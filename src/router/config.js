@@ -140,6 +140,14 @@ const options = {
                   },
                   component: () =>
                     import("@/pages/channel/enterpriseAdmin/list")
+                },
+                {
+                  path: "detail",
+                  name: "企业详情",
+                  meta: {
+                    invisible: true
+                  },
+                  component: () => import("@/pages/channel/enterpriseAdmin/detail")
                 }
               ]
             }
