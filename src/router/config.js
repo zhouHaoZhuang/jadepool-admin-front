@@ -98,6 +98,23 @@ const options = {
                   component: () => import("@/pages/channel/channelAdmin/list")
                 },
                 {
+                  path: "add",
+                  name: "新增渠道",
+                  meta: {
+                    invisible: true
+                  },
+                  component: () =>
+                    import("@/pages/channel/channelAdmin/addChannel")
+                },
+                {
+                  path: "detail",
+                  name: "渠道详情",
+                  meta: {
+                    invisible: true
+                  },
+                  component: () => import("@/pages/channel/channelAdmin/detail")
+                },
+                {
                   path: "price",
                   name: "渠道价格",
                   meta: {
@@ -276,7 +293,8 @@ const options = {
                   meta: {
                     icon: "home"
                   },
-                  component: () => import("@/pages/production/supplier/list/list.vue")
+                  component: () =>
+                    import("@/pages/production/supplier/list/list.vue")
                 },
                 {
                   path: "purchase",
@@ -284,7 +302,8 @@ const options = {
                   meta: {
                     icon: "home"
                   },
-                  component: () => import("@/pages/production/supplier/purchase/list.vue")
+                  component: () =>
+                    import("@/pages/production/supplier/purchase/list.vue")
                 }
               ]
             },
@@ -302,7 +321,8 @@ const options = {
                   meta: {
                     icon: "home"
                   },
-                  component: () => import("@/pages/production/product/information/list.vue")
+                  component: () =>
+                    import("@/pages/production/product/information/list.vue")
                 }
               ]
             },
@@ -330,7 +350,9 @@ const options = {
                     icon: "home"
                   },
                   component: () =>
-                    import("@/pages/production/cloudServer/orderRouting/list.vue")
+                    import(
+                      "@/pages/production/cloudServer/orderRouting/list.vue"
+                    )
                 }
               ]
             }
