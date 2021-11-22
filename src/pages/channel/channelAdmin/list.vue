@@ -179,6 +179,7 @@ export default {
 .channel-list-container {
   background: #fff;
   padding: 20px;
+  margin: 0 24px;
   .public-table-wrap {
     .status {
       display: flex;
