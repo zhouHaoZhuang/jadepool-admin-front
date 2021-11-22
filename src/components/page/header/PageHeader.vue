@@ -10,10 +10,10 @@
       </div>
       <div class="detail">
         <div class="main">
-          <div class="row">
+          <!-- <div class="row">
             <h1 v-if="showPageTitle && title" class="title">{{title}}</h1>
             <div class="action"><slot name="action"></slot></div>
-          </div>
+          </div> -->
           <div class="row">
             <div v-if="this.$slots.content" class="content">
               <div v-if="avatar" class="avatar"><a-avatar :src="avatar" :size="72" /></div>
