@@ -139,6 +139,7 @@
         </a-form-model-item>
         <a-form-model-item label="AccessKey Secret" prop="name">
           <a-input v-model="apiForm.name" />
+          <div class="channel-detail-resetKey">快速重置Secret</div>
         </a-form-model-item>
         <a-form-model-item label="回调地址" prop="name1">
           <a-input v-model="apiForm.name1" />
@@ -332,5 +333,9 @@ export default {
     border-bottom: none !important;
     padding-left: 24px;
   }
+}
+.channel-detail-resetKey {
+  color: #1890ff;
+  line-height: 15px;
 }
 </style>
