@@ -255,6 +255,86 @@ const options = {
               ]
             }
           ]
+        },
+        // 生产
+        {
+          path: "/production",
+          name: "生产",
+          component: PageView,
+          children: [
+            {
+              path: "supplier",
+              name: "供应商管理",
+              meta: {
+                icon: "home"
+              },
+              component: BlankView,
+              children: [
+                {
+                  path: "supplierList",
+                  name: "供应商列表",
+                  meta: {
+                    icon: "home"
+                  },
+                  component: () => import("@/pages/production/supplier/list/list.vue")
+                },
+                {
+                  path: "purchase",
+                  name: "采购账号列表",
+                  meta: {
+                    icon: "home"
+                  },
+                  component: () => import("@/pages/production/supplier/purchase/list.vue")
+                }
+              ]
+            },
+            {
+              path: "product",
+              name: "产品管理",
+              meta: {
+                icon: "home"
+              },
+              component: BlankView,
+              children: [
+                {
+                  path: "information",
+                  name: "产品信息管理",
+                  meta: {
+                    icon: "home"
+                  },
+                  component: () => import("@/pages/production/product/information/list.vue")
+                }
+              ]
+            },
+            {
+              path: "cloudServer",
+              name: "云服务器",
+              meta: {
+                icon: "home"
+              },
+              component: BlankView,
+              children: [
+                {
+                  path: "product",
+                  name: "产品配置",
+                  meta: {
+                    icon: "home"
+                  },
+                  component: () =>
+                    import("@/pages/production/cloudServer/product/list.vue")
+                },
+                {
+                  path: "orderRouting",
+                  name: "订单路由配置",
+                  meta: {
+                    icon: "home"
+                  },
+                  component: () =>
+                    import("@/pages/production/cloudServer/orderRouting/list.vue")
+                }
+              ]
+            }
+          ]
         }
       ]
     }
