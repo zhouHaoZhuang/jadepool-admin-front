@@ -3,7 +3,7 @@
     <!-- 头信息 -->
     <div class="box-wrap">
       <div class="btn1">
-        <a-button type="primary">+ 新建供应商</a-button>
+        <a-button type="primary" @click="addChannel">+ 新建供应商</a-button>
       </div>
       <div class="xiala">
         <a-dropdown>
@@ -115,7 +115,11 @@ export default {
       data,columns,
     };
   },
-  methods: {}
+  methods: {
+    addChannel() {
+      this.$router.push("/production/supplier/add");
+    }
+  }
 };
 </script>
 

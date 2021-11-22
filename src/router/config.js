@@ -297,6 +297,15 @@ const options = {
                     import("@/pages/production/supplier/list/list.vue")
                 },
                 {
+                  path:"add",
+                  name:"新建供应商",
+                  meta:{
+                    invisible:true
+                  },
+                  component:() =>
+                    import("@/pages/production/supplier/list/price.vue")
+                },
+                {
                   path: "purchase",
                   name: "采购账号列表",
                   meta: {
