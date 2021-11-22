@@ -1,12 +1,11 @@
 <template>
-  <div>渠道列表
-    <div class="box-wrap"></div>
+  <div>
+    <div class="channel-list-container"></div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "index",
   data() {
     return {};
   },
@@ -14,4 +13,9 @@ export default {
 };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.channel-list-container {
+  background: #fff;
+  padding: 20px;
+}
+</style>
