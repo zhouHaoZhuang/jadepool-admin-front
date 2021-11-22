@@ -42,7 +42,6 @@ export default {
     return {
       labelCol: { span: 6 },
       wrapperCol: { span: 18 },
-      other: "",
       form: {
         name: "",
         name1: "",
