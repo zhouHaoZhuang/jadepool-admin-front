@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="channel-list-container">123</div>
+    <div class="channel-list-container"></div>
   </div>
 </template>
 
