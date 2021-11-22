@@ -9,6 +9,9 @@
 ## UI框架地址
 https://www.antdv.com/docs/vue/introduce-cn/
 
+## 项目原型地址
+https://8dol6m.axshare.com/#id=5nolun&p=%E6%B8%A0%E9%81%93%E5%88%97%E8%A1%A8&g=1
+
 ## 使用
 ### yarn
 ```bash
