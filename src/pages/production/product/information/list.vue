@@ -52,9 +52,23 @@
         <a-pagination
           size="small"
           :total="50"
-          show-size-changer
+          v-model="current"
+          :page-size-options="pageSizeOptions"
           show-quick-jumper
-        />
+          showSizeChanger
+          :defaultPageSize="5"
+          @change="changepage"
+          :show-total="
+            (total, range) => `第${range[0]}条——第${range[1]} 条 共 ${total} 条记录`
+          "
+          :page-size="5"
+          :default-current="1"
+        >
+          <template slot="buildOptionText" slot-scope="props">
+            <span v-if="props.value !== '50'">{{ props.value }}条/页</span>
+            <span v-if="props.value === '50'">全部</span>
+          </template></a-pagination
+        >
       </div>
     </div>
     <!-- <addproduct class="addproduct" v-show="isshow"></addproduct> -->
@@ -67,7 +81,10 @@ export default {
   name: "index",
   data() {
     return {
-      isshow: false
+      pageSizeOptions: ["5", "10", "20", "30"],
+      current: 1,
+      pageSize: 10,
+      total: 50
     };
   },
   components: {
@@ -79,6 +96,9 @@ export default {
     },
     handleMenuClick(e) {
       console.log("click", e);
+    },
+    changepage(page, pageSize) {
+      console.log(page, pageSize, "-------");
     }
   }
 };
@@ -146,6 +166,7 @@ export default {
       // margin-bottom: 200px;
     }
     > div:nth-child(2) {
+      height: 265px;
       > div {
         display: flex;
         width: 100%;

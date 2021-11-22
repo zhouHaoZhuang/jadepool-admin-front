@@ -4,75 +4,34 @@
       <a-form-model
         ref="ruleForm"
         :model="form"
+        :rules="rules"
         :label-col="labelCol"
         :wrapper-col="wrapperCol"
       >
         <a-form-model-item ref="name" label="资源池产品名称" prop="name">
-          <a-input
-            v-model="form.name"
-            @blur="
-              () => {
-                $refs.name.onFieldBlur();
-              }
-            "
-          />
+          <a-input v-model="form.name" />
         </a-form-model-item>
-        <a-form-model-item ref="name" label="资源池产品CODE" prop="name">
-          <a-input
-            v-model="form.name"
-            @blur="
-              () => {
-                $refs.name.onFieldBlur();
-              }
-            "
-          />
-        </a-form-model-item>
-        <a-form-model-item ref="name" label="供应商" prop="name">
-          <a-input
-            v-model="form.name"
-            @blur="
-              () => {
-                $refs.name.onFieldBlur();
-              }
-            "
-          />
+        <!-- <a-form-model-item ref="name" label="资源池产品CODE" prop="name">
+          <a-input v-model="form.name" />
+        </a-form-model-item> -->
+        <!-- <a-form-model-item ref="name" label="供应商" prop="name">
+          <a-input v-model="form.name" />
         </a-form-model-item>
         <a-form-model-item ref="name" label="供应商产品CODE" prop="name">
-          <a-input
-            v-model="form.name"
-            @blur="
-              () => {
-                $refs.name.onFieldBlur();
-              }
-            "
-          />
+          <a-input v-model="form.name" />
         </a-form-model-item>
         <a-form-model-item ref="name" label="供应商产品Type" prop="name">
-          <a-input
-            v-model="form.name"
-            @blur="
-              () => {
-                $refs.name.onFieldBlur();
-              }
-            "
-          />
+          <a-input v-model="form.name" />
         </a-form-model-item>
         <a-form-model-item ref="name" label="产品经理" prop="name">
-          <a-input
-            v-model="form.name"
-            @blur="
-              () => {
-                $refs.name.onFieldBlur();
-              }
-            "
-          />
-        </a-form-model-item>
-        <a-form-model-item label="备注" prop="desc">
+          <a-input v-model="form.name" />
+        </a-form-model-item> -->
+        <!-- <a-form-model-item label="备注" prop="desc">
           <a-input v-model="form.desc" type="textarea" />
-        </a-form-model-item>
-        <a-button type="primary" @click="onSubmit">
+        </a-form-model-item> -->
+        <!-- <a-button type="primary" @click="onSubmit">
           提交
-        </a-button>
+        </a-button> -->
       </a-form-model>
     </div>
   </div>
