@@ -4,3 +4,42 @@
   height: 100px;
   background: pink;
 }
+// 通用头部样式
+.public-header-wrap {
+}
+// 通用主体样式
+.public-table-wrap {
+  margin-top: 24px;
+}
+// 修改antd按钮组件link类型样式
+.ant-btn-link {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none;
+  &:hover,
+  &:focus {
+    background: transparent !important;
+  }
+}
+// 覆盖表格hover背景色
+.ant-table-row {
+  &:hover {
+    td {
+      background: transparent !important;
+    }
+  }
+}
+// 分割线样式调整
+.ant-divider {
+  background: #1890ff !important;
+}
+// 全局分页样式修改
+.ant-table-pagination {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  li:first-child {
+    position: absolute;
+    left: 0;
+  }
+}
