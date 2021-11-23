@@ -323,7 +323,8 @@ const options = {
                   path: "add",
                   name: "新建供应商",
                   meta: {
-                    invisible: true
+                    invisible: true,
+                    back: true
                   },
                   component: () =>
                     import("@/pages/production/supplier/list/price.vue")
@@ -332,7 +333,8 @@ const options = {
                   path:"amend",
                   name:"编辑供应商",
                   meta:{
-                    invisible:true
+                    invisible:true,
+                    back: true
                   },
                   component:() =>
                     import("@/pages/production/supplier/list/amend.vue")
@@ -350,7 +352,8 @@ const options = {
                   path:"adda",
                   name:"新建采购账号",
                   meta:{
-                    invisible:true
+                    invisible:true,
+                    back: true
                   },
                   component:() =>
                     import("@/pages/production/supplier/purchase/price.vue")
@@ -359,7 +362,8 @@ const options = {
                   path:"amends",
                   name:"编辑采购账号",
                   meta:{
-                    invisible:true
+                    invisible:true,
+                    back: true
                   },
                   component:() =>
                     import("@/pages/production/supplier/purchase/amend.vue")
