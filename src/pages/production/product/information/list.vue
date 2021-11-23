@@ -111,6 +111,8 @@ export default {
   position: relative;
   padding-bottom: 150px;
   background-color: #fff;
+  margin: 0 24px;
+  padding: 20px;
   h4 {
     font-size: 20px;
     font-weight: 650;
