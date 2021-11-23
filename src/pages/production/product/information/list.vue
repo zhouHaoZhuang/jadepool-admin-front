@@ -126,7 +126,7 @@ export default {
     // 不！能！获取组件实例 `this`
     // 因为当守卫执行前，组件实例还没被创建
     let addPool = to.query.form;
-    console.log(to, from, "-----------");
+    // console.log(to, from, "-----------");
     if (from.name == "新建产品线") {
       console.log(addPool, "addPool");
       next(vm => {
@@ -162,15 +162,14 @@ export default {
     next();
   },
   activated() {
+    this.$store.dispatch("pool/getList");
+
     let addPool = this.$route.query.form;
     // console.log(this.$route, "5555555555555");
     if (this.PoolList.length == 0) {
-      this.$store.dispatch("pool/getList").then(res => {
-        console.log("接口回调", res.data.list);
-        this.PoolList = res.data.list;
-        this.exhibitList = this.PoolList.slice(0, this.pageSize);
-        // console.log(this.exhibitList, "exhibitList");
-      });
+      // this.$store.dispatch("pool/getList");
+      this.PoolList = this.$store.state.pool.poolList;
+      this.exhibitList = this.PoolList.slice(0, this.pageSize);
     }
     if (addPool == undefined) {
       return;

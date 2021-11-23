@@ -10,18 +10,21 @@ const pool = {
   mutations: {
     SET_POOL: (state, poolList) => {
       state.poolList = poolList;
+      // console.log(state.poolList,'state');
     },
   },
 
   actions: {
     // 获取列表
-    getList({ commit, state }, params) {
-      console.log(state);
+   async getList({ commit, state }, params) {
+      // console.log(state);
     //   commit("SET_USERINFO", { name: "管理员" });
-      return request({
+      let data = await request({
         url: "http://8.136.205.83:8080/productDetail",
         method: "get",
       });
+      // console.log(data.data.list);
+      commit("SET_POOL", data.data.list);
     },
     delList({ commit, state }, params) {
       console.log(state);
