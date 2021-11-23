@@ -27,6 +27,7 @@ const progressStart = (to, from, next) => {
  */
 const loginGuard = (to, from, next, options) => {
   const { store, message } = options;
+  console.log("登录守卫", to, loginIgnore.includes(to), store.state.user.token);
   if (!loginIgnore.includes(to) && !store.state.user.token) {
     message.warning("登录已失效，请重新登录");
     next({ path: "/login" });

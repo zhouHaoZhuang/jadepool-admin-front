@@ -1,5 +1,5 @@
 <template>
-  <common-layout>
+  <common-layout class="login-wrap">
     <div class="login">
       <a-form @submit="onSubmit" :form="form">
         <a-form-item>
@@ -7,7 +7,14 @@
             autocomplete="autocomplete"
             size="large"
             placeholder="admin"
-            v-decorator="['name', {rules: [{ required: true, message: '请输入账户名', whitespace: true}]}]"
+            v-decorator="[
+              'name',
+              {
+                rules: [
+                  { required: true, message: '请输入账户名', whitespace: true }
+                ]
+              }
+            ]"
           >
             <a-icon slot="prefix" type="user" />
           </a-input>
@@ -18,7 +25,14 @@
             placeholder="888888"
             autocomplete="autocomplete"
             type="password"
-            v-decorator="['password', {rules: [{ required: true, message: '请输入密码', whitespace: true}]}]"
+            v-decorator="[
+              'password',
+              {
+                rules: [
+                  { required: true, message: '请输入密码', whitespace: true }
+                ]
+              }
+            ]"
           >
             <a-icon slot="prefix" type="lock" />
           </a-input>
@@ -44,10 +58,21 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.$router.push("/");
+      this.$store.dispatch("user/login").then(res => {
+        this.$router.push("/");
+      });
     }
   }
 };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.login-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .login {
+    width: 600px;
+  }
+}
+</style>
