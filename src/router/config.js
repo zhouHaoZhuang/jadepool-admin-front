@@ -67,7 +67,8 @@ const options = {
                   path: "detail",
                   name: "查看消息详情",
                   meta: {
-                    invisible: true // 不显示在左侧菜单
+                    invisible: true, // 不显示在左侧菜单
+                    back: true
                   },
                   component: () => import("@/pages/home/index/detail")
                 }
@@ -101,7 +102,8 @@ const options = {
                   path: "add",
                   name: "新增渠道",
                   meta: {
-                    invisible: true
+                    invisible: true,
+                    back: true
                   },
                   component: () =>
                     import("@/pages/channel/channelAdmin/addChannel")
@@ -110,7 +112,8 @@ const options = {
                   path: "detail",
                   name: "渠道详情",
                   meta: {
-                    invisible: true
+                    invisible: true,
+                    back: true
                   },
                   component: () => import("@/pages/channel/channelAdmin/detail")
                 },
@@ -127,7 +130,8 @@ const options = {
                   name: "新增产品采购价格",
                   meta: {
                     icon: "home",
-                    invisible: true
+                    invisible: true,
+                    back: true
                   },
                   component: () => import("@/pages/channel/channelAdmin/update")
                 }
@@ -154,7 +158,8 @@ const options = {
                   path: "detail",
                   name: "企业详情",
                   meta: {
-                    invisible: true
+                    invisible: true,
+                    back: true
                   },
                   component: () =>
                     import("@/pages/channel/enterpriseAdmin/detail")
