@@ -34,7 +34,7 @@ const options = {
         // 首页 一级菜单
         {
           path: "/dashboard",
-          name: "首页",
+          name: "仪表盘",
           component: PageView,
           children: [
             // 二级菜单
@@ -48,7 +48,7 @@ const options = {
               children: [
                 // 三级菜单
                 {
-                  path: "index",
+                  path: "home",
                   name: "后台首页",
                   meta: {
                     icon: "home"

@@ -3,7 +3,7 @@ import request from "@/utils/request";
 const user = {
   namespaced: true,
   state: {
-    token: "qwertyuiop",
+    token: "",
     userInfo: {}
   },
 
@@ -20,19 +20,21 @@ const user = {
     // 登录
     login({ commit, state }, data) {
       return new Promise((resolve, reject) => {
-        request({
-          url: "/login",
-          method: "post",
-          data
-        })
-          .then(res => {
-            const token = res.data;
-            commit("SET_TOKEN", token);
-            resolve();
-          })
-          .catch(error => {
-            reject(error);
-          });
+        commit("SET_TOKEN", "qwertyuioo");
+        resolve();
+        // request({
+        //   url: "/login",
+        //   method: "post",
+        //   data
+        // })
+        //   .then(res => {
+        //     const token = res.data;
+        //     commit("SET_TOKEN", token);
+        //     resolve();
+        //   })
+        //   .catch(error => {
+        //     reject(error);
+        //   });
       });
     },
     // 登出
