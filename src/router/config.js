@@ -314,6 +314,15 @@ const options = {
                     import("@/pages/production/supplier/list/price.vue")
                 },
                 {
+                  path:"amend",
+                  name:"编辑供应商",
+                  meta:{
+                    invisible:true
+                  },
+                  component:() =>
+                    import("@/pages/production/supplier/list/amend.vue")
+                },
+                {
                   path: "purchase",
                   name: "采购账号列表",
                   meta: {
@@ -321,6 +330,24 @@ const options = {
                   },
                   component: () =>
                     import("@/pages/production/supplier/purchase/list.vue")
+                },
+                {
+                  path:"adda",
+                  name:"新建采购账号",
+                  meta:{
+                    invisible:true
+                  },
+                  component:() =>
+                    import("@/pages/production/supplier/purchase/price.vue")
+                },
+                {
+                  path:"amends",
+                  name:"编辑采购账号",
+                  meta:{
+                    invisible:true
+                  },
+                  component:() =>
+                    import("@/pages/production/supplier/purchase/amend.vue")
                 }
               ]
             },

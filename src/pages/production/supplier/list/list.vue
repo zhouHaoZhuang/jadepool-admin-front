@@ -159,14 +159,14 @@ export default {
       this.listQuery.pageSize = pageSize;
       // this.getList();
     },
-    // 查看
+    // 编辑
     goDetail(record) {
       this.$router.push({
-        path: "/channel/index/detail",
+        path: "/production/supplier/amend",
         query: { id: record.id }
       });
     },
-    // 冻结
+    // 删除
     handleFrozen(record) {},
     // 新增渠道
     addChannel() {

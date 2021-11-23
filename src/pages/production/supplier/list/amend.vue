@@ -2,19 +2,22 @@
   <div class="supplier-add">
     <div class="content">
       <a-form-model ref="ruleForm" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-model-item label="所属供应商" prop="name">
+        <a-form-model-item label="供应商全名称" prop="name">
           <a-input v-model="form.name" />
         </a-form-model-item>
-        <a-form-model-item label="供应商标识" prop="name1">
+        <a-form-model-item label="简称" prop="name1">
           <a-input v-model="form.name1" />
         </a-form-model-item>
-        <a-form-model-item label="供应商侧账号ID" prop="web">
+        <a-form-model-item label="网址">
           <a-input v-model="form.web" />
         </a-form-model-item>
-        <a-form-model-item label="账号配置">
-          <a-input v-model="form.desc" type="textarea" />
+        <a-form-model-item label="联系人">
+          <a-input v-model="form.user" />
         </a-form-model-item>
-        <a-form-model-item label="备注">
+        <a-form-model-item label="电话">
+          <a-input v-model="form.phone" />
+        </a-form-model-item>
+        <a-form-model-item label="描述">
           <a-input v-model="form.desc" type="textarea" />
         </a-form-model-item>
         <a-form-model-item :wrapper-col="{span:18,offset:6}">
@@ -47,21 +50,14 @@ export default {
         name:[
           {
             required:true,
-            message:"请选择所属供应商",
+            message:"请输入供应商全称",
             trigger:"blur"
           }
         ],
         name1:[
           {
             required:true,
-            message:"请输入供应商标识",
-            trigger:"blur"
-          }
-        ],
-        web:[
-          {
-            required:true,
-            message:"请输入供应商侧账号ID",
+            message:"请输入简称",
             trigger:"blur"
           }
         ]
