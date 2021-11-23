@@ -2,7 +2,7 @@
   <div class="channel-price-container">
     <div class="top-search">
       <a-input
-        v-model="listQuery.search"
+        v-model="listQuery.channelCustomerName"
         style="width:500px"
         size="large"
         placeholder="请选择渠道商"
@@ -23,19 +23,23 @@
             <a-select
               style="width:120px"
               allowClear
-              v-model="listQuery.id"
+              v-model="listQuery.productCode"
               placeholder="产品名称"
             >
-              <a-select-option :value="1">
-                Jack
-              </a-select-option>
-              <a-select-option :value="2">
-                TOM
+              <a-select-option
+                v-for="item in data"
+                :key="item.productCode"
+                :value="item.id"
+              >
+                {{ item.productName }}
               </a-select-option>
             </a-select>
           </a-form-model-item>
           <a-form-model-item>
-            <a-input v-model="listQuery.search" placeholder="搜索关键词" />
+            <a-input
+              v-model="listQuery.channelCustomerName"
+              placeholder="搜索关键词"
+            />
           </a-form-model-item>
           <a-form-model-item>
             <a-button type="primary" @click="search">
@@ -51,6 +55,9 @@
           rowKey="id"
           :pagination="paginationProps"
         >
+          <span slot="discountType" slot-scope="text">
+            {{ channelPriceType[text] }}
+          </span>
           <span slot="action" slot-scope="text, record">
             <a-button type="link" @click="updatePrice('edit', record)">
               编辑
@@ -67,15 +74,17 @@
 </template>
 
 <script>
+import { channelPriceType } from "@/utils/enum";
 export default {
   data() {
     return {
+      channelPriceType,
       listQuery: {
-        id: undefined,
-        search: "",
-        pageNo: 1,
+        channelCustomerName: "",
+        productCode: undefined,
+        currentPage: 1,
         pageSize: 10,
-        total: 500
+        total: 0
       },
       columns: [
         {
@@ -85,50 +94,44 @@ export default {
         },
         {
           title: "渠道商",
-          dataIndex: "name",
-          key: "name"
+          dataIndex: "channelCustomerName",
+          key: "channelCustomerName"
         },
         {
           title: "资源池产品",
-          dataIndex: "name1",
-          key: "name1"
+          dataIndex: "productName",
+          key: "productName"
         },
         {
           title: "资源池产品CODE",
-          dataIndex: "web",
-          key: "web"
+          dataIndex: "productCode",
+          key: "productCode"
         },
         {
           title: "折扣方式",
-          dataIndex: "status",
-          key: "status"
+          dataIndex: "discountType",
+          key: "discountType",
+          scopedSlots: { customRender: "discountType" }
         },
         {
           title: "折扣",
-          dataIndex: "gmtCreate"
+          dataIndex: "discountPrice",
+          key: "discountPrice"
         },
         {
           title: "操作",
           key: "action",
+          fixed: "right",
           scopedSlots: { customRender: "action" }
         }
       ],
-      data: [
-        {
-          id: 1,
-          name: "全程",
-          name1: "剑圣",
-          web: "www.baidu.com",
-          status: 200,
-          gmtCreate: "2021-10-12"
-        }
-      ],
+      data: [],
       paginationProps: {
         showQuickJumper: true,
         showSizeChanger: true,
         total: 1,
         showTotal: (total, range) =>
-          `共 ${total} 条记录 第 ${this.listQuery.pageNo} / ${Math.ceil(
+          `共 ${total} 条记录 第 ${this.listQuery.currentPage} / ${Math.ceil(
             total / this.listQuery.pageSize
           )} 页`,
         onChange: this.quickJump,
@@ -136,28 +139,32 @@ export default {
       }
     };
   },
+  activated() {
+    this.getList();
+  },
   methods: {
     // 查询
     search() {
-      // this.getList();
+      this.listQuery.currentPage = 1;
+      this.getList();
     },
     // 查询表格数据
     getList() {
-      this.$store.dispatch("").then(res => {
-        console.log("获取数据", res);
-        this.paginationProps.total = 500;
+      this.$store.dispatch("channel/getPriceList", this.listQuery).then(res => {
+        this.data = [...res.data.list];
+        this.paginationProps.total = res.data.totalCount * 1;
       });
     },
     // 表格分页快速跳转n页
-    quickJump(pageNo) {
-      this.listQuery.pageNo = pageNo;
-      // this.getList();
+    quickJump(currentPage) {
+      this.listQuery.currentPage = currentPage;
+      this.getList();
     },
     // 表格分页切换每页条数
     onShowSizeChange(current, pageSize) {
-      this.listQuery.pageNo = current;
+      this.listQuery.currentPage = current;
       this.listQuery.pageSize = pageSize;
-      // this.getList();
+      this.getList();
     },
     // 新增/编辑
     updatePrice(type, record) {
@@ -171,11 +178,16 @@ export default {
       }
     },
     // 删除
-    handleDel() {
+    handleDel(record) {
       this.$confirm({
         title: "确认要删除吗？",
         onOk: () => {
-          // this.$store.dispatch("").then(res => {});
+          this.$store
+            .dispatch("channel/delPrice", { id: record.id })
+            .then(res => {
+              this.$message.success("删除成功");
+              this.getList();
+            });
         }
       });
     }
