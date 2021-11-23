@@ -70,6 +70,7 @@ export default {
     };
   },
   methods: {
+    // 提交
     onSubmit(){
       this.$refs.ruleForm.validate(valid => {
         if(valid) {
@@ -77,6 +78,7 @@ export default {
         }
       })
     },
+    // 重置
     resetForm(){
       this.$refs.ruleForm.resetFields();
     }
