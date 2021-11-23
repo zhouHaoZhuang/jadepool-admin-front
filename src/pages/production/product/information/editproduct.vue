@@ -9,28 +9,28 @@
         :wrapper-col="wrapperCol"
       >
         <a-form-model-item label="资源池产品ID">
-          {{ form.ResourcePoolId }}
+          {{ form.productCode }}
         </a-form-model-item>
         <a-form-model-item
-          ref="ResourcePoolName"
+          ref="productName"
           label="资源池产品名称"
-          prop="ResourcePoolName"
+          prop="productName"
         >
-          <a-input v-model="form.ResourcePoolName" />
+          <a-input v-model="form.productName" />
         </a-form-model-item>
         <a-form-model-item
-          ref="ResourcePoolCode"
+          ref="productCode"
           label="资源池产品CODE"
-          prop="ResourcePoolCode"
+          prop="productCode"
         >
-          <a-input v-model="form.ResourcePoolCode" />
+          <a-input v-model="form.productCode" />
         </a-form-model-item>
         <!-- <a-form-model-item ref="name" label="供应商" prop="name">
           <a-input v-model="form.SupplierName" />
         </a-form-model-item> -->
-        <a-form-model-item label="供应商" prop="SupplierName">
+        <a-form-model-item label="供应商" prop="supplierName">
           <a-select
-            v-model="form.SupplierName"
+            v-model="form.supplierName"
             placeholder="please select your zone"
           >
             <a-select-option value="阿里云">
@@ -42,16 +42,16 @@
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="供应商产品CODE">
-          <a-input v-model="form.SupplierCode" />
+          <a-input v-model="form.supplierProductCode" />
         </a-form-model-item>
         <a-form-model-item label="供应商产品Type">
-          <a-input v-model="form.SupplierType" />
+          <a-input v-model="form.supplierProductType" />
         </a-form-model-item>
         <a-form-model-item label="产品经理">
           <a-input v-model="form.pm" />
         </a-form-model-item>
         <a-form-model-item label="备注">
-          <a-input v-model="form.Remark" type="textarea" />
+          <a-input v-model="form.remark" type="textarea" />
         </a-form-model-item>
         <a-button type="primary" @click="onSubmit" :loading="loading">
           提交
@@ -69,30 +69,30 @@ export default {
       wrapperCol: { span: 18 },
       other: "",
       form: {
-        ResourcePoolName: "",
-        ResourcePoolCode: "",
-        SupplierName: "",
-        SupplierCode: "",
-        SupplierType: "",
+        productName: "",
+        productCode: "",
+        supplierName: "",
+        supplierProductCode: "",
+        supplierProductType: "",
         pm: "",
-        Remark: ""
+        remark: ""
       },
       rules: {
-        ResourcePoolName: [
+        productName: [
           {
             required: true,
             message: "输入值不能为空",
             trigger: "blur"
           }
         ],
-        ResourcePoolCode: [
+        productCode: [
           {
             required: true,
             message: "输入值不能为空",
             trigger: "blur"
           }
         ],
-        SupplierName: [
+        supplierName: [
           {
             required: true,
             message: "select",
@@ -131,10 +131,10 @@ export default {
     // 重置表单数据
     resetForm() {
       this.$refs.ruleForm.resetFields();
-      this.form.SupplierCode = "";
-      this.form.SupplierType = "";
+      this.form.supplierProductCode = "";
+      this.form.supplierProductType = "";
       this.form.pm = "";
-      this.form.Remark = "";
+      this.form.remark = "";
     }
   }
 };

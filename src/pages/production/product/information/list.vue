@@ -1,6 +1,5 @@
 <template>
   <div class="information">
-    <h4>产品信息管理</h4>
     <div class="box-wrap">
       <a-button type="primary" @click="addinform">
         + 新建产品
@@ -33,7 +32,7 @@
         ><span>供应商产品Code</span><span>供应商产品Type</span><span>备注</span
         ><span>操作</span>
       </div>
-      <div>
+      <div v-if="exhibitList.length > 0">
         <!-- <div>
           <div>P00001</div>
           <div>游戏安全盒子</div>
@@ -44,14 +43,14 @@
           <div>游戏盒子专用账号</div>
           <div><a>编辑</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a>删除</a></div>
         </div> -->
-        <div v-for="(v, i) in exhibitList" :key="i" :id="v.ResourcePoolId">
-          <div>{{ v.ResourcePoolId }}</div>
-          <div>{{ v.ResourcePoolName }}</div>
-          <div>{{ v.ResourcePoolCode }}</div>
-          <div>{{ v.SupplierName }}</div>
-          <div>{{ v.SupplierCode }}</div>
-          <div>{{ v.SupplierType }}</div>
-          <div>{{ v.Remark }}</div>
+        <div v-for="(v, i) in exhibitList" :key="i" :id="v.id">
+          <div>{{ v.productCode }}</div>
+          <div>{{ v.productName }}</div>
+          <div>{{ v.productCode }}</div>
+          <div>{{ v.supplierName }}</div>
+          <div>{{ v.supplierProductCode }}</div>
+          <div>{{ v.supplierProductType }}</div>
+          <div>{{ v.remark }}</div>
           <div>
             <a @click="editPool(v)">编辑</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a
               @click="delectPool"
@@ -60,7 +59,7 @@
           </div>
         </div>
       </div>
-      <div>
+      <div v-if="exhibitList.length > 0">
         <span>
           共{{ PoolList.length }}条记录第{{ current }}/{{ pageNum }}页
         </span>
@@ -90,8 +89,6 @@
 
 <script>
 import { loadGuards } from "@/utils/routerUtil";
-// import { loadGuards } from "@/utils/routerUtil";
-// import addproduct from './addproduct.vue'
 export default {
   name: "index",
   data() {
@@ -99,78 +96,7 @@ export default {
       pageSizeOptions: ["5", "10", "20", "30"],
       current: 1,
       pageSize: 5,
-      PoolList: [
-        {
-          ResourcePoolId: "资源池1",
-          ResourcePoolName: "腾讯游戏盒子",
-          ResourcePoolCode: "腾讯",
-          SupplierName: "腾讯云",
-          SupplierCode: "esc",
-          SupplierType: "云服务",
-          pm: "腾讯云",
-          Remark: "游戏盒子"
-        },
-        {
-          ResourcePoolId: "资源池2",
-          ResourcePoolName: "华为云盒子",
-          ResourcePoolCode: "huawei",
-          SupplierName: "华为云",
-          SupplierCode: "huawei",
-          SupplierType: "华为云服务",
-          pm: "华为云",
-          Remark: "华为云盒子"
-        },
-        {
-          ResourcePoolId: "资源池3",
-          ResourcePoolName: "华为云盒子",
-          ResourcePoolCode: "huawei",
-          SupplierName: "华为云",
-          SupplierCode: "huawei",
-          SupplierType: "华为云服务",
-          pm: "华为云",
-          Remark: "华为云盒子"
-        },
-        {
-          ResourcePoolId: "资源池4",
-          ResourcePoolName: "华为云盒子",
-          ResourcePoolCode: "huawei",
-          SupplierName: "华为云",
-          SupplierCode: "huawei",
-          SupplierType: "华为云服务",
-          pm: "华为云",
-          Remark: "华为云盒子"
-        },
-        {
-          ResourcePoolId: "资源池5",
-          ResourcePoolName: "华为云盒子",
-          ResourcePoolCode: "huawei",
-          SupplierName: "华为云",
-          SupplierCode: "huawei",
-          SupplierType: "华为云服务",
-          pm: "华为云",
-          Remark: "华为云盒子"
-        },
-        {
-          ResourcePoolId: "资源池6",
-          ResourcePoolName: "华为云盒子",
-          ResourcePoolCode: "huawei",
-          SupplierName: "华为云",
-          SupplierCode: "huawei",
-          SupplierType: "华为云服务",
-          pm: "华为云",
-          Remark: "华为云盒子"
-        },
-        {
-          ResourcePoolId: "资源池7",
-          ResourcePoolName: "华为云盒子",
-          ResourcePoolCode: "huawei",
-          SupplierName: "华为云",
-          SupplierCode: "huawei",
-          SupplierType: "华为云服务",
-          pm: "华为云",
-          Remark: "华为云盒子"
-        }
-      ],
+      PoolList: [],
       exhibitList: []
     };
   },
@@ -192,43 +118,65 @@ export default {
     }
   },
   created() {
-    this.exhibitList = this.PoolList.slice(0, this.pageSize);
     // let addPool = this.$route.params.form;
     // console.log(addPool, "-----------");
   },
+  beforeRouteEnter(to, from, next) {
+    // 在渲染该组件的对应路由被 confirm 前调用
+    // 不！能！获取组件实例 `this`
+    // 因为当守卫执行前，组件实例还没被创建
+    let addPool = to.query.form;
+    console.log(to, from, "-----------");
+    if (from.name == "新建产品线") {
+      console.log(addPool, "addPool");
+      next(vm => {
+        vm.PoolList.push(addPool);
+        vm.exhibitList = vm.PoolList.slice(0, vm.pageSize);
+      });
+      return;
+    }
+    if (from.name == "编辑产品线") {
+      next(vm => {
+        let inx = vm.PoolList.findIndex(function(params) {
+          return params.productCode === addPool.productCode;
+        });
+        vm.PoolList.splice(inx, 1, addPool);
+        // console.log(this.PoolList, "this.PoolList");
+        if (vm.current == 1) {
+          vm.exhibitList = vm.PoolList.slice(0, vm.pageSize);
+        } else {
+          vm.exhibitList = vm.PoolList.slice(
+            vm.pageSize * (vm.current - 1),
+            vm.pageSize * vm.current
+          );
+          if (vm.exhibitList.length == 0) {
+            vm.current--;
+            vm.exhibitList = vm.PoolList.slice(
+              vm.pageSize * (vm.current - 1),
+              vm.pageSize * vm.current
+            );
+          }
+        }
+      });
+    }
+    next();
+  },
   activated() {
     let addPool = this.$route.query.form;
+    // console.log(this.$route, "5555555555555");
+    if (this.PoolList.length == 0) {
+      this.$store.dispatch("pool/getList").then(res => {
+        console.log("接口回调", res.data.list);
+        this.PoolList = res.data.list;
+        this.exhibitList = this.PoolList.slice(0, this.pageSize);
+        // console.log(this.exhibitList, "exhibitList");
+      });
+    }
+    if (addPool == undefined) {
+      return;
+    }
     if (addPool === "[object Object]") {
       return;
-    }
-    // console.log(addPool.ResourcePoolId, "-----------");
-
-    if (addPool.ResourcePoolId) {
-      let inx = this.PoolList.findIndex(function(params) {
-        return params.ResourcePoolId === addPool.ResourcePoolId;
-      });
-      this.PoolList.splice(inx, 1, addPool);
-      // console.log(this.PoolList, "this.PoolList");
-      if (this.current == 1) {
-        this.exhibitList = this.PoolList.slice(0, this.pageSize);
-      } else {
-        this.exhibitList = this.PoolList.slice(
-          this.pageSize * (this.current - 1),
-          this.pageSize * this.current
-        );
-        if (this.exhibitList.length == 0) {
-          this.current--;
-          this.exhibitList = this.PoolList.slice(
-            this.pageSize * (this.current - 1),
-            this.pageSize * this.current
-          );
-        }
-      }
-      return;
-    }
-    if (addPool) {
-      addPool.ResourcePoolId = "资源池" + (this.PoolList.length + 1);
-      this.PoolList.push(addPool);
     }
   },
   methods: {
@@ -273,7 +221,10 @@ export default {
       if (page == 1) {
         this.exhibitList = this.PoolList.slice(0, this.pageSize);
       } else {
-        this.exhibitList = this.PoolList.slice(this.pageSize * (page - 1), this.pageSize * page);
+        this.exhibitList = this.PoolList.slice(
+          this.pageSize * (page - 1),
+          this.pageSize * page
+        );
       }
       // this.exhibitList = this.PoolList.slice(page, pageSize);
       this.current = page;
