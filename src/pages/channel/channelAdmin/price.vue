@@ -1,7 +1,7 @@
 <template>
   <div class="channel-price-container">
     <div class="top-search">
-      <a-input v-model="listQuery.search" size="large" placeholder="请选择渠道商" />
+      <a-input v-model="listQuery.search" style="width:500px" size="large" placeholder="请选择渠道商" />
       <a-button type="primary" size="large" @click="search">
         查询
       </a-button>
@@ -166,6 +166,10 @@ export default {
           query: { id: record.id }
         });
       }
+    },
+    // 删除
+    handleDel(){
+      
     }
   }
 };
@@ -176,10 +180,16 @@ export default {
   margin-top: -24px;
   .top-search {
     height: 80px;
-    background: pink;
+    background: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
+    input{
+      border-radius: 0!important;
+    }
+    .ant-btn-lg{
+      border-radius: 0 4px 4px 0!important;
+    }
   }
   .price-content {
     padding: 20px;
