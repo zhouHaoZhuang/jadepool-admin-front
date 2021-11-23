@@ -166,7 +166,7 @@ export default {
     }
   },
   created() {
-    console.log("查看菜单", this.subMenu, this.menuData);
+    // console.log("查看菜单", this.subMenu, this.menuData);
     this.correctPageMinHeight(this.minHeight - 24);
     this.setActivated(this.$route);
   },

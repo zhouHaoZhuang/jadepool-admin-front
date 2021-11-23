@@ -8,23 +8,23 @@
         :label-col="labelCol"
         :wrapper-col="wrapperCol"
       >
-        <a-form-model-item label="渠道商全称" prop="name">
-          <a-input v-model="form.name" />
+        <a-form-model-item label="渠道商全称" prop="cutomerName">
+          <a-input v-model="form.cutomerName" />
         </a-form-model-item>
-        <a-form-model-item label="简称" prop="name1">
-          <a-input v-model="form.name1" />
+        <a-form-model-item label="简称" prop="shortName">
+          <a-input v-model="form.shortName" />
         </a-form-model-item>
         <a-form-model-item label="项目地址">
-          <a-input v-model="form.web" />
+          <a-input v-model="form.addressProject" />
         </a-form-model-item>
         <a-form-model-item label="联系人">
-          <a-input v-model="form.user" />
+          <a-input v-model="form.contract" />
         </a-form-model-item>
         <a-form-model-item label="电话">
-          <a-input v-model="form.phone" />
+          <a-input v-model="form.number" />
         </a-form-model-item>
         <a-form-model-item label="描述">
-          <a-input v-model="form.desc" type="textarea" />
+          <a-input v-model="form.description" type="textarea" />
         </a-form-model-item>
         <a-form-model-item :wrapper-col="{ span: 18, offset: 6 }">
           <a-button type="primary" @click="onSubmit" :loading="loading">
@@ -43,22 +43,22 @@ export default {
       labelCol: { span: 6 },
       wrapperCol: { span: 18 },
       form: {
-        name: "",
-        name1: "",
-        web: "",
-        user: "",
-        phone: "",
-        desc: ""
+        cutomerName: "",
+        shortName: "",
+        addressProject: "",
+        contract: "",
+        number: "",
+        description: ""
       },
       rules: {
-        name: [
+        cutomerName: [
           {
             required: true,
             message: "请输入渠道商全称",
             trigger: "blur"
           }
         ],
-        name1: [
+        shortName: [
           {
             required: true,
             message: "请输入简称",
@@ -69,12 +69,25 @@ export default {
       loading: false
     };
   },
+  activated() {
+    this.resetForm();
+  },
   methods: {
     // 提交
     onSubmit() {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
-          console.log(valid, this.form);
+          this.loading = true;
+          this.$store
+            .dispatch("channel/add", this.form)
+            .then(res => {
+              this.$message.success("新增渠道成功");
+              this.resetForm();
+              this.$router.back();
+            })
+            .finally(() => {
+              this.loading = false;
+            });
         }
       });
     },

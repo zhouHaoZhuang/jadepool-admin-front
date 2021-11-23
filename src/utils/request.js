@@ -1,7 +1,7 @@
 import axios from "axios";
 import env from "@/config/env";
-// import message from "ant-design-vue/es/message";
-// import store from "@/store";
+import message from "ant-design-vue/es/message";
+import store from "@/store";
 // 创建 axios 实例
 const request = axios.create({
   // API 请求的默认前缀
@@ -36,17 +36,17 @@ request.interceptors.response.use(response => {
     return response;
   }
   const data = response.data;
-  // const errno = data.errno;
-  // const errmsg = data.errmsg;
-  // if (errno !== 200) {
-  //   message.warning(errmsg);
-  //   if (errno === 10001 || errno === 10006 || errno === 3) {
-  //     store.dispatch("user/logout").then(() => {
-  //       location.reload();
-  //     });
-  //   }
-  //   return Promise.reject(data);
-  // }
+  const errno = data.code;
+  const errmsg = data.msg;
+  if (errno !== '000000') {
+    message.warning(errmsg);
+    // if (errno === 10001 || errno === 10006 || errno === 3) {
+    //   store.dispatch("user/logout").then(() => {
+    //     location.reload();
+    //   });
+    // }
+    return Promise.reject(data);
+  }
   return data;
 }, errorHandler);
 

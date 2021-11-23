@@ -113,9 +113,9 @@ function loadRoutes(routesConfig) {
     }
   }
   /*************** 兼容 version < v0.6.1 *****************/
-
   // 应用配置
   const { router, store, i18n } = appOptions;
+  console.log("加载路由", routesConfig, router, store);
 
   // 如果 routesConfig 有值，则更新到本地，否则从本地获取
   if (routesConfig) {
@@ -142,7 +142,6 @@ function loadRoutes(routesConfig) {
   const menuRoutes = rootRoute && rootRoute.children;
   if (menuRoutes) {
     store.commit("setting/setMenuData", menuRoutes);
-    console.log("查看路由", menuRoutes);
   }
 }
 
