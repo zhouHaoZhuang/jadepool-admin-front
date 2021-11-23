@@ -27,14 +27,14 @@ const options = {
     },
     {
       path: "/",
-      name: "首页",
+      name: "默认",
       component: TabsView,
       redirect: "/dashboard",
       children: [
         // 首页 一级菜单
         {
           path: "/dashboard",
-          name: "仪表盘",
+          name: "首页",
           component: PageView,
           children: [
             // 二级菜单
@@ -56,20 +56,20 @@ const options = {
                   component: () => import("@/pages/home/index/index")
                 },
                 {
-                  path: "detail",
-                  name: "首页详情",
-                  meta: {
-                    invisible: true // 不显示在左侧菜单
-                  },
-                  component: () => import("@/pages/home/index/detail")
-                },
-                {
                   path: "message",
                   name: "消息提醒",
                   meta: {
                     icon: "home"
                   },
                   component: () => import("@/pages/home/index/message")
+                },
+                {
+                  path: "detail",
+                  name: "查看消息详情",
+                  meta: {
+                    invisible: true // 不显示在左侧菜单
+                  },
+                  component: () => import("@/pages/home/index/detail")
                 }
               ]
             }
@@ -156,7 +156,8 @@ const options = {
                   meta: {
                     invisible: true
                   },
-                  component: () => import("@/pages/channel/enterpriseAdmin/detail")
+                  component: () =>
+                    import("@/pages/channel/enterpriseAdmin/detail")
                 }
               ]
             }
@@ -314,12 +315,12 @@ const options = {
                     import("@/pages/production/supplier/list/list.vue")
                 },
                 {
-                  path:"add",
-                  name:"新建供应商",
-                  meta:{
-                    invisible:true
+                  path: "add",
+                  name: "新建供应商",
+                  meta: {
+                    invisible: true
                   },
-                  component:() =>
+                  component: () =>
                     import("@/pages/production/supplier/list/price.vue")
                 },
                 {
@@ -347,7 +348,8 @@ const options = {
                   meta: {
                     icon: "home"
                   },
-                  component: () => import("@/pages/production/product/information/list.vue")
+                  component: () =>
+                    import("@/pages/production/product/information/list.vue")
                 },
                 {
                   path: "addproduct",
@@ -355,7 +357,10 @@ const options = {
                   meta: {
                     invisible: true // 不显示在左侧菜单
                   },
-                  component: () => import("@/pages/production/product/information/addproduct.vue")
+                  component: () =>
+                    import(
+                      "@/pages/production/product/information/addproduct.vue"
+                    )
                 }
               ]
             },
