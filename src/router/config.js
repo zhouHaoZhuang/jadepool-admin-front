@@ -121,6 +121,15 @@ const options = {
                     icon: "home"
                   },
                   component: () => import("@/pages/channel/channelAdmin/price")
+                },
+                {
+                  path: "update",
+                  name: "新增产品采购价格",
+                  meta: {
+                    icon: "home",
+                    invisible: true
+                  },
+                  component: () => import("@/pages/channel/channelAdmin/update")
                 }
               ]
             },
