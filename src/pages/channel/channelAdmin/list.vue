@@ -15,16 +15,17 @@
               v-model="listQuery.id"
               placeholder="渠道商ID"
             >
-              <a-select-option :value="1">
-                Jack
-              </a-select-option>
-              <a-select-option :value="2">
-                TOM
+              <a-select-option
+                v-for="item in data"
+                :key="item.id"
+                :value="item.id"
+              >
+                {{ item.cutomerName }}
               </a-select-option>
             </a-select>
           </a-form-model-item>
           <a-form-model-item>
-            <a-input v-model="listQuery.search" placeholder="搜索关键词" />
+            <a-input v-model="listQuery.cutomerName" placeholder="搜索关键词" />
           </a-form-model-item>
           <a-form-model-item>
             <a-button type="primary" @click="search">
@@ -40,13 +41,13 @@
           rowKey="id"
           :pagination="paginationProps"
         >
-          <span slot="web" slot-scope="text" style="color:#1890ff">
+          <span slot="addressProject" slot-scope="text" style="color:#1890ff">
             {{ text }}
           </span>
-          <div class="status" slot="status" slot-scope="text">
-            <div v-if="text === 200" class="dot"></div>
+          <div class="status" slot="deleted" slot-scope="text">
+            <div v-if="text === 't'" class="dot"></div>
             <div v-else class="dot dot-err"></div>
-            {{ text === 200 ? "正常" : "冻结" }}
+            {{ text === "t" ? "正常" : "冻结" }}
           </div>
           <span slot="action" slot-scope="text, record">
             <a-button type="link" @click="goDetail(record)">
@@ -54,7 +55,7 @@
             </a-button>
             <a-divider type="vertical" />
             <a-button type="link" @click="handleFrozen(record)">
-              冻结
+              {{ record.deleted !== "t" ? "解冻" : "冻结" }}
             </a-button>
           </span>
         </a-table>
@@ -69,10 +70,10 @@ export default {
     return {
       listQuery: {
         id: undefined,
-        search: "",
-        pageNo: 1,
+        cutomerName: "",
+        currentPage: 1,
         pageSize: 10,
-        total: 500
+        total: 0
       },
       columns: [
         {
@@ -82,52 +83,45 @@ export default {
         },
         {
           title: "全称",
-          dataIndex: "name",
-          key: "name"
+          dataIndex: "cutomerName",
+          key: "cutomerName"
         },
         {
           title: "简称",
-          dataIndex: "name1",
-          key: "name1"
+          dataIndex: "shortName",
+          key: "shortName"
         },
         {
           title: "项目网址",
-          dataIndex: "web",
-          key: "web",
-          scopedSlots: { customRender: "web" }
+          dataIndex: "addressProject",
+          key: "addressProject",
+          scopedSlots: { customRender: "addressProject" }
         },
         {
           title: "状态",
-          dataIndex: "status",
-          key: "status",
-          scopedSlots: { customRender: "status" }
+          dataIndex: "deleted",
+          key: "deleted",
+          scopedSlots: { customRender: "deleted" }
         },
         {
           title: "创建时间",
-          dataIndex: "gmtCreate"
+          dataIndex: "createTime",
+          key: "createTime"
         },
         {
           title: "操作",
           key: "action",
+          fixed: "right",
           scopedSlots: { customRender: "action" }
         }
       ],
-      data: [
-        {
-          id: 1,
-          name: "全程",
-          name1: "剑圣",
-          web: "www.baidu.com",
-          status: 200,
-          gmtCreate: "2021-10-12"
-        }
-      ],
+      data: [],
       paginationProps: {
         showQuickJumper: true,
         showSizeChanger: true,
         total: 1,
         showTotal: (total, range) =>
-          `共 ${total} 条记录 第 ${this.listQuery.pageNo} / ${Math.ceil(
+          `共 ${total} 条记录 第 ${this.listQuery.currentPage} / ${Math.ceil(
             total / this.listQuery.pageSize
           )} 页`,
         onChange: this.quickJump,
@@ -135,28 +129,33 @@ export default {
       }
     };
   },
+  activated() {
+    this.getList();
+  },
   methods: {
     // 查询
     search() {
-      // this.getList();
+      this.listQuery.currentPage = 1;
+      this.getList();
     },
     // 查询表格数据
     getList() {
-      this.$store.dispatch("").then(res => {
+      this.$store.dispatch("channel/getList", this.listQuery).then(res => {
         console.log("获取数据", res);
-        this.paginationProps.total = 500;
+        this.data = [...res.data.list];
+        this.paginationProps.total = res.data.totalCount * 1;
       });
     },
     // 表格分页快速跳转n页
-    quickJump(pageNo) {
-      this.listQuery.pageNo = pageNo;
-      // this.getList();
+    quickJump(currentPage) {
+      this.listQuery.currentPage = currentPage;
+      this.getList();
     },
     // 表格分页切换每页条数
     onShowSizeChange(current, pageSize) {
-      this.listQuery.pageNo = current;
+      this.listQuery.currentPage = current;
       this.listQuery.pageSize = pageSize;
-      // this.getList();
+      this.getList();
     },
     // 查看
     goDetail(record) {
@@ -166,7 +165,19 @@ export default {
       });
     },
     // 冻结
-    handleFrozen(record) {},
+    handleFrozen(record) {
+      const deleted = record.deleted === "t" ? "f" : "t";
+      this.$store
+        .dispatch("channel/updateStatus", {
+          id: record.id,
+          deleted
+        })
+        .then(res => {
+          this.$message.success("操作成功");
+          const index = this.data.findIndex(ele => ele.id === record.id);
+          this.data.splice(index, { ...record, deleted });
+        });
+    },
     // 新增渠道
     addChannel() {
       this.$router.push("/channel/index/add");
