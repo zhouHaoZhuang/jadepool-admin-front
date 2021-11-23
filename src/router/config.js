@@ -335,15 +335,17 @@ const options = {
                   path: "addproduct",
                   name: "新建产品线",
                   meta: {
-                    invisible: true // 不显示在左侧菜单
+                    invisible: true, // 不显示在左侧菜单
+                    back: true // 后退
                   },
                   component: () => import("@/pages/production/product/information/addproduct.vue")
                 },
                 {
                   path: "editproduct",
-                  name: "编辑产品信息",
+                  name: "编辑产品线",
                   meta: {
-                    invisible: true // 不显示在左侧菜单
+                    invisible: true, // 不显示在左侧菜单
+                    back: true // 后退
                   },
                   component: () => import("@/pages/production/product/information/editproduct.vue")
                 }
