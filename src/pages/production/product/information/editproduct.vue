@@ -8,6 +8,9 @@
         :label-col="labelCol"
         :wrapper-col="wrapperCol"
       >
+        <a-form-model-item label="资源池产品ID">
+          {{ form.ResourcePoolId }}
+        </a-form-model-item>
         <a-form-model-item
           ref="ResourcePoolName"
           label="资源池产品名称"
@@ -38,16 +41,16 @@
             </a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item  label="供应商产品CODE" >
+        <a-form-model-item label="供应商产品CODE">
           <a-input v-model="form.SupplierCode" />
         </a-form-model-item>
         <a-form-model-item label="供应商产品Type">
           <a-input v-model="form.SupplierType" />
         </a-form-model-item>
-        <a-form-model-item  label="产品经理">
+        <a-form-model-item label="产品经理">
           <a-input v-model="form.pm" />
         </a-form-model-item>
-        <a-form-model-item label="备注" >
+        <a-form-model-item label="备注">
           <a-input v-model="form.Remark" type="textarea" />
         </a-form-model-item>
         <a-button type="primary" @click="onSubmit" :loading="loading">
@@ -95,10 +98,18 @@ export default {
             message: "select",
             trigger: "change"
           }
-        ],
+        ]
       },
       loading: false
     };
+  },
+  activated() {
+    let form = this.$route.query.form;
+    // if (form == "[object Object]") {
+    //   return;
+    // }
+    this.form = form;
+    // console.log(form, "********");
   },
   methods: {
     // 提交
@@ -113,17 +124,17 @@ export default {
               form: this.form
             }
           });
-          this.resetForm()
+          this.resetForm();
         }
       });
     },
     // 重置表单数据
     resetForm() {
       this.$refs.ruleForm.resetFields();
-      this.form.SupplierCode = ''
-      this.form.SupplierType = ''
-      this.form.pm = ''
-      this.form.Remark = ''
+      this.form.SupplierCode = "";
+      this.form.SupplierType = "";
+      this.form.pm = "";
+      this.form.Remark = "";
     }
   }
 };

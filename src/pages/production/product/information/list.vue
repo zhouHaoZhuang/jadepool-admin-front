@@ -34,7 +34,7 @@
         ><span>操作</span>
       </div>
       <div>
-        <div>
+        <!-- <div>
           <div>P00001</div>
           <div>游戏安全盒子</div>
           <div>game</div>
@@ -43,26 +43,39 @@
           <div></div>
           <div>游戏盒子专用账号</div>
           <div><a>编辑</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a>删除</a></div>
+        </div> -->
+        <div v-for="(v, i) in exhibitList" :key="i" :id="v.ResourcePoolId">
+          <div>{{ v.ResourcePoolId }}</div>
+          <div>{{ v.ResourcePoolName }}</div>
+          <div>{{ v.ResourcePoolCode }}</div>
+          <div>{{ v.SupplierName }}</div>
+          <div>{{ v.SupplierCode }}</div>
+          <div>{{ v.SupplierType }}</div>
+          <div>{{ v.Remark }}</div>
+          <div>
+            <a @click="editPool(v)">编辑</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a
+              @click="delectPool"
+              >删除</a
+            >
+          </div>
         </div>
       </div>
       <div>
         <span>
-          共400条记录第1/80页
+          共{{ PoolList.length }}条记录第{{ current }}/{{ pageNum }}页
         </span>
         <a-pagination
           size="small"
-          :total="50"
+          :total="PoolList.length"
           v-model="current"
           :page-size-options="pageSizeOptions"
           show-quick-jumper
           showSizeChanger
-          :defaultPageSize="5"
           @change="changepage"
-          :show-total="
-            (total, range) => `第${range[0]}条——第${range[1]} 条 共 ${total} 条记录`
-          "
-          :page-size="5"
+          :show-total="(total, range) => `第${range[0]}条--第${range[1]}条`"
+          :page-size="pageSize"
           :default-current="1"
+          @showSizeChange="onShowSizeChange"
         >
           <template slot="buildOptionText" slot-scope="props">
             <span v-if="props.value !== '50'">{{ props.value }}条/页</span>
@@ -76,6 +89,8 @@
 </template>
 
 <script>
+import { loadGuards } from "@/utils/routerUtil";
+// import { loadGuards } from "@/utils/routerUtil";
 // import addproduct from './addproduct.vue'
 export default {
   name: "index",
@@ -83,22 +98,193 @@ export default {
     return {
       pageSizeOptions: ["5", "10", "20", "30"],
       current: 1,
-      pageSize: 10,
-      total: 50
+      pageSize: 5,
+      PoolList: [
+        {
+          ResourcePoolId: "资源池1",
+          ResourcePoolName: "腾讯游戏盒子",
+          ResourcePoolCode: "腾讯",
+          SupplierName: "腾讯云",
+          SupplierCode: "esc",
+          SupplierType: "云服务",
+          pm: "腾讯云",
+          Remark: "游戏盒子"
+        },
+        {
+          ResourcePoolId: "资源池2",
+          ResourcePoolName: "华为云盒子",
+          ResourcePoolCode: "huawei",
+          SupplierName: "华为云",
+          SupplierCode: "huawei",
+          SupplierType: "华为云服务",
+          pm: "华为云",
+          Remark: "华为云盒子"
+        },
+        {
+          ResourcePoolId: "资源池3",
+          ResourcePoolName: "华为云盒子",
+          ResourcePoolCode: "huawei",
+          SupplierName: "华为云",
+          SupplierCode: "huawei",
+          SupplierType: "华为云服务",
+          pm: "华为云",
+          Remark: "华为云盒子"
+        },
+        {
+          ResourcePoolId: "资源池4",
+          ResourcePoolName: "华为云盒子",
+          ResourcePoolCode: "huawei",
+          SupplierName: "华为云",
+          SupplierCode: "huawei",
+          SupplierType: "华为云服务",
+          pm: "华为云",
+          Remark: "华为云盒子"
+        },
+        {
+          ResourcePoolId: "资源池5",
+          ResourcePoolName: "华为云盒子",
+          ResourcePoolCode: "huawei",
+          SupplierName: "华为云",
+          SupplierCode: "huawei",
+          SupplierType: "华为云服务",
+          pm: "华为云",
+          Remark: "华为云盒子"
+        },
+        {
+          ResourcePoolId: "资源池6",
+          ResourcePoolName: "华为云盒子",
+          ResourcePoolCode: "huawei",
+          SupplierName: "华为云",
+          SupplierCode: "huawei",
+          SupplierType: "华为云服务",
+          pm: "华为云",
+          Remark: "华为云盒子"
+        },
+        {
+          ResourcePoolId: "资源池7",
+          ResourcePoolName: "华为云盒子",
+          ResourcePoolCode: "huawei",
+          SupplierName: "华为云",
+          SupplierCode: "huawei",
+          SupplierType: "华为云服务",
+          pm: "华为云",
+          Remark: "华为云盒子"
+        }
+      ],
+      exhibitList: []
     };
   },
-  components: {
-    // addproduct
+  computed: {
+    pageNum() {
+      if (this.PoolList.length / this.pageSize < 1) {
+        return 1;
+      } else {
+        if (this.PoolList.length % this.pageSize == 0) {
+          return this.PoolList.length / this.pageSize;
+        } else {
+          return (
+            (this.PoolList.length - (this.PoolList.length % this.pageSize)) /
+              this.pageSize +
+            1
+          );
+        }
+      }
+    }
+  },
+  created() {
+    this.exhibitList = this.PoolList.slice(0, this.pageSize);
+    // let addPool = this.$route.params.form;
+    // console.log(addPool, "-----------");
+  },
+  activated() {
+    let addPool = this.$route.query.form;
+    if (addPool === "[object Object]") {
+      return;
+    }
+    // console.log(addPool.ResourcePoolId, "-----------");
+
+    if (addPool.ResourcePoolId) {
+      let inx = this.PoolList.findIndex(function(params) {
+        return params.ResourcePoolId === addPool.ResourcePoolId;
+      });
+      this.PoolList.splice(inx, 1, addPool);
+      // console.log(this.PoolList, "this.PoolList");
+      if (this.current == 1) {
+        this.exhibitList = this.PoolList.slice(0, this.pageSize);
+      } else {
+        this.exhibitList = this.PoolList.slice(
+          this.pageSize * (this.current - 1),
+          this.pageSize * this.current
+        );
+        if (this.exhibitList.length == 0) {
+          this.current--;
+          this.exhibitList = this.PoolList.slice(
+            this.pageSize * (this.current - 1),
+            this.pageSize * this.current
+          );
+        }
+      }
+      return;
+    }
+    if (addPool) {
+      addPool.ResourcePoolId = "资源池" + (this.PoolList.length + 1);
+      this.PoolList.push(addPool);
+    }
   },
   methods: {
+    delectPool(e) {
+      // console.log(e.path[2].id);
+      const inx = this.exhibitList.findIndex(function(params) {
+        return params.ResourcePoolId == e.path[2].id;
+      });
+      this.exhibitList.splice(inx, 1);
+      const inx2 = this.PoolList.findIndex(function(params) {
+        return params.ResourcePoolId == e.path[2].id;
+      });
+      this.PoolList.splice(inx2, 1);
+      if (this.current == 1) {
+        this.exhibitList = this.PoolList.slice(0, this.pageSize);
+      } else {
+        this.exhibitList = this.PoolList.slice(
+          this.pageSize * (this.current - 1),
+          this.pageSize * this.current
+        );
+        if (this.exhibitList.length == 0) {
+          this.current--;
+          this.exhibitList = this.PoolList.slice(
+            this.pageSize * (this.current - 1),
+            this.pageSize * this.current
+          );
+        }
+      }
+    },
     addinform() {
       this.$router.push("/production/product/addproduct");
     },
     handleMenuClick(e) {
       console.log("click", e);
     },
+    onShowSizeChange(current, pageSize) {
+      this.pageSize = pageSize;
+      this.exhibitList = this.PoolList.slice(current - 1, pageSize);
+    },
     changepage(page, pageSize) {
-      console.log(page, pageSize, "-------");
+      // console.log(page, pageSize, "-------");
+      if (page == 1) {
+        this.exhibitList = this.PoolList.slice(0, this.pageSize);
+      } else {
+        this.exhibitList = this.PoolList.slice(this.pageSize * (page - 1), this.pageSize * page);
+      }
+      // this.exhibitList = this.PoolList.slice(page, pageSize);
+      this.current = page;
+    },
+    editPool(v) {
+      this.$router.push({
+        path: "/production/product/editproduct",
+        query: {
+          form: v
+        }
+      });
     }
   }
 };
@@ -168,11 +354,11 @@ export default {
       // margin-bottom: 200px;
     }
     > div:nth-child(2) {
-      height: 265px;
       > div {
         display: flex;
         width: 100%;
         padding: 0 16px;
+        height: 53px;
         border-bottom: 1px solid #000;
         > div {
           flex: 1;

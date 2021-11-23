@@ -333,11 +333,19 @@ const options = {
                 },
                 {
                   path: "addproduct",
-                  name: "产品信息管理",
+                  name: "新建产品线",
                   meta: {
                     invisible: true // 不显示在左侧菜单
                   },
                   component: () => import("@/pages/production/product/information/addproduct.vue")
+                },
+                {
+                  path: "editproduct",
+                  name: "编辑产品信息",
+                  meta: {
+                    invisible: true // 不显示在左侧菜单
+                  },
+                  component: () => import("@/pages/production/product/information/editproduct.vue")
                 }
               ]
             },
