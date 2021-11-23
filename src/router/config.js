@@ -27,7 +27,7 @@ const options = {
     },
     {
       path: "/",
-      name: "首页",
+      name: "默认",
       component: TabsView,
       redirect: "/dashboard",
       children: [
@@ -48,20 +48,12 @@ const options = {
               children: [
                 // 三级菜单
                 {
-                  path: "index",
+                  path: "home",
                   name: "后台首页",
                   meta: {
                     icon: "home"
                   },
                   component: () => import("@/pages/home/index/index")
-                },
-                {
-                  path: "detail",
-                  name: "首页详情",
-                  meta: {
-                    invisible: true // 不显示在左侧菜单
-                  },
-                  component: () => import("@/pages/home/index/detail")
                 },
                 {
                   path: "message",
@@ -70,6 +62,15 @@ const options = {
                     icon: "home"
                   },
                   component: () => import("@/pages/home/index/message")
+                },
+                {
+                  path: "detail",
+                  name: "查看消息详情",
+                  meta: {
+                    invisible: true, // 不显示在左侧菜单
+                    back: true
+                  },
+                  component: () => import("@/pages/home/index/detail")
                 }
               ]
             }
@@ -101,7 +102,8 @@ const options = {
                   path: "add",
                   name: "新增渠道",
                   meta: {
-                    invisible: true
+                    invisible: true,
+                    back: true
                   },
                   component: () =>
                     import("@/pages/channel/channelAdmin/addChannel")
@@ -110,7 +112,8 @@ const options = {
                   path: "detail",
                   name: "渠道详情",
                   meta: {
-                    invisible: true
+                    invisible: true,
+                    back: true
                   },
                   component: () => import("@/pages/channel/channelAdmin/detail")
                 },
@@ -121,6 +124,16 @@ const options = {
                     icon: "home"
                   },
                   component: () => import("@/pages/channel/channelAdmin/price")
+                },
+                {
+                  path: "update",
+                  name: "新增产品采购价格",
+                  meta: {
+                    icon: "home",
+                    invisible: true,
+                    back: true
+                  },
+                  component: () => import("@/pages/channel/channelAdmin/update")
                 }
               ]
             },
@@ -145,9 +158,11 @@ const options = {
                   path: "detail",
                   name: "企业详情",
                   meta: {
-                    invisible: true
+                    invisible: true,
+                    back: true
                   },
-                  component: () => import("@/pages/channel/enterpriseAdmin/detail")
+                  component: () =>
+                    import("@/pages/channel/enterpriseAdmin/detail")
                 }
               ]
             }
@@ -305,6 +320,15 @@ const options = {
                     import("@/pages/production/supplier/list/list.vue")
                 },
                 {
+                  path: "add",
+                  name: "新建供应商",
+                  meta: {
+                    invisible: true
+                  },
+                  component: () =>
+                    import("@/pages/production/supplier/list/price.vue")
+                },
+                {
                   path: "purchase",
                   name: "采购账号列表",
                   meta: {
@@ -329,7 +353,8 @@ const options = {
                   meta: {
                     icon: "home"
                   },
-                  component: () => import("@/pages/production/product/information/list.vue")
+                  component: () =>
+                    import("@/pages/production/product/information/list.vue")
                 },
                 {
                   path: "addproduct",

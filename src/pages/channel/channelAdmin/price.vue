@@ -1,6 +1,16 @@
 <template>
   <div class="channel-price-container">
-    <div class="top-search"></div>
+    <div class="top-search">
+      <a-input
+        v-model="listQuery.search"
+        style="width:500px"
+        size="large"
+        placeholder="请选择渠道商"
+      />
+      <a-button type="primary" size="large" @click="search">
+        查询
+      </a-button>
+    </div>
     <div class="price-content">
       <div class="public-header-wrap">
         <a-form-model layout="inline" :model="listQuery">
@@ -46,7 +56,7 @@
               编辑
             </a-button>
             <a-divider type="vertical" />
-            <a-button type="link" @click="handleFrozen(record)">
+            <a-button type="link" @click="handleDel(record)">
               删除
             </a-button>
           </span>
@@ -149,18 +159,25 @@ export default {
       this.listQuery.pageSize = pageSize;
       // this.getList();
     },
-    // 冻结
-    handleFrozen(record) {},
     // 新增/编辑
     updatePrice(type, record) {
       if (type === "add") {
-        this.$router.push("/channel/index/add");
+        this.$router.push("/channel/index/update");
       } else {
         this.$router.push({
-          path: "/channel/index/detail",
+          path: "/channel/index/update",
           query: { id: record.id }
         });
       }
+    },
+    // 删除
+    handleDel() {
+      this.$confirm({
+        title: "确认要删除吗？",
+        onOk: () => {
+          // this.$store.dispatch("").then(res => {});
+        }
+      });
     }
   }
 };
@@ -171,7 +188,16 @@ export default {
   margin-top: -24px;
   .top-search {
     height: 80px;
-    background: pink;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    input {
+      border-radius: 0 !important;
+    }
+    .ant-btn-lg {
+      border-radius: 0 4px 4px 0 !important;
+    }
   }
   .price-content {
     padding: 20px;
