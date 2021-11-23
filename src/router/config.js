@@ -329,8 +329,15 @@ const options = {
                   meta: {
                     icon: "home"
                   },
-                  component: () =>
-                    import("@/pages/production/product/information/list.vue")
+                  component: () => import("@/pages/production/product/information/list.vue")
+                },
+                {
+                  path: "addproduct",
+                  name: "产品信息管理",
+                  meta: {
+                    invisible: true // 不显示在左侧菜单
+                  },
+                  component: () => import("@/pages/production/product/information/addproduct.vue")
                 }
               ]
             },
