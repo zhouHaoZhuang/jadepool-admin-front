@@ -141,7 +141,6 @@ export default {
     // 查询表格数据
     getList() {
       this.$store.dispatch("channel/getList", this.listQuery).then(res => {
-        console.log("获取数据", res);
         this.data = [...res.data.list];
         this.paginationProps.total = res.data.totalCount * 1;
       });
