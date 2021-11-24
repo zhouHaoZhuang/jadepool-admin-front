@@ -4,5 +4,6 @@ import setting from "./setting"; // 配置文件
 import pool from "./pool";
 import channel from "./channel";
 import provider from "./provider";
+import purchase from "./purchase";
 
-export default { user, account, setting, channel, provider, pool };
+export default { user, account, setting, channel, provider, pool, purchase };

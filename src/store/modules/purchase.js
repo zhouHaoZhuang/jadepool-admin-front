@@ -1,52 +1,52 @@
 import request from "@/utils/request";
 
-const provider = {
+const purchase = {
   namespaced: true,
   state: {},
 
   mutations: {},
 
   actions: {
-    // 获取列表
+    // 获取采购
     getList({ commit, state }, params) {
       return request({
-        url: "/supplier",
+        url: "/purchaseAccount",
         method: "get",
         params
       });
     },
-    // 新增供应商
+    // 新增采购
     add({ commit, state }, data) {
       return request({
-        url: "/supplier",
+        url: "/purchaseAccount",
         method: "post",
         data
       });
     },
-    // 编辑供应商
+    // 编辑采购
     edit({ commit, state }, data) {
       return request({
-        url: `/supplier/${data.id}`,
+        url: `/purchaseAccount/${data.id}`,
         method: "put",
         data
       });
     },
-    // 删除供应商
+    // 删除采购
     updateStatus({ commit, state }, data) {
       return request({
-        url: `/supplier/${data.ids}`,
+        url: `/purchaseAccount/${data.ids}`,
         method: "delete",
         data
       });
     },
-    //获取ID
-    getId({ commit, state }, id) {
-      return request({
-        url: `/supplier/one?id=${id}`,
-        method: "get",
-      });
-    },
+  // 获取采购id
+  getId({ commit, state }, id) {
+    return request({
+      url: `/purchaseAccount/one?id=${id}`,
+      method: "get",
+    });
+  },
   }
 };
 
-export default provider;
+export default purchase;

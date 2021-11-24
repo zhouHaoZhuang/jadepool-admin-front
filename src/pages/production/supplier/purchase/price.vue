@@ -2,20 +2,30 @@
   <div class="supplier-add">
     <div class="content">
       <a-form-model ref="ruleForm" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-model-item label="所属供应商" prop="name">
-          <a-input v-model="form.name" />
+        <a-form-model-item label="所属供应商" prop="accountCode">
+          <a-select
+            v-model="form.supplierCode"
+            placeholder="please select your zone"
+          >
+            <a-select-option value="阿里云">
+              阿里云
+            </a-select-option>
+            <a-select-option value="华为云">
+              华为云
+            </a-select-option>
+          </a-select>
         </a-form-model-item>
-        <a-form-model-item label="供应商标识" prop="name1">
-          <a-input v-model="form.name1" />
+        <a-form-model-item label="供应商标识" prop="supplierAccountCode">
+          <a-input v-model="form.supplierAccountCode" />
         </a-form-model-item>
-        <a-form-model-item label="供应商侧账号ID" prop="web">
-          <a-input v-model="form.web" />
+        <a-form-model-item label="供应商侧账号ID" prop="accountTag">
+          <a-input v-model="form.accountTag" />
         </a-form-model-item>
         <a-form-model-item label="账号配置">
-          <a-input v-model="form.desc" type="textarea" />
+          <a-input v-model="form.keyConfig" type="keyConfig" />
         </a-form-model-item>
         <a-form-model-item label="备注">
-          <a-input v-model="form.desc" type="textarea" />
+          <a-input v-model="form.remark" type="remark" />
         </a-form-model-item>
         <a-form-model-item :wrapper-col="{span:18,offset:6}">
           <a-button type="primary" @click="onSubmit" :loading="loading">
@@ -36,29 +46,29 @@ export default {
       wrapperCol:{span:18},
       other:"",
       form:{
-        name:"",
-        name1:"",
-        web:"",
-        user:"",
-        phone:"",
-        desc:""
+        accountCode:"",
+        supplierAccountCode:"",
+        accountTag:"",
+        keyConfig:"",
+        remark:"",
+        supplierCode:""
       },
       rules:{
-        name:[
+       supplierCode: [
           {
-            required:true,
-            message:"请选择所属供应商",
-            trigger:"blur"
+            required: true,
+            message: "select",
+            trigger: "change"
           }
         ],
-        name1:[
+        supplierAccountCode:[
           {
             required:true,
             message:"请输入供应商标识",
             trigger:"blur"
           }
         ],
-        web:[
+        accountTag:[
           {
             required:true,
             message:"请输入供应商侧账号ID",
@@ -72,15 +82,27 @@ export default {
   methods: {
     // 提交
     onSubmit(){
-      this.$refs.ruleForm.validate(valid => {
-        if(valid) {
-          console.log(valid, this.form);
-        }
-      })
+     this.$refs.ruleForm.validate(valid => {
+       console.log(this.form);
+        this.$store.dispatch("purchase/add", this.form).then(val => {
+          console.log(val);
+          this.$message.success("提交成功");
+          this.$router.back();
+          this.resetForm();
+        });
+      });
     },
     // 重置
     resetForm(){
       this.$refs.ruleForm.resetFields();
+      this.form = {
+        accountCode:"",
+        supplierAccountCode:"",
+        accountTag:"",
+        keyConfig:"",
+        remark:"",
+        supplierCode:""
+      }
     }
   }
 };
