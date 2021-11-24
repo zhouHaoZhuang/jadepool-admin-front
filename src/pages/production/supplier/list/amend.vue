@@ -2,23 +2,26 @@
   <div class="supplier-add">
     <div class="content">
       <a-form-model ref="ruleForm" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-model-item label="供应商全名称" prop="name">
-          <a-input v-model="form.name" />
+         <a-form-model-item label="供应商ID">
+          {{ form.id }}
         </a-form-model-item>
-        <a-form-model-item label="简称" prop="name1">
-          <a-input v-model="form.name1" />
+        <a-form-model-item label="供应商全名称" prop="supplierName">
+          <a-input v-model="form.supplierName" />
+        </a-form-model-item>
+        <a-form-model-item label="简称" prop="shortName">
+          <a-input v-model="form.shortName" />
         </a-form-model-item>
         <a-form-model-item label="网址">
-          <a-input v-model="form.web" />
+          <a-input v-model="form.url" />
         </a-form-model-item>
         <a-form-model-item label="联系人">
-          <a-input v-model="form.user" />
+          <a-input v-model="form.contacts" />
         </a-form-model-item>
         <a-form-model-item label="电话">
-          <a-input v-model="form.phone" />
+          <a-input v-model="form.number" />
         </a-form-model-item>
         <a-form-model-item label="描述">
-          <a-input v-model="form.desc" type="textarea" />
+          <a-input v-model="form.description" type="textarea" />
         </a-form-model-item>
         <a-form-model-item :wrapper-col="{span:18,offset:6}">
           <a-button type="primary" @click="onSubmit" :loading="loading">
@@ -32,19 +35,20 @@
 
 <script>
 export default {
-  name: "index",
   data() {
     return {
+      detail:{},
       labelCol:{span:6},
       wrapperCol:{span:18},
       other:"",
       form:{
-        name:"",
-        name1:"",
-        web:"",
-        user:"",
-        phone:"",
-        desc:""
+        id:"",
+        supplierName:"",
+        shortName:"",
+        url:"",
+        contacts:"",
+        number:"",
+        description:""
       },
       rules:{
         name:[
@@ -64,6 +68,12 @@ export default {
       },
       loading:false
     };
+  },
+  activated(){
+    let id = this.$route.query.id;
+    this.$store.dispatch("provider/getId", id).then(res => {
+    this.form = res.data
+    });
   },
   methods: {
     onSubmit(){

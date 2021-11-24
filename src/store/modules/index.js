@@ -6,4 +6,15 @@ import channel from "./channel";
 import provider from "./provider";
 import order from "./order";
 
-export default { user, account, setting, channel, provider, pool, order };
+import purchase from "./purchase";
+
+export default {
+  user,
+  account,
+  setting,
+  channel,
+  provider,
+  pool,
+  order,
+  purchase
+};
