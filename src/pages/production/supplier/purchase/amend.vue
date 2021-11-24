@@ -96,13 +96,24 @@ export default {
   methods: {
     onSubmit() {
       this.$refs.ruleForm.validate(valid => {
-        if (valid) {
-          console.log(valid, this.form);
-        }
+        this.$store.dispatch("provider/edit", this.form).then(val => {
+          console.log(val);
+          this.$message.success("提交成功");
+          this.$router.back();
+          this.resetForm();
+        });
       });
     },
     resetForm() {
       this.$refs.ruleForm.resetFields();
+      this.form = {
+        id: "",
+        supplierCode: "",
+        accountTag: "",
+        supplierAccountCode: "",
+        remark: "",
+        textarea: ""
+      }
     }
   }
 };

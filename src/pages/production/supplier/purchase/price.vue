@@ -7,11 +7,10 @@
             v-model="form.supplierCode"
             placeholder="please select your zone"
           >
-            <a-select-option value="阿里云">
+            <a-select-option value="S20211122000001">
               阿里云
             </a-select-option>
             <a-select-option value="华为云">
-              华为云
             </a-select-option>
           </a-select>
         </a-form-model-item>

@@ -34,7 +34,7 @@ const provider = {
     // 删除供应商
     updateStatus({ commit, state }, data) {
       return request({
-        url: `/supplier/${data.ids}`,
+        url: `/supplier/${data.id}`,
         method: "delete",
         data
       });
