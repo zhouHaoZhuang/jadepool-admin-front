@@ -174,7 +174,7 @@ export default {
         .then(res => {
           this.$message.success("操作成功");
           const index = this.data.findIndex(ele => ele.id === record.id);
-          this.data.splice(index, { ...record, deleted });
+          this.data.splice(index, 1, { ...record, deleted });
         });
     },
     // 新增渠道

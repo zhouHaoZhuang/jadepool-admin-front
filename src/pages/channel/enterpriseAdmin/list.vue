@@ -43,7 +43,7 @@
           <div class="status" slot="corporationStatus" slot-scope="text">
             <div v-if="text === 0" class="dot"></div>
             <div v-else class="dot dot-default"></div>
-            {{ corporationStatusEnum[text] }}
+            {{ corporationStatusEnum[text] }}{{ text }}
           </div>
           <span slot="action" slot-scope="text, record">
             <a-button type="link" @click="goDetail(record)">
@@ -51,7 +51,7 @@
             </a-button>
             <a-divider type="vertical" />
             <a-button type="link" @click="handleFrozen(record)">
-              冻结
+              {{ record.corporationStatus === 0 ? "冻结" : "解冻" }}
             </a-button>
           </span>
         </a-table>
@@ -169,16 +169,16 @@ export default {
     },
     // 冻结
     handleFrozen(record) {
-      const deleted = record.deleted === "t" ? "f" : "t";
+      const corporationStatus = record.corporationStatus === 0 ? 1 : 0;
       this.$store
         .dispatch("channel/updateEnterpriseStatus", {
           id: record.id,
-          deleted
+          corporationStatus
         })
         .then(res => {
           this.$message.success("操作成功");
           const index = this.data.findIndex(ele => ele.id === record.id);
-          this.data.splice(index, { ...record, deleted });
+          this.data.splice(index, 1, { ...res.data });
         });
     }
   }
