@@ -27,31 +27,6 @@
     </div>
     <div class="InformationList">
       <div>
-        <!-- <div>
-          <div>P00001</div>
-          <div>游戏安全盒子</div>
-          <div>game</div>
-          <div>阿里云（aliyun）</div>
-          <div>ecs</div>
-          <div></div>
-          <div>游戏盒子专用账号</div>
-          <div><a>编辑</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a>删除</a></div>
-        </div> -->
-        <!-- <div v-for="(v, i) in exhibitList" :key="i" :id="v.id">
-          <div>{{ v.productCode }}</div>
-          <div>{{ v.productName }}</div>
-          <div>{{ v.productCode }}</div>
-          <div>{{ v.supplierName }}</div>
-          <div>{{ v.supplierProductCode }}</div>
-          <div>{{ v.supplierProductType }}</div>
-          <div>{{ v.remark }}</div>
-          <div>
-            <a @click="editPool(v)">编辑</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a
-              @click="delectPool"
-              >删除</a
-            >
-          </div>
-        </div> -->
         <a-table
           :columns="columns"
           :data-source="exhibitList"
