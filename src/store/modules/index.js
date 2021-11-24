@@ -5,4 +5,4 @@ import pool from "./pool";
 import channel from "./channel";
 import provider from "./provider";
 
-export default { user, account, setting, channel, provider };
+export default { user, account, setting, channel, provider, pool };
