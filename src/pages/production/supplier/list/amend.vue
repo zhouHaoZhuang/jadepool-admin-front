@@ -2,6 +2,9 @@
   <div class="supplier-add">
     <div class="content">
       <a-form-model ref="ruleForm" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
+         <a-form-model-item label="渠道商ID">
+          {{ detail.id }}
+        </a-form-model-item>
         <a-form-model-item label="供应商全名称" prop="name">
           <a-input v-model="form.name" />
         </a-form-model-item>
@@ -32,13 +35,14 @@
 
 <script>
 export default {
-  name: "index",
   data() {
     return {
+      detail:{},
       labelCol:{span:6},
       wrapperCol:{span:18},
       other:"",
       form:{
+        id:"",
         name:"",
         name1:"",
         web:"",
@@ -64,6 +68,9 @@ export default {
       },
       loading:false
     };
+  },
+  created(){
+    // this.getDetail();
   },
   methods: {
     onSubmit(){

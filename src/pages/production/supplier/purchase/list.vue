@@ -15,16 +15,13 @@
               v-model="listQuery.id"
               placeholder="采购账号ID"
             >
-              <a-select-option :value="1">
-                Jack
-              </a-select-option>
-              <a-select-option :value="2">
-                TOM
+              <a-select-option v-for="item in data" :key="item.id" :value="item.id">
+                {{item.id}}
               </a-select-option>
             </a-select>
           </a-form-model-item>
           <a-form-model-item>
-            <a-input v-model="listQuery.search" placeholder="搜索关键词" />
+            <a-input v-model="listQuery.id" placeholder="搜索关键词" />
           </a-form-model-item>
           <a-form-model-item>
             <a-button type="primary" @click="search">
@@ -57,13 +54,12 @@
 
 <script>
 export default {
-  name: "index",
   data() {
     return {
       listQuery: {
         id: undefined,
-        search: "",
-        pageNo: 1,
+        cutomerName: "",
+        currentPage: 1,
         pageSize: 10,
         total: 500
       },
@@ -75,27 +71,27 @@ export default {
         },
         {
           title: "所属供应商",
-          dataIndex: "name",
-          key: "name"
+          dataIndex: "supplierCode",
+          key: "supplierCode"
         },
         {
           title: "账号标识",
-          dataIndex: "name1",
-          key: "name1"
+          dataIndex: "accountTag",
+          key: "accountTag"
         },
         {
           title: "供应商侧账号ID",
-          dataIndex: "web",
-          key: "web",
+          dataIndex: "supplierAccountCode",
+          key: "supplierAccountCode",
         },
         {
           title: "备注",
-          dataIndex: "status",
-          key: "status",
+          dataIndex: "remark",
+          key: "remark",
         },
         {
           title: "创建时间",
-          dataIndex: "gmtCreate"
+          dataIndex: "createTime"
         },
         {
           title: "操作",
@@ -104,21 +100,14 @@ export default {
         }
       ],
       data: [
-        {
-          id: "SA00001",
-          name: "阿里云（aliyun）",
-          name1: "shhhxx001",
-          web: "1695953920158663",
-          status: "游戏盒子专用账号",
-          gmtCreate: "2016-09-21  08:50:08"
-        }
+
       ],
       paginationProps: {
         showQuickJumper: true,
         showSizeChanger: true,
         total: 1,
         showTotal: (total, range) =>
-          `共 ${total} 条记录 第 ${this.listQuery.pageNo} / ${Math.ceil(
+          `共 ${total} 条记录 第 ${this.listQuery.currentPage} / ${Math.ceil(
             total / this.listQuery.pageSize
           )} 页`,
         onChange: this.quickJump,
@@ -126,28 +115,33 @@ export default {
       }
     };
   },
+  activated(){
+    this.getList();
+  },
   methods: {
     // 查询
     search() {
-      // this.getList();
+      this.listQuery.currentPage = 1;
+      this.getList();
     },
     // 查询表格数据
     getList() {
-      this.$store.dispatch("").then(res => {
+      this.$store.dispatch("purchase/getList",this.listQuery).then(res => {
         console.log("获取数据", res);
-        this.paginationProps.total = 500;
+        this.data = [...res.data.list]
+        this.paginationProps.total = res.data.totalCount * 1;
       });
     },
     // 表格分页快速跳转n页
-    quickJump(pageNo) {
-      this.listQuery.pageNo = pageNo;
-      // this.getList();
+    quickJump(currentPage) {
+      this.listQuery.currentPage = currentPage;
+      this.getList();
     },
     // 表格分页切换每页条数
     onShowSizeChange(current, pageSize) {
-      this.listQuery.pageNo = current;
+      this.listQuery.currentPage = current;
       this.listQuery.pageSize = pageSize;
-      // this.getList();
+      this.getList();
     },
     // 编辑
     goDetail(record) {
@@ -157,7 +151,7 @@ export default {
       });
     },
     // // 删除
-    // handleFrozen(record) {},
+    handleFrozen(record) {},
     // 新增渠道
     addChannel() {
       this.$router.push("/production/supplier/adda");

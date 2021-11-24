@@ -16,16 +16,13 @@
               v-model="listQuery.id"
               placeholder="供应商ID"
             >
-              <a-select-option :value="1">
-                Jack
-              </a-select-option>
-              <a-select-option :value="2">
-                TOM
+              <a-select-option v-for="item in data" :key="item.id" :value="item.id">
+                {{item.id}}
               </a-select-option>
             </a-select>
           </a-form-model-item>
           <a-form-model-item>
-            <a-input v-model="listQuery.search" placeholder="搜索关键词" />
+            <a-input v-model="listQuery.id" placeholder="搜索关键词" />
           </a-form-model-item>
           <a-form-model-item>
             <a-button type="primary" @click="search">
@@ -41,13 +38,13 @@
           rowKey="id"
           :pagination="paginationProps"
         >
-          <span slot="web" slot-scope="text" style="color:#1890ff">
+          <span slot="addressProject" slot-scope="text" style="color:#1890ff">
             {{ text }}
           </span>
-          <div class="status" slot="status" slot-scope="text">
-            <div v-if="text === 200" class="dot"></div>
+          <div class="status" slot="deleted" slot-scope="text">
+            <div v-if="text === 't'" class="dot"></div>
             <div v-else class="dot dot-err"></div>
-            {{ text === 200 ? "正常" : "冻结" }}
+            {{ text === "t" ? "正常" : "冻结" }}
           </div>
           <span slot="action" slot-scope="text, record">
             <a-button type="link" @click="goDetail(record)">
@@ -70,8 +67,8 @@ export default {
     return {
       listQuery: {
         id: undefined,
-        search: "",
-        pageNo: 1,
+        cutomerName: "",
+        currentPage: 1,
         pageSize: 10,
         total: 500
       },
@@ -83,52 +80,45 @@ export default {
         },
         {
           title: "全称",
-          dataIndex: "name",
-          key: "name"
+          dataIndex: "supplierName",
+          key: "supplierName"
         },
         {
           title: "简称",
-          dataIndex: "name1",
-          key: "name1"
+          dataIndex: "shortName",
+          key: "shortName"
         },
         {
           title: "网址",
-          dataIndex: "web",
-          key: "web",
-          scopedSlots: { customRender: "web" }
+          dataIndex: "url",
+          key: "url",
+          scopedSlots: { customRender: "url" }
         },
         {
           title: "状态",
-          dataIndex: "status",
-          key: "status",
-          scopedSlots: { customRender: "status" }
+          dataIndex: "deleted",
+          key: "deleted",
+          scopedSlots: { customRender: "deleted" }
         },
         {
           title: "创建时间",
-          dataIndex: "gmtCreate"
+          dataIndex: "createTime",
+          key:"createTime"
         },
         {
           title: "操作",
           key: "action",
+          fixed:"right",
           scopedSlots: { customRender: "action" }
         }
       ],
-      data: [
-        {
-          id: "0001",
-          name: "阿里云计算有限公司",
-          name1: "阿里云",
-          web: "www.aliyun.com",
-          status: 200,
-          gmtCreate: "2016-09-21  08:50:08"
-        }
-      ],
+      data: [],
       paginationProps: {
         showQuickJumper: true,
         showSizeChanger: true,
         total: 1,
         showTotal: (total, range) =>
-          `共 ${total} 条记录 第 ${this.listQuery.pageNo} / ${Math.ceil(
+          `共 ${total} 条记录 第 ${this.listQuery.currentPage} / ${Math.ceil(
             total / this.listQuery.pageSize
           )} 页`,
         onChange: this.quickJump,
@@ -142,26 +132,27 @@ export default {
   methods: {
     // 查询
     search() {
-      // this.getList();
+      this.listQuery.currentPage = 1;
+      this.getList();
     },
     // 查询表格数据
     getList() {
-      this.$store.dispatch("provider/getList").then(res => {
-        console.log("获取数据", res.data);
+      this.$store.dispatch("provider/getList",this.listQuery).then(res => {
+        console.log("获取数据", res);
         this.data = [...res.data.list]
         this.paginationProps.total = res.data.totalCount * 1;
       });
     },
     // 表格分页快速跳转n页
-    quickJump(pageNo) {
-      this.listQuery.pageNo = pageNo;
-      // this.getList();
+    quickJump(currentPage) {
+      this.listQuery.currentPage = currentPage;
+      this.getList();
     },
     // 表格分页切换每页条数
     onShowSizeChange(current, pageSize) {
-      this.listQuery.pageNo = current;
+      this.listQuery.currentPage = current;
       this.listQuery.pageSize = pageSize;
-      // this.getList();
+      this.getList();
     },
     // 编辑
     goDetail(record) {
