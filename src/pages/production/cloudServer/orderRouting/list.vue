@@ -15,7 +15,7 @@
           tableLayout="auto"
         >
           <a slot="name" slot-scope="text">{{ text }}</a>
-          <p slot="action" slot-scope="v">
+          <div slot="action" slot-scope="v">
             <a-button type="link" @click="editPool(v)">
               编辑
             </a-button>
@@ -23,36 +23,10 @@
             <a-button type="link" @click="delectPool(v.id)">
               删除
             </a-button>
-          </p>
+          </div>
         </a-table>
       </div>
-      <!-- <div>
-        <span>
-          共{{ PoolList.length }}条记录第{{ current }}/{{ pageNum }}页
-        </span>
-        <a-pagination
-          size="small"
-          :total="PoolList.length"
-          v-model="current"
-          :page-size-options="pageSizeOptions"
-          show-quick-jumper
-          showSizeChanger
-          @change="changepage"
-          :show-total="(total, range) => `第${range[0]}条--第${range[1]}条`"
-          :page-size="pageSize"
-          :default-current="1"
-          @showSizeChange="onShowSizeChange"
-        >
-          <template slot="buildOptionText" slot-scope="props">
-            <span v-if="props.value !== PoolList.length"
-              >{{ props.value }}条/页</span
-            >
-            <span v-if="props.value === PoolList.length">全部</span>
-          </template></a-pagination
-        >
-      </div> -->
     </div>
-    <!-- <addproduct class="addproduct" v-show="isshow"></addproduct> -->
   </div>
 </template>
 
@@ -71,40 +45,40 @@ export default {
       columns: [
         {
           title: "渠道商ID",
-          dataIndex: "id",
-          key: "id",
+          dataIndex: "accountCode",
+          key: "accountCode",
           ellipsis: true
         },
         {
           title: "渠道商简称",
-          dataIndex: "productName",
-          key: "productName",
+          dataIndex: "createUserName",
+          key: "createUserName",
           ellipsis: true
         },
         {
           title: "采购账号ID",
-          dataIndex: "productCode",
-          key: "productCode",
+          dataIndex: "cusomerCode",
+          key: "cusomerCode",
           ellipsis: true
         },
         {
           title: "所属供应商",
-          dataIndex: "supplierName",
-          key: "supplierName",
-          scopedSlots: { customRender: "supplierName" },
+          dataIndex: "supplier",
+          key: "supplier",
+          scopedSlots: { customRender: "supplier" },
           ellipsis: true
         },
         {
           title: "账号标识",
-          dataIndex: "supplierProductCode",
-          key: "supplierProductCode",
-          scopedSlots: { customRender: "supplierProductCode" },
+          dataIndex: "accountTag",
+          key: "accountTag",
+          scopedSlots: { customRender: "accountTag" },
           ellipsis: true
         },
         {
           title: "供应商侧账号ID",
-          dataIndex: "supplierProductType",
-          key: "supplierProductType",
+          dataIndex: "id",
+          key: "id",
           ellipsis: true
         },
         {
@@ -154,7 +128,7 @@ export default {
     }
   },
   activated() {
-    this.$store.dispatch("pool/getList").then(val => {
+    this.$store.dispatch("order/getList").then(val => {
       this.PoolList = val.data.list;
       this.data = this.PoolList;
       this.paginationProps.total = this.data.length;
@@ -181,11 +155,11 @@ export default {
   methods: {
     delectPool(id) {
       // console.log(id, "id");
-      this.$store.dispatch("pool/delList", id).then(val => {
+      this.$store.dispatch("order/delList", id).then(val => {
         // console.log(val);
         // code: "000000"
         this.$message.success("操作成功");
-        this.$store.dispatch("pool/getList").then(val => {
+        this.$store.dispatch("order/getList").then(val => {
           this.PoolList = val.data.list;
           this.data = this.PoolList;
           this.paginationProps.total = this.data.length;
@@ -212,7 +186,7 @@ export default {
       });
     },
     addinform() {
-      this.$router.push("/production/product/addproduct");
+      this.$router.push("/production/cloudServer/newOrder");
     },
     handleMenuClick(e) {
       // console.log("click", e);
@@ -263,7 +237,7 @@ export default {
     },
     editPool(v) {
       this.$router.push({
-        path: "/production/product/editproduct",
+        path: "/production/cloudServer/changeOrder",
         query: {
           form: v.id
         }

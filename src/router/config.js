@@ -434,6 +434,24 @@ const options = {
                     import(
                       "@/pages/production/cloudServer/orderRouting/list.vue"
                     )
+                },
+                {
+                  path: "newOrder",
+                  name: "新建订单路由规则",
+                  meta: {
+                    invisible: true, // 不显示在左侧菜单
+                    back: true // 后退
+                  },
+                  component: () => import("@/pages/production/cloudServer/orderRouting/newOrder.vue")
+                },
+                {
+                  path: "changeOrder",
+                  name: "编辑订单路由规则",
+                  meta: {
+                    invisible: true, // 不显示在左侧菜单
+                    back: true // 后退
+                  },
+                  component: () => import("@/pages/production/cloudServer/orderRouting/changeOrder.vue")
                 }
               ]
             }
