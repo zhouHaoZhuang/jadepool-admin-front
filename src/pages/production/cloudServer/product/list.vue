@@ -15,16 +15,17 @@
         >
           <span>阿里云</span>
         </a-form-model-item>
-        <a-form-model-item label="默认采购账号" prop="supplierName">
+        <a-form-model-item label="默认采购账号" prop="accountCode">
           <a-select
-            v-model="form.supplierName"
+            v-model="form.accountCode"
             placeholder="please select your zone"
           >
-            <a-select-option value="阿里云">
-              阿里云
-            </a-select-option>
-            <a-select-option value="华为云">
-              华为云
+           <a-select-option
+              v-for="v in purchase"
+              :value="v.accountCode"
+              :key="v.id"
+            >
+              {{ v.accountTag }}
             </a-select-option>
           </a-select>
         </a-form-model-item>
@@ -62,11 +63,9 @@ export default {
       other: "",
       form: {
         productName: "",
-        productCode: "",
-        supplierName: "",
+        accountCode: "",
         supplierProductCode: "",
         supplierProductType: "",
-        pm: "",
         remark: ""
       },
       rules: {
@@ -77,14 +76,7 @@ export default {
             trigger: "blur"
           }
         ],
-        productCode: [
-          {
-            required: true,
-            message: "输入值不能为空",
-            trigger: "blur"
-          }
-        ],
-        supplierName: [
+        accountCode: [
           {
             required: true,
             message: "select",
@@ -92,8 +84,16 @@ export default {
           }
         ]
       },
-      loading: false
+      loading: false,
+      purchase:[]
     };
+  },
+  activated() {
+     //   获取采购账号
+    this.$store.dispatch("purchase/getList").then(val => {
+      console.log(val.data.list);
+      this.purchase = val.data.list;
+    });
   },
   methods: {
     // 提交
