@@ -323,10 +323,21 @@ const options = {
                   path: "add",
                   name: "新建供应商",
                   meta: {
-                    invisible: true
+                    invisible: true,
+                    back: true
                   },
                   component: () =>
                     import("@/pages/production/supplier/list/price.vue")
+                },
+                {
+                  path:"amend",
+                  name:"编辑供应商",
+                  meta:{
+                    invisible:true,
+                    back: true
+                  },
+                  component:() =>
+                    import("@/pages/production/supplier/list/amend.vue")
                 },
                 {
                   path: "purchase",
@@ -336,6 +347,26 @@ const options = {
                   },
                   component: () =>
                     import("@/pages/production/supplier/purchase/list.vue")
+                },
+                {
+                  path:"adda",
+                  name:"新建采购账号",
+                  meta:{
+                    invisible:true,
+                    back: true
+                  },
+                  component:() =>
+                    import("@/pages/production/supplier/purchase/price.vue")
+                },
+                {
+                  path:"amends",
+                  name:"编辑采购账号",
+                  meta:{
+                    invisible:true,
+                    back: true
+                  },
+                  component:() =>
+                    import("@/pages/production/supplier/purchase/amend.vue")
                 }
               ]
             },
@@ -358,14 +389,21 @@ const options = {
                 },
                 {
                   path: "addproduct",
-                  name: "产品信息管理",
+                  name: "新建产品线",
                   meta: {
-                    invisible: true // 不显示在左侧菜单
+                    invisible: true, // 不显示在左侧菜单
+                    back: true // 后退
                   },
-                  component: () =>
-                    import(
-                      "@/pages/production/product/information/addproduct.vue"
-                    )
+                  component: () => import("@/pages/production/product/information/addproduct.vue")
+                },
+                {
+                  path: "editproduct",
+                  name: "编辑产品线",
+                  meta: {
+                    invisible: true, // 不显示在左侧菜单
+                    back: true // 后退
+                  },
+                  component: () => import("@/pages/production/product/information/editproduct.vue")
                 }
               ]
             },

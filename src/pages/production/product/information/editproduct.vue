@@ -8,18 +8,13 @@
         :label-col="labelCol"
         :wrapper-col="wrapperCol"
       >
-        <a-form-model-item
-          ref="productName"
-          label="资源池产品名称"
-          prop="productName"
-        >
+        <a-form-model-item label="资源池产品ID">
+          {{ form.id }}
+        </a-form-model-item>
+        <a-form-model-item label="资源池产品名称" prop="productName">
           <a-input v-model="form.productName" />
         </a-form-model-item>
-        <a-form-model-item
-          ref="productCode"
-          label="资源池产品CODE"
-          prop="productCode"
-        >
+        <a-form-model-item label="资源池产品CODE" prop="productCode">
           <a-input v-model="form.productCode" />
         </a-form-model-item>
         <!-- <a-form-model-item ref="name" label="供应商" prop="name">
@@ -38,16 +33,16 @@
             </a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item ref="supplierProductCode" label="供应商产品CODE">
+        <a-form-model-item label="供应商产品CODE">
           <a-input v-model="form.supplierProductCode" />
         </a-form-model-item>
-        <a-form-model-item ref="supplierProductType" label="供应商产品Type">
+        <a-form-model-item label="供应商产品Type">
           <a-input v-model="form.supplierProductType" />
         </a-form-model-item>
-        <a-form-model-item ref="pm" label="产品经理">
+        <a-form-model-item label="产品经理">
           <a-input v-model="form.pm" />
         </a-form-model-item>
-        <a-form-model-item label="备注" ref="remark">
+        <a-form-model-item label="备注">
           <a-input v-model="form.remark" type="textarea" />
         </a-form-model-item>
         <a-button type="primary" @click="onSubmit" :loading="loading">
@@ -100,29 +95,35 @@ export default {
       loading: false
     };
   },
+  activated() {
+    let id = this.$route.query.form;
+    this.$store.dispatch("pool/getOne", id).then(res => {
+      this.form = res.data;
+      console.log(res.data);
+    });
+    // console.log(form, "********");
+  },
   methods: {
     // 提交
     onSubmit() {
+      // console.log(this.form, "form");
       this.$refs.ruleForm.validate(valid => {
-        this.$store.dispatch("pool/addList", this.form).then(val => {
-          console.log(val);
-          this.$message.success("提交成功");
-
-          this.$router.back();
-          this.resetForm();
-        });
-
-        // if (valid) {
-        //   console.log(valid, this.form);
-        //   // this.$router.push("/production/product/information");
-        //   this.$router.push({
-        //     path: "/production/product/information",
-        //     query: {
-        //       form: this.form
-        //     }
-        //   });
-
-        // }
+        if (valid) {
+          console.log("test", valid, this.form);
+          this.$store
+            .dispatch("pool/changeList", this.form)
+            .then(res => {
+              this.$message.success("提交成功");
+              console.log(res, "********");
+              this.$router.back();
+            })
+            .catch(err => {
+              // console.log(err, "********");
+            })
+            .finally(() => {
+              this.resetForm();
+            });
+        }
       });
     },
     // 重置表单数据
