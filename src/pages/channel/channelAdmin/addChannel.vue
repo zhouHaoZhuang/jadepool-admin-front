@@ -94,6 +94,14 @@ export default {
     // 重置表单数据
     resetForm() {
       this.$refs.ruleForm.resetFields();
+      this.form = {
+        cutomerName: "",
+        shortName: "",
+        addressProject: "",
+        contract: "",
+        number: "",
+        description: ""
+      };
     }
   }
 };
