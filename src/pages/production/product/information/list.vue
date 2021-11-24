@@ -1,111 +1,56 @@
 <template>
   <div class="information">
     <div class="box-wrap">
-      <a-button type="primary" @click="addinform">
-        + 新建产品
-      </a-button>
-      <a-dropdown>
-        <a-menu slot="overlay" @click="handleMenuClick">
-          <a-menu-item key="1">
-            1st item
-          </a-menu-item>
-          <a-menu-item key="2">
-            2nd item
-          </a-menu-item>
-          <a-menu-item key="3">
-            3rd item
-          </a-menu-item>
-        </a-menu>
-        <a-button> 产品ID <a-icon type="down" /> </a-button>
-      </a-dropdown>
-      <div>
-        <a-input placeholder="搜索关键词" />
-      </div>
-      <a-button type="primary">
-        查询
-      </a-button>
+      <a-space>
+        <a-button type="primary" @click="addinform">
+          + 新建产品
+        </a-button>
+        <a-dropdown>
+          <a-menu slot="overlay" @click="handleMenuClick">
+            <a-menu-item key="1">
+              1st item
+            </a-menu-item>
+            <a-menu-item key="2">
+              2nd item
+            </a-menu-item>
+            <a-menu-item key="3">
+              3rd item
+            </a-menu-item>
+          </a-menu>
+          <a-button> 产品ID <a-icon type="down" /> </a-button>
+        </a-dropdown>
+        <div>
+          <a-input placeholder="搜索关键词" />
+        </div>
+        <a-button type="primary">
+          查询
+        </a-button>
+      </a-space>
     </div>
     <div class="InformationList">
-      <div>
-        <!-- <div>
-          <div>P00001</div>
-          <div>游戏安全盒子</div>
-          <div>game</div>
-          <div>阿里云（aliyun）</div>
-          <div>ecs</div>
-          <div></div>
-          <div>游戏盒子专用账号</div>
-          <div><a>编辑</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a>删除</a></div>
-        </div> -->
-        <!-- <div v-for="(v, i) in exhibitList" :key="i" :id="v.id">
-          <div>{{ v.productCode }}</div>
-          <div>{{ v.productName }}</div>
-          <div>{{ v.productCode }}</div>
-          <div>{{ v.supplierName }}</div>
-          <div>{{ v.supplierProductCode }}</div>
-          <div>{{ v.supplierProductType }}</div>
-          <div>{{ v.remark }}</div>
-          <div>
-            <a @click="editPool(v)">编辑</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a
-              @click="delectPool"
-              >删除</a
-            >
-          </div>
-        </div> -->
-        <a-table
-          :columns="columns"
-          :data-source="exhibitList"
-          rowKey="id"
-          :pagination="paginationProps"
-          tableLayout="auto"
-        >
-          <a slot="name" slot-scope="text">{{ text }}</a>
-          <p slot="action" slot-scope="v">
-            <a-button type="link" @click="editPool(v)">
-              编辑
-            </a-button>
-            <a-divider type="vertical" />
-            <a-button type="link" @click="delectPool(v.id)">
-              删除
-            </a-button>
-          </p>
-        </a-table>
-      </div>
-      <!-- <div>
-        <span>
-          共{{ PoolList.length }}条记录第{{ current }}/{{ pageNum }}页
-        </span>
-        <a-pagination
-          size="small"
-          :total="PoolList.length"
-          v-model="current"
-          :page-size-options="pageSizeOptions"
-          show-quick-jumper
-          showSizeChanger
-          @change="changepage"
-          :show-total="(total, range) => `第${range[0]}条--第${range[1]}条`"
-          :page-size="pageSize"
-          :default-current="1"
-          @showSizeChange="onShowSizeChange"
-        >
-          <template slot="buildOptionText" slot-scope="props">
-            <span v-if="props.value !== PoolList.length"
-              >{{ props.value }}条/页</span
-            >
-            <span v-if="props.value === PoolList.length">全部</span>
-          </template></a-pagination
-        >
-      </div> -->
+      <a-table
+        :columns="columns"
+        :data-source="exhibitList"
+        rowKey="id"
+        :pagination="paginationProps"
+      >
+        <span slot="name" slot-scope="text">{{ text }}</span>
+        <div slot="action" slot-scope="v">
+          <a-button type="link" @click="editPool(v)">
+            编辑
+          </a-button>
+          <a-divider type="vertical" />
+          <a-button type="link" @click="delectPool(v.id)">
+            删除
+          </a-button>
+        </div>
+      </a-table>
     </div>
-    <!-- <addproduct class="addproduct" v-show="isshow"></addproduct> -->
   </div>
 </template>
 
 <script>
-import { loadGuards } from "@/utils/routerUtil";
-
 export default {
-  name: "index",
   data() {
     return {
       pageSizeOptions: ["5", "10", "20", "30"],
@@ -117,46 +62,39 @@ export default {
         {
           title: "资源池产品ID",
           dataIndex: "id",
-          key: "id",
-          ellipsis: true
+          key: "id"
         },
         {
           title: "资源池产品名称",
           dataIndex: "productName",
-          key: "productName",
-          ellipsis: true
+          key: "productName"
         },
         {
           title: "资源池产品CODE",
           dataIndex: "productCode",
-          key: "productCode",
-          ellipsis: true
+          key: "productCode"
         },
         {
           title: "供应商",
           dataIndex: "supplierName",
           key: "supplierName",
-          scopedSlots: { customRender: "supplierName" },
-          ellipsis: true
+          scopedSlots: { customRender: "supplierName" }
         },
         {
           title: "供应商产品CODE",
           dataIndex: "supplierProductCode",
           key: "supplierProductCode",
-          scopedSlots: { customRender: "supplierProductCode" },
-          ellipsis: true
+          scopedSlots: { customRender: "supplierProductCode" }
         },
         {
           title: "供应商产品Type",
           dataIndex: "supplierProductType",
-          key: "supplierProductType",
-          ellipsis: true
+          key: "supplierProductType"
         },
         {
           title: "备注",
           dataIndex: "remark",
-          key: "remark",
-          ellipsis: true
+          key: "remark"
         },
         {
           title: "操作",
@@ -366,84 +304,18 @@ export default {
 
 <style lang="less" scoped>
 .information {
-  // padding: 20px;
-  width: 1220px;
   position: relative;
   padding-bottom: 150px;
   background-color: #fff;
   margin: 0 24px;
   padding: 20px;
-  h4 {
-    font-size: 20px;
-    font-weight: 650;
-    height: 28px;
-    line-height: 28px;
-    width: 100%;
-    background-color: #fff;
-  }
   .box-wrap {
     width: 100%;
-    display: flex;
-    align-items: center;
     height: 60px;
     padding-left: 16px;
-    background-color: #fff;
-    > div {
-      width: 240px;
-      margin-right: 5px;
-    }
-    > button {
-      margin-right: 5px;
-    }
-  }
-  .addproduct {
-    position: absolute;
-    top: 0;
-    left: 0;
   }
   .InformationList {
-    background-color: #fff;
     padding: 0 16px;
-    // > div:nth-child(1) {
-    //   width: 100%;
-    //   background-color: rgb(250, 250, 250);
-    //   display: flex;
-    //   padding: 16px;
-    //   color: rgba(0, 0, 0, 0.85);
-    //   border: 1px solid rgba(0, 0, 0, 0.15);
-    //   border-radius: 3px;
-    //   > span {
-    //     flex: 1;
-    //     font-weight: 650;
-    //     font-style: normal;
-    //     font-size: 14px;
-    //   }
-    // }
-    > div:nth-child(3) {
-      width: 100%;
-      height: 40px;
-      display: flex;
-      margin-top: 20px;
-      justify-content: space-between;
-      // margin-bottom: 200px;
-    }
-    > div:nth-child(2) {
-      > div {
-        display: flex;
-        width: 100%;
-        padding: 0 16px;
-        height: 53px;
-        border-bottom: 1px solid #000;
-        > div {
-          flex: 1;
-          height: 53px;
-          line-height: 53px;
-        }
-        > div:nth-child(8) {
-          color: rgb(49, 104, 255);
-        }
-      }
-    }
   }
 }
 </style>
