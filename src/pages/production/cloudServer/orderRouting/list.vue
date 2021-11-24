@@ -133,7 +133,7 @@ export default {
       this.data = this.PoolList;
       this.paginationProps.total = this.data.length;
       this.paginationProps.current = this.current;
-      console.log(this.data);
+      // console.log(this.data);
       if (this.current == 1) {
         this.exhibitList = this.PoolList.slice(0, this.pageSize);
       } else {

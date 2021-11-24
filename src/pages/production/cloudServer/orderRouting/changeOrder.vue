@@ -1,5 +1,5 @@
 <template>
- <div class="addproduct">
+  <div class="addproduct">
     <div class="box-wrap">
       <a-form-model
         ref="ruleForm"
@@ -9,18 +9,19 @@
         :wrapper-col="wrapperCol"
       >
         <a-form-model-item label="渠道商" prop="supplierName">
-         {{form.accountCode}}
+          {{ form.cusomerCode }}
         </a-form-model-item>
         <a-form-model-item label="采购账号" prop="supplierName">
           <a-select
-            v-model="form.cusomerCode"
+            v-model="form.accountCode"
             placeholder="please select your zone"
           >
-            <a-select-option value="阿里云">
-              阿里云
-            </a-select-option>
-            <a-select-option value="华为云">
-              华为云
+            <a-select-option
+              v-for="v in purchase"
+              :value="v.accountCode"
+              :key="v.id"
+            >
+              {{ v.accountTag }}
             </a-select-option>
           </a-select>
         </a-form-model-item>
@@ -42,6 +43,11 @@ export default {
     this.$store.dispatch("order/getOne", id).then(res => {
       this.form = res.data;
       console.log(res.data);
+    });
+    //   获取采购账号
+    this.$store.dispatch("purchase/getList").then(val => {
+      console.log(val.data.list);
+      this.purchase = val.data.list;
     });
   },
   data() {
@@ -70,7 +76,8 @@ export default {
           }
         ]
       },
-      loading: false
+      loading: false,
+      purchase: []
     };
   },
   methods: {
@@ -114,4 +121,5 @@ export default {
       left: 150px;
     }
   }
-}</style>
+}
+</style>

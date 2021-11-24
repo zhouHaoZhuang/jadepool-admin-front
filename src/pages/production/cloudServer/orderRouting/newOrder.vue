@@ -10,24 +10,29 @@
       >
         <a-form-model-item label="渠道商" prop="supplierName">
           <a-select
-            v-model="form.accountCode"
+            v-model="form.cusomerCode"
             placeholder="please select your zone"
           >
-          <a-select-option v-for="(v) in cutomerList" :value="v.accountCode" :key="v.id">
-             {{v.cutomerName}}
+            <a-select-option
+              v-for="v in cutomerList"
+              :value="v.cutomerCode"
+              :key="v.id"
+            >
+              {{ v.cutomerName }}
             </a-select-option>
           </a-select>
         </a-form-model-item>
         <a-form-model-item label="采购账号" prop="supplierName">
           <a-select
-            v-model="form.cusomerCode"
+            v-model="form.accountCode"
             placeholder="please select your zone"
           >
-            <a-select-option value="阿里云">
-              阿里云
-            </a-select-option>
-            <a-select-option value="华为云">
-              华为云
+            <a-select-option
+              v-for="v in purchase"
+              :value="v.accountCode"
+              :key="v.id"
+            >
+              {{ v.accountTag }}
             </a-select-option>
           </a-select>
         </a-form-model-item>
@@ -65,7 +70,7 @@ export default {
             trigger: "blur"
           }
         ],
-        supplierName: [
+        cusomerCode: [
           {
             required: true,
             message: "select",
@@ -74,27 +79,30 @@ export default {
         ]
       },
       loading: false,
-      cutomerList:[]
+      cutomerList: [],
+      purchase: []
     };
   },
   activated() {
     //   获取渠道商
-    this.$store.dispatch("channel/getList").then((val)=>{ 
-        // cutomerName 
-        console.log(val.data.list); 
-        this.cutomerList = val.data.list;
+    this.$store.dispatch("channel/getList").then(val => {
+      // cutomerName
+      console.log(val.data.list);
+      this.cutomerList = val.data.list;
     });
     //   获取采购账号
-    //  this.$store.dispatch("channel/getList").then((val)=>{ 
-    //     console.log(val.data.list); 
-    // });
+    this.$store.dispatch("purchase/getList").then(val => {
+      console.log(val.data.list);
+      this.purchase = val.data.list;
+    });
   },
   methods: {
     // 提交
     onSubmit() {
+          // console.log(this.form,"9999999999999");
       this.$refs.ruleForm.validate(valid => {
         this.$store.dispatch("order/addList", this.form).then(val => {
-          console.log(val,"-----");
+          console.log(val, "-----");
           this.$message.success("提交成功");
           this.$router.back();
           this.resetForm();
