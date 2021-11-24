@@ -38,7 +38,14 @@ const provider = {
         method: "delete",
         data
       });
-    }
+    },
+    //获取ID
+    getId({ commit, state }, id) {
+      return request({
+        url: `/supplier/one?id=${id}`,
+        method: "get",
+      });
+    },
   }
 };
 

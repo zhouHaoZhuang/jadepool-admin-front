@@ -77,23 +77,24 @@ export default {
     //提交
     onSubmit() {
       this.$refs.ruleForm.validate(valid => {
-        if (valid) {
-          this.loading = true;
-          this.$store
-            .dispatch("/production/supplier/add",this.form)
-            .then(res => {
-              this.$message.success("新增供应商成功");
-              this.resetForm();
-              this.$router.back()
-            })
-            .finally(() => {
-              this.loading = false
-            })
-        }
+        this.$store.dispatch("provider/add", this.form).then(val => {
+          console.log(val);
+          this.$message.success("提交成功");
+          this.$router.back();
+          this.resetForm();
+        });
       });
     },
     resetForm() {
       this.$refs.ruleForm.resetFields();
+      this.form = {
+        supplierName: "",
+        shortName: "",
+        url: "",
+        contract: "",
+        number: "",
+        description: ""
+      }
     }
   }
 };

@@ -7,7 +7,7 @@ const purchase = {
   mutations: {},
 
   actions: {
-    // 获取列表
+    // 获取采购
     getList({ commit, state }, params) {
       return request({
         url: "/purchaseAccount",
@@ -15,7 +15,7 @@ const purchase = {
         params
       });
     },
-    // 新增供应商
+    // 新增采购
     add({ commit, state }, data) {
       return request({
         url: "/purchaseAccount",
@@ -23,7 +23,7 @@ const purchase = {
         data
       });
     },
-    // 编辑供应商
+    // 编辑采购
     edit({ commit, state }, data) {
       return request({
         url: `/purchaseAccount/${data.id}`,
@@ -31,14 +31,21 @@ const purchase = {
         data
       });
     },
-    // 删除供应商
+    // 删除采购
     updateStatus({ commit, state }, data) {
       return request({
         url: `/purchaseAccount/${data.ids}`,
         method: "delete",
         data
       });
-    }
+    },
+  // 获取采购id
+  getId({ commit, state }, id) {
+    return request({
+      url: `/purchaseAccount/one?id=${id}`,
+      method: "get",
+    });
+  },
   }
 };
 

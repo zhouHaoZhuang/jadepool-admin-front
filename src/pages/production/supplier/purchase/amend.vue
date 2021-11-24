@@ -8,20 +8,20 @@
         :label-col="labelCol"
         :wrapper-col="wrapperCol"
       >
-        <a-form-model-item label="采购账号ID" prop="name">
-          <a-input v-model="form.name" />
+        <a-form-model-item label="采购账号ID" prop="id">
+          {{form.id}}
         </a-form-model-item>
-        <a-form-model-item label="所属供应商" prop="name1">
-          <a-input v-model="form.name1" />
+        <a-form-model-item label="所属供应商" prop="supplierCode">
+          {{form.supplierCode}}
         </a-form-model-item>
-        <a-form-model-item label="供应商标识" prop="web">
-          <a-input v-model="form.web" />
+        <a-form-model-item label="供应商标识" prop="accountTag">
+          <a-input v-model="form.accountTag" />
         </a-form-model-item>
-        <a-form-model-item label="供应商侧账号ID" prop="user">
-          <a-input v-model="form.user" />
+        <a-form-model-item label="供应商侧账号ID" prop="supplierAccountCode">
+          <a-input v-model="form.supplierAccountCode" />
         </a-form-model-item>
         <a-form-model-item label="描述">
-          <a-input v-model="form.desc" type="textarea" />
+          <a-input v-model="form.desc" type="remark" />
         </a-form-model-item>
         <a-form-model-item label="账号配置">
           <a-input v-model="form.desc" type="textarea" />
@@ -38,19 +38,18 @@
 
 <script>
 export default {
-  name: "index",
   data() {
     return {
       labelCol: { span: 6 },
       wrapperCol: { span: 18 },
       other: "",
       form: {
-        name: "",
-        name1: "",
-        web: "",
-        user: "",
-        phone: "",
-        desc: ""
+        id: "",
+        supplierCode: "",
+        accountTag: "",
+        supplierAccountCode: "",
+        remark: "",
+        textarea: ""
       },
       rules: {
         name: [
@@ -84,6 +83,15 @@ export default {
       },
       loading: false
     };
+  },
+   activated() {
+    let id = this.$route.query.id;
+    // console.log(id);
+    this.$store.dispatch("purchase/getId", id).then(res => {
+      this.form = res.data
+      // console.log(res.data);
+    });
+    // console.log(form, "********");
   },
   methods: {
     onSubmit() {
