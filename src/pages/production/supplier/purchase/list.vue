@@ -100,7 +100,6 @@ export default {
         }
       ],
       data: [
-
       ],
       paginationProps: {
         showQuickJumper: true,
