@@ -198,7 +198,7 @@ export default {
       this.paginationProps.current = current;
       this.paginationProps.pageSize = pageSize;
       console.log(this.paginationProps.pageSize, "pageSize");
-      this.$store.dispatch("pool/getList").then(val => {
+      this.$store.dispatch("order/getList").then(val => {
         this.PoolList = val.data.list;
         this.data = this.PoolList;
         this.paginationProps.total = this.data.length;
