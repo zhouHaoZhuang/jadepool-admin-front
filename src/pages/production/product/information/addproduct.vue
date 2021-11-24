@@ -30,11 +30,9 @@
             v-model="form.supplierName"
             placeholder="please select your zone"
           >
-            <a-select-option value="阿里云">
-              阿里云
-            </a-select-option>
-            <a-select-option value="华为云">
-              华为云
+          <!-- supplierNameList -->
+            <a-select-option v-for="(v) in supplierNameList" :value="v.id" :key="v.id">
+              {{ v.supplierName }}
             </a-select-option>
           </a-select>
         </a-form-model-item>
@@ -97,8 +95,15 @@ export default {
           }
         ]
       },
-      loading: false
+      loading: false,
+      supplierNameList:[]
     };
+  },
+  activated() {
+    // 此处需要获取供应商
+    this.$store.dispatch("provider/getList").then(res => {
+      this.supplierNameList = res.data.list;
+    });
   },
   methods: {
     // 提交
@@ -107,11 +112,9 @@ export default {
         this.$store.dispatch("pool/addList", this.form).then(val => {
           console.log(val);
           this.$message.success("提交成功");
-
           this.$router.back();
           this.resetForm();
         });
-
         // if (valid) {
         //   console.log(valid, this.form);
         //   // this.$router.push("/production/product/information");
