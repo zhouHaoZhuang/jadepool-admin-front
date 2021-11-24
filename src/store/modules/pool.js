@@ -16,47 +16,48 @@ const pool = {
 
   actions: {
     // 获取列表
-   async getList({ commit, state }, params) {
+  getList({ commit, state }, params) {
       // console.log(state);
     //   commit("SET_USERINFO", { name: "管理员" });
-      let data = await request({
-        url: "http://8.136.205.83:8080/productDetail",
+    return request({
+        url: "/productDetail",
         method: "get",
       });
       // console.log(data.data.list);
-      commit("SET_POOL", data.data.list);
+      // commit("SET_POOL", data.data.list);
     },
-    delList({ commit, state }, params) {
+    delList({ commit, state }, id) {
       console.log(state);
     //   commit("SET_USERINFO", { name: "管理员" });
       return request({
-        url: "http://8.136.205.83:8080/productDetail",
+        url: `/productDetail/${id}`,
         method: "delete",
-        params: {
-          ...params
-        }
       });
     },
-    changeList({ commit, state }, params) {
-      console.log(state);
-      // commit("SET_USERINFO", { name: "管理员" });
+    changeList({ commit, state }, data) {
       return request({
-        url: "http://8.136.205.83:8080/productDetail/map",
-        method: "patch",
-        params: {
-          ...params
-        }
+        url: `/productDetail/${data.id}`,
+        method: "put",
+        data
       });
     },
     addList({ commit, state }, params) {
       console.log(state);
       // commit("SET_USERINFO", { name: "管理员" });
       return request({
-        url: "http://8.136.205.83:8080/productDetail",
+        url: "/productDetail",
         method: "post",
-        params: {
+        data: {
           ...params
         }
+      });
+    },
+    getOne({ commit, state }, id) {
+      console.log(state);
+      // commit("SET_USERINFO", { name: "管理员" });
+      return request({
+        url: `/productDetail/one?id=${id}`,
+        method: "get",
       });
     }
   }

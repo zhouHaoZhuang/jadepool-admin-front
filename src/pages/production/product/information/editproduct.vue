@@ -9,20 +9,12 @@
         :wrapper-col="wrapperCol"
       >
         <a-form-model-item label="资源池产品ID">
-          {{ form.productCode }}
+          {{ form.id }}
         </a-form-model-item>
-        <a-form-model-item
-          ref="productName"
-          label="资源池产品名称"
-          prop="productName"
-        >
+        <a-form-model-item label="资源池产品名称" prop="productName">
           <a-input v-model="form.productName" />
         </a-form-model-item>
-        <a-form-model-item
-          ref="productCode"
-          label="资源池产品CODE"
-          prop="productCode"
-        >
+        <a-form-model-item label="资源池产品CODE" prop="productCode">
           <a-input v-model="form.productCode" />
         </a-form-model-item>
         <!-- <a-form-model-item ref="name" label="供应商" prop="name">
@@ -104,37 +96,48 @@ export default {
     };
   },
   activated() {
-    let form = this.$route.query.form;
-    // if (form == "[object Object]") {
-    //   return;
-    // }
-    this.form = form;
+    let id = this.$route.query.form;
+    this.$store.dispatch("pool/getOne", id).then(res => {
+      this.form = res.data;
+      console.log(res.data);
+    });
     // console.log(form, "********");
   },
   methods: {
     // 提交
     onSubmit() {
+      // console.log(this.form, "form");
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
-          console.log(valid, this.form);
-          // this.$router.push("/production/product/information");
-          this.$router.push({
-            path: "/production/product/information",
-            query: {
-              form: this.form
-            }
-          });
-          this.resetForm();
+          console.log("test", valid, this.form);
+          this.$store
+            .dispatch("pool/changeList", this.form)
+            .then(res => {
+              this.$message.success("提交成功");
+              console.log(res, "********");
+              this.$router.back();
+            })
+            .catch(err => {
+              // console.log(err, "********");
+            })
+            .finally(() => {
+              this.resetForm();
+            });
         }
       });
     },
     // 重置表单数据
     resetForm() {
       this.$refs.ruleForm.resetFields();
-      this.form.supplierProductCode = "";
-      this.form.supplierProductType = "";
-      this.form.pm = "";
-      this.form.remark = "";
+      this.form = {
+        productName: "",
+        productCode: "",
+        supplierName: "",
+        supplierProductCode: "",
+        supplierProductType: "",
+        pm: "",
+        remark: ""
+      };
     }
   }
 };
