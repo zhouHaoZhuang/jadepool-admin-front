@@ -27,16 +27,16 @@ const purchase = {
     edit({ commit, state }, data) {
       return request({
         url: `/purchaseAccount/${data.id}`,
-        method: "put",
+        method: "patch",
         data
       });
     },
     // 删除采购
-    updateStatus({ commit, state }, id) {
+    updateStatus({ commit, state }, data) {
       return request({
-        url: `/purchaseAccount/${id}`,
+        url: `/purchaseAccount/${data.id}`,
         method: "delete",
-        
+        data
       });
     },
   // 获取采购id
