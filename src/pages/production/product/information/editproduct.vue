@@ -97,7 +97,6 @@ export default {
     let id = this.$route.query.form;
     this.$store.dispatch("pool/getOne", id).then(res => {
       this.form = res.data;
-      // console.log(res.data);
     });
   },
   methods: {
@@ -105,16 +104,13 @@ export default {
     onSubmit() {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
-          console.log("test", valid, this.form);
           this.$store
             .dispatch("pool/changeList", this.form)
             .then(res => {
               this.$message.success("提交成功");
-              console.log(res, "********");
               this.$router.back();
             })
             .catch(err => {
-              // console.log(err, "********");
             })
             .finally(() => {
               this.resetForm();
