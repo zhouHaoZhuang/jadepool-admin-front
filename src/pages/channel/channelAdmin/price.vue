@@ -152,20 +152,11 @@ export default {
     // 查询表格数据
     getList() {
       this.tableLoading = true;
-      this.$store
-        .dispatch(
-          "channel/getPriceList",
-          this.listQuery.key
-            ? {
-                ...this.listQuery,
-                ["qp-channelCustomerName-like"]: this.listQuery.topSearch,
-                [`qp-${this.listQuery.key}-like`]: this.listQuery.search
-              }
-            : {
-                ...this.listQuery,
-                ["qp-channelCustomerName-like"]: this.listQuery.topSearch
-              }
-        )
+      const newListQuery = {
+        ...this.listQuery,
+        ["qp-channelCustomerName-like"]: this.listQuery.topSearch
+      };
+      this.$getList("channel/getPriceList", newListQuery)
         .then(res => {
           this.data = [...res.data.list];
           this.paginationProps.total = res.data.totalCount * 1;
