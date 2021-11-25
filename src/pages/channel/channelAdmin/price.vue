@@ -153,11 +153,19 @@ export default {
     getList() {
       this.tableLoading = true;
       this.$store
-        .dispatch("channel/getPriceList", {
-          ...this.listQuery,
-          ["qp-channelCustomerName-like"]: this.listQuery.topSearch,
-          [`qp-${this.listQuery.key}-like`]: this.listQuery.search
-        })
+        .dispatch(
+          "channel/getPriceList",
+          this.listQuery.key
+            ? {
+                ...this.listQuery,
+                ["qp-channelCustomerName-like"]: this.listQuery.topSearch,
+                [`qp-${this.listQuery.key}-like`]: this.listQuery.search
+              }
+            : {
+                ...this.listQuery,
+                ["qp-channelCustomerName-like"]: this.listQuery.topSearch
+              }
+        )
         .then(res => {
           this.data = [...res.data.list];
           this.paginationProps.total = res.data.totalCount * 1;

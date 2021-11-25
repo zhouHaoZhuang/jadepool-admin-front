@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@antv/data-set": "^0.11.4",
+    "@authing/vue-ui-components": "^2.4.56",
     "animate.css": "^4.1.0",
     "ant-design-vue": "1.7.2",
     "axios": "^0.19.2",

@@ -151,10 +151,15 @@ export default {
     getList() {
       this.tableLoading = true;
       this.$store
-        .dispatch("channel/getList", {
-          ...this.listQuery,
-          [`qp-${this.listQuery.key}-like`]: this.listQuery.search
-        })
+        .dispatch(
+          "channel/getList",
+          this.listQuery.key
+            ? {
+                ...this.listQuery,
+                [`qp-${this.listQuery.key}-like`]: this.listQuery.search
+              }
+            : this.listQuery
+        )
         .then(res => {
           this.data = [...res.data.list];
           this.paginationProps.total = res.data.totalCount * 1;
