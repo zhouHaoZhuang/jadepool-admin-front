@@ -14,6 +14,7 @@ import "moment/locale/zh-cn";
 import "./global.less"; // global style
 import * as Directives from "@/utils/directives/index";
 import * as Filters from "@/utils/filters/index";
+import * as utilsFun from "@/utils/index";
 
 const router = initRouter(store.state.setting.asyncRoutes);
 const i18n = initI18n("CN", "US");
@@ -24,6 +25,8 @@ Vue.use(Viser);
 Vue.use(Plugins);
 Vue.use(Directives);
 Vue.use(Filters);
+
+Vue.prototype.$getArrOnceData = utilsFun.getArrOnceData;
 
 bootstrap({ router, store, i18n, message: Vue.prototype.$message });
 

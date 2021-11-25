@@ -93,7 +93,9 @@ export default {
       wrapperCol: { span: 18 },
       form: {
         channelCustomerCode: undefined,
+        channelCustomerName: "",
         productCode: undefined,
+        productName: "",
         discountType: "1",
         discountPrice: ""
       },
@@ -144,7 +146,7 @@ export default {
             this.getList();
             this.getPriceList();
           }
-        } else if (newVal.path === "/channel/index/price") {
+        } else {
           this.resetForm();
         }
       },
@@ -182,10 +184,21 @@ export default {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
           this.loading = true;
+          const newForm = {
+            ...this.form,
+            channelCustomerName: this.$getArrOnceData(
+              this.form.channelCustomerCode,
+              this.data
+            ).cutomerName,
+            productName: this.$getArrOnceData(
+              this.form.productCode,
+              this.priceData
+            ).productName
+          };
           this.$store
             .dispatch(
-              this.type === "add" ? "channel/add" : "channel/add",
-              this.form
+              this.type === "add" ? "channel/addPrice" : "channel/editPrice",
+              this.type === "add" ? newForm : this.form
             )
             .then(res => {
               this.$message.success(
@@ -204,7 +217,15 @@ export default {
     },
     // 重置表单数据
     resetForm() {
-      this.$refs.ruleForm.resetFields();
+      this.$refs.ruleForm.clearValidate();
+      this.form = {
+        channelCustomerCode: undefined,
+        channelCustomerName: "",
+        productCode: undefined,
+        productName: "",
+        discountType: "1",
+        discountPrice: ""
+      };
     }
   }
 };

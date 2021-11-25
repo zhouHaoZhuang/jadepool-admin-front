@@ -261,7 +261,7 @@ export default {
     },
     handleCancelDetail(e) {
       this.visibleDetail = false;
-      this.$refs.ruleForm.resetFields();
+      this.$refs.ruleForm.clearValidate();
     },
     // 修改接口信息
     showModal() {
@@ -281,7 +281,7 @@ export default {
     },
     handleCancel(e) {
       this.visible = false;
-      this.$refs.apiForm.resetFields();
+      this.$refs.apiForm.clearValidate();
     }
   }
 };

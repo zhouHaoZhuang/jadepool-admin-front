@@ -93,7 +93,7 @@ export default {
     },
     // 重置
     resetForm(){
-      this.$refs.ruleForm.resetFields();
+      this.$refs.ruleForm.clearValidate();
       this.form = {
         accountCode:"",
         supplierAccountCode:"",
