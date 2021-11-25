@@ -12,7 +12,7 @@
           :data-source="exhibitList"
           rowKey="id"
           :pagination="paginationProps"
-          tableLayout="auto"
+          :scroll="{ x: 1300 }"
         >
           <a slot="name" slot-scope="text">{{ text }}</a>
           <div slot="action" slot-scope="v">
@@ -31,8 +31,6 @@
 </template>
 
 <script>
-import { loadGuards } from "@/utils/routerUtil";
-
 export default {
   name: "index",
   data() {
@@ -40,52 +38,45 @@ export default {
       pageSizeOptions: ["5", "10", "20", "30"],
       current: 1,
       pageSize: 5,
-      PoolList: [],
-      exhibitList: [],
+      PoolList: [], //完整数据
+      exhibitList: [], //表格数据
       columns: [
         {
           title: "渠道商ID",
-          dataIndex: "accountCode",
-          key: "accountCode",
-          ellipsis: true
+          dataIndex: "cusomerCode",
+          key: "cusomerCode",
         },
         {
           title: "渠道商简称",
           dataIndex: "createUserName",
           key: "createUserName",
-          ellipsis: true
         },
         {
           title: "采购账号ID",
-          dataIndex: "cusomerCode",
-          key: "cusomerCode",
-          ellipsis: true
+          dataIndex: "accountCode",
+          key: "accountCode",
         },
         {
           title: "所属供应商",
           dataIndex: "supplier",
           key: "supplier",
           scopedSlots: { customRender: "supplier" },
-          ellipsis: true
         },
         {
           title: "账号标识",
           dataIndex: "accountTag",
           key: "accountTag",
           scopedSlots: { customRender: "accountTag" },
-          ellipsis: true
         },
         {
           title: "供应商侧账号ID",
-          dataIndex: "id",
-          key: "id",
-          ellipsis: true
+          dataIndex: "supplierAccountCode",
+          key: "supplierAccountCode",
         },
         {
           title: "备注",
           dataIndex: "remark",
           key: "remark",
-          ellipsis: true
         },
         {
           title: "操作",
@@ -94,7 +85,8 @@ export default {
           scopedSlots: { customRender: "action" }
         }
       ],
-      data: [],
+      data: [], //请求的数据
+      // 表格分页器配置
       paginationProps: {
         showQuickJumper: true,
         showSizeChanger: true,
@@ -111,6 +103,7 @@ export default {
   },
 
   computed: {
+    // 总页数
     pageNum() {
       if (this.PoolList.length / this.pageSize < 1) {
         return 1;
@@ -128,7 +121,43 @@ export default {
     }
   },
   activated() {
+    // 获取订单路由列表
     this.$store.dispatch("order/getList").then(val => {
+        this.reqAfter(val)
+    });
+  },
+  methods: {
+    // 定义删除方法
+    delectPool(id) {
+      this.$confirm({
+        title: "确认要删除吗？",
+        onOk: () => {
+          this.$store.dispatch("order/delList", id).then(val => {
+            this.$message.success("操作成功");
+            this.$store.dispatch("order/getList").then(val => {
+              this.reqAfter(val);
+            });
+          });
+        }
+      });
+    },
+    // 跳转至添加路由页面
+    addinform() {
+      this.$router.push("/production/cloudServer/newOrder");
+    },
+    handleMenuClick(e) {
+    },
+    // 分页器改变pageSize之后的回调
+    onShowSizeChange(current, pageSize) {
+      this.pageSize = pageSize;
+      this.current = current;
+      this.paginationProps.current = current;
+      this.paginationProps.pageSize = pageSize;
+      this.$store.dispatch("order/getList").then(val => {
+        this.reqAfter(val);
+      });
+    },
+    reqAfter(val) {
       this.PoolList = val.data.list;
       this.data = this.PoolList;
       this.paginationProps.total = this.data.length;
@@ -150,80 +179,10 @@ export default {
           );
         }
       }
-    });
-  },
-  methods: {
-    delectPool(id) {
-      // console.log(id, "id");
-      this.$store.dispatch("order/delList", id).then(val => {
-        // console.log(val);
-        // code: "000000"
-        this.$message.success("操作成功");
-        this.$store.dispatch("order/getList").then(val => {
-          this.PoolList = val.data.list;
-          this.data = this.PoolList;
-          this.paginationProps.total = this.data.length;
-          this.paginationProps.current = this.current;
-          // console.log(this.data);
-          if (this.current == 1) {
-            this.exhibitList = this.PoolList.slice(0, this.pageSize);
-          } else {
-            this.exhibitList = this.PoolList.slice(
-              this.pageSize * (this.current - 1),
-              this.pageSize * this.current
-            );
-            if (this.exhibitList.length == 0) {
-              this.current--;
-              this.paginationProps.current = this.current;
-              this.exhibitList = this.PoolList.slice(
-                this.pageSize * (this.current - 1),
-                this.pageSize * this.current
-              );
-            }
-          }
-        });
-        // alert(val);
-      });
     },
-    addinform() {
-      this.$router.push("/production/cloudServer/newOrder");
-    },
-    handleMenuClick(e) {
-      // console.log("click", e);
-    },
-    onShowSizeChange(current, pageSize) {
-      console.log(current, pageSize);
-      this.pageSize = pageSize;
-      this.current = current;
-      this.paginationProps.current = current;
-      this.paginationProps.pageSize = pageSize;
-      console.log(this.paginationProps.pageSize, "pageSize");
-      this.$store.dispatch("pool/getList").then(val => {
-        this.PoolList = val.data.list;
-        this.data = this.PoolList;
-        this.paginationProps.total = this.data.length;
-        this.paginationProps.current = this.current;
-        console.log(this.data);
-        if (this.current == 1) {
-          this.exhibitList = this.PoolList.slice(0, this.pageSize);
-        } else {
-          this.exhibitList = this.PoolList.slice(
-            this.pageSize * (this.current - 1),
-            this.pageSize * this.current
-          );
-          if (this.exhibitList.length == 0) {
-            this.current--;
-            this.paginationProps.current = this.current;
-            this.exhibitList = this.PoolList.slice(
-              this.pageSize * (this.current - 1),
-              this.pageSize * this.current
-            );
-          }
-        }
-      });
-    },
+    // 改变页码之后的回调
     changepage(page, pageSize) {
-      console.log(page, pageSize, "-------");
+      // console.log(page, pageSize, "-------");
       if (page == 1) {
         this.exhibitList = this.PoolList.slice(0, this.pageSize);
       } else {
@@ -235,6 +194,7 @@ export default {
       this.current = page;
       this.paginationProps.current = page;
     },
+    // 跳转至修改数据路由
     editPool(v) {
       this.$router.push({
         path: "/production/cloudServer/changeOrder",
@@ -249,7 +209,6 @@ export default {
 
 <style lang="less" scoped>
 .information {
-  width: 1220px;
   position: relative;
   padding-bottom: 150px;
   background-color: #fff;

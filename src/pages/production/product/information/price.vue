@@ -1,5 +1,6 @@
 <template>
   <div>渠道价格</div>
+  <!-- 这个文件没有用 -->
 </template>
 
 <script>

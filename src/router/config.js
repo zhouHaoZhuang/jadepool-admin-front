@@ -416,15 +416,6 @@ const options = {
               component: BlankView,
               children: [
                 {
-                  path: "product",
-                  name: "产品配置",
-                  meta: {
-                    icon: "home"
-                  },
-                  component: () =>
-                    import("@/pages/production/cloudServer/product/list.vue")
-                },
-                {
                   path: "orderRouting",
                   name: "订单路由配置",
                   meta: {

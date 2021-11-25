@@ -22,16 +22,16 @@
         >
           <a-input v-model="form.productCode" />
         </a-form-model-item>
-        <!-- <a-form-model-item ref="name" label="供应商" prop="name">
-          <a-input v-model="form.SupplierName" />
-        </a-form-model-item> -->
         <a-form-model-item label="供应商" prop="supplierName">
           <a-select
             v-model="form.supplierName"
             placeholder="please select your zone"
           >
-          <!-- supplierNameList -->
-            <a-select-option v-for="(v) in supplierNameList" :value="v.id" :key="v.id">
+            <a-select-option
+              v-for="v in supplierNameList"
+              :value="v.supplierName"
+              :key="v.id"
+            >
               {{ v.supplierName }}
             </a-select-option>
           </a-select>
@@ -42,6 +42,21 @@
         <a-form-model-item ref="supplierProductType" label="供应商产品Type">
           <a-input v-model="form.supplierProductType" />
         </a-form-model-item>
+        <a-form-model-item label="默认采购账号" prop="defaultPurchaseAccount">
+          <a-select
+            v-model="form.defaultPurchaseAccount"
+            placeholder="please select your zone"
+          >
+            <a-select-option
+              v-for="v in purchase"
+              :value="v.accountCode"
+              :key="v.id"
+            >
+              {{ v.accountTag }}
+            </a-select-option>
+          </a-select>
+        </a-form-model-item>
+
         <a-form-model-item ref="pm" label="产品经理">
           <a-input v-model="form.pm" />
         </a-form-model-item>
@@ -64,13 +79,14 @@ export default {
       wrapperCol: { span: 18 },
       other: "",
       form: {
-        productName: "",
-        productCode: "",
-        supplierName: "",
-        supplierProductCode: "",
-        supplierProductType: "",
-        pm: "",
-        remark: ""
+        productName: "",    //产品名称
+        defaultPurchaseAccount: "",     //默认采购账号
+        productCode: "",      //产品CODE
+        supplierName: "",       //供应商
+        supplierProductCode: "",    //供应商产品CODE
+        supplierProductType: "",    //供应商产品Type
+        pm: "",            //产品经理
+        remark: ""      //备注
       },
       rules: {
         productName: [
@@ -78,6 +94,13 @@ export default {
             required: true,
             message: "输入值不能为空",
             trigger: "blur"
+          }
+        ],
+        defaultPurchaseAccount: [
+          {
+            required: true,
+            message: "select",
+            trigger: "change"
           }
         ],
         productCode: [
@@ -96,18 +119,25 @@ export default {
         ]
       },
       loading: false,
-      supplierNameList:[]
+      supplierNameList: [],
+      purchase:[]
     };
   },
   activated() {
-    // 此处需要获取供应商
+    // 此处需要获取供应商列表
     this.$store.dispatch("provider/getList").then(res => {
       this.supplierNameList = res.data.list;
+    });
+    // 此处需要获取默认采购账号列表
+    this.$store.dispatch("purchase/getList").then(val => {
+      // console.log(val.data.list);
+      this.purchase = val.data.list;
     });
   },
   methods: {
     // 提交
     onSubmit() {
+      console.log(this.form);
       this.$refs.ruleForm.validate(valid => {
         this.$store.dispatch("pool/addList", this.form).then(val => {
           console.log(val);
@@ -115,17 +145,6 @@ export default {
           this.$router.back();
           this.resetForm();
         });
-        // if (valid) {
-        //   console.log(valid, this.form);
-        //   // this.$router.push("/production/product/information");
-        //   this.$router.push({
-        //     path: "/production/product/information",
-        //     query: {
-        //       form: this.form
-        //     }
-        //   });
-
-        // }
       });
     },
     // 重置表单数据
