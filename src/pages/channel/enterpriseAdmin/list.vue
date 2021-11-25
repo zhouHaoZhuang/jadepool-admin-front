@@ -7,14 +7,15 @@
             <a-select
               style="width:120px"
               allowClear
-              v-model="listQuery.id"
-              placeholder="企业ID"
+              v-model="listQuery.key"
+              placeholder="请选择"
             >
-              <a-select-option :value="1">
-                Jack
-              </a-select-option>
-              <a-select-option :value="2">
-                TOM
+              <a-select-option
+                v-for="item in columns.slice(0, columns.length - 3)"
+                :key="item.dataIndex"
+                :value="item.dataIndex"
+              >
+                {{ item.title }}
               </a-select-option>
             </a-select>
           </a-form-model-item>
@@ -30,28 +31,33 @@
       </div>
       <div class="public-table-wrap">
         <a-table
+          :loading="tableLoading"
           :columns="columns"
           :data-source="data"
           rowKey="id"
           :pagination="paginationProps"
+          :scroll="{ x: 1300 }"
         >
-          <div class="status" slot="name1" slot-scope="text">
-            <div v-if="text === 200" class="dot"></div>
+          <div class="status" slot="certificationStatus" slot-scope="text">
+            <div v-if="text === 0" class="dot"></div>
             <div v-else class="dot dot-err"></div>
-            {{ text === 200 ? "正常" : "冻结" }}
+            {{ certificationStatusEnum[text] }}
           </div>
-          <div class="status" slot="status" slot-scope="text">
-            <div v-if="text === 200" class="dot"></div>
-            <div v-else class="dot dot-err"></div>
-            {{ text === 200 ? "正常" : "冻结" }}
+          <div class="status" slot="corporationStatus" slot-scope="text">
+            <div v-if="text === 0" class="dot"></div>
+            <div v-else class="dot dot-default"></div>
+            {{ corporationStatusEnum[text] }}
           </div>
+          <span slot="createTime" slot-scope="text">
+            {{ text | formatDate }}
+          </span>
           <span slot="action" slot-scope="text, record">
             <a-button type="link" @click="goDetail(record)">
               查看
             </a-button>
             <a-divider type="vertical" />
             <a-button type="link" @click="handleFrozen(record)">
-              冻结
+              {{ record.corporationStatus === 0 ? "冻结" : "解冻" }}
             </a-button>
           </span>
         </a-table>
@@ -61,105 +67,122 @@
 </template>
 
 <script>
+import { certificationStatusEnum, corporationStatusEnum } from "@/utils/enum";
 export default {
   data() {
     return {
+      certificationStatusEnum,
+      corporationStatusEnum,
       listQuery: {
-        id: undefined,
+        key: undefined,
         search: "",
-        pageNo: 1,
+        currentPage: 1,
         pageSize: 10,
-        total: 500
+        total: 0
       },
       columns: [
         {
           title: "企业ID",
           dataIndex: "id",
-          key: "id"
+          key: "id",
+          width: 250
         },
         {
           title: "企业名称",
-          dataIndex: "name",
-          key: "name"
+          dataIndex: "corporationName",
+          key: "corporationName"
         },
         {
           title: "认证状态",
-          dataIndex: "name1",
-          key: "name1",
-          scopedSlots: { customRender: "name1" }
+          dataIndex: "certificationStatus",
+          key: "certificationStatus",
+          scopedSlots: { customRender: "certificationStatus" }
         },
         {
           title: "所属渠道商",
-          dataIndex: "web",
-          key: "web"
+          dataIndex: "channelCustomerName",
+          key: "channelCustomerName"
         },
         {
           title: "渠道商ID",
-          dataIndex: "web1",
-          key: "web1"
+          dataIndex: "channelCustomerCode",
+          key: "channelCustomerCode"
         },
         {
           title: "企业状态",
-          dataIndex: "status",
-          key: "status",
-          scopedSlots: { customRender: "status" }
+          dataIndex: "corporationStatus",
+          key: "corporationStatus",
+          scopedSlots: { customRender: "corporationStatus" }
         },
         {
           title: "创建时间",
-          dataIndex: "gmtCreate"
+          dataIndex: "createTime",
+          key: "createTime",
+          width: 250,
+          scopedSlots: { customRender: "createTime" }
         },
         {
           title: "操作",
           key: "action",
+          fixed: "right",
           scopedSlots: { customRender: "action" }
         }
       ],
-      data: [
-        {
-          id: 1,
-          name: "全程",
-          name1: "剑圣",
-          web: "www.baidu.com",
-          status: 200,
-          web1: "1234",
-          gmtCreate: "2021-10-12"
-        }
-      ],
+      data: [],
       paginationProps: {
         showQuickJumper: true,
         showSizeChanger: true,
         total: 1,
         showTotal: (total, range) =>
-          `共 ${total} 条记录 第 ${this.listQuery.pageNo} / ${Math.ceil(
+          `共 ${total} 条记录 第 ${this.listQuery.currentPage} / ${Math.ceil(
             total / this.listQuery.pageSize
           )} 页`,
         onChange: this.quickJump,
         onShowSizeChange: this.onShowSizeChange
-      }
+      },
+      tableLoading: false
     };
+  },
+  activated() {
+    this.getList();
   },
   methods: {
     // 查询
     search() {
-      // this.getList();
+      this.listQuery.currentPage = 1;
+      this.getList();
     },
     // 查询表格数据
     getList() {
-      this.$store.dispatch("").then(res => {
-        console.log("获取数据", res);
-        this.paginationProps.total = 500;
-      });
+      this.tableLoading = true;
+      this.$store
+        .dispatch(
+          "channel/getEnterpriseList",
+          this.listQuery.key
+            ? {
+                ...this.listQuery,
+                [`qp-${this.listQuery.key}-like`]: this.listQuery.search
+              }
+            : this.listQuery
+        )
+        .then(res => {
+          this.data = [...res.data.list];
+          this.paginationProps.total = res.data.totalCount * 1;
+        })
+        .finally(() => {
+          this.tableLoading = false;
+        });
     },
     // 表格分页快速跳转n页
-    quickJump(pageNo) {
-      this.listQuery.pageNo = pageNo;
-      // this.getList();
+    quickJump(currentPage) {
+      this.listQuery.currentPage = currentPage;
+      this.getList();
     },
     // 表格分页切换每页条数
     onShowSizeChange(current, pageSize) {
-      this.listQuery.pageNo = current;
+      this.listQuery.currentPage = current;
       this.listQuery.pageSize = pageSize;
-      // this.getList();
+      this.getList();
     },
     // 查看
     goDetail(record) {
@@ -169,7 +192,19 @@ export default {
       });
     },
     // 冻结
-    handleFrozen(record) {}
+    handleFrozen(record) {
+      const corporationStatus = record.corporationStatus === 0 ? 1 : 0;
+      this.$store
+        .dispatch("channel/updateEnterpriseStatus", {
+          id: record.id,
+          corporationStatus
+        })
+        .then(res => {
+          this.$message.success("操作成功");
+          const index = this.data.findIndex(ele => ele.id === record.id);
+          this.data.splice(index, 1, { ...res.data });
+        });
+    }
   }
 };
 </script>
@@ -192,6 +227,9 @@ export default {
       }
       .dot-err {
         background: red;
+      }
+      .dot-default {
+        background: #ccc;
       }
     }
   }

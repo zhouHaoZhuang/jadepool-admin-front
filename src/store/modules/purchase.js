@@ -32,11 +32,11 @@ const purchase = {
       });
     },
     // 删除采购
-    updateStatus({ commit, state }, data) {
+    updateStatus({ commit, state }, id) {
       return request({
-        url: `/purchaseAccount/${data.ids}`,
+        url: `/purchaseAccount/${id}`,
         method: "delete",
-        data
+        
       });
     },
   // 获取采购id

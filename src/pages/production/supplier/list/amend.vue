@@ -84,7 +84,7 @@ export default {
       })
     },
     resetForm(){
-      this.$refs.ruleForm.resetFields();
+      this.$refs.ruleForm.clearValidate();
     }
   }
 };

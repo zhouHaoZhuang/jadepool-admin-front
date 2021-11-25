@@ -2,7 +2,7 @@
   <div class="channel-price-container">
     <div class="top-search">
       <a-input
-        v-model="listQuery.channelCustomerName"
+        v-model="listQuery.topSearch"
         style="width:500px"
         size="large"
         placeholder="请选择渠道商"
@@ -23,23 +23,20 @@
             <a-select
               style="width:120px"
               allowClear
-              v-model="listQuery.productCode"
-              placeholder="产品名称"
+              v-model="listQuery.key"
+              placeholder="请选择"
             >
               <a-select-option
-                v-for="item in data"
-                :key="item.productCode"
-                :value="item.id"
+                v-for="item in columns.slice(0, columns.length - 1)"
+                :key="item.dataIndex"
+                :value="item.dataIndex"
               >
-                {{ item.productName }}
+                {{ item.title }}
               </a-select-option>
             </a-select>
           </a-form-model-item>
           <a-form-model-item>
-            <a-input
-              v-model="listQuery.channelCustomerName"
-              placeholder="搜索关键词"
-            />
+            <a-input v-model="listQuery.search" placeholder="搜索关键词" />
           </a-form-model-item>
           <a-form-model-item>
             <a-button type="primary" @click="search">
@@ -50,10 +47,12 @@
       </div>
       <div class="public-table-wrap">
         <a-table
+          :loading="tableLoading"
           :columns="columns"
           :data-source="data"
           rowKey="id"
           :pagination="paginationProps"
+          :scroll="{ x: 1300 }"
         >
           <span slot="discountType" slot-scope="text">
             {{ channelPriceType[text] }}
@@ -80,8 +79,9 @@ export default {
     return {
       channelPriceType,
       listQuery: {
-        channelCustomerName: "",
-        productCode: undefined,
+        key: undefined,
+        topSearch: "",
+        search: "",
         currentPage: 1,
         pageSize: 10,
         total: 0
@@ -136,7 +136,8 @@ export default {
           )} 页`,
         onChange: this.quickJump,
         onShowSizeChange: this.onShowSizeChange
-      }
+      },
+      tableLoading: false
     };
   },
   activated() {
@@ -150,10 +151,28 @@ export default {
     },
     // 查询表格数据
     getList() {
-      this.$store.dispatch("channel/getPriceList", this.listQuery).then(res => {
-        this.data = [...res.data.list];
-        this.paginationProps.total = res.data.totalCount * 1;
-      });
+      this.tableLoading = true;
+      this.$store
+        .dispatch(
+          "channel/getPriceList",
+          this.listQuery.key
+            ? {
+                ...this.listQuery,
+                ["qp-channelCustomerName-like"]: this.listQuery.topSearch,
+                [`qp-${this.listQuery.key}-like`]: this.listQuery.search
+              }
+            : {
+                ...this.listQuery,
+                ["qp-channelCustomerName-like"]: this.listQuery.topSearch
+              }
+        )
+        .then(res => {
+          this.data = [...res.data.list];
+          this.paginationProps.total = res.data.totalCount * 1;
+        })
+        .finally(() => {
+          this.tableLoading = false;
+        });
     },
     // 表格分页快速跳转n页
     quickJump(currentPage) {

@@ -96,6 +96,7 @@ export default {
         {
           title: "操作",
           key: "action",
+          fixed: "right",
           scopedSlots: { customRender: "action" }
         }
       ],
@@ -149,8 +150,21 @@ export default {
         query: { id: record.id }
       });
     },
-    // // 删除
-    handleFrozen(record) {},
+    // 删除
+    handleFrozen(record) {
+      console.log(record.id);
+      this.$confirm({
+        title: "确认要删除吗？",
+        onOk: () => {
+          this.$store
+            .dispatch("purchase/updateStatus", {id:record.id})
+            .then(res => {
+              this.$message.success("删除成功");
+              this.getList();
+            });
+        }
+      });
+    },
     // 新增渠道
     addChannel() {
       this.$router.push("/production/supplier/adda");
