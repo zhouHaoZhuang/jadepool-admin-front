@@ -66,8 +66,8 @@ export default {
       columns: [
         {
           title: "采购账号ID",
-          dataIndex: "id",
-          key: "id"
+          dataIndex: "accountCode",
+          key: "accountCode"
         },
         {
           title: "所属供应商",
@@ -152,12 +152,12 @@ export default {
     },
     // 删除
     handleFrozen(record) {
-      console.log(record.id);
+      console.log(record);
       this.$confirm({
         title: "确认要删除吗？",
         onOk: () => {
           this.$store
-            .dispatch("purchase/updateStatus", {id:record.id})
+            .dispatch("purchase/updateStatus", record)
             .then(res => {
               this.$message.success("删除成功");
               this.getList();

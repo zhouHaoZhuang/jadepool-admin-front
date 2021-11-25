@@ -11,6 +11,7 @@
               阿里云
             </a-select-option>
             <a-select-option value="华为云">
+              华为云
             </a-select-option>
           </a-select>
         </a-form-model-item>
