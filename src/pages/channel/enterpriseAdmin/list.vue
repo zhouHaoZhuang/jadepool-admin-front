@@ -43,7 +43,7 @@
           <div class="status" slot="corporationStatus" slot-scope="text">
             <div v-if="text === 0" class="dot"></div>
             <div v-else class="dot dot-default"></div>
-            {{ corporationStatusEnum[text] }}{{ text }}
+            {{ corporationStatusEnum[text] }}
           </div>
           <span slot="action" slot-scope="text, record">
             <a-button type="link" @click="goDetail(record)">
