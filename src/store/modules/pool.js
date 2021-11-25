@@ -19,15 +19,8 @@ const pool = {
     getList({ commit, state }, params) {
       return request({
         url: "/productDetail",
-        method: "get"
-      });
-    },
-    // 搜索列表接口
-    selectList({ commit, state }, data) {
-      // console.log(data, "data");
-      return request({
-        url: `/productDetail?key=${data.key}&search=${data.search}&currentPage=${data.currentPage}&pageSize=${data.pageSize}&total=${data.total}&qp-${data.key}-${data.eq?'eq':'like'}=${data.search}`,
-        method: "get"
+        method: "get",
+        params
       });
     },
     delList({ commit, state }, id) {

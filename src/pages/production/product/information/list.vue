@@ -5,13 +5,13 @@
         <a-button type="primary" @click="addinform">
           + 新建产品
         </a-button>
-        <a-select style="width:150px" v-model="title" :placeholder="title">
+        <a-select style="width:150px" v-model="listQuery.key" :placeholder="title">
           <a-select-option :key="i" v-for="(v, i) in columns2" :value="v.key">
             {{ v.title }}
           </a-select-option>
         </a-select>
         <div>
-          <a-input placeholder="搜索关键词" v-model="sechKey" />
+          <a-input placeholder="搜索关键词" v-model="listQuery.search" />
         </div>
         <a-button type="primary" @click="handleMenuClick">
           查询
@@ -26,7 +26,6 @@
           rowKey="id"
           :pagination="paginationProps"
           :scroll="{ x: 1300 }"
-          table-layout="auto"
         >
           <a slot="name" slot-scope="text">{{ text }}</a>
           <div slot="action" slot-scope="v">
@@ -45,7 +44,6 @@
 </template>
 
 <script>
-import { loadGuards } from "@/utils/routerUtil";
 export default {
   data() {
     return {
@@ -55,11 +53,19 @@ export default {
       PoolList: [],
       exhibitList: [],
       title: "请选择",
+      listQuery: {
+        key: undefined,
+        search: "",
+        currentPage: 1,
+        pageSize: 10,
+        total: 0
+      },
       columns: [
         {
           title: "资源池产品ID",
           dataIndex: "id",
-          key: "id"
+          key: "id",
+          width: 250,
         },
         {
           title: "资源池产品名称",
@@ -146,12 +152,11 @@ export default {
     });
   },
   methods: {
-    reqList(val) {
-      this.PoolList = val.data.list;
+    reqList(res) {
+      this.PoolList = res.data.list;
       this.data = this.PoolList;
-      this.paginationProps.total = this.data.length;
+      this.paginationProps.total = res.data.totalCount*1;
       this.paginationProps.current = this.current;
-      // console.log(this.data);
       if (this.current == 1) {
         this.exhibitList = this.PoolList.slice(0, this.pageSize);
       } else {
@@ -188,48 +193,23 @@ export default {
       //添加资源池产品，跳转至添加页面路由
       this.$router.push("/production/product/addproduct");
     },
-
-    // currentPage: 1
-    // key: "cutomerName"
-    // pageSize: 10
-    // qp-cutomerName-like: "02"
-    // search: "02"
-    // total: 0
     handleMenuClick() {
-      let search = this.sechKey;   //搜索的关键字
-      let key = this.title;   //搜索的字段
-      let pageSize = this.pageSize;   //搜索每页显示的条数
-      let currentPage = this.current;   //搜索当前页
-      let total = 0;      //不知道干啥的
-      let data = {
-        search,
-        key,
-        pageSize,
-        currentPage,
-        total,
-      };
-      if (key === "id") {
-        data.eq = "eq";
-      }
-      this.$store.dispatch("pool/selectList", data).then(val => {
+      this.$getList("pool/selectList", this.listQuery).then(val => {
         this.reqList(val);     //获取列表数据并初始化数据
       });
     },
     // 切换页码之后被调用
     onShowSizeChange(current, pageSize) {
-      console.log(current, pageSize);
       this.pageSize = pageSize;
       this.current = current;
       this.paginationProps.current = current;
       this.paginationProps.pageSize = pageSize;
-      // console.log(this.paginationProps.pageSize, "pageSize");
       this.$store.dispatch("pool/getList").then(val => {
         this.reqList(val);
       });
     },
     // 切换pagSize之后被调用
     changepage(page, pageSize) {
-      // console.log(page, pageSize, "-------");
       if (page == 1) {
         this.exhibitList = this.PoolList.slice(0, this.pageSize);
       } else {
@@ -238,7 +218,6 @@ export default {
           this.pageSize * page
         );
       }
-      // this.exhibitList = this.PoolList.slice(page, pageSize);
       this.current = page;
       this.paginationProps.current = page;
     },

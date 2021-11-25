@@ -13,7 +13,6 @@
           rowKey="id"
           :pagination="paginationProps"
           :scroll="{ x: 1300 }"
-          tableLayout="auto"
         >
           <a slot="name" slot-scope="text">{{ text }}</a>
           <div slot="action" slot-scope="v">
@@ -32,8 +31,6 @@
 </template>
 
 <script>
-import { loadGuards } from "@/utils/routerUtil";
-
 export default {
   name: "index",
   data() {
@@ -48,45 +45,38 @@ export default {
           title: "渠道商ID",
           dataIndex: "cusomerCode",
           key: "cusomerCode",
-          ellipsis: true
         },
         {
           title: "渠道商简称",
           dataIndex: "createUserName",
           key: "createUserName",
-          ellipsis: true
         },
         {
           title: "采购账号ID",
           dataIndex: "accountCode",
           key: "accountCode",
-          ellipsis: true
         },
         {
           title: "所属供应商",
           dataIndex: "supplier",
           key: "supplier",
           scopedSlots: { customRender: "supplier" },
-          ellipsis: true
         },
         {
           title: "账号标识",
           dataIndex: "accountTag",
           key: "accountTag",
           scopedSlots: { customRender: "accountTag" },
-          ellipsis: true
         },
         {
           title: "供应商侧账号ID",
           dataIndex: "supplierAccountCode",
           key: "supplierAccountCode",
-          ellipsis: true
         },
         {
           title: "备注",
           dataIndex: "remark",
           key: "remark",
-          ellipsis: true
         },
         {
           title: "操作",
@@ -156,16 +146,13 @@ export default {
       this.$router.push("/production/cloudServer/newOrder");
     },
     handleMenuClick(e) {
-      // console.log("click", e);
     },
     // 分页器改变pageSize之后的回调
     onShowSizeChange(current, pageSize) {
-      // console.log(current, pageSize);
       this.pageSize = pageSize;
       this.current = current;
       this.paginationProps.current = current;
       this.paginationProps.pageSize = pageSize;
-      // console.log(this.paginationProps.pageSize, "pageSize");
       this.$store.dispatch("order/getList").then(val => {
         this.reqAfter(val);
       });
@@ -222,7 +209,6 @@ export default {
 
 <style lang="less" scoped>
 .information {
-  // width: 1220px;
   position: relative;
   padding-bottom: 150px;
   background-color: #fff;
