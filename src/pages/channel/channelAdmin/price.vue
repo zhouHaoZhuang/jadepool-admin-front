@@ -2,7 +2,7 @@
   <div class="channel-price-container">
     <div class="top-search">
       <a-input
-        v-model="listQuery.channelCustomerName"
+        v-model="listQuery.topSearch"
         style="width:500px"
         size="large"
         placeholder="请选择渠道商"
@@ -80,6 +80,7 @@ export default {
       channelPriceType,
       listQuery: {
         key: undefined,
+        topSearch: "",
         search: "",
         currentPage: 1,
         pageSize: 10,
@@ -154,6 +155,7 @@ export default {
       this.$store
         .dispatch("channel/getPriceList", {
           ...this.listQuery,
+          ["qp-channelCustomerName-like"]: this.listQuery.topSearch,
           [`qp-${this.listQuery.key}-like`]: this.listQuery.search
         })
         .then(res => {
