@@ -40,6 +40,7 @@
           :data-source="data"
           rowKey="id"
           :pagination="paginationProps"
+          :scroll="{ x: 1300 }"
         >
           <span slot="addressProject" slot-scope="text" style="color:#1890ff">
             {{ text }}
@@ -106,7 +107,8 @@ export default {
         {
           title: "创建时间",
           dataIndex: "createTime",
-          key: "createTime"
+          key: "createTime",
+          width: 250
         },
         {
           title: "操作",

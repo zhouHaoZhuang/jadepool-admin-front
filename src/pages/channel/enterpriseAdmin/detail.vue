@@ -7,43 +7,47 @@
       <div class="bot-content">
         <div class="item">
           <div class="label">企业ID:</div>
-          <div class="value">C00001</div>
+          <div class="value">{{ detail.id }}</div>
         </div>
         <div class="item">
           <div class="label">企业名称:</div>
-          <div class="value">xxxxxxxx公司</div>
+          <div class="value">{{ detail.corporationName }}</div>
         </div>
         <div class="item">
           <div class="label">认证状态:</div>
-          <div class="value">公司</div>
+          <div class="value">
+            {{ certificationStatusEnum[detail.certificationStatus] }}
+          </div>
         </div>
         <div class="item">
           <div class="label">所属渠道商:</div>
-          <div class="value">www.baidu.com</div>
+          <div class="value">{{ detail.channelCustomerName }}</div>
         </div>
         <div class="item">
           <div class="label">渠道商ID:</div>
-          <div class="value">张三</div>
+          <div class="value">{{ detail.channelCustomerCode }}</div>
         </div>
         <div class="item">
           <div class="label">企业状态:</div>
-          <div class="value">150150150150</div>
+          <div class="value">
+            {{ corporationStatusEnum[detail.corporationStatus] }}
+          </div>
         </div>
         <div class="item">
           <div class="label">创建时间:</div>
-          <div class="value">五</div>
+          <div class="value">{{ detail.createTime }}</div>
         </div>
         <div class="item">
           <div class="label">最后更新时间:</div>
-          <div class="value">五</div>
+          <div class="value">{{ detail.modifyTime }}</div>
         </div>
         <div class="item">
           <div class="label">企业认证时间:</div>
-          <div class="value">五</div>
+          <div class="value">{{ detail.corporationCertificationTime }}</div>
         </div>
         <div class="item">
           <div class="label">备注:</div>
-          <div class="value">五</div>
+          <div class="value">{{ detail.remark }}</div>
         </div>
       </div>
     </div>
@@ -51,18 +55,26 @@
 </template>
 
 <script>
+import { certificationStatusEnum, corporationStatusEnum } from "@/utils/enum";
 export default {
   data() {
     return {
+      certificationStatusEnum,
+      corporationStatusEnum,
       detail: {}
     };
   },
+  created() {
+    this.getDetail();
+  },
   methods: {
-    // 获取详情
+    // 获取企业详情
     getDetail() {
-      this.$store.dispatch("").then(res => {
-        this.detail = { ...res.data };
-      });
+      this.$store
+        .dispatch("channel/getEnterpriseDetail", { id: this.$route.query.id })
+        .then(res => {
+          this.detail = { ...res.data };
+        });
     }
   }
 };

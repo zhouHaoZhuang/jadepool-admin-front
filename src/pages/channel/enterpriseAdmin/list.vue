@@ -7,14 +7,15 @@
             <a-select
               style="width:120px"
               allowClear
-              v-model="listQuery.id"
-              placeholder="企业ID"
+              v-model="listQuery.key"
+              placeholder="请选择"
             >
-              <a-select-option :value="1">
-                Jack
-              </a-select-option>
-              <a-select-option :value="2">
-                TOM
+              <a-select-option
+                v-for="item in columns.slice(0, columns.length - 1)"
+                :key="item.dataIndex"
+                :value="item.dataIndex"
+              >
+                {{ item.title }}
               </a-select-option>
             </a-select>
           </a-form-model-item>
@@ -34,6 +35,7 @@
           :data-source="data"
           rowKey="id"
           :pagination="paginationProps"
+          :scroll="{ x: 1300 }"
         >
           <div class="status" slot="certificationStatus" slot-scope="text">
             <div v-if="text === 0" class="dot"></div>
@@ -68,7 +70,7 @@ export default {
       certificationStatusEnum,
       corporationStatusEnum,
       listQuery: {
-        id: undefined,
+        key: undefined,
         search: "",
         currentPage: 1,
         pageSize: 10,
@@ -78,7 +80,8 @@ export default {
         {
           title: "企业ID",
           dataIndex: "id",
-          key: "id"
+          key: "id",
+          width: 250
         },
         {
           title: "企业名称",
@@ -110,7 +113,8 @@ export default {
         {
           title: "创建时间",
           dataIndex: "createTime",
-          key: "createTime"
+          key: "createTime",
+          width: 250
         },
         {
           title: "操作",
@@ -144,10 +148,15 @@ export default {
     },
     // 查询表格数据
     getList() {
-      this.$store.dispatch("channel/getEnterpriseList").then(res => {
-        this.data = [...res.data.list];
-        this.paginationProps.total = res.data.totalCount * 1;
-      });
+      this.$store
+        .dispatch("channel/getEnterpriseList", {
+          ...this.listQuery,
+          [this.listQuery.key]: this.listQuery.search
+        })
+        .then(res => {
+          this.data = [...res.data.list];
+          this.paginationProps.total = res.data.totalCount * 1;
+        });
     },
     // 表格分页快速跳转n页
     quickJump(currentPage) {

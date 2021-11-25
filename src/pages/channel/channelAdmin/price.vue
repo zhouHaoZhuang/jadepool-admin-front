@@ -54,6 +54,7 @@
           :data-source="data"
           rowKey="id"
           :pagination="paginationProps"
+          :scroll="{ x: 1300 }"
         >
           <span slot="discountType" slot-scope="text">
             {{ channelPriceType[text] }}
