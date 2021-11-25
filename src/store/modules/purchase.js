@@ -27,7 +27,7 @@ const purchase = {
     edit({ commit, state }, data) {
       return request({
         url: `/purchaseAccount/${data.id}`,
-        method: "put",
+        method: "patch",
         data
       });
     },
