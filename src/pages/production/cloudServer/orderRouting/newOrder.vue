@@ -8,19 +8,26 @@
         :label-col="labelCol"
         :wrapper-col="wrapperCol"
       >
-        <a-form-model-item
-          ref="productName"
-          label="供应商"
-          prop="productName"
-        >
-          <span>阿里云</span>
+        <a-form-model-item label="渠道商" prop="supplierName">
+          <a-select
+            v-model="form.cusomerCode"
+            placeholder="please select your zone"
+          >
+            <a-select-option
+              v-for="v in cutomerList"
+              :value="v.cutomerCode"
+              :key="v.id"
+            >
+              {{ v.cutomerName }}
+            </a-select-option>
+          </a-select>
         </a-form-model-item>
-        <a-form-model-item label="默认采购账号" prop="accountCode">
+        <a-form-model-item label="采购账号" prop="supplierName">
           <a-select
             v-model="form.accountCode"
             placeholder="please select your zone"
           >
-           <a-select-option
+            <a-select-option
               v-for="v in purchase"
               :value="v.accountCode"
               :key="v.id"
@@ -29,21 +36,7 @@
             </a-select-option>
           </a-select>
         </a-form-model-item>
-         <a-form-model-item
-          ref="productName"
-          label="产品代码"
-          prop="productName"
-        >
-          <span>ddos</span>
-        </a-form-model-item>
-         <a-form-model-item
-          ref="productName"
-          label="产品类型"
-          prop="productName"
-        >
-          <span>ddos_gamesecuritybox_public_cn</span>
-        </a-form-model-item>
-        <a-form-model-item label="描述" ref="remark">
+        <a-form-model-item label="备注" ref="remark">
           <a-input v-model="form.remark" type="textarea" />
         </a-form-model-item>
         <a-button type="primary" @click="onSubmit" :loading="loading">
@@ -61,22 +54,23 @@ export default {
       labelCol: { span: 6 },
       wrapperCol: { span: 18 },
       other: "",
+      //       "accountCode": "string",
+      //   "cusomerCode": "string",
+      //   "remark": "string"
       form: {
-        productName: "",
         accountCode: "",
-        supplierProductCode: "",
-        supplierProductType: "",
+        cusomerCode: "",
         remark: ""
       },
       rules: {
-        productName: [
+        accountCode: [
           {
             required: true,
             message: "输入值不能为空",
             trigger: "blur"
           }
         ],
-        accountCode: [
+        cusomerCode: [
           {
             required: true,
             message: "select",
@@ -85,11 +79,18 @@ export default {
         ]
       },
       loading: false,
-      purchase:[]
+      cutomerList: [],
+      purchase: []
     };
   },
   activated() {
-     //   获取采购账号
+    //   获取渠道商
+    this.$store.dispatch("channel/getList").then(val => {
+      // cutomerName
+      console.log(val.data.list);
+      this.cutomerList = val.data.list;
+    });
+    //   获取采购账号
     this.$store.dispatch("purchase/getList").then(val => {
       console.log(val.data.list);
       this.purchase = val.data.list;
@@ -98,11 +99,11 @@ export default {
   methods: {
     // 提交
     onSubmit() {
+          // console.log(this.form,"9999999999999");
       this.$refs.ruleForm.validate(valid => {
-        this.$store.dispatch("pool/addList", this.form).then(val => {
-          console.log(val);
+        this.$store.dispatch("order/addList", this.form).then(val => {
+          console.log(val, "-----");
           this.$message.success("提交成功");
-
           this.$router.back();
           this.resetForm();
         });
@@ -112,12 +113,8 @@ export default {
     resetForm() {
       this.$refs.ruleForm.resetFields();
       this.form = {
-        productName: "",
-        productCode: "",
-        supplierName: "",
-        supplierProductCode: "",
-        supplierProductType: "",
-        pm: "",
+        accountCode: "",
+        cusomerCode: "",
         remark: ""
       };
     }
@@ -144,4 +141,3 @@ export default {
   }
 }
 </style>
-

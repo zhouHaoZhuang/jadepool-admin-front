@@ -8,19 +8,15 @@
         :label-col="labelCol"
         :wrapper-col="wrapperCol"
       >
-        <a-form-model-item
-          ref="productName"
-          label="供应商"
-          prop="productName"
-        >
-          <span>阿里云</span>
+        <a-form-model-item label="渠道商" prop="supplierName">
+          {{ form.cusomerCode }}
         </a-form-model-item>
-        <a-form-model-item label="默认采购账号" prop="accountCode">
+        <a-form-model-item label="采购账号" prop="supplierName">
           <a-select
             v-model="form.accountCode"
             placeholder="please select your zone"
           >
-           <a-select-option
+            <a-select-option
               v-for="v in purchase"
               :value="v.accountCode"
               :key="v.id"
@@ -29,21 +25,7 @@
             </a-select-option>
           </a-select>
         </a-form-model-item>
-         <a-form-model-item
-          ref="productName"
-          label="产品代码"
-          prop="productName"
-        >
-          <span>ddos</span>
-        </a-form-model-item>
-         <a-form-model-item
-          ref="productName"
-          label="产品类型"
-          prop="productName"
-        >
-          <span>ddos_gamesecuritybox_public_cn</span>
-        </a-form-model-item>
-        <a-form-model-item label="描述" ref="remark">
+        <a-form-model-item label="备注" ref="remark">
           <a-input v-model="form.remark" type="textarea" />
         </a-form-model-item>
         <a-button type="primary" @click="onSubmit" :loading="loading">
@@ -56,27 +38,37 @@
 
 <script>
 export default {
+  activated() {
+    let id = this.$route.query.form;
+    this.$store.dispatch("order/getOne", id).then(res => {
+      this.form = res.data;
+      console.log(res.data);
+    });
+    //   获取采购账号
+    this.$store.dispatch("purchase/getList").then(val => {
+      console.log(val.data.list);
+      this.purchase = val.data.list;
+    });
+  },
   data() {
     return {
       labelCol: { span: 6 },
       wrapperCol: { span: 18 },
       other: "",
       form: {
-        productName: "",
         accountCode: "",
-        supplierProductCode: "",
-        supplierProductType: "",
+        cusomerCode: "",
         remark: ""
       },
       rules: {
-        productName: [
+        accountCode: [
           {
             required: true,
             message: "输入值不能为空",
             trigger: "blur"
           }
         ],
-        accountCode: [
+        supplierName: [
           {
             required: true,
             message: "select",
@@ -85,24 +77,16 @@ export default {
         ]
       },
       loading: false,
-      purchase:[]
+      purchase: []
     };
-  },
-  activated() {
-     //   获取采购账号
-    this.$store.dispatch("purchase/getList").then(val => {
-      console.log(val.data.list);
-      this.purchase = val.data.list;
-    });
   },
   methods: {
     // 提交
     onSubmit() {
       this.$refs.ruleForm.validate(valid => {
-        this.$store.dispatch("pool/addList", this.form).then(val => {
+        this.$store.dispatch("order/changeList", this.form).then(val => {
           console.log(val);
           this.$message.success("提交成功");
-
           this.$router.back();
           this.resetForm();
         });
@@ -112,12 +96,8 @@ export default {
     resetForm() {
       this.$refs.ruleForm.resetFields();
       this.form = {
-        productName: "",
-        productCode: "",
-        supplierName: "",
-        supplierProductCode: "",
-        supplierProductType: "",
-        pm: "",
+        accountCode: "",
+        cusomerCode: "",
         remark: ""
       };
     }
@@ -135,7 +115,6 @@ export default {
   > .box-wrap {
     width: 600px;
     margin: 0 auto;
-    // text-align: center;
     background-color: #fff;
     button {
       position: relative;
@@ -144,4 +123,3 @@ export default {
   }
 }
 </style>
-

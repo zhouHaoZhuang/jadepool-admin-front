@@ -28,23 +28,27 @@
       </a-space>
     </div>
     <div class="InformationList">
-      <a-table
-        :columns="columns"
-        :data-source="exhibitList"
-        rowKey="id"
-        :pagination="paginationProps"
-      >
-        <span slot="name" slot-scope="text">{{ text }}</span>
-        <div slot="action" slot-scope="v">
-          <a-button type="link" @click="editPool(v)">
-            编辑
-          </a-button>
-          <a-divider type="vertical" />
-          <a-button type="link" @click="delectPool(v.id)">
-            删除
-          </a-button>
-        </div>
-      </a-table>
+
+      <div>
+        <a-table
+          :columns="columns"
+          :data-source="exhibitList"
+          rowKey="id"
+          :pagination="paginationProps"
+          tableLayout="auto"
+        >
+          <a slot="name" slot-scope="text">{{ text }}</a>
+          <p slot="action" slot-scope="v">
+            <a-button type="link" @click="editPool(v)">
+              编辑
+            </a-button>
+            <a-divider type="vertical" />
+            <a-button type="link" @click="delectPool(v.id)">
+              删除
+            </a-button>
+          </p>
+        </a-table>
+      </div>
     </div>
   </div>
 </template>
@@ -137,49 +141,7 @@ export default {
     }
   },
   created() {
-    // let addPool = this.$route.params.form;
-    // console.log(addPool, "-----------");
   },
-  // beforeRouteEnter(to, from, next) {
-  //   // 在渲染该组件的对应路由被 confirm 前调用
-  //   // 不！能！获取组件实例 `this`
-  //   // 因为当守卫执行前，组件实例还没被创建
-  //   let addPool = to.query.form;
-  //   // console.log(to, from, "-----------");
-  //   if (from.name == "新建产品线") {
-  //     console.log(addPool, "addPool");
-  //     next(vm => {
-  //       vm.PoolList.push(addPool);
-  //       vm.exhibitList = vm.PoolList.slice(0, vm.pageSize);
-  //     });
-  //     return;
-  //   }
-  //   if (from.name == "编辑产品线") {
-  //     next(vm => {
-  //       let inx = vm.PoolList.findIndex(function(params) {
-  //         return params.productCode === addPool.productCode;
-  //       });
-  //       vm.PoolList.splice(inx, 1, addPool);
-  //       // console.log(this.PoolList, "this.PoolList");
-  //       if (vm.current == 1) {
-  //         vm.exhibitList = vm.PoolList.slice(0, vm.pageSize);
-  //       } else {
-  //         vm.exhibitList = vm.PoolList.slice(
-  //           vm.pageSize * (vm.current - 1),
-  //           vm.pageSize * vm.current
-  //         );
-  //         if (vm.exhibitList.length == 0) {
-  //           vm.current--;
-  //           vm.exhibitList = vm.PoolList.slice(
-  //             vm.pageSize * (vm.current - 1),
-  //             vm.pageSize * vm.current
-  //           );
-  //         }
-  //       }
-  //     });
-  //   }
-  //   next();
-  // },
   activated() {
     this.$store.dispatch("pool/getList").then(val => {
       this.PoolList = val.data.list;
