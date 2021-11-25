@@ -41,8 +41,8 @@ export default {
       pageSizeOptions: ["5", "10", "20", "30"],
       current: 1,
       pageSize: 5,
-      PoolList: [],   //完整数据
-      exhibitList: [],   //表格数据
+      PoolList: [], //完整数据
+      exhibitList: [], //表格数据
       columns: [
         {
           title: "渠道商ID",
@@ -95,7 +95,7 @@ export default {
           scopedSlots: { customRender: "action" }
         }
       ],
-      data: [],   //请求的数据
+      data: [], //请求的数据
       // 表格分页器配置
       paginationProps: {
         showQuickJumper: true,
@@ -133,26 +133,7 @@ export default {
   activated() {
     // 获取订单路由列表
     this.$store.dispatch("order/getList").then(val => {
-      this.PoolList = val.data.list;
-      this.data = this.PoolList;
-      this.paginationProps.total = this.data.length;
-      this.paginationProps.current = this.current;
-      if (this.current == 1) {
-        this.exhibitList = this.PoolList.slice(0, this.pageSize);
-      } else {
-        this.exhibitList = this.PoolList.slice(
-          this.pageSize * (this.current - 1),
-          this.pageSize * this.current
-        );
-        if (this.exhibitList.length == 0) {
-          this.current--;
-          this.paginationProps.current = this.current;
-          this.exhibitList = this.PoolList.slice(
-            this.pageSize * (this.current - 1),
-            this.pageSize * this.current
-          );
-        }
-      }
+        this.reqAfter(val)
     });
   },
   methods: {
@@ -164,29 +145,8 @@ export default {
           this.$store.dispatch("order/delList", id).then(val => {
             this.$message.success("操作成功");
             this.$store.dispatch("order/getList").then(val => {
-              this.PoolList = val.data.list;
-              this.data = this.PoolList;
-              this.paginationProps.total = this.data.length;
-              this.paginationProps.current = this.current;
-              // console.log(this.data);
-              if (this.current == 1) {
-                this.exhibitList = this.PoolList.slice(0, this.pageSize);
-              } else {
-                this.exhibitList = this.PoolList.slice(
-                  this.pageSize * (this.current - 1),
-                  this.pageSize * this.current
-                );
-                if (this.exhibitList.length == 0) {
-                  this.current--;
-                  this.paginationProps.current = this.current;
-                  this.exhibitList = this.PoolList.slice(
-                    this.pageSize * (this.current - 1),
-                    this.pageSize * this.current
-                  );
-                }
-              }
+              this.reqAfter(val);
             });
-            // alert(val);
           });
         }
       });
@@ -207,28 +167,31 @@ export default {
       this.paginationProps.pageSize = pageSize;
       // console.log(this.paginationProps.pageSize, "pageSize");
       this.$store.dispatch("order/getList").then(val => {
-        this.PoolList = val.data.list;
-        this.data = this.PoolList;
-        this.paginationProps.total = this.data.length;
-        this.paginationProps.current = this.current;
-        // console.log(this.data);
-        if (this.current == 1) {
-          this.exhibitList = this.PoolList.slice(0, this.pageSize);
-        } else {
+        this.reqAfter(val);
+      });
+    },
+    reqAfter(val) {
+      this.PoolList = val.data.list;
+      this.data = this.PoolList;
+      this.paginationProps.total = this.data.length;
+      this.paginationProps.current = this.current;
+      // console.log(this.data);
+      if (this.current == 1) {
+        this.exhibitList = this.PoolList.slice(0, this.pageSize);
+      } else {
+        this.exhibitList = this.PoolList.slice(
+          this.pageSize * (this.current - 1),
+          this.pageSize * this.current
+        );
+        if (this.exhibitList.length == 0) {
+          this.current--;
+          this.paginationProps.current = this.current;
           this.exhibitList = this.PoolList.slice(
             this.pageSize * (this.current - 1),
             this.pageSize * this.current
           );
-          if (this.exhibitList.length == 0) {
-            this.current--;
-            this.paginationProps.current = this.current;
-            this.exhibitList = this.PoolList.slice(
-              this.pageSize * (this.current - 1),
-              this.pageSize * this.current
-            );
-          }
         }
-      });
+      }
     },
     // 改变页码之后的回调
     changepage(page, pageSize) {

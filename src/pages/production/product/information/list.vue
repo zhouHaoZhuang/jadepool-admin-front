@@ -5,14 +5,6 @@
         <a-button type="primary" @click="addinform">
           + 新建产品
         </a-button>
-        <!-- <a-dropdown>
-          <a-menu slot="overlay" @click="handleMenuClick">
-            <a-menu-item :key="i" v-for="(v,i) in columns" :value="v.title">
-              {{ v.title }}
-            </a-menu-item>
-          </a-menu>
-          <a-button> {{title}} <a-icon type="down" /> </a-button>
-        </a-dropdown> -->
         <a-select style="width:150px" v-model="title" :placeholder="title">
           <a-select-option :key="i" v-for="(v, i) in columns2" :value="v.key">
             {{ v.title }}
@@ -204,34 +196,23 @@ export default {
     // search: "02"
     // total: 0
     handleMenuClick() {
-      let search = this.sechKey;
-      let key = this.title;
-      let pageSize = this.pageSize;
-      let currentPage = this.current;
-      let total = 0;
-      let qp = `qp-${this.title}-like`;
+      let search = this.sechKey;   //搜索的关键字
+      let key = this.title;   //搜索的字段
+      let pageSize = this.pageSize;   //搜索每页显示的条数
+      let currentPage = this.current;   //搜索当前页
+      let total = 0;      //不知道干啥的
       let data = {
         search,
         key,
         pageSize,
         currentPage,
         total,
-        qp
       };
       if (key === "id") {
-        // console.log("eq");
         data.eq = "eq";
       }
-      // console.log("click", {
-      //   search,
-      //   key,
-      //   pageSize,
-      //   currentPage,
-      //   total,
-      //   [qp]: search
-      // });
       this.$store.dispatch("pool/selectList", data).then(val => {
-        this.reqList(val);
+        this.reqList(val);     //获取列表数据并初始化数据
       });
     },
     // 切换页码之后被调用
