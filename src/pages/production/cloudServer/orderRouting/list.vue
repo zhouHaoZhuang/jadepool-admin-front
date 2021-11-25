@@ -154,35 +154,37 @@ export default {
   },
   methods: {
     delectPool(id) {
-      // console.log(id, "id");
-      this.$store.dispatch("order/delList", id).then(val => {
-        // console.log(val);
-        // code: "000000"
-        this.$message.success("操作成功");
-        this.$store.dispatch("order/getList").then(val => {
-          this.PoolList = val.data.list;
-          this.data = this.PoolList;
-          this.paginationProps.total = this.data.length;
-          this.paginationProps.current = this.current;
-          // console.log(this.data);
-          if (this.current == 1) {
-            this.exhibitList = this.PoolList.slice(0, this.pageSize);
-          } else {
-            this.exhibitList = this.PoolList.slice(
-              this.pageSize * (this.current - 1),
-              this.pageSize * this.current
-            );
-            if (this.exhibitList.length == 0) {
-              this.current--;
+      this.$confirm({
+        title: "确认要删除吗？",
+        onOk: () => {
+          this.$store.dispatch("order/delList", id).then(val => {
+            this.$message.success("操作成功");
+            this.$store.dispatch("order/getList").then(val => {
+              this.PoolList = val.data.list;
+              this.data = this.PoolList;
+              this.paginationProps.total = this.data.length;
               this.paginationProps.current = this.current;
-              this.exhibitList = this.PoolList.slice(
-                this.pageSize * (this.current - 1),
-                this.pageSize * this.current
-              );
-            }
-          }
-        });
-        // alert(val);
+              // console.log(this.data);
+              if (this.current == 1) {
+                this.exhibitList = this.PoolList.slice(0, this.pageSize);
+              } else {
+                this.exhibitList = this.PoolList.slice(
+                  this.pageSize * (this.current - 1),
+                  this.pageSize * this.current
+                );
+                if (this.exhibitList.length == 0) {
+                  this.current--;
+                  this.paginationProps.current = this.current;
+                  this.exhibitList = this.PoolList.slice(
+                    this.pageSize * (this.current - 1),
+                    this.pageSize * this.current
+                  );
+                }
+              }
+            });
+            // alert(val);
+          });
+        }
       });
     },
     addinform() {
