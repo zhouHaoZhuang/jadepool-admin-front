@@ -12,6 +12,7 @@
           :data-source="exhibitList"
           rowKey="id"
           :pagination="paginationProps"
+          :scroll="{ x: 1300 }"
           tableLayout="auto"
         >
           <a slot="name" slot-scope="text">{{ text }}</a>
@@ -258,7 +259,7 @@ export default {
 
 <style lang="less" scoped>
 .information {
-  width: 1220px;
+  // width: 1220px;
   position: relative;
   padding-bottom: 150px;
   background-color: #fff;
