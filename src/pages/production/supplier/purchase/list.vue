@@ -137,28 +137,14 @@ export default {
     // 查询表格数据
     getList() {
       this.tableLoading = true;
-      this.$store
-        .dispatch(
-          "purchase/getList",
-          this.listQuery.key
-            ? {
-                ...this.listQuery,
-                [`qp-${this.listQuery.key}-like`]: this.listQuery.search
-              }
-            : this.listQuery
-        )
-        .then(res => {
+      this.$getList("purchase/getList", this.listQuery)
+      .then(res => {
           this.data = [...res.data.list];
           this.paginationProps.total = res.data.totalCount * 1;
         })
         .finally(() => {
           this.tableLoading = false;
         });
-      // this.$store.dispatch("purchase/getList",this.listQuery).then(res => {
-      //   console.log("获取数据", res);
-      //   this.data = [...res.data.list]
-      //   this.paginationProps.total = res.data.totalCount * 1;
-      // });
     },
     // 表格分页快速跳转n页
     quickJump(currentPage) {
