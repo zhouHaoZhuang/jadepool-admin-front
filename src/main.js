@@ -27,6 +27,7 @@ Vue.use(Directives);
 Vue.use(Filters);
 
 Vue.prototype.$getArrOnceData = utilsFun.getArrOnceData;
+Vue.prototype.$getList = utilsFun.getList;
 
 bootstrap({ router, store, i18n, message: Vue.prototype.$message });
 
