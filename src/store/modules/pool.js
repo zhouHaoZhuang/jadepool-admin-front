@@ -19,7 +19,8 @@ const pool = {
     getList({ commit, state }, params) {
       return request({
         url: "/productDetail",
-        method: "get"
+        method: "get",
+        params
       });
     },
     delList({ commit, state }, id) {

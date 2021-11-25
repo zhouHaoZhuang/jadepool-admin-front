@@ -17,9 +17,6 @@
         <a-form-model-item label="资源池产品CODE" prop="productCode">
           <a-input v-model="form.productCode" />
         </a-form-model-item>
-        <!-- <a-form-model-item ref="name" label="供应商" prop="name">
-          <a-input v-model="form.SupplierName" />
-        </a-form-model-item> -->
         <a-form-model-item label="供应商" prop="supplierName">
           <a-select
             v-model="form.supplierName"
@@ -61,13 +58,13 @@ export default {
       wrapperCol: { span: 18 },
       other: "",
       form: {
-        productName: "",
-        productCode: "",
-        supplierName: "",
-        supplierProductCode: "",
-        supplierProductType: "",
-        pm: "",
-        remark: ""
+        productName: "",    //产品名称
+        productCode: "",    //产品CODE
+        supplierName: "",   //供应商
+        supplierProductCode: "",      //供应商产品CODE
+        supplierProductType: "",    //供应商产品Type
+        pm: "",               //产品经理
+        remark: ""            //备注
       },
       rules: {
         productName: [
@@ -96,17 +93,16 @@ export default {
     };
   },
   activated() {
+    // 获取当前要修改的数据
     let id = this.$route.query.form;
     this.$store.dispatch("pool/getOne", id).then(res => {
       this.form = res.data;
-      console.log(res.data);
+      // console.log(res.data);
     });
-    // console.log(form, "********");
   },
   methods: {
     // 提交
     onSubmit() {
-      // console.log(this.form, "form");
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
           console.log("test", valid, this.form);
