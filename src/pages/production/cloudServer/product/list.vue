@@ -110,7 +110,7 @@ export default {
     },
     // 重置表单数据
     resetForm() {
-      this.$refs.ruleForm.resetFields();
+      this.$refs.ruleForm.clearValidate();
       this.form = {
         productName: "",
         productCode: "",

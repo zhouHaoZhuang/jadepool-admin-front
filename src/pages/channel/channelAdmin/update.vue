@@ -93,9 +93,11 @@ export default {
       wrapperCol: { span: 18 },
       form: {
         channelCustomerCode: undefined,
+        channelCustomerName: "",
         productCode: undefined,
+        productName: "",
         discountType: "1",
-        discountPrice: ""
+        discountPrice: undefined
       },
       rules: {
         channelCustomerCode: [
@@ -136,6 +138,9 @@ export default {
     $route: {
       handler(newVal, oldVal) {
         if (newVal.path === "/channel/index/update") {
+          this.$nextTick(() => {
+            this.resetForm();
+          });
           if (newVal.query.id) {
             this.type = "edit";
             this.getDetail();
@@ -144,8 +149,6 @@ export default {
             this.getList();
             this.getPriceList();
           }
-        } else if (newVal.path === "/channel/index/price") {
-          this.resetForm();
         }
       },
       immediate: true,
@@ -182,10 +185,26 @@ export default {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
           this.loading = true;
+          let newFrom = {};
+          if (this.type === "add") {
+            newFrom = {
+              ...this.form,
+              channelCustomerName: this.$getArrOnceData(
+                this.form.channelCustomerCode,
+                this.data
+              ).cutomerName,
+              productName: this.$getArrOnceData(
+                this.form.productCode,
+                this.priceData
+              ).productName
+            };
+          } else {
+            newFrom = { ...this.form };
+          }
           this.$store
             .dispatch(
-              this.type === "add" ? "channel/add" : "channel/add",
-              this.form
+              this.type === "add" ? "channel/addPrice" : "channel/editPrice",
+              newFrom
             )
             .then(res => {
               this.$message.success(
@@ -204,7 +223,15 @@ export default {
     },
     // 重置表单数据
     resetForm() {
-      this.$refs.ruleForm.resetFields();
+      this.$refs.ruleForm.clearValidate();
+      this.form = {
+        channelCustomerCode: undefined,
+        channelCustomerName: "",
+        productCode: undefined,
+        productName: "",
+        discountType: "1",
+        discountPrice: ""
+      };
     }
   }
 };

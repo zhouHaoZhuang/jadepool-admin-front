@@ -7,14 +7,15 @@
             <a-select
               style="width:120px"
               allowClear
-              v-model="listQuery.id"
-              placeholder="企业ID"
+              v-model="listQuery.key"
+              placeholder="请选择"
             >
-              <a-select-option :value="1">
-                Jack
-              </a-select-option>
-              <a-select-option :value="2">
-                TOM
+              <a-select-option
+                v-for="item in columns.slice(0, columns.length - 3)"
+                :key="item.dataIndex"
+                :value="item.dataIndex"
+              >
+                {{ item.title }}
               </a-select-option>
             </a-select>
           </a-form-model-item>
@@ -30,10 +31,12 @@
       </div>
       <div class="public-table-wrap">
         <a-table
+          :loading="tableLoading"
           :columns="columns"
           :data-source="data"
           rowKey="id"
           :pagination="paginationProps"
+          :scroll="{ x: 1300 }"
         >
           <div class="status" slot="certificationStatus" slot-scope="text">
             <div v-if="text === 0" class="dot"></div>
@@ -45,6 +48,9 @@
             <div v-else class="dot dot-default"></div>
             {{ corporationStatusEnum[text] }}
           </div>
+          <span slot="createTime" slot-scope="text">
+            {{ text | formatDate }}
+          </span>
           <span slot="action" slot-scope="text, record">
             <a-button type="link" @click="goDetail(record)">
               查看
@@ -68,7 +74,7 @@ export default {
       certificationStatusEnum,
       corporationStatusEnum,
       listQuery: {
-        id: undefined,
+        key: undefined,
         search: "",
         currentPage: 1,
         pageSize: 10,
@@ -78,7 +84,8 @@ export default {
         {
           title: "企业ID",
           dataIndex: "id",
-          key: "id"
+          key: "id",
+          width: 250
         },
         {
           title: "企业名称",
@@ -110,7 +117,9 @@ export default {
         {
           title: "创建时间",
           dataIndex: "createTime",
-          key: "createTime"
+          key: "createTime",
+          width: 250,
+          scopedSlots: { customRender: "createTime" }
         },
         {
           title: "操作",
@@ -130,7 +139,8 @@ export default {
           )} 页`,
         onChange: this.quickJump,
         onShowSizeChange: this.onShowSizeChange
-      }
+      },
+      tableLoading: false
     };
   },
   activated() {
@@ -144,10 +154,24 @@ export default {
     },
     // 查询表格数据
     getList() {
-      this.$store.dispatch("channel/getEnterpriseList").then(res => {
-        this.data = [...res.data.list];
-        this.paginationProps.total = res.data.totalCount * 1;
-      });
+      this.tableLoading = true;
+      this.$store
+        .dispatch(
+          "channel/getEnterpriseList",
+          this.listQuery.key
+            ? {
+                ...this.listQuery,
+                [`qp-${this.listQuery.key}-like`]: this.listQuery.search
+              }
+            : this.listQuery
+        )
+        .then(res => {
+          this.data = [...res.data.list];
+          this.paginationProps.total = res.data.totalCount * 1;
+        })
+        .finally(() => {
+          this.tableLoading = false;
+        });
     },
     // 表格分页快速跳转n页
     quickJump(currentPage) {

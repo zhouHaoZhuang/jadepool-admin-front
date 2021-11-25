@@ -40,7 +40,7 @@
             </div>
           </div>
         </a-tab-pane>
-        <a-tab-pane key="2" tab="开放平台信息">
+        <!-- <a-tab-pane key="2" tab="开放平台信息">
           <div class="tabs-content">
             <div class="top-title">
               <span>接口信息</span>
@@ -73,7 +73,7 @@
               </div>
             </div>
           </div>
-        </a-tab-pane>
+        </a-tab-pane> -->
       </a-tabs>
     </div>
     <!-- 修改基础资料弹窗 -->
@@ -261,7 +261,7 @@ export default {
     },
     handleCancelDetail(e) {
       this.visibleDetail = false;
-      this.$refs.ruleForm.resetFields();
+      this.$refs.ruleForm.clearValidate();
     },
     // 修改接口信息
     showModal() {
@@ -281,7 +281,7 @@ export default {
     },
     handleCancel(e) {
       this.visible = false;
-      this.$refs.apiForm.resetFields();
+      this.$refs.apiForm.clearValidate();
     }
   }
 };

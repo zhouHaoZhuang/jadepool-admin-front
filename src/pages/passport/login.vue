@@ -1,6 +1,7 @@
 <template>
   <common-layout class="login-wrap">
     <div class="login">
+      <!-- <AuthingGuard :appId="appId" /> -->
       <a-form @submit="onSubmit" :form="form">
         <a-form-item>
           <a-input
@@ -47,13 +48,16 @@
 
 <script>
 import CommonLayout from "@/layouts/CommonLayout";
+import { AuthingGuard } from "@authing/vue-ui-components";
+import "@authing/vue-ui-components/lib/index.min.css";
 
 export default {
   name: "Login",
   components: { CommonLayout },
   data() {
     return {
-      form: this.$form.createForm(this)
+      form: this.$form.createForm(this),
+      appId: "619f2dac84bea60dbe1be5bf"
     };
   },
   methods: {

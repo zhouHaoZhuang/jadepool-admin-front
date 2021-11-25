@@ -12,20 +12,20 @@
             <a-select
               style="width:120px"
               allowClear
-              v-model="listQuery.id"
-              placeholder="渠道商ID"
+              v-model="listQuery.key"
+              placeholder="请选择"
             >
               <a-select-option
-                v-for="item in data"
-                :key="item.id"
-                :value="item.id"
+                v-for="item in columns.slice(0, columns.length - 3)"
+                :key="item.dataIndex"
+                :value="item.dataIndex"
               >
-                {{ item.cutomerName }}
+                {{ item.title }}
               </a-select-option>
             </a-select>
           </a-form-model-item>
           <a-form-model-item>
-            <a-input v-model="listQuery.cutomerName" placeholder="搜索关键词" />
+            <a-input v-model="listQuery.search" placeholder="搜索关键词" />
           </a-form-model-item>
           <a-form-model-item>
             <a-button type="primary" @click="search">
@@ -36,26 +36,31 @@
       </div>
       <div class="public-table-wrap">
         <a-table
+          :loading="tableLoading"
           :columns="columns"
           :data-source="data"
           rowKey="id"
           :pagination="paginationProps"
+          :scroll="{ x: 1300 }"
         >
           <span slot="addressProject" slot-scope="text" style="color:#1890ff">
             {{ text }}
           </span>
-          <div class="status" slot="deleted" slot-scope="text">
-            <div v-if="text === 't'" class="dot"></div>
+          <div class="status" slot="customerStatus" slot-scope="text">
+            <div v-if="text === 0" class="dot"></div>
             <div v-else class="dot dot-err"></div>
-            {{ text === "t" ? "正常" : "冻结" }}
+            {{ text === 0 ? "正常" : "冻结" }}
           </div>
+          <span slot="createTime" slot-scope="text">
+            {{ text | formatDate }}
+          </span>
           <span slot="action" slot-scope="text, record">
             <a-button type="link" @click="goDetail(record)">
               查看
             </a-button>
             <a-divider type="vertical" />
             <a-button type="link" @click="handleFrozen(record)">
-              {{ record.deleted !== "t" ? "解冻" : "冻结" }}
+              {{ record.customerStatus !== 0 ? "解冻" : "冻结" }}
             </a-button>
           </span>
         </a-table>
@@ -69,8 +74,8 @@ export default {
   data() {
     return {
       listQuery: {
-        id: undefined,
-        cutomerName: "",
+        key: undefined,
+        search: "",
         currentPage: 1,
         pageSize: 10,
         total: 0
@@ -79,7 +84,8 @@ export default {
         {
           title: "渠道商ID",
           dataIndex: "id",
-          key: "id"
+          key: "id",
+          width: 260
         },
         {
           title: "全称",
@@ -99,14 +105,16 @@ export default {
         },
         {
           title: "状态",
-          dataIndex: "deleted",
-          key: "deleted",
-          scopedSlots: { customRender: "deleted" }
+          dataIndex: "customerStatus",
+          key: "customerStatus",
+          scopedSlots: { customRender: "customerStatus" }
         },
         {
           title: "创建时间",
           dataIndex: "createTime",
-          key: "createTime"
+          key: "createTime",
+          scopedSlots: { customRender: "createTime" },
+          width: 250
         },
         {
           title: "操作",
@@ -126,7 +134,8 @@ export default {
           )} 页`,
         onChange: this.quickJump,
         onShowSizeChange: this.onShowSizeChange
-      }
+      },
+      tableLoading: false
     };
   },
   activated() {
@@ -140,10 +149,24 @@ export default {
     },
     // 查询表格数据
     getList() {
-      this.$store.dispatch("channel/getList", this.listQuery).then(res => {
-        this.data = [...res.data.list];
-        this.paginationProps.total = res.data.totalCount * 1;
-      });
+      this.tableLoading = true;
+      this.$store
+        .dispatch(
+          "channel/getList",
+          this.listQuery.key
+            ? {
+                ...this.listQuery,
+                [`qp-${this.listQuery.key}-like`]: this.listQuery.search
+              }
+            : this.listQuery
+        )
+        .then(res => {
+          this.data = [...res.data.list];
+          this.paginationProps.total = res.data.totalCount * 1;
+        })
+        .finally(() => {
+          this.tableLoading = false;
+        });
     },
     // 表格分页快速跳转n页
     quickJump(currentPage) {
@@ -165,16 +188,16 @@ export default {
     },
     // 冻结
     handleFrozen(record) {
-      const deleted = record.deleted === "t" ? "f" : "t";
+      const customerStatus = record.customerStatus === 0 ? 1 : 0;
       this.$store
         .dispatch("channel/updateStatus", {
           id: record.id,
-          deleted
+          customerStatus
         })
         .then(res => {
           this.$message.success("操作成功");
           const index = this.data.findIndex(ele => ele.id === record.id);
-          this.data.splice(index, 1, { ...record, deleted });
+          this.data.splice(index, 1, { ...record, customerStatus });
         });
     },
     // 新增渠道
