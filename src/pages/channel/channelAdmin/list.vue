@@ -46,10 +46,10 @@
           <span slot="addressProject" slot-scope="text" style="color:#1890ff">
             {{ text }}
           </span>
-          <div class="status" slot="deleted" slot-scope="text">
-            <div v-if="text === 't'" class="dot"></div>
+          <div class="status" slot="customerStatus" slot-scope="text">
+            <div v-if="text === 0" class="dot"></div>
             <div v-else class="dot dot-err"></div>
-            {{ text === "t" ? "正常" : "冻结" }}
+            {{ text === 0 ? "正常" : "冻结" }}
           </div>
           <span slot="createTime" slot-scope="text">
             {{ text | formatDate }}
@@ -60,7 +60,7 @@
             </a-button>
             <a-divider type="vertical" />
             <a-button type="link" @click="handleFrozen(record)">
-              {{ record.deleted !== "t" ? "解冻" : "冻结" }}
+              {{ record.customerStatus !== 0 ? "解冻" : "冻结" }}
             </a-button>
           </span>
         </a-table>
@@ -105,9 +105,9 @@ export default {
         },
         {
           title: "状态",
-          dataIndex: "deleted",
-          key: "deleted",
-          scopedSlots: { customRender: "deleted" }
+          dataIndex: "customerStatus",
+          key: "customerStatus",
+          scopedSlots: { customRender: "customerStatus" }
         },
         {
           title: "创建时间",
@@ -153,7 +153,7 @@ export default {
       this.$store
         .dispatch("channel/getList", {
           ...this.listQuery,
-          [this.listQuery.key]: this.listQuery.search
+          [`qp-${this.listQuery.key}-like`]: this.listQuery.search
         })
         .then(res => {
           this.data = [...res.data.list];
@@ -183,16 +183,16 @@ export default {
     },
     // 冻结
     handleFrozen(record) {
-      const deleted = record.deleted === "t" ? "f" : "t";
+      const customerStatus = record.customerStatus === 0 ? 1 : 0;
       this.$store
         .dispatch("channel/updateStatus", {
           id: record.id,
-          deleted
+          customerStatus
         })
         .then(res => {
           this.$message.success("操作成功");
           const index = this.data.findIndex(ele => ele.id === record.id);
-          this.data.splice(index, 1, { ...record, deleted });
+          this.data.splice(index, 1, { ...record, customerStatus });
         });
     },
     // 新增渠道

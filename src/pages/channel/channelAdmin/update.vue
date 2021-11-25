@@ -97,7 +97,7 @@ export default {
         productCode: undefined,
         productName: "",
         discountType: "1",
-        discountPrice: ""
+        discountPrice: undefined
       },
       rules: {
         channelCustomerCode: [
@@ -138,6 +138,9 @@ export default {
     $route: {
       handler(newVal, oldVal) {
         if (newVal.path === "/channel/index/update") {
+          this.$nextTick(() => {
+            this.resetForm();
+          });
           if (newVal.query.id) {
             this.type = "edit";
             this.getDetail();
@@ -146,8 +149,6 @@ export default {
             this.getList();
             this.getPriceList();
           }
-        } else {
-          this.resetForm();
         }
       },
       immediate: true,
@@ -184,21 +185,26 @@ export default {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
           this.loading = true;
-          const newForm = {
-            ...this.form,
-            channelCustomerName: this.$getArrOnceData(
-              this.form.channelCustomerCode,
-              this.data
-            ).cutomerName,
-            productName: this.$getArrOnceData(
-              this.form.productCode,
-              this.priceData
-            ).productName
-          };
+          let newFrom = {};
+          if (this.type === "add") {
+            newFrom = {
+              ...this.form,
+              channelCustomerName: this.$getArrOnceData(
+                this.form.channelCustomerCode,
+                this.data
+              ).cutomerName,
+              productName: this.$getArrOnceData(
+                this.form.productCode,
+                this.priceData
+              ).productName
+            };
+          } else {
+            newFrom = { ...this.form };
+          }
           this.$store
             .dispatch(
               this.type === "add" ? "channel/addPrice" : "channel/editPrice",
-              this.type === "add" ? newForm : this.form
+              newFrom
             )
             .then(res => {
               this.$message.success(

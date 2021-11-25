@@ -154,7 +154,7 @@ export default {
       this.$store
         .dispatch("channel/getPriceList", {
           ...this.listQuery,
-          [this.listQuery.key]: this.listQuery.search
+          [`qp-${this.listQuery.key}-like`]: this.listQuery.search
         })
         .then(res => {
           this.data = [...res.data.list];
