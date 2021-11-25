@@ -35,15 +35,17 @@
         </div>
         <div class="item">
           <div class="label">创建时间:</div>
-          <div class="value">{{ detail.createTime }}</div>
+          <div class="value">{{ detail.createTime | formatDate }}</div>
         </div>
         <div class="item">
           <div class="label">最后更新时间:</div>
-          <div class="value">{{ detail.modifyTime }}</div>
+          <div class="value">{{ detail.modifyTime | formatDate }}</div>
         </div>
         <div class="item">
           <div class="label">企业认证时间:</div>
-          <div class="value">{{ detail.corporationCertificationTime }}</div>
+          <div class="value">
+            {{ detail.corporationCertificationTime | formatDate }}
+          </div>
         </div>
         <div class="item">
           <div class="label">备注:</div>

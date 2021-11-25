@@ -50,6 +50,7 @@
       </div>
       <div class="public-table-wrap">
         <a-table
+          :loading="tableLoading"
           :columns="columns"
           :data-source="data"
           rowKey="id"
@@ -137,7 +138,8 @@ export default {
           )} 页`,
         onChange: this.quickJump,
         onShowSizeChange: this.onShowSizeChange
-      }
+      },
+      tableLoading: false
     };
   },
   activated() {
@@ -151,10 +153,16 @@ export default {
     },
     // 查询表格数据
     getList() {
-      this.$store.dispatch("channel/getPriceList", this.listQuery).then(res => {
-        this.data = [...res.data.list];
-        this.paginationProps.total = res.data.totalCount * 1;
-      });
+      this.tableLoading = true;
+      this.$store
+        .dispatch("channel/getPriceList", this.listQuery)
+        .then(res => {
+          this.data = [...res.data.list];
+          this.paginationProps.total = res.data.totalCount * 1;
+        })
+        .finally(() => {
+          this.tableLoading = false;
+        });
     },
     // 表格分页快速跳转n页
     quickJump(currentPage) {

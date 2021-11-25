@@ -31,6 +31,7 @@
       </div>
       <div class="public-table-wrap">
         <a-table
+          :loading="tableLoading"
           :columns="columns"
           :data-source="data"
           rowKey="id"
@@ -47,6 +48,9 @@
             <div v-else class="dot dot-default"></div>
             {{ corporationStatusEnum[text] }}
           </div>
+          <span slot="createTime" slot-scope="text">
+            {{ text | formatDate }}
+          </span>
           <span slot="action" slot-scope="text, record">
             <a-button type="link" @click="goDetail(record)">
               查看
@@ -114,7 +118,8 @@ export default {
           title: "创建时间",
           dataIndex: "createTime",
           key: "createTime",
-          width: 250
+          width: 250,
+          scopedSlots: { customRender: "createTime" }
         },
         {
           title: "操作",
@@ -134,7 +139,8 @@ export default {
           )} 页`,
         onChange: this.quickJump,
         onShowSizeChange: this.onShowSizeChange
-      }
+      },
+      tableLoading: false
     };
   },
   activated() {
@@ -148,6 +154,7 @@ export default {
     },
     // 查询表格数据
     getList() {
+      this.tableLoading = true;
       this.$store
         .dispatch("channel/getEnterpriseList", {
           ...this.listQuery,
@@ -156,6 +163,9 @@ export default {
         .then(res => {
           this.data = [...res.data.list];
           this.paginationProps.total = res.data.totalCount * 1;
+        })
+        .finally(() => {
+          this.tableLoading = false;
         });
     },
     // 表格分页快速跳转n页
