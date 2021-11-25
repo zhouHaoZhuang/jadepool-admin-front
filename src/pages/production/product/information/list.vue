@@ -7,14 +7,8 @@
         </a-button>
         <a-dropdown>
           <a-menu slot="overlay" @click="handleMenuClick">
-            <a-menu-item key="1">
-              1st item
-            </a-menu-item>
-            <a-menu-item key="2">
-              2nd item
-            </a-menu-item>
-            <a-menu-item key="3">
-              3rd item
+            <a-menu-item :key="v.id" v-for="(v) in data" :value='v.id'>
+              {{v.id}}
             </a-menu-item>
           </a-menu>
           <a-button> 产品ID <a-icon type="down" /> </a-button>
@@ -140,8 +134,7 @@ export default {
       }
     }
   },
-  created() {
-  },
+
   activated() {
     this.$store.dispatch("pool/getList").then(val => {
       this.PoolList = val.data.list;

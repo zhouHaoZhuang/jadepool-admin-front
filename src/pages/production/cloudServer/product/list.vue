@@ -15,20 +15,6 @@
         >
           <span>阿里云</span>
         </a-form-model-item>
-        <a-form-model-item label="默认采购账号" prop="accountCode">
-          <a-select
-            v-model="form.accountCode"
-            placeholder="please select your zone"
-          >
-           <a-select-option
-              v-for="v in purchase"
-              :value="v.accountCode"
-              :key="v.id"
-            >
-              {{ v.accountTag }}
-            </a-select-option>
-          </a-select>
-        </a-form-model-item>
          <a-form-model-item
           ref="productName"
           label="产品代码"

@@ -30,8 +30,12 @@
             v-model="form.supplierName"
             placeholder="please select your zone"
           >
-          <!-- supplierNameList -->
-            <a-select-option v-for="(v) in supplierNameList" :value="v.id" :key="v.id">
+            <!-- supplierNameList -->
+            <a-select-option
+              v-for="v in supplierNameList"
+              :value="v.supplierName"
+              :key="v.id"
+            >
               {{ v.supplierName }}
             </a-select-option>
           </a-select>
@@ -42,6 +46,21 @@
         <a-form-model-item ref="supplierProductType" label="供应商产品Type">
           <a-input v-model="form.supplierProductType" />
         </a-form-model-item>
+        <a-form-model-item label="默认采购账号" prop="defaultPurchaseAccount">
+          <a-select
+            v-model="form.defaultPurchaseAccount"
+            placeholder="please select your zone"
+          >
+            <a-select-option
+              v-for="v in purchase"
+              :value="v.accountCode"
+              :key="v.id"
+            >
+              {{ v.accountTag }}
+            </a-select-option>
+          </a-select>
+        </a-form-model-item>
+
         <a-form-model-item ref="pm" label="产品经理">
           <a-input v-model="form.pm" />
         </a-form-model-item>
@@ -65,6 +84,7 @@ export default {
       other: "",
       form: {
         productName: "",
+        defaultPurchaseAccount: "",
         productCode: "",
         supplierName: "",
         supplierProductCode: "",
@@ -78,6 +98,13 @@ export default {
             required: true,
             message: "输入值不能为空",
             trigger: "blur"
+          }
+        ],
+        defaultPurchaseAccount: [
+          {
+            required: true,
+            message: "select",
+            trigger: "change"
           }
         ],
         productCode: [
@@ -96,7 +123,9 @@ export default {
         ]
       },
       loading: false,
-      supplierNameList:[]
+      supplierNameList: [],
+      purchase:[]
+
     };
   },
   activated() {
@@ -104,10 +133,15 @@ export default {
     this.$store.dispatch("provider/getList").then(res => {
       this.supplierNameList = res.data.list;
     });
+    this.$store.dispatch("purchase/getList").then(val => {
+      console.log(val.data.list);
+      this.purchase = val.data.list;
+    });
   },
   methods: {
     // 提交
     onSubmit() {
+      console.log(this.form);
       this.$refs.ruleForm.validate(valid => {
         this.$store.dispatch("pool/addList", this.form).then(val => {
           console.log(val);

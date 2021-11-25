@@ -8,10 +8,10 @@
         :label-col="labelCol"
         :wrapper-col="wrapperCol"
       >
-        <a-form-model-item label="渠道商" prop="supplierName">
+        <a-form-model-item label="渠道商" prop="cusomerCode">
           {{ form.cusomerCode }}
         </a-form-model-item>
-        <a-form-model-item label="采购账号" prop="supplierName">
+        <a-form-model-item label="采购账号" prop="accountCode">
           <a-select
             v-model="form.accountCode"
             placeholder="please select your zone"
@@ -61,14 +61,14 @@ export default {
         remark: ""
       },
       rules: {
-        accountCode: [
+        cusomerCode: [
           {
             required: true,
             message: "输入值不能为空",
             trigger: "blur"
           }
         ],
-        supplierName: [
+        accountCode: [
           {
             required: true,
             message: "select",

@@ -45,8 +45,8 @@ export default {
       columns: [
         {
           title: "渠道商ID",
-          dataIndex: "accountCode",
-          key: "accountCode",
+          dataIndex: "cusomerCode",
+          key: "cusomerCode",
           ellipsis: true
         },
         {
@@ -57,8 +57,8 @@ export default {
         },
         {
           title: "采购账号ID",
-          dataIndex: "cusomerCode",
-          key: "cusomerCode",
+          dataIndex: "accountCode",
+          key: "accountCode",
           ellipsis: true
         },
         {
@@ -77,8 +77,8 @@ export default {
         },
         {
           title: "供应商侧账号ID",
-          dataIndex: "id",
-          key: "id",
+          dataIndex: "supplierAccountCode",
+          key: "supplierAccountCode",
           ellipsis: true
         },
         {
