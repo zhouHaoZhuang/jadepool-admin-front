@@ -162,7 +162,20 @@ export default {
       });
     },
     // 删除
-    handleFrozen(record) {},
+    handleFrozen(record) {
+      console.log(record);
+      this.$confirm({
+        title: "确认要删除吗？",
+        onOk: () => {
+          this.$store
+            .dispatch("provider/updateStatus", record)
+            .then(res => {
+              this.$message.success("删除成功");
+              this.getList();
+            });
+        }
+      });
+    },
     // 新增渠道
     addChannel() {
       this.$router.push("/production/supplier/add");

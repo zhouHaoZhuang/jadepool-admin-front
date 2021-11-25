@@ -1,6 +1,6 @@
 import request from "@/utils/request";
 
-const pool = {
+const order = {
   namespaced: true,
   state: {
     poolList: [],
@@ -10,7 +10,6 @@ const pool = {
   mutations: {
     SET_POOL: (state, poolList) => {
       state.poolList = poolList;
-      // console.log(state.poolList,'state');
     }
   },
 
@@ -18,26 +17,26 @@ const pool = {
     // 获取列表
     getList({ commit, state }, params) {
       return request({
-        url: "/productDetail",
+        url: "/orderRoute",
         method: "get"
       });
     },
     delList({ commit, state }, id) {
       return request({
-        url: `/productDetail/${id}`,
+        url: `/orderRoute/${id}`,
         method: "delete"
       });
     },
     changeList({ commit, state }, data) {
       return request({
-        url: `/productDetail/${data.id}`,
+        url: `/orderRoute/${data.id}`,
         method: "put",
         data
       });
     },
     addList({ commit, state }, params) {
       return request({
-        url: "/productDetail",
+        url: "/orderRoute",
         method: "post",
         data: {
           ...params
@@ -47,11 +46,11 @@ const pool = {
     getOne({ commit, state }, id) {
       console.log(state);
       return request({
-        url: `/productDetail/one?id=${id}`,
+        url: `/orderRoute/one?id=${id}`,
         method: "get"
       });
     }
   }
 };
 
-export default pool;
+export default order;
