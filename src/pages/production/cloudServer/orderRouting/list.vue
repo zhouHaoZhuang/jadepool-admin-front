@@ -40,8 +40,8 @@ export default {
       pageSizeOptions: ["5", "10", "20", "30"],
       current: 1,
       pageSize: 5,
-      PoolList: [],
-      exhibitList: [],
+      PoolList: [],   //完整数据
+      exhibitList: [],   //表格数据
       columns: [
         {
           title: "渠道商ID",
@@ -94,7 +94,8 @@ export default {
           scopedSlots: { customRender: "action" }
         }
       ],
-      data: [],
+      data: [],   //请求的数据
+      // 表格分页器配置
       paginationProps: {
         showQuickJumper: true,
         showSizeChanger: true,
@@ -111,6 +112,7 @@ export default {
   },
 
   computed: {
+    // 总页数
     pageNum() {
       if (this.PoolList.length / this.pageSize < 1) {
         return 1;
@@ -128,12 +130,12 @@ export default {
     }
   },
   activated() {
+    // 获取订单路由列表
     this.$store.dispatch("order/getList").then(val => {
       this.PoolList = val.data.list;
       this.data = this.PoolList;
       this.paginationProps.total = this.data.length;
       this.paginationProps.current = this.current;
-      // console.log(this.data);
       if (this.current == 1) {
         this.exhibitList = this.PoolList.slice(0, this.pageSize);
       } else {
@@ -153,6 +155,7 @@ export default {
     });
   },
   methods: {
+    // 定义删除方法
     delectPool(id) {
       this.$confirm({
         title: "确认要删除吗？",
@@ -187,25 +190,27 @@ export default {
         }
       });
     },
+    // 跳转至添加路由页面
     addinform() {
       this.$router.push("/production/cloudServer/newOrder");
     },
     handleMenuClick(e) {
       // console.log("click", e);
     },
+    // 分页器改变pageSize之后的回调
     onShowSizeChange(current, pageSize) {
-      console.log(current, pageSize);
+      // console.log(current, pageSize);
       this.pageSize = pageSize;
       this.current = current;
       this.paginationProps.current = current;
       this.paginationProps.pageSize = pageSize;
-      console.log(this.paginationProps.pageSize, "pageSize");
+      // console.log(this.paginationProps.pageSize, "pageSize");
       this.$store.dispatch("order/getList").then(val => {
         this.PoolList = val.data.list;
         this.data = this.PoolList;
         this.paginationProps.total = this.data.length;
         this.paginationProps.current = this.current;
-        console.log(this.data);
+        // console.log(this.data);
         if (this.current == 1) {
           this.exhibitList = this.PoolList.slice(0, this.pageSize);
         } else {
@@ -224,8 +229,9 @@ export default {
         }
       });
     },
+    // 改变页码之后的回调
     changepage(page, pageSize) {
-      console.log(page, pageSize, "-------");
+      // console.log(page, pageSize, "-------");
       if (page == 1) {
         this.exhibitList = this.PoolList.slice(0, this.pageSize);
       } else {
@@ -237,6 +243,7 @@ export default {
       this.current = page;
       this.paginationProps.current = page;
     },
+    // 跳转至修改数据路由
     editPool(v) {
       this.$router.push({
         path: "/production/cloudServer/changeOrder",

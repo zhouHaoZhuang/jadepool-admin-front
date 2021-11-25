@@ -101,13 +101,14 @@ export default {
         }
       ],
       data: [],
+      // 表格分页器配置
       paginationProps: {
         showQuickJumper: true,
         showSizeChanger: true,
         pageSizeOptions: ["5", "10", "20", "30"],
         total: 0,
-        current: 1,
-        pageSize: 5,
+        current: 1,  //当前页
+        pageSize: 5,  //每页显示数量
         showTotal: (total, range) =>
           `共 ${total} 条记录 第 ${this.current} /  ${this.pageNum} 页`,
         onChange: this.changepage,
@@ -117,6 +118,7 @@ export default {
   },
 
   computed: {
+    // 共几页
     pageNum() {
       if (this.PoolList.length / this.pageSize < 1) {
         return 1;
@@ -135,12 +137,13 @@ export default {
   },
 
   activated() {
+    // 获取列表数据  以及初始化操作
     this.$store.dispatch("pool/getList").then(val => {
       this.PoolList = val.data.list;
       this.data = this.PoolList;
       this.paginationProps.total = this.data.length;
       this.paginationProps.current = this.current;
-      console.log(this.data);
+      // console.log(this.data);
       if (this.current == 1) {
         this.exhibitList = this.PoolList.slice(0, this.pageSize);
       } else {
@@ -160,7 +163,7 @@ export default {
     });
   },
   methods: {
-    delectPool(id) {
+    delectPool(id) {   //删除方法
       this.$confirm({
         title: "确认要删除吗？",
         onOk: () => {
@@ -192,12 +195,13 @@ export default {
         }
       });
     },
-    addinform() {
+    addinform() {   //添加资源池产品，跳转至添加页面路由
       this.$router.push("/production/product/addproduct");
     },
     handleMenuClick(e) {
       // console.log("click", e);
     },
+    // 切换页码之后被调用
     onShowSizeChange(current, pageSize) {
       console.log(current, pageSize);
       this.pageSize = pageSize;
@@ -210,7 +214,7 @@ export default {
         this.data = this.PoolList;
         this.paginationProps.total = this.data.length;
         this.paginationProps.current = this.current;
-        console.log(this.data);
+        // console.log(this.data);
         if (this.current == 1) {
           this.exhibitList = this.PoolList.slice(0, this.pageSize);
         } else {
@@ -229,6 +233,7 @@ export default {
         }
       });
     },
+    // 切换pagSize之后被调用
     changepage(page, pageSize) {
       console.log(page, pageSize, "-------");
       if (page == 1) {
@@ -243,6 +248,7 @@ export default {
       this.current = page;
       this.paginationProps.current = page;
     },
+    // 跳转至修改页面
     editPool(v) {
       // console.log(v);
       this.$router.push({

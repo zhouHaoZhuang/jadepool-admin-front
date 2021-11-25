@@ -40,13 +40,14 @@
 export default {
   activated() {
     let id = this.$route.query.form;
+    // 获取当前页面要修改的数据
     this.$store.dispatch("order/getOne", id).then(res => {
       this.form = res.data;
-      console.log(res.data);
+      // console.log(res.data);
     });
     //   获取采购账号
     this.$store.dispatch("purchase/getList").then(val => {
-      console.log(val.data.list);
+      // console.log(val.data.list);
       this.purchase = val.data.list;
     });
   },
@@ -56,9 +57,9 @@ export default {
       wrapperCol: { span: 18 },
       other: "",
       form: {
-        accountCode: "",
-        cusomerCode: "",
-        remark: ""
+        accountCode: "",    //  采购账号
+        cusomerCode: "",   //  渠道商
+        remark: ""        //  备注
       },
       rules: {
         cusomerCode: [
@@ -85,7 +86,7 @@ export default {
     onSubmit() {
       this.$refs.ruleForm.validate(valid => {
         this.$store.dispatch("order/changeList", this.form).then(val => {
-          console.log(val);
+          // console.log(val);
           this.$message.success("提交成功");
           this.$router.back();
           this.resetForm();

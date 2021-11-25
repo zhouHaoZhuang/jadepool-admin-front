@@ -22,15 +22,11 @@
         >
           <a-input v-model="form.productCode" />
         </a-form-model-item>
-        <!-- <a-form-model-item ref="name" label="供应商" prop="name">
-          <a-input v-model="form.SupplierName" />
-        </a-form-model-item> -->
         <a-form-model-item label="供应商" prop="supplierName">
           <a-select
             v-model="form.supplierName"
             placeholder="please select your zone"
           >
-            <!-- supplierNameList -->
             <a-select-option
               v-for="v in supplierNameList"
               :value="v.supplierName"
@@ -83,14 +79,14 @@ export default {
       wrapperCol: { span: 18 },
       other: "",
       form: {
-        productName: "",
-        defaultPurchaseAccount: "",
-        productCode: "",
-        supplierName: "",
-        supplierProductCode: "",
-        supplierProductType: "",
-        pm: "",
-        remark: ""
+        productName: "",    //产品名称
+        defaultPurchaseAccount: "",     //默认采购账号
+        productCode: "",      //产品CODE
+        supplierName: "",       //供应商
+        supplierProductCode: "",    //供应商产品CODE
+        supplierProductType: "",    //供应商产品Type
+        pm: "",            //产品经理
+        remark: ""      //备注
       },
       rules: {
         productName: [
@@ -125,16 +121,16 @@ export default {
       loading: false,
       supplierNameList: [],
       purchase:[]
-
     };
   },
   activated() {
-    // 此处需要获取供应商
+    // 此处需要获取供应商列表
     this.$store.dispatch("provider/getList").then(res => {
       this.supplierNameList = res.data.list;
     });
+    // 此处需要获取默认采购账号列表
     this.$store.dispatch("purchase/getList").then(val => {
-      console.log(val.data.list);
+      // console.log(val.data.list);
       this.purchase = val.data.list;
     });
   },
@@ -149,17 +145,6 @@ export default {
           this.$router.back();
           this.resetForm();
         });
-        // if (valid) {
-        //   console.log(valid, this.form);
-        //   // this.$router.push("/production/product/information");
-        //   this.$router.push({
-        //     path: "/production/product/information",
-        //     query: {
-        //       form: this.form
-        //     }
-        //   });
-
-        // }
       });
     },
     // 重置表单数据
