@@ -1,6 +1,17 @@
 <template>
     <div>
-        1
+        <div class="purchase-list-container">
+
+        </div>
+        <div class="purchase-list-container">
+
+        </div>
+        <div class="purchase-list-container">
+
+        </div>
+        <div class="purchase-list-container">
+
+        </div>
     </div>
 </template>
 
@@ -9,6 +20,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
+<style lang="less" scoped>
+.purchase-list-container {
+  background: #fff;
+  padding: 20px;
+  margin: 0 14px;
+}
 </style>

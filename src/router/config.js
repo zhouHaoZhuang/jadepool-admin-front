@@ -318,7 +318,17 @@ const options = {
                   },
                   component: () =>
                     import("@/pages/business/cloudservers/example/living.vue")
-                }
+                },
+                {
+                  path: "adds",
+                  name: "列表管理",
+                  meta: {
+                    invisible: true,
+                    back: true
+                  },
+                  component: () =>
+                    import("@/pages/business/cloudservers/example/regulate.vue")
+                },
               ]
             }
           ]

@@ -41,9 +41,9 @@
             <a-table
               :columns="columns"
               :data-source="data"
-              :scroll="{ x: 2000 }"
+              :scroll="{ x: 2100 }"
             >
-              <a slot="action" slot-scope="" href="javascript:;">action</a>
+              <a slot="action" slot-scope="" href="javascript:;" @click="addChannel">管理</a>
             </a-table>
           </a-tab-pane>
           <a-tab-pane key="2" tab="即将到期" force-render>
@@ -162,6 +162,10 @@ export default {
       this.listQuery.pageNo = current;
       this.listQuery.pageSize = pageSize;
       // this.getList();
+    },
+    //
+    addChannel() {
+      this.$router.push("/business/cloudservers/adds");
     }
   }
 };
