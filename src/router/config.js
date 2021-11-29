@@ -330,13 +330,13 @@ const options = {
                     import("@/pages/production/supplier/list/price.vue")
                 },
                 {
-                  path:"amend",
-                  name:"编辑供应商",
-                  meta:{
-                    invisible:true,
+                  path: "amend",
+                  name: "编辑供应商",
+                  meta: {
+                    invisible: true,
                     back: true
                   },
-                  component:() =>
+                  component: () =>
                     import("@/pages/production/supplier/list/amend.vue")
                 },
                 {
@@ -349,23 +349,23 @@ const options = {
                     import("@/pages/production/supplier/purchase/list.vue")
                 },
                 {
-                  path:"adda",
-                  name:"新建采购账号",
-                  meta:{
-                    invisible:true,
+                  path: "adda",
+                  name: "新建采购账号",
+                  meta: {
+                    invisible: true,
                     back: true
                   },
-                  component:() =>
+                  component: () =>
                     import("@/pages/production/supplier/purchase/price.vue")
                 },
                 {
-                  path:"amends",
-                  name:"编辑采购账号",
-                  meta:{
-                    invisible:true,
+                  path: "amends",
+                  name: "编辑采购账号",
+                  meta: {
+                    invisible: true,
                     back: true
                   },
-                  component:() =>
+                  component: () =>
                     import("@/pages/production/supplier/purchase/amend.vue")
                 }
               ]
@@ -394,7 +394,10 @@ const options = {
                     invisible: true, // 不显示在左侧菜单
                     back: true // 后退
                   },
-                  component: () => import("@/pages/production/product/information/addproduct.vue")
+                  component: () =>
+                    import(
+                      "@/pages/production/product/information/addproduct.vue"
+                    )
                 },
                 {
                   path: "editproduct",
@@ -403,7 +406,10 @@ const options = {
                     invisible: true, // 不显示在左侧菜单
                     back: true // 后退
                   },
-                  component: () => import("@/pages/production/product/information/editproduct.vue")
+                  component: () =>
+                    import(
+                      "@/pages/production/product/information/editproduct.vue"
+                    )
                 }
               ]
             },
@@ -433,7 +439,10 @@ const options = {
                     invisible: true, // 不显示在左侧菜单
                     back: true // 后退
                   },
-                  component: () => import("@/pages/production/cloudServer/orderRouting/newOrder.vue")
+                  component: () =>
+                    import(
+                      "@/pages/production/cloudServer/orderRouting/newOrder.vue"
+                    )
                 },
                 {
                   path: "changeOrder",
@@ -442,8 +451,74 @@ const options = {
                     invisible: true, // 不显示在左侧菜单
                     back: true // 后退
                   },
-                  component: () => import("@/pages/production/cloudServer/orderRouting/changeOrder.vue")
+                  component: () =>
+                    import(
+                      "@/pages/production/cloudServer/orderRouting/changeOrder.vue"
+                    )
                 }
+              ]
+            }
+          ]
+        },
+        // 系统
+        {
+          path: "/system",
+          name: "系统",
+          component: PageView,
+          children: [
+            {
+              path: "admin",
+              name: "管理员",
+              meta: {
+                icon: "home"
+              },
+              component: BlankView,
+              children: [
+                {
+                  path: "index",
+                  name: "管理员管理",
+                  meta: {
+                    icon: "home"
+                  },
+                  component: () => import("@/pages/system/admin/index")
+                },
+                // {
+                //   path: "add",
+                //   name: "新增渠道",
+                //   meta: {
+                //     invisible: true,
+                //     back: true
+                //   },
+                //   component: () =>
+                //     import("@/pages/channel/channelAdmin/addChannel")
+                // },
+                // {
+                //   path: "detail",
+                //   name: "渠道详情",
+                //   meta: {
+                //     invisible: true,
+                //     back: true
+                //   },
+                //   component: () => import("@/pages/channel/channelAdmin/detail")
+                // },
+                {
+                  path: "role",
+                  name: "权限管理",
+                  meta: {
+                    icon: "home"
+                  },
+                  component: () => import("@/pages/system/admin/role")
+                }
+                // {
+                //   path: "update",
+                //   name: "新增产品采购价格",
+                //   meta: {
+                //     icon: "home",
+                //     invisible: true,
+                //     back: true
+                //   },
+                //   component: () => import("@/pages/channel/channelAdmin/update")
+                // }
               ]
             }
           ]
