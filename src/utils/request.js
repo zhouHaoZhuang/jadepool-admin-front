@@ -26,6 +26,7 @@ const errorHandler = error => {
 request.interceptors.request.use(async config => {
   config.cancelToken = axiosSource.token;
   const token = store.state.user.token;
+  // 每次请求时需要判断登录状态，未登录直接跳转登录页，并且取消本次请求
   if (config.url !== "/user/loginByUsername") {
     const data = await authenticationClient.checkLoginStatus(token);
     if (data.code !== 200) {
