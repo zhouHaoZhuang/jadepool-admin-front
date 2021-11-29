@@ -59,7 +59,7 @@ const user = {
         token: state.token
       });
       authenticationClient.getCurrentUser().then(user => {
-        commit("SET_USERINFO", user.data);
+        commit("SET_USERINFO", user);
       });
     }
   }
