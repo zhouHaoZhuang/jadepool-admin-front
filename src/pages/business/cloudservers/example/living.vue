@@ -69,42 +69,41 @@ export default {
   data() {
     return {
       listQuery: {
-        id: undefined,
+        key: undefined,
         search: "",
         pageNo: 1,
         pageSize: 10,
-        total: 500
+        total: 0
       },
       columns: [
         {
           title: "实例ID",
           width: 100,
-          dataIndex: "id",
-          key: "id",
+          dataIndex: "instanceId",
+          key: "instanceId",
           fixed: "left"
         },
         {
           title: "IP",
           width: 100,
-          dataIndex: "ip",
-          key: "ip",
+          dataIndex: "publicIp",
+          key: "publicIp",
           fixed: "left"
         },
-        { title: "弹性IP", dataIndex: "address", key: "1" },
-        { title: "共享类型", dataIndex: "address", key: "2" },
-        { title: "区域", dataIndex: "address", key: "3" },
-        { title: "CPU", dataIndex: "address", key: "4" },
-        { title: "内存", dataIndex: "address", key: "5" },
-        { title: "磁盘", dataIndex: "address", key: "6" },
-        { title: "带宽", dataIndex: "address", key: "7" },
-        { title: "渠道ID", dataIndex: "address", key: "8" },
-        { title: "企业ID", dataIndex: "address", key: "9" },
-        { title: "实例创建时间", dataIndex: "address", key: "10" },
-        { title: "实例到期时间", dataIndex: "address", key: "11" },
-        { title: "实例状态", dataIndex: "address", key: "12" },
-        { title: "运行状态", dataIndex: "address", key: "13" },
-        { title: "操作状态", dataIndex: "address", key: "14" },
-        { title: "操作", dataIndex: "address", key: "15" },
+        { title: "弹性IP", dataIndex: "intranetIp", key: "intranetIp" },
+        { title: "共享类型", dataIndex: "shareType", key: "shareType" },
+        { title: "区域", dataIndex: "zoneId", key: "zoneId" },
+        { title: "CPU", dataIndex: "cpu", key: "cpu" },
+        { title: "内存", dataIndex: "memory", key: "memory" },
+        { title: "磁盘", dataIndex: "internetMaxBandwidthOut", key: "internetMaxBandwidthOut" },
+        { title: "带宽", dataIndex: "internetMaxBandwidthIn", key: "internetMaxBandwidthIn" },
+        { title: "渠道ID", dataIndex: "channelCode", key: "channelCode" },
+        { title: "企业ID", dataIndex: "", key: "" },
+        { title: "实例创建时间", dataIndex: "creationTime", key: "creationTime" },
+        { title: "实例到期时间", dataIndex: "expiredTime", key: "expiredTime" },
+        { title: "实例状态", dataIndex: "", key: "" },
+        { title: "运行状态", dataIndex: "runningStatus", key: "runningStatus" },
+        { title: "操作状态", dataIndex: "", key: "" },
         {
           title: "操作",
           key: "operation",
