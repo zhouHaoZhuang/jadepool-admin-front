@@ -39,8 +39,11 @@
             </div>
             <!-- 表格 -->
             <a-table
+              :loading="tableLoading"
               :columns="columns"
               :data-source="data"
+              rowKey="id"
+              :pagination="paginationProps"
               :scroll="{ x: 2100 }"
             >
               <a slot="action" slot-scope="" href="javascript:;" @click="addChannel">管理</a>
@@ -76,15 +79,15 @@ export default {
         {
           title: "实例ID",
           width: 100,
-          dataIndex: "name",
-          key: "name",
+          dataIndex: "id",
+          key: "id",
           fixed: "left"
         },
         {
           title: "IP",
           width: 100,
-          dataIndex: "age",
-          key: "age",
+          dataIndex: "ip",
+          key: "ip",
           fixed: "left"
         },
         { title: "弹性IP", dataIndex: "address", key: "1" },
@@ -110,20 +113,7 @@ export default {
           scopedSlots: { customRender: "action" }
         }
       ],
-      data: [
-        {
-          key: "1",
-          name: "John Brown",
-          age: 32,
-          address: "New York Park"
-        },
-        {
-          key: "2",
-          name: "Jim Green",
-          age: 40,
-          address: "London Park"
-        },
-      ],
+      data: [],
       paginationProps: {
         showQuickJumper: true,
         showSizeChanger: true,
@@ -134,8 +124,12 @@ export default {
           )} 页`,
         onChange: this.quickJump,
         onShowSizeChange: this.onShowSizeChange
-      }
+      },
+      tableLoading: false
     };
+  },
+  activated(){
+    this.getList();
   },
   methods: {
     callback(key) {
@@ -143,25 +137,32 @@ export default {
     },
     // 查询
     search() {
-      // this.getList();
+      this.getList();
+      console.log();
     },
     // 查询表格数据
     getList() {
-      this.$store.dispatch("").then(res => {
-        console.log("获取数据", res);
-        this.paginationProps.total = 500;
+     this.tableLoading = true;
+      this.$getList("instance/getLists", this.listQuery)
+        .then(res => {
+          console.log(res);
+          this.data = [...res.data.list];
+          this.paginationProps.total = res.data.totalCount * 1;
+        })
+        .finally(() => {
+          this.tableLoading = false;
       });
     },
     // 表格分页快速跳转n页
     quickJump(pageNo) {
       this.listQuery.pageNo = pageNo;
-      // this.getList();
+      this.getList();
     },
     // 表格分页切换每页条数
     onShowSizeChange(current, pageSize) {
       this.listQuery.pageNo = current;
       this.listQuery.pageSize = pageSize;
-      // this.getList();
+      this.getList();
     },
     //
     addChannel() {

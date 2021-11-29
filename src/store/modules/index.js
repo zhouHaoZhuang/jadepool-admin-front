@@ -5,6 +5,7 @@ import pool from "./pool";
 import channel from "./channel";
 import provider from "./provider";
 import order from "./order";
+import instance from "./instance";
 
 import purchase from "./purchase";
 
@@ -16,5 +17,6 @@ export default {
   provider,
   pool,
   order,
-  purchase
+  purchase,
+  instance
 };
