@@ -32,7 +32,7 @@ const financialOrder = {
     },
     selectList({ commit, state }, params){
       return request({
-        url: `/order?pageSize=${params.pageSize}`,
+        url: `/order`,
         method: "get",
         params
       });

@@ -71,7 +71,7 @@
             {{ v.modifyTime | formatDate }}
           </div>
           <div slot="payStatus" slot-scope="v">
-            {{ v  === 1 ? "支付" : "未支付"  }}
+            {{ v === 1 ? "支付" : "未支付" }}
           </div>
         </a-table>
       </div>
@@ -210,18 +210,50 @@ export default {
           this.dataAll = val.data.list;
           this.data = this.dataAll.slice(0, this.paginationProps.pageSize);
           console.log(val, "66666666");
-          console.log(val.data.list[0].payStatus === 1 ? "支付" : "未支付");
         });
       // console.log(res, "66666666");
       // this.dataAll = res.data.list;
       // this.data = this.dataAll.slice(0, this.paginationProps.pageSize);
     });
+    console.log(this.useColumns, "this.useColumns");
   },
   computed: {
     useColumns() {
-      return this.columns.slice(0, 9).filter(item => {
-        return item.title !== "原价";
-      });
+      return [
+        {
+          title: "订单编号",
+          dataIndex: "orderNo",
+          key: "orderNo",
+          width: 170
+        },
+        {
+          title: "渠道ID",
+          dataIndex: "cutomerCode",
+          key: "cutomerCode",
+          width: 150
+        },
+        {
+          title: "订单类型",
+          dataIndex: "tradeType",
+          key: "tradeType",
+          scopedSlots: { customRender: "tradeType" },
+          width: 100
+        },
+        {
+          title: "状态",
+          dataIndex: "payStatus",
+          key: "payStatus",
+          width: 100,
+          scopedSlots: { customRender: "payStatus" }
+        },
+        {
+          title: "创建时间",
+          dataIndex: "createTime",
+          key: "createTime",
+          width: 190,
+          scopedSlots: { customRender: "createTime" }
+        }
+      ];
     }
   },
   methods: {
