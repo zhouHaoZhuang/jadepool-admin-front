@@ -16,7 +16,7 @@ export const getList = (request, listQuery) => {
           ? {
               ...listQuery,
               [`qp-${listQuery.key}-${
-                filterList.indexOf(listQuery.key) === -1 ? "eq" : "like"
+                filterList.indexOf(listQuery.key) !== -1 ? "eq" : "like"
               }`]: listQuery.search
             }
           : listQuery
