@@ -28,11 +28,11 @@
       <div class="config">
         <div>
           <span>价格备注:</span>
-          <span>{{ orderInfo.modifyTime }}</span>
+          <span>{{ orderInfo.jiage }}</span>
         </div>
         <div>
           <span>订单备注:</span>
-          <span>{{ orderInfo.modifyTime }}</span>
+          <span>{{ orderInfo.order }}</span>
         </div>
         <div>
           <span>配置信息</span>

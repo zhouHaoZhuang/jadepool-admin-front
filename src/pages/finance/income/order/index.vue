@@ -17,7 +17,11 @@
           </a-select-option>
         </a-select>
         <div class="sechkey">
-          <a-input placeholder="搜索关键词" v-model="listQuery.search" />
+          <a-input
+            :disabled="!isTime"
+            placeholder="搜索关键词"
+            v-model="listQuery.search"
+          />
         </div>
         <div>
           <a-date-picker
@@ -40,7 +44,6 @@
             @openChange="handleEndOpenChange"
           />
         </div>
-        <!-- <a-date-picker :default-value="moment('2015-06-06', dateFormat)" disabled /> -->
         <a-button type="primary" @click="secectClick">
           查询
         </a-button>
@@ -57,7 +60,7 @@
         >
           <a slot="name" slot-scope="text">{{ text }}</a>
           <div slot="tradeType" slot-scope="v">
-            {{ v.tradeType === 1 ? "采购" : "销售" }}
+            {{ v === 1 ? "采购" : "销售" }}
           </div>
           <div slot="action" slot-scope="v">
             <a-button type="link" @click="selectPool(v)">
@@ -198,24 +201,17 @@ export default {
   },
   activated() {
     this.$store.dispatch("financialOrder/getList").then(res => {
-      // console.log(res);
       this.$store
         .dispatch("financialOrder/getAllList", {
           pageSize: res.data.totalCount * 1
         })
         .then(val => {
           this.paginationProps.total = val.data.totalCount * 1;
-          // this.paginationProps.pageSize = val.data.pageSize * 1;
           this.paginationProps.current = val.data.currentPage * 1;
           this.dataAll = val.data.list;
           this.data = this.dataAll.slice(0, this.paginationProps.pageSize);
-          console.log(val, "66666666");
         });
-      // console.log(res, "66666666");
-      // this.dataAll = res.data.list;
-      // this.data = this.dataAll.slice(0, this.paginationProps.pageSize);
     });
-    console.log(this.useColumns, "this.useColumns");
   },
   computed: {
     useColumns() {
@@ -279,9 +275,6 @@ export default {
     handleEndOpenChange(open) {
       this.endOpen = open;
     },
-    onChange(date, dateString) {
-      console.log(date, dateString);
-    },
     changepage(current, pageSize) {
       this.paginationProps.current = current;
       this.paginationProps.pageSize = pageSize;
@@ -319,12 +312,55 @@ export default {
       });
     },
     secectClick() {
-      // console.log(this.title, this.search,this.startValue._d.toLocaleString());
       this.listQuery.key = this.title;
-      // this.$getList(this.title, this.search, this.startValue, this.endValue);
-      this.$getList("financialOrder/getList", this.listQuery).then(val => {
-        console.log(val, "val");
-      });
+      if (this.title == "createTime") {
+        let startTime = this.startValue._d
+          .toLocaleString("chinese", { hour12: false })
+          .replaceAll("/", "-");
+        let endTime = this.endValue._d
+          .toLocaleString("chinese", { hour12: false })
+          .replaceAll("/", "-");
+        // console.log(this.title, this.search, startTime, endTime);
+        this.$store
+          .dispatch("financialOrder/selectList", {
+            startTime,
+            endTime
+          })
+          .then(val => {
+            // console.log(val, "时间请求结果");
+            this.paginationProps.total = val.data.totalCount * 1;
+            this.paginationProps.current = val.data.currentPage * 1;
+            this.dataAll = val.data.list;
+            this.data = this.dataAll.slice(0, this.paginationProps.pageSize);
+          });
+      } else {
+        // this.$getList(this.title, this.search, this.startValue, this.endValue);
+        let tempSearch = this.listQuery.search;
+        if (this.title == "tradeType") {
+          if (this.listQuery.search == "销售") {
+            this.listQuery.search = 5;
+          }
+          if (this.listQuery.search == "采购") {
+            this.listQuery.search = 1;
+          }
+        }
+        if (this.title == "payStatus") {
+          if (this.listQuery.search == "支付") {
+            this.listQuery.search = 1;
+          }
+          if (this.listQuery.search == "未支付") {
+            this.listQuery.search = 0;
+          }
+        }
+        this.$getList("financialOrder/getList", this.listQuery).then(val => {
+          // console.log(val, "时间请求结果");
+          this.paginationProps.total = val.data.totalCount * 1;
+          this.paginationProps.current = val.data.currentPage * 1;
+          this.dataAll = val.data.list;
+          this.data = this.dataAll.slice(0, this.paginationProps.pageSize);
+          this.listQuery.search = tempSearch;
+        });
+      }
     },
     changeKey(val) {
       // console.log(val);
@@ -346,6 +382,7 @@ export default {
   background-color: #fff;
   .orderTop {
     display: flex;
+    margin-bottom: 25px;
     .sechkey {
       width: 200px;
       margin-right: 20px;
