@@ -18,27 +18,41 @@ const financialOrder = {
     // 获取列表
     getList({ commit, state }, params) {
       return request({
-        url: "/productDetail",
+        url: `/order`,
+        method: "get",
+        params
+      });
+    },
+    getAllList({ commit, state }, params) {
+      return request({
+        url: `/order?pageSize=${params.pageSize}`,
+        method: "get",
+        params
+      });
+    },
+    selectList({ commit, state }, params){
+      return request({
+        url: `/order?pageSize=${params.pageSize}`,
         method: "get",
         params
       });
     },
     delList({ commit, state }, id) {
       return request({
-        url: `/productDetail/${id}`,
+        url: `/order/${id}`,
         method: "delete"
       });
     },
     changeList({ commit, state }, data) {
       return request({
-        url: `/productDetail/${data.id}`,
+        url: `/order/${data.id}`,
         method: "put",
         data
       });
     },
     addList({ commit, state }, params) {
       return request({
-        url: "/productDetail",
+        url: "/order",
         method: "post",
         data: {
           ...params
@@ -48,7 +62,7 @@ const financialOrder = {
     getOne({ commit, state }, id) {
       console.log(state);
       return request({
-        url: `/productDetail/one?id=${id}`,
+        url: `/order/one?id=${id}`,
         method: "get"
       });
     }
