@@ -20,7 +20,6 @@ const instance = {
         return request({
           url: `/ecsProductStock/getOneEcsDetail/${data.id}`,
           method: "get",
-          data
         });
       },
   }

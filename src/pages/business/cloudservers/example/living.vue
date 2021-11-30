@@ -6,19 +6,20 @@
           <a-tab-pane key="1" tab="正常">
             <div class="public-header-wrap">
               <a-form-model layout="inline" :model="listQuery">
-                  <!-- 下拉框 -->
+                <!-- 下拉框 -->
                 <a-form-model-item>
                   <a-select
                     style="width:120px"
                     allowClear
-                    v-model="listQuery.id"
-                    placeholder="采购账号ID"
+                    v-model="listQuery.key"
+                    placeholder="请选择"
                   >
-                    <a-select-option :value="1">
-                      Jack
-                    </a-select-option>
-                    <a-select-option :value="2">
-                      TOM
+                    <a-select-option
+                      v-for="item in columns.slice(0, columns.length - 3)"
+                      :key="item.dataIndex"
+                      :value="item.dataIndex"
+                    >
+                      {{ item.title }}
                     </a-select-option>
                   </a-select>
                 </a-form-model-item>
@@ -46,7 +47,12 @@
               :pagination="paginationProps"
               :scroll="{ x: 2100 }"
             >
-              <a slot="action" slot-scope="" href="javascript:;" @click="addChannel">管理</a>
+              <a
+                slot="action"
+                slot-scope="text, record"
+                @click="addChannel(record.ecsBaseInfoResDto.ecsProductStockId)"
+                >管理</a
+              >
             </a-table>
           </a-tab-pane>
           <a-tab-pane key="2" tab="即将到期" force-render>
@@ -79,8 +85,8 @@ export default {
         {
           title: "实例ID",
           width: 100,
-          dataIndex: "instanceId",
-          key: "instanceId",
+          dataIndex: "ecsBaseInfoResDto.ecsProductStockId",
+          key: "ecsBaseInfoResDto.ecsProductStockId",
           fixed: "left"
         },
         {
@@ -95,14 +101,38 @@ export default {
         { title: "区域", dataIndex: "zoneId", key: "zoneId" },
         { title: "CPU", dataIndex: "cpu", key: "cpu" },
         { title: "内存", dataIndex: "memory", key: "memory" },
-        { title: "磁盘", dataIndex: "internetMaxBandwidthOut", key: "internetMaxBandwidthOut" },
-        { title: "带宽", dataIndex: "internetMaxBandwidthIn", key: "internetMaxBandwidthIn" },
-        { title: "渠道ID", dataIndex: "channelCode", key: "channelCode" },
-        { title: "企业ID", dataIndex: "", key: "" },
-        { title: "实例创建时间", dataIndex: "creationTime", key: "creationTime" },
-        { title: "实例到期时间", dataIndex: "expiredTime", key: "expiredTime" },
+        {
+          title: "磁盘",
+          dataIndex: "internetMaxBandwidthOut",
+          key: "internetMaxBandwidthOut"
+        },
+        {
+          title: "带宽",
+          dataIndex: "internetMaxBandwidthIn",
+          key: "internetMaxBandwidthIn"
+        },
+        {
+          title: "渠道ID",
+          dataIndex: "ecsBaseInfoResDto.channelCode",
+          key: "ecsBaseInfoResDto.channelCode"
+        },
+        {
+          title: "企业ID",
+          dataIndex: "ecsProductOrderLogResDtoList[0].id",
+          key: "ecsProductOrderLogResDtoList[0].id"
+        },
+        {
+          title: "实例创建时间",
+          dataIndex: "ecsProductOrderLogResDtoList[0].createTime",
+          key: "ecsProductOrderLogResDtoList.createTime"
+        },
+        {
+          title: "实例到期时间",
+          dataIndex: "ecsProductOrderLogResDtoList[0].modifyTime",
+          key: "ecsProductOrderLogResDtoList[0].modifyTime"
+        },
         { title: "实例状态", dataIndex: "", key: "" },
-        { title: "运行状态", dataIndex: "runningStatus", key: "runningStatus" },
+        { title: "运行状态", dataIndex: "", key: "" },
         { title: "操作状态", dataIndex: "", key: "" },
         {
           title: "操作",
@@ -127,7 +157,7 @@ export default {
       tableLoading: false
     };
   },
-  activated(){
+  activated() {
     this.getList();
   },
   methods: {
@@ -136,21 +166,22 @@ export default {
     },
     // 查询
     search() {
+      
       this.getList();
-      console.log();
     },
     // 查询表格数据
     getList() {
-     this.tableLoading = true;
+      this.tableLoading = true;
       this.$getList("instance/getLists", this.listQuery)
         .then(res => {
           console.log(res);
           this.data = [...res.data.list];
+          console.log(this.data);
           this.paginationProps.total = res.data.totalCount * 1;
         })
         .finally(() => {
           this.tableLoading = false;
-      });
+        });
     },
     // 表格分页快速跳转n页
     quickJump(pageNo) {
@@ -164,8 +195,12 @@ export default {
       this.getList();
     },
     //
-    addChannel() {
-      this.$router.push("/business/cloudservers/adds");
+    addChannel(record) {
+      console.log(record);
+      this.$router.push({
+        path: "/business/cloudservers/adds",
+        query: { id: record }
+      });
     }
   }
 };
@@ -177,7 +212,7 @@ export default {
   padding: 20px;
   margin: 0 24px;
   .public-header-wrap {
-      padding-bottom: 10px;
+    padding-bottom: 10px;
   }
 }
 </style>

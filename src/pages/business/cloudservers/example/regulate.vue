@@ -219,11 +219,11 @@ export default {
   methods: {
     //获取
     getListas() {
-      // console.log(this.detail);
+      // console.log(this.$route.query.id);
       this.$store
         .dispatch("instance/getListas", { id: this.$route.query.id })
         .then(res => {
-          this.detail = { ...res.data };
+          this.data = { ...res.data };
         });
     }
   }
