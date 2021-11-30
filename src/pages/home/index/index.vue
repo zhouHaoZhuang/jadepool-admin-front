@@ -49,20 +49,11 @@ export default {
     }),
     ...mapGetters(["token"])
   },
-  created() {
-    this.getList();
-  },
+  created() {},
   // activated() {
   //   this.getList();
   // },
-  methods: {
-    // 获取列表
-    getList() {
-      this.$store.dispatch("user/getList", { action: "apphome" }).then(res => {
-        console.log("接口回调", res);
-      });
-    }
-  }
+  methods: {}
 };
 </script>
 

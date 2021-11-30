@@ -1,4 +1,6 @@
 import request from "@/utils/request";
+const { AuthenticationClient } = require("authing-js-sdk");
+import env from "@/config/env";
 
 const user = {
   namespaced: true,
@@ -18,42 +20,46 @@ const user = {
 
   actions: {
     // 登录
-    login({ commit, state }, data) {
+    login({ commit, state, dispatch }, data) {
       return new Promise((resolve, reject) => {
-        commit("SET_TOKEN", "qwertyuioo");
-        resolve();
-        // request({
-        //   url: "/login",
-        //   method: "post",
-        //   data
-        // })
-        //   .then(res => {
-        //     const token = res.data;
-        //     commit("SET_TOKEN", token);
-        //     resolve();
-        //   })
-        //   .catch(error => {
-        //     reject(error);
-        //   });
+        request({
+          url: "/user/loginByUsername",
+          method: "post",
+          data
+        })
+          .then(res => {
+            const token = res.data.token;
+            commit("SET_TOKEN", token);
+            dispatch("getUserInfo");
+            resolve();
+          })
+          .catch(error => {
+            reject(error);
+          });
       });
     },
     // 登出
     logout({ commit, state }) {
       return new Promise(resolve => {
         commit("SET_TOKEN", "");
+        const authenticationClient = new AuthenticationClient({
+          appId: env.appId,
+          appHost: env.appHost,
+          token: state.token
+        });
+        authenticationClient.logout();
         resolve();
       });
     },
-    // 获取列表
-    getList({ commit, state }, params) {
-      console.log(state);
-      commit("SET_USERINFO", { name: "管理员" });
-      return request({
-        url: "/common/Handler.ashx",
-        method: "get",
-        params: {
-          ...params
-        }
+    // 获取用户信息
+    getUserInfo({ commit, state }) {
+      const authenticationClient = new AuthenticationClient({
+        appId: env.appId,
+        appHost: env.appHost,
+        token: state.token
+      });
+      authenticationClient.getCurrentUser().then(user => {
+        commit("SET_USERINFO", user);
       });
     }
   }
