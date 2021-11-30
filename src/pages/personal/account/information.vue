@@ -5,23 +5,23 @@
         <div class="bot-content">
           <div class="item">
             <div class="label">ID:</div>
-            <div class="value">11111</div>
+            <div class="value">{{ userInfo.id }}</div>
           </div>
           <div class="item">
             <div class="label">姓名:</div>
-            <div class="value"></div>
+            <div class="value">{{ userInfo.username }}</div>
           </div>
           <div class="item">
             <div class="label">角色权限：</div>
-            <div class="value"></div>
+            <div class="value">{{ userInfo.limit }}</div>
           </div>
           <div class="item">
             <div class="label">手机：</div>
-            <div class="value"></div>
+            <div class="value">{{ userInfo.phone }}</div>
           </div>
           <div class="item">
             <div class="label">邮箱：</div>
-            <div class="value"></div>
+            <div class="value">{{ userInfo.email }}</div>
           </div>
         </div>
       </div>
@@ -30,7 +30,21 @@
 </template>
 
 <script>
-export default {};
+import { mapState } from "vuex";
+export default {
+  name: "HeaderAvatar",
+  computed: {
+    ...mapState({
+      userInfo: state => state.user.userInfo
+    })
+  },
+  created() {
+    console.log(this.userInfo);
+  },
+  data() {
+    return {};
+  }
+};
 </script>
 
 <style lang="less" scoped>
