@@ -1,69 +1,77 @@
 <template>
   <common-layout class="login-wrap">
     <div class="login">
-      <!-- <AuthingGuard :appId="appId" /> -->
-      <a-form @submit="onSubmit" :form="form">
-        <a-form-item>
-          <a-input
-            autocomplete="autocomplete"
-            size="large"
-            placeholder="admin"
-            v-decorator="[
-              'name',
-              {
-                rules: [
-                  { required: true, message: '请输入账户名', whitespace: true }
-                ]
-              }
-            ]"
-          >
+      <a-form-model ref="ruleForm" :model="form" :rules="rules">
+        <a-form-model-item prop="username">
+          <a-input v-model="form.username" size="large" placeholder="账户">
             <a-icon slot="prefix" type="user" />
           </a-input>
-        </a-form-item>
-        <a-form-item>
+        </a-form-model-item>
+        <a-form-model-item prop="password">
           <a-input
+            v-model="form.password"
             size="large"
-            placeholder="888888"
-            autocomplete="autocomplete"
+            placeholder="密码"
             type="password"
-            v-decorator="[
-              'password',
-              {
-                rules: [
-                  { required: true, message: '请输入密码', whitespace: true }
-                ]
-              }
-            ]"
           >
             <a-icon slot="prefix" type="lock" />
           </a-input>
-        </a-form-item>
-        <a-form-item>
-          <a-button htmlType="submit" type="primary">登录</a-button>
-        </a-form-item>
-      </a-form>
+        </a-form-model-item>
+        <a-form-model-item>
+          <a-button type="primary" :loading="loading" @click="onSubmit"
+            >登录</a-button
+          >
+        </a-form-model-item>
+      </a-form-model>
     </div>
   </common-layout>
 </template>
 
 <script>
 import CommonLayout from "@/layouts/CommonLayout";
-import { AuthingGuard } from "@authing/vue-ui-components";
-import "@authing/vue-ui-components/lib/index.min.css";
 
 export default {
   name: "Login",
   components: { CommonLayout },
   data() {
     return {
-      form: this.$form.createForm(this),
-      appId: "619f2dac84bea60dbe1be5bf"
+      form: {
+        username: "",
+        password: ""
+      },
+      rules: {
+        username: [
+          {
+            required: true,
+            message: "请输入账号",
+            trigger: "blur"
+          }
+        ],
+        password: [
+          {
+            required: true,
+            message: "请输入密码",
+            trigger: "blur"
+          }
+        ]
+      },
+      loading: false
     };
   },
   methods: {
     onSubmit() {
-      this.$store.dispatch("user/login").then(res => {
-        this.$router.push("/");
+      this.$refs.ruleForm.validate(valid => {
+        if (valid) {
+          this.loading = true;
+          this.$store
+            .dispatch("user/login", this.form)
+            .then(res => {
+              this.$router.push("/");
+            })
+            .finally(() => {
+              this.loading = false;
+            });
+        }
       });
     }
   }

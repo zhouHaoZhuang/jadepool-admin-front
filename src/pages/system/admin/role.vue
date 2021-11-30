@@ -1,12 +1,22 @@
 <template>
-  <div>
-    <!-- 头信息 -->
-    <div class="channel-list-container">
+  <div class="channel-price-container">
+    <div class="top-search">
+      <a-input
+        v-model="listQuery.topSearch"
+        style="width:500px"
+        size="large"
+        placeholder="请选择渠道商"
+      />
+      <a-button type="primary" size="large" @click="search">
+        查询
+      </a-button>
+    </div>
+    <div class="price-content">
       <div class="public-header-wrap">
         <a-form-model layout="inline" :model="listQuery">
           <a-form-model-item>
-            <a-button type="primary" icon="plus" @click="addChannel">
-              新建供应商
+            <a-button type="primary" icon="plus" @click="updatePrice('add')">
+              新建产品采购价格
             </a-button>
           </a-form-model-item>
           <a-form-model-item>
@@ -17,7 +27,7 @@
               placeholder="请选择"
             >
               <a-select-option
-                v-for="item in columns.slice(0, columns.length - 3)"
+                v-for="item in columns.slice(0, columns.length - 1)"
                 :key="item.dataIndex"
                 :value="item.dataIndex"
               >
@@ -37,28 +47,22 @@
       </div>
       <div class="public-table-wrap">
         <a-table
+          :loading="tableLoading"
           :columns="columns"
           :data-source="data"
           rowKey="id"
           :pagination="paginationProps"
+          :scroll="{ x: 1300 }"
         >
-          <span slot="createTime" slot-scope="text">
-            {{ text | formatDate }}
+          <span slot="discountType" slot-scope="text">
+            {{ channelPriceType[text] }}
           </span>
-          <span slot="addressProject" slot-scope="text" style="color:#1890ff">
-            {{ text }}
-          </span>
-          <div class="status" slot="deleted" slot-scope="text">
-            <div v-if="text === 't'" class="dot"></div>
-            <div v-else class="dot dot-err"></div>
-            {{ text === "t" ? "正常" : "冻结" }}
-          </div>
           <span slot="action" slot-scope="text, record">
-            <a-button type="link" @click="goDetail(record)">
+            <a-button type="link" @click="updatePrice('edit', record)">
               编辑
             </a-button>
             <a-divider type="vertical" />
-            <a-button type="link" @click="handleFrozen(record)">
+            <a-button type="link" @click="handleDel(record)">
               删除
             </a-button>
           </span>
@@ -69,50 +73,50 @@
 </template>
 
 <script>
+import { channelPriceType } from "@/utils/enum";
 export default {
   data() {
     return {
+      channelPriceType,
       listQuery: {
         key: undefined,
+        topSearch: "",
         search: "",
         currentPage: 1,
         pageSize: 10,
-        total: 500
+        total: 0
       },
       columns: [
         {
-          title: "供应商ID",
+          title: "渠道商ID",
           dataIndex: "id",
           key: "id"
         },
         {
-          title: "全称",
-          dataIndex: "supplierName",
-          key: "supplierName"
+          title: "渠道商",
+          dataIndex: "channelCustomerName",
+          key: "channelCustomerName"
         },
         {
-          title: "简称",
-          dataIndex: "shortName",
-          key: "shortName"
+          title: "资源池产品",
+          dataIndex: "productName",
+          key: "productName"
         },
         {
-          title: "网址",
-          dataIndex: "url",
-          key: "url",
-          scopedSlots: { customRender: "url" }
+          title: "资源池产品CODE",
+          dataIndex: "productCode",
+          key: "productCode"
         },
         {
-          title: "状态",
-          dataIndex: "deleted",
-          key: "deleted",
-          scopedSlots: { customRender: "deleted" }
+          title: "折扣方式",
+          dataIndex: "discountType",
+          key: "discountType",
+          scopedSlots: { customRender: "discountType" }
         },
         {
-          title: "创建时间",
-          dataIndex: "createTime",
-          key: "createTime",
-          scopedSlots: { customRender: "createTime" },
-          width: 250
+          title: "折扣",
+          dataIndex: "discountPrice",
+          key: "discountPrice"
         },
         {
           title: "操作",
@@ -148,8 +152,12 @@ export default {
     // 查询表格数据
     getList() {
       this.tableLoading = true;
-       this.$getList("provider/getList", this.listQuery)
-      .then(res => {
+      const newListQuery = {
+        ...this.listQuery,
+        ["qp-channelCustomerName-like"]: this.listQuery.topSearch
+      };
+      this.$getList("channel/getPriceList", newListQuery)
+        .then(res => {
           this.data = [...res.data.list];
           this.paginationProps.total = res.data.totalCount * 1;
         })
@@ -168,54 +176,55 @@ export default {
       this.listQuery.pageSize = pageSize;
       this.getList();
     },
-    // 编辑
-    goDetail(record) {
-      this.$router.push({
-        path: "/production/supplier/amend",
-        query: { id: record.id }
-      });
+    // 新增/编辑
+    updatePrice(type, record) {
+      if (type === "add") {
+        this.$router.push("/channel/index/update");
+      } else {
+        this.$router.push({
+          path: "/channel/index/update",
+          query: { id: record.id }
+        });
+      }
     },
     // 删除
-    handleFrozen(record) {
-      console.log(record);
+    handleDel(record) {
       this.$confirm({
         title: "确认要删除吗？",
         onOk: () => {
-          this.$store.dispatch("provider/updateStatus", record).then(res => {
-            this.$message.success("删除成功");
-            this.getList();
-          });
+          this.$store
+            .dispatch("channel/delPrice", { id: record.id })
+            .then(res => {
+              this.$message.success("删除成功");
+              this.getList();
+            });
         }
       });
-    },
-    // 新增渠道
-    addChannel() {
-      this.$router.push("/production/supplier/add");
     }
   }
 };
 </script>
 
 <style lang="less" scoped>
-.channel-list-container {
-  background: #fff;
-  padding: 20px;
-  margin: 0 24px;
-  .public-table-wrap {
-    .status {
-      display: flex;
-      align-items: center;
-      .dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: green;
-        margin-right: 5px;
-      }
-      .dot-err {
-        background: red;
-      }
+.channel-price-container {
+  margin-top: -24px;
+  .top-search {
+    height: 80px;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    input {
+      border-radius: 0 !important;
     }
+    .ant-btn-lg {
+      border-radius: 0 4px 4px 0 !important;
+    }
+  }
+  .price-content {
+    padding: 20px;
+    margin: 20px;
+    background: #fff;
   }
 }
 </style>

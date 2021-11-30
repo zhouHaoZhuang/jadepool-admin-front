@@ -1,8 +1,8 @@
 <template>
   <a-dropdown>
     <div class="header-avatar" style="cursor: pointer">
-      <a-avatar class="avatar" size="small" shape="circle" :src="user.avatar" />
-      <span class="name">{{ user.name }}</span>
+      <a-avatar class="avatar" size="small" shape="circle" :src="userInfo.photo" />
+      <span class="name">{{ userInfo.username }}</span>
     </div>
     <a-menu :class="['avatar-menu']" slot="overlay">
       <a-menu-item>
@@ -23,12 +23,16 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "HeaderAvatar",
+  computed: {
+    ...mapState({
+      userInfo: state => state.user.userInfo
+    })
+  },
   data() {
-    return {
-      user: {}
-    };
+    return {};
   },
   methods: {
     logout() {

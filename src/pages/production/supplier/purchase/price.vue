@@ -1,8 +1,14 @@
 <template>
   <div class="supplier-add">
     <div class="content">
-      <a-form-model ref="ruleForm" :model="form" :rules="rules" :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-model-item label="所属供应商" prop="accountCode">
+      <a-form-model
+        ref="ruleForm"
+        :model="form"
+        :rules="rules"
+        :label-col="labelCol"
+        :wrapper-col="wrapperCol"
+      >
+        <a-form-model-item label="所属供应商" prop="supplierCode">
           <a-select
             v-model="form.supplierCode"
             placeholder="please select your zone"
@@ -11,6 +17,7 @@
               阿里云
             </a-select-option>
             <a-select-option value="华为云">
+              华为云
             </a-select-option>
           </a-select>
         </a-form-model-item>
@@ -26,7 +33,7 @@
         <a-form-model-item label="备注">
           <a-input v-model="form.remark" type="remark" />
         </a-form-model-item>
-        <a-form-model-item :wrapper-col="{span:18,offset:6}">
+        <a-form-model-item :wrapper-col="{ span: 18, offset: 6 }">
           <a-button type="primary" @click="onSubmit" :loading="loading">
             提交
           </a-button>
@@ -41,67 +48,78 @@ export default {
   name: "index",
   data() {
     return {
-      labelCol:{span:6},
-      wrapperCol:{span:18},
-      other:"",
-      form:{
-        accountCode:"",
-        supplierAccountCode:"",
-        accountTag:"",
-        keyConfig:"",
-        remark:"",
-        supplierCode:""
+      labelCol: { span: 6 },
+      wrapperCol: { span: 18 },
+      other: "",
+      form: {
+        accountCode: "",
+        supplierAccountCode: "",
+        accountTag: "",
+        keyConfig: "",
+        remark: "",
+        supplierCode: ""
       },
-      rules:{
-       supplierCode: [
+      rules: {
+        supplierCode: [
           {
             required: true,
             message: "select",
             trigger: "change"
           }
         ],
-        supplierAccountCode:[
+        supplierAccountCode: [
           {
-            required:true,
-            message:"请输入供应商标识",
-            trigger:"blur"
+            required: true,
+            message: "请输入供应商标识",
+            trigger: "blur"
           }
         ],
-        accountTag:[
+        accountTag: [
           {
-            required:true,
-            message:"请输入供应商侧账号ID",
-            trigger:"blur"
+            required: true,
+            message: "请输入供应商侧账号ID",
+            trigger: "blur"
           }
         ]
       },
-      loading:false
+      loading: false
     };
   },
   methods: {
     // 提交
-    onSubmit(){
-     this.$refs.ruleForm.validate(valid => {
-       console.log(this.form);
-        this.$store.dispatch("purchase/add", this.form).then(val => {
-          console.log(val);
-          this.$message.success("提交成功");
-          this.$router.back();
-          this.resetForm();
-        });
+    onSubmit() {
+      this.$refs.ruleForm.validate(valid => {
+        if (valid) {
+          const obj = JSON.parse(this.form.keyConfig);
+          if (typeof obj == "object" && JSON.stringify(obj) !== "{}") {
+            this.$store
+              .dispatch("purchase/add", {
+                ...this.form,
+                keyConfig: obj
+              })
+              .then(val => {
+                console.log(val);
+                this.$message.success("提交成功");
+                this.$router.back();
+                this.resetForm();
+              });
+          } else {
+            this.$message.warning("账号配置格式不正确");
+          }
+        }
       });
     },
     // 重置
-    resetForm(){
+    resetForm() {
       this.$refs.ruleForm.clearValidate();
       this.form = {
-        accountCode:"",
-        supplierAccountCode:"",
-        accountTag:"",
-        keyConfig:"",
-        remark:"",
-        supplierCode:""
-      }
+        accountCode: "",
+        supplierAccountCode: "",
+        accountTag: "",
+        keyConfig: "",
+        remark: "",
+        supplierCode: ""
+      };
     }
   }
 };
