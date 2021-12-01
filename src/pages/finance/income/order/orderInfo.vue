@@ -14,7 +14,7 @@
         </li>
         <li>
           <span>创建时间:</span>
-          <span>{{ orderInfo.createTime }}</span>
+          <span>{{ orderInfo.createTime | formatDate }}</span>
         </li>
         <li>
           <span>状态:</span>
@@ -22,7 +22,7 @@
         </li>
         <li>
           <span>支付时间:</span>
-          <span>{{ orderInfo.payTime }}</span>
+          <span>{{ orderInfo.payTime | formatDate }}</span>
         </li>
       </ul>
       <div class="config">
@@ -44,6 +44,18 @@
           :scroll="{ x: 1300 }"
         >
           <a slot="name" slot-scope="text">{{ text }}</a>
+          <div slot="tradeType" slot-scope="v">
+            {{ v === 1 ? "采购" : "销售" }}
+          </div>
+          <div slot="ecsPrice" slot-scope="v">
+            <span>CPU：{{ v.cpu }}</span
+            ><br><span>内存：{{ v.memory }}</span
+            ><br><span>磁盘：{{ v.priceUnit }}</span
+            ><br><span>带宽：{{ v.internetMaxBandwidthOut }}</span
+            ><br><span>防御：{{ v.priceUnit }}</span
+            ><br><span>操作系统：{{ v.osName }}</span><br>
+            <span>所在区：{{ v.zoneId }}</span>
+          </div>
         </a-table>
       </div>
     </div>
@@ -85,60 +97,62 @@ export default {
   data() {
     return {
       orderInfo: null,
-      data:[],
+      data: [],
       columns: [
         {
           title: "产品名称",
           dataIndex: "title",
           key: "title",
-          width: 100,
+          width: 100
         },
         {
           title: "类型",
-          dataIndex: "Type",
-          key: "Type"
+          dataIndex: "tradeType",
+          key: "tradeType",
+          scopedSlots: { customRender: "tradeType" }
         },
         {
           title: "配置信息",
-          dataIndex: "productInfo",
-          key: "productInfo"
+          dataIndex: "ecsPrice",
+          key: "ecsPrice",
+          scopedSlots: { customRender: "ecsPrice" }
         },
         {
           title: "数量",
-          dataIndex: "num",
-          key: "num",
+          dataIndex: "ecsPrice.amount",
+          key: "ecsPrice.amount"
         },
         {
           title: "付费方式",
-          dataIndex: "Payment",
-          key: "Payment",
+          dataIndex: "ecsPrice.chargeModel",
+          key: "ecsPrice.chargeModel"
         },
         {
           title: "原价",
-          dataIndex: "Originalprice",
-          key: "Originalprice"
+          dataIndex: "originAmount",
+          key: "originAmount"
         },
         {
           title: "订单金额",
-          dataIndex: "remark",
-          key: "remark"
+          dataIndex: "actualAmount",
+          key: "actualAmount"
         },
         {
           title: "推广优惠",
           key: "Promote",
-          dataIndex: "Promote",
+          dataIndex: "Promote"
         },
-         {
+        {
           title: "代金券抵扣",
           key: "Voucher",
-          dataIndex: "Voucher",
+          dataIndex: "Voucher"
         },
-         {
+        {
           title: "现金实付",
           key: "cash",
-          dataIndex: "cash",
+          dataIndex: "cash"
         }
-      ],
+      ]
     };
   },
   activated() {
@@ -147,6 +161,7 @@ export default {
     this.$store.dispatch("financialOrder/getOne", id).then(res => {
       console.log(res);
       this.orderInfo = res.data;
+      this.data = [res.data];
     });
   }
 };
