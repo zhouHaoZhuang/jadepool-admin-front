@@ -296,6 +296,81 @@ const options = {
             }
           ]
         },
+        //业务
+        {
+          path: "/business",
+          name: "业务",
+          component: PageView,
+          children: [
+            {
+              path: "cloudservers",
+              name: "云服务器",
+              meta: {
+                icon: "home"
+              },
+              component: BlankView,
+              children: [
+                {
+                  path: "example",
+                  name: "实例列表",
+                  meta: {
+                    icon: "home"
+                  },
+                  component: () =>
+                    import("@/pages/business/cloudservers/example/living.vue")
+                },
+                {
+                  path: "adds",
+                  name: "列表管理",
+                  meta: {
+                    invisible: true,
+                    back: true
+                  },
+                  component: () =>
+                    import("@/pages/business/cloudservers/example/regulate.vue")
+                },
+              ]
+            }
+          ]
+        },
+        //账号管理
+        {
+            path: "/personal",
+            name: "个人中心",
+            component: PageView,
+            children: [
+              {
+                path: "account",
+                name: "账号管理",
+                meta: {
+                  icon: "home"
+                },
+                component: BlankView,
+                children: [
+                  {
+                    path: "information",
+                    name: "个人信息",
+                    meta: {
+                      icon: "home"
+                    },
+                    component: () =>
+                      import("@/pages/personal/account/information.vue")
+                  },
+                  {
+                    path: "password",
+                    name: "修改密码",
+                    meta: {
+                      // invisible: true,
+                      // back: true
+                      icon:"home"
+                    },
+                    component: () =>
+                      import("@/pages/personal/account/password.vue")
+                  },
+                ]
+              }
+            ]
+          },
         // 生产
         {
           path: "/production",
