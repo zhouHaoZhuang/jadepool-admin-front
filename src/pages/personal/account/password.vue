@@ -26,12 +26,17 @@
               :rules="rules"
               v-bind="layout"
             >
-              <a-form-model-item has-feedback label="旧密码" prop="password">
-                <a-input style="width:250px"></a-input>
-              </a-form-model-item>
-              <a-form-model-item has-feedback label="新密码:" prop="pass">
+              <a-form-model-item has-feedback label="旧密码" prop="oldPassword">
                 <a-input
-                  v-model="ruleForm.pass"
+                  style="width:250px"
+                  v-model="ruleForm.oldPassword"
+                  type="password"
+                  autocomplete="off"
+                ></a-input>
+              </a-form-model-item>
+              <a-form-model-item has-feedback label="新密码:" prop="newPassword">
+                <a-input
+                  v-model="ruleForm.newPassword"
                   type="password"
                   autocomplete="off"
                   style="width:250px"
@@ -67,13 +72,21 @@
 <script>
 import { mapState } from "vuex";
 export default {
-  name: "HeaderAvatar",
   computed: {
     ...mapState({
       userInfo: state => state.user.userInfo
     })
   },
   data() {
+    let validatePas = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入原密码"));
+      } else {
+        if (this.ruleForm.checkPass !== "")
+          this.$refs.ruleForm.validateField("checkPass");
+      }
+      callback();
+    };
     let validatePass = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入新密码"));
@@ -87,7 +100,7 @@ export default {
     let validatePass2 = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请确认输入的密码"));
-      } else if (value !== this.ruleForm.pass) {
+      } else if (value !== this.ruleForm.newPassword) {
         callback(new Error("两次密码不匹配!"));
       } else {
         callback();
@@ -95,11 +108,15 @@ export default {
     };
     return {
       ruleForm: {
-        password: "",
-        pass: "",
+        oldPassword: "",
+        newPassword: "",
         checkPass: ""
       },
+      form:{
+
+      },
       rules: {
+        password: [{ validator: validatePas, trigger: "change" }],
         pass: [{ validator: validatePass, trigger: "change" }],
         checkPass: [{ validator: validatePass2, trigger: "change" }]
       },
@@ -112,12 +129,18 @@ export default {
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
-        if (valid) {
-          alert("修改成功!");
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
+       console.log(valid);
+       if(valid){
+         this.$store.dispatch("user/changePassword",{
+           oldPassword:this.ruleForm.oldPassword,
+           newPassword:this.ruleForm.newPassword
+         })
+         .then(res => {
+           this.$message.success("修改成功")
+           this.new = {...res.data}
+         })
+         return false
+       }
       });
     },
     resetForm(formName) {
@@ -133,9 +156,6 @@ export default {
     margin: 0 20px;
     background: #fff;
     .bot-content {
-      //   padding: 20px 30px;
-      //   display: flex;
-      //   flex-direction: column;
       align-items: center;
       .item {
         padding-left: 175px;
