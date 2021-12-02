@@ -56,9 +56,15 @@
           :data-source="data"
           rowKey="id"
           :pagination="paginationProps"
-          :scroll="{ x: 1300 }"
+          :scroll="{ x: 1400 }"
         >
           <a slot="name" slot-scope="text">{{ text }}</a>
+          <div slot="originAmount" slot-scope="v">
+            {{v.toFixed(2)}}
+          </div>
+          <div slot="actualAmount" slot-scope="v">
+            {{v.toFixed(2)}}
+          </div>
           <div slot="tradeType" slot-scope="v">
             {{ v === 1 ? "采购" : "销售" }}
           </div>
@@ -68,13 +74,22 @@
             </a-button>
           </div>
           <div slot="createTime" slot-scope="v">
-            {{ v.createTime | formatDate }}
+            {{ v | formatDate }}
           </div>
-          <div slot="modifyTime" slot-scope="v">
-            {{ v.modifyTime | formatDate }}
+          <div slot="payTime" slot-scope="v">
+            {{ v | formatDate }}
           </div>
-          <div slot="payStatus" slot-scope="v">
-            {{ v === 1 ? "支付" : "未支付" }}
+          <div
+            :class="{ green: v === 1, blue: v !== 1 }"
+            slot="payStatus"
+            slot-scope="v"
+          >
+            {{ v === 1 ? "已支付" : "未支付" }}
+          </div>
+          <div slot="select" slot-scope="v">
+            <a-button type="link" @click="selectPool(v)">
+              {{ v.payStatus === 1 ? "查看(1)" : "——————" }}
+            </a-button>
           </div>
         </a-table>
       </div>
@@ -160,13 +175,14 @@ export default {
           title: "支付时间",
           dataIndex: "payTime",
           key: "payTime",
-          width: 190,
+          width: 250,
           scopedSlots: { customRender: "payTime" }
         },
         {
           title: "查询",
-          dataIndex: "select",
-          key: "select"
+          fixed: "right",
+          key: "selects",
+          scopedSlots: { customRender: "select" }
         },
         {
           title: "操作",
@@ -206,6 +222,7 @@ export default {
           pageSize: res.data.totalCount * 1
         })
         .then(val => {
+          console.log(val);
           this.paginationProps.total = val.data.totalCount * 1;
           this.paginationProps.current = val.data.currentPage * 1;
           this.dataAll = val.data.list;
@@ -392,6 +409,28 @@ export default {
     }
     .zhi {
       margin: 10px;
+    }
+  }
+  .orderTable {
+    .green {
+      background-color: rgb(115, 209, 61);
+      color: rgb(255, 255, 255);
+      font-size: 12px;
+      width: 52px;
+      height: 20px;
+      text-align: center;
+      line-height: 20px;
+      border-radius: 2px;
+    }
+    .blue {
+      background-color: rgb(64, 169, 255);
+      color: rgb(255, 255, 255);
+      font-size: 12px;
+      width: 52px;
+      height: 20px;
+      text-align: center;
+      line-height: 20px;
+      border-radius: 2px;
     }
   }
 }

@@ -18,7 +18,7 @@
         </li>
         <li>
           <span>状态:</span>
-          <span>{{ orderInfo.payStatus === 1 ? "支付" : "未支付" }}</span>
+          <span :class="{ green: orderInfo.payStatus === 1, blue: orderInfo.payStatus !== 1 }">{{ orderInfo.payStatus === 1 ? "已支付" : "未支付" }}</span>
         </li>
         <li>
           <span>支付时间:</span>
@@ -50,7 +50,7 @@
           <div slot="ecsPrice" slot-scope="v">
             <span>CPU：{{ v.cpu }}</span
             ><br><span>内存：{{ v.memory }}</span
-            ><br><span>磁盘：{{ v.priceUnit }}</span
+            ><br><span>磁盘：{{ v.dataDiskSize }}</span
             ><br><span>带宽：{{ v.internetMaxBandwidthOut }}</span
             ><br><span>防御：{{ v.priceUnit }}</span
             ><br><span>操作系统：{{ v.osName }}</span><br>
@@ -159,7 +159,14 @@ export default {
     let id = this.$route.query.id;
     // console.log(id);
     this.$store.dispatch("financialOrder/getOne", id).then(res => {
-      console.log(res);
+      // console.log(res);
+      let dataDisk = res.data.ecsPrice.dataDisk;
+      let dataDiskSize = 0;
+      for (let index = 0; index < dataDisk.length; index++) {
+        dataDiskSize += dataDisk[index].size;
+      }
+      res.data.ecsPrice.dataDiskSize = dataDiskSize;
+      // console.log(dataDiskSize);
       this.orderInfo = res.data;
       this.data = [res.data];
     });
@@ -214,6 +221,29 @@ export default {
           line-height: 65px;
         }
       }
+    }
+    .green {
+      background-color: rgb(115, 209, 61);
+      color: rgb(255, 255, 255);
+      display: inline-block;
+      font-size: 12px;
+      width: 52px;
+      height: 20px;
+      text-align: center;
+      line-height: 20px;
+      border-radius: 2px;
+    }
+    .blue {
+      display: inline-block;
+
+      background-color: rgb(64, 169, 255);
+      color: rgb(255, 255, 255);
+        font-size: 12px;
+      width: 52px;
+      height: 20px;
+      text-align: center;
+      line-height: 20px;
+      border-radius: 2px;
     }
   }
 }
