@@ -188,7 +188,17 @@ const options = {
                   meta: {
                     icon: "home"
                   },
-                  component: () => import("@/pages/channel/channelAdmin/list")
+                  component: () => import("@/pages/finance/income/order")
+                },
+                {
+                  path: "orderinfo",
+                  name: "订单详情",
+                  meta: {
+                    invisible: true,
+                    back: true
+                  },
+                  component: () =>
+                    import("@/pages/finance/income/order/orderInfo.vue")
                 },
                 {
                   path: "detailed",

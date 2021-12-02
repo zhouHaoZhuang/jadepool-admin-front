@@ -54,9 +54,6 @@ export default {
       labelCol: { span: 6 },
       wrapperCol: { span: 18 },
       other: "",
-      //       "accountCode": "string",
-      //   "cusomerCode": "string",
-      //   "remark": "string"
       form: {
         accountCode: "",
         cusomerCode: "",
@@ -86,7 +83,6 @@ export default {
   activated() {
     //   获取渠道商
     this.$store.dispatch("channel/getList").then(val => {
-      // cutomerName
       console.log(val.data.list);
       this.cutomerList = val.data.list;
     });
@@ -99,10 +95,8 @@ export default {
   methods: {
     // 提交
     onSubmit() {
-          // console.log(this.form,"9999999999999");
       this.$refs.ruleForm.validate(valid => {
         this.$store.dispatch("order/addList", this.form).then(val => {
-          console.log(val, "-----");
           this.$message.success("提交成功");
           this.$router.back();
           this.resetForm();
