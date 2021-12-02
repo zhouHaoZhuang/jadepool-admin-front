@@ -6,6 +6,7 @@ import channel from "./channel";
 import provider from "./provider";
 import order from "./order";
 import financialOrder from "./financialOrder";
+import instance from "./instance";
 import purchase from "./purchase";
 
 export default {
@@ -17,5 +18,6 @@ export default {
   pool,
   order,
   purchase,
-  financialOrder
+  financialOrder,
+  instance
 };

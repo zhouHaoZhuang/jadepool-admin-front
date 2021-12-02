@@ -61,6 +61,14 @@ const user = {
       authenticationClient.getCurrentUser().then(user => {
         commit("SET_USERINFO", user);
       });
+    },
+    //修改密码
+    changePassword({ commit, state }, data) {
+      return request({
+        url: "/user/updatePassword",
+        method: "post",
+        data
+      });
     }
   }
 };
