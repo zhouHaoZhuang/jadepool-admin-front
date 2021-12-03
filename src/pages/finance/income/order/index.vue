@@ -66,7 +66,11 @@
             {{v.toFixed(2)}}
           </div>
           <div slot="tradeType" slot-scope="v">
-            {{ v === 1 ? "采购" : "销售" }}
+             <span v-if="v === 1">新购</span>
+            <span v-if="v === 5">升配</span>
+            <span v-if="v === 10">降配</span>
+            <span v-if="v === 15">续费</span>
+            <span v-if="v === 20">退费</span>
           </div>
           <div slot="action" slot-scope="v">
             <a-button type="link" @click="selectPool(v)">
@@ -222,7 +226,7 @@ export default {
           pageSize: res.data.totalCount * 1
         })
         .then(val => {
-          console.log(val);
+          // console.log(val);
           this.paginationProps.total = val.data.totalCount * 1;
           this.paginationProps.current = val.data.currentPage * 1;
           this.dataAll = val.data.list;
@@ -319,7 +323,10 @@ export default {
         );
       }
     },
-    selectPool(v) {
+    selectPool(v, i) {
+      // if (!i && i != undefined) {
+      //   return
+      // }
       //  console.log(v.id);
       this.$router.push({
         path: "/finance/index/orderinfo",

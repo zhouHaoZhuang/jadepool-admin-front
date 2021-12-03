@@ -1,5 +1,5 @@
 <template>
-  <div class="orderInfo">
+  <div class="orderInfo" v-if="data[0]">
     <!-- 订单信息 -->
     <div v-if="orderInfo" class="channel">
       <p>订单信息</p>
@@ -10,7 +10,7 @@
         </li>
         <li>
           <span>订单类型:</span>
-          <span>{{ orderInfo.tradeType === 1 ? "采购" : "销售" }} </span>
+          <span>{{ orderInfo.tradeType === 1 ? "新购" : "销售" }} </span>
         </li>
         <li>
           <span>创建时间:</span>
@@ -18,7 +18,13 @@
         </li>
         <li>
           <span>状态:</span>
-          <span :class="{ green: orderInfo.payStatus === 1, blue: orderInfo.payStatus !== 1 }">{{ orderInfo.payStatus === 1 ? "已支付" : "未支付" }}</span>
+          <span
+            :class="{
+              green: orderInfo.payStatus === 1,
+              blue: orderInfo.payStatus !== 1
+            }"
+            >{{ orderInfo.payStatus === 1 ? "已支付" : "未支付" }}</span
+          >
         </li>
         <li>
           <span>支付时间:</span>
@@ -28,11 +34,11 @@
       <div class="config">
         <div>
           <span>价格备注:</span>
-          <span>{{ orderInfo.jiage }}</span>
+          <span>{{ orderInfo.priceRemark }}</span>
         </div>
         <div>
           <span>订单备注:</span>
-          <span>{{ orderInfo.order }}</span>
+          <span>{{ orderInfo.remark }}</span>
         </div>
         <div>
           <span>配置信息</span>
@@ -45,15 +51,20 @@
         >
           <a slot="name" slot-scope="text">{{ text }}</a>
           <div slot="tradeType" slot-scope="v">
-            {{ v === 1 ? "采购" : "销售" }}
+            <span v-if="v === 1">新购</span>
+            <span v-if="v === 5">升配</span>
+            <span v-if="v === 10">降配</span>
+            <span v-if="v === 15">续费</span>
+            <span v-if="v === 20">退费</span>
           </div>
           <div slot="ecsPrice" slot-scope="v">
             <span>CPU：{{ v.cpu }}</span
-            ><br><span>内存：{{ v.memory }}</span
-            ><br><span>磁盘：{{ v.dataDiskSize }}</span
-            ><br><span>带宽：{{ v.internetMaxBandwidthOut }}</span
-            ><br><span>防御：{{ v.priceUnit }}</span
-            ><br><span>操作系统：{{ v.osName }}</span><br>
+            ><br /><span>内存：{{ v.memory }}</span
+            ><br /><span>磁盘：{{ v.dataDiskSize }}</span
+            ><br /><span>带宽：{{ v.internetMaxBandwidthOut }}</span
+            ><br /><span>防御：{{ "20G" }}</span
+            ><br /><span>操作系统：{{ v.osName }}</span
+            ><br />
             <span>所在区：{{ v.zoneId }}</span>
           </div>
         </a-table>
@@ -65,27 +76,27 @@
       <ul>
         <li>
           <span>渠道商ID:</span>
-          <span>c00001</span>
+          <span>{{data[0].cutomerCode}}</span>
         </li>
         <li>
           <span>企业名称:</span>
-          <span>浙江云盾互联网科技有限公司 </span>
+          <span>{{data[0].customerName}} </span>
         </li>
         <li>
           <span>简称:</span>
-          <span>云盾信息</span>
+          <span>{{data[0].customerShortName}}</span>
         </li>
         <li>
           <span>企业ID:</span>
-          <span>E00001</span>
+          <span>{{data[0].corporationCode}}</span>
         </li>
         <li>
           <span>企业名称:</span>
-          <span>XXXX企业</span>
+          <span>{{data[0].corporationName}}</span>
         </li>
         <li>
           <span>认证状态:</span>
-          <span>已认证</span>
+          <span>{{data[0].certificationStatus}}</span>
         </li>
       </ul>
     </div>
@@ -101,8 +112,8 @@ export default {
       columns: [
         {
           title: "产品名称",
-          dataIndex: "title",
-          key: "title",
+          dataIndex: "productName",
+          key: "productName",
           width: 100
         },
         {
@@ -138,14 +149,14 @@ export default {
           key: "actualAmount"
         },
         {
-          title: "推广优惠",
-          key: "Promote",
-          dataIndex: "Promote"
+          title: "推广优惠",  
+          key: "discountAmount",
+          dataIndex: "discountAmount"
         },
         {
           title: "代金券抵扣",
-          key: "Voucher",
-          dataIndex: "Voucher"
+          key: "discountRate",
+          dataIndex: "discountRate"
         },
         {
           title: "现金实付",
@@ -162,11 +173,13 @@ export default {
       // console.log(res);
       let dataDisk = res.data.ecsPrice.dataDisk;
       let dataDiskSize = 0;
-      for (let index = 0; index < dataDisk.length; index++) {
-        dataDiskSize += dataDisk[index].size;
+      if (dataDisk) {
+        for (let index = 0; index < dataDisk.length; index++) {
+          dataDiskSize += dataDisk[index].size;
+        }
+        res.data.ecsPrice.dataDiskSize = dataDiskSize;
       }
-      res.data.ecsPrice.dataDiskSize = dataDiskSize;
-      // console.log(dataDiskSize);
+      console.log(dataDisk);
       this.orderInfo = res.data;
       this.data = [res.data];
     });
@@ -238,7 +251,7 @@ export default {
 
       background-color: rgb(64, 169, 255);
       color: rgb(255, 255, 255);
-        font-size: 12px;
+      font-size: 12px;
       width: 52px;
       height: 20px;
       text-align: center;
