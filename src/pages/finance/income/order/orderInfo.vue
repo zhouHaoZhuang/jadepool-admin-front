@@ -58,14 +58,14 @@
             <span v-if="v === 20">退费</span>
           </div>
           <div slot="ecsPrice" slot-scope="v">
-            <span>CPU：{{ v.cpu }}</span
-            ><br /><span>内存：{{ v.memory }}</span
-            ><br /><span>磁盘：{{ v.dataDiskSize }}</span
-            ><br /><span>带宽：{{ v.internetMaxBandwidthOut }}</span
-            ><br /><span>防御：{{ "20G" }}</span
-            ><br /><span>操作系统：{{ v.osName }}</span
-            ><br />
-            <span>所在区：{{ v.zoneId }}</span>
+            <div>CPU：{{ v.cpu }}</div
+            ><div>内存：{{ v.memory }}</div
+            ><div>磁盘：{{ v.dataDiskSize }}</div
+            ><div>带宽：{{ v.internetMaxBandwidthOut }}</div
+            ><div>防御：{{ "20G" }}</div
+            ><div>操作系统：{{ v.osName }}</div
+            >
+            <div>所在区：{{ v.zoneId }}</div>
           </div>
         </a-table>
       </div>
