@@ -91,8 +91,11 @@
             {{ v === 1 ? "已支付" : "未支付" }}
           </div>
           <div slot="select" slot-scope="v">
-            <a-button type="link" @click="selectPool(v)">
-              {{ v.payStatus === 1 ? "查看(1)" : "——————" }}
+            <a-button v-if="v.payStatus === 1" type="link" @click="selectPool(v)">
+              查看(1)
+            </a-button>
+            <a-button v-else type="link">
+              ——————
             </a-button>
           </div>
         </a-table>
