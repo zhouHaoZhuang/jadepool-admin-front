@@ -17,11 +17,19 @@ const instance = {
     },
     // 获取信息
     getListas({ commit, state }, data) {
-        return request({
-          url: `/ecsProductStock/getOneEcsDetail/${data.id}`,
-          method: "get",
-        });
-      },
+      return request({
+        url: `/ecsProductStock/getOneEcsDetail/${data.id}`,
+        method: "get"
+      });
+    },
+    // 续费降配列表
+    cloudList({ commit, state }, params) {
+      return request({
+        url: "/corporation/ecsStock/queryRenewEcsPage",
+        method: "get",
+        params
+      });
+    }
   }
 };
 
