@@ -1,96 +1,68 @@
 <template>
   <div class="cloud-container">
-    <!-- 按钮操作 -->
-    <div class="btns">
-      <div class="left">
-        <a-space>
-          <span>到期时间:</span>
+    <!-- 头部筛选 -->
+    <div class="public-header-wrap">
+      <a-form-model layout="inline" :model="listQuery">
+        <a-form-model-item>
           <a-select
-            v-model="listQuery.residueDay"
-            class="select"
-            placeholder="30天"
-            style="width: 150px"
+            style="width:120px"
+            allowClear
+            v-model="listQuery.key"
+            placeholder="请选择"
           >
-            <a-select-option value="all"> 全部 </a-select-option>
+            <a-select-option
+              v-for="item in columns.slice(0, columns.length - 3)"
+              :key="item.dataIndex"
+              :value="item.dataIndex"
+            >
+              {{ item.title }}
+            </a-select-option>
           </a-select>
-          <a-input-group style="width: 400px" compact>
-            <a-select v-model="listQuery.key" style="width: 100px">
-              <a-select-option value="ip"> IP地址 </a-select-option>
-              <a-select-option value="instanceName"> 实例名称 </a-select-option>
-            </a-select>
-            <a-input-search
-              v-model="listQuery.search"
-              style="width: 70%"
-              placeholder="请输入搜索关键词"
-              enter-button
-              @search="handleSearch"
-            />
-          </a-input-group>
-        </a-space>
-      </div>
-      <div class="right">
-        <div class="icon-btn" @click="getList()">
-          <a-icon type="sync" />
-        </div>
-      </div>
+        </a-form-model-item>
+        <a-form-model-item>
+          <a-input v-model="listQuery.search" placeholder="搜索关键词" />
+        </a-form-model-item>
+        <!-- <a-form-model-item>
+          <a-select
+            style="width:120px"
+            allowClear
+            v-model="listQuery.status"
+            placeholder="状态"
+          >
+            <a-select-option
+              v-for="(value, key) in runningStatusSelect"
+              :key="key"
+              :value="key"
+            >
+              {{ value }}
+            </a-select-option>
+          </a-select>
+        </a-form-model-item> -->
+        <a-form-model-item>
+          <a-range-picker
+            format="YYYY-MM-DD"
+            :placeholder="['开始时间', '结束时间']"
+            @ok="datePickerOnOk"
+          />
+        </a-form-model-item>
+        <a-form-model-item>
+          <a-button type="primary" @click="handleSearch">
+            查询
+          </a-button>
+        </a-form-model-item>
+      </a-form-model>
     </div>
     <div class="table">
       <a-table
-        rowKey="id"
+        rowKey="orderNo"
         :loading="tableLoading"
         :columns="columns"
         :data-source="data"
-        :scroll="{ x: 1000 }"
         :pagination="paginationProps"
-        :row-selection="{
-          selectedRowKeys: selectedRowKeys,
-          onChange: onSelectChange
-        }"
       >
-        <!-- 实例名称 -->
-        <div slot="instanceName" slot-scope="text">
-          {{ text }}
-        </div>
-        <!-- IP地址 -->
-        <div slot="ip" slot-scope="text, record">
-          <div>
-            {{ record.outIp }} (公)
-            <a-icon
-              class="copy-icon"
-              type="copy"
-              @click="handleCopy(record.outIp)"
-            />
-          </div>
-          <div>
-            {{ record.innerIp }} (私)
-            <a-icon
-              class="copy-icon"
-              type="copy"
-              @click="handleCopy(record.innerIp)"
-            />
-          </div>
-        </div>
-        <!-- 配置 -->
-        <!-- <div slot="setting" slot-scope="text, record">
-          <div>规格：{{ record.cpu }}核{{ record.memory }}G</div>
-          <div>带宽：{{ record.internetMaxBandwidthOut }}Mbps</div>
-        </div> -->
-        <!-- 类型/到期时间 -->
-        <div slot="endTimeStr" slot-scope="text">
-          <div>包年包月</div>
-          <div>{{ text }}</div>
-        </div>
-        <!-- 自动续费/周期 -->
-        <div slot="autoRenew" slot-scope="text, record">
-          <span v-if="text === 0" style="color: red">未开通</span>
-          <span v-if="text === 1" style="color: #2bbe22">已开通</span>
-          <span v-if="text === 1">
-            /{{ record.renewPeriod }}{{ getAutoRenewUnit(record.renewUnit) }}
-          </span>
-        </div>
-        <!-- 倒计时/天 -->
-        <div slot="residueDay" slot-scope="text">
-          <span v-if="text === 15">已销毁</span>
+        <!-- 状态 -->
+        <div slot="runningStatus" slot-scope="text">
+          {{ runningStatusEnum[text] }}
         </div>
       </a-table>
     </div>
@@ -101,31 +73,15 @@
 import { runningStatusEnum, runningStatusSelect } from "@/utils/enum";
 import moment from "moment";
 export default {
-  computed: {
-    // 按钮是否禁用
-    disabledBtn() {
-      return this.selectedRowKeys.length === 0;
-    },
-    // 根据自动续费周期的单位返回文字
-    getAutoRenewUnit() {
-      return function(unit) {
-        if (unit === "Month") {
-          return "个月";
-        }
-        if (unit === "Year") {
-          return "年";
-        }
-      };
-    }
-  },
   data() {
     return {
       runningStatusEnum,
       runningStatusSelect,
       listQuery: {
-        key: "ip",
+        key: undefined,
         search: "",
-        residueDay: undefined,
+        startTime: "",
+        endTime: "",
         currentPage: 1,
         pageSize: 10,
         total: 0
@@ -133,42 +89,32 @@ export default {
       data: [],
       columns: [
         {
-          title: "实例名称",
-          dataIndex: "instanceName",
-          width: 150,
-          scopedSlots: { customRender: "instanceName" }
+          title: "ID",
+          dataIndex: "id"
         },
         {
-          title: "地域",
-          dataIndex: "regionId",
-          width: 100
+          title: "用户ID",
+          dataIndex: "customerCode"
         },
         {
-          title: "IP地址",
-          dataIndex: "ip",
-          width: 150,
-          scopedSlots: { customRender: "ip" }
+          title: "服务器",
+          dataIndex: "innerInstanceId"
         },
         {
-          title: "类型/到期日期",
-          dataIndex: "endTimeStr",
-          width: 150,
-          sorter: (a, b) => moment(a.endTimeStr) - moment(b.endTimeStr),
-          scopedSlots: { customRender: "endTimeStr" }
+          title: "创建时间",
+          dataIndex: "createTimeStr",
+          sorter: (a, b) => moment(a.createTimeStr) - moment(b.createTimeStr)
         },
         {
-          title: "倒计时",
-          dataIndex: "residueDay",
-          width: 120,
-          scopedSlots: { customRender: "residueDay" }
-        },
-        {
-          title: "自动续费/周期",
-          dataIndex: "autoRenew",
-          width: 130,
-          sorter: (a, b) => a.renewPeriod - b.renewPeriod,
-          scopedSlots: { customRender: "autoRenew" }
+          title: "执行时间",
+          dataIndex: "modifyTimeStr",
+          sorter: (a, b) => moment(a.modifyTimeStr) - moment(b.modifyTimeStr)
         }
+        // {
+        //   title: "状态",
+        //   dataIndex: "runningStatus",
+        //   scopedSlots: { customRender: "runningStatus" }
+        // }
       ],
       paginationProps: {
         showSizeChanger: true,
@@ -179,12 +125,8 @@ export default {
           )} 页`,
         onShowSizeChange: this.onShowSizeChange
       },
-      tableLoading: false,
-      selectedRowKeys: []
+      tableLoading: false
     };
-  },
-  created() {
-    this.getList();
   },
   activated() {
     this.getList();
@@ -193,11 +135,7 @@ export default {
     // 获取服务器列表
     getList() {
       this.tableLoading = true;
-      this.$store
-        .dispatch("instance/cloudList", {
-          ...this.listQuery,
-          [this.listQuery.key]: this.listQuery.search
-        })
+      this.$getList("instance/cloudList", this.listQuery)
         .then(res => {
           this.data = [...res.data.list];
         })
@@ -209,10 +147,6 @@ export default {
     handleSearch() {
       this.getList();
     },
-    // 表格多选
-    onSelectChange(selectedRowKeys) {
-      this.selectedRowKeys = selectedRowKeys;
-    },
     // 点击复制
     handleCopy(txt) {
       this.$copyText(txt)
@@ -222,6 +156,11 @@ export default {
         .catch(() => {
           this.$message.warning("复制失败");
         });
+    },
+    // 日期选择
+    datePickerOnOk(value) {
+      this.listQuery.startTime = moment(value[0]).format("YYYY-MM-DD");
+      this.listQuery.endTime = moment(value[1]).format("YYYY-MM-DD");
     }
   }
 };
@@ -233,28 +172,9 @@ export default {
   margin: 24px;
   margin-top: 0;
   padding: 24px;
-  .btns {
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    .right {
-      color: #4d4d4d;
-      font-size: 18px;
-      display: flex;
-      .icon-btn {
-        width: 32px;
-        height: 32px;
-        border: 1px solid #ddd;
-        margin: 0 4px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-      }
-    }
-  }
   .table {
     color: #4d4d4d;
+    margin-top: 15px;
     .copy-icon {
       color: #00aaff;
       cursor: pointer;

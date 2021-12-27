@@ -25,7 +25,7 @@ const instance = {
     // 续费降配列表
     cloudList({ commit, state }, params) {
       return request({
-        url: "/corporation/ecsStock/queryRenewEcsPage",
+        url: "/ecsProductStock/upDownPage",
         method: "get",
         params
       });

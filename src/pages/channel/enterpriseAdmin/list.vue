@@ -155,7 +155,7 @@ export default {
     // 查询表格数据
     getList() {
       this.tableLoading = true;
-      this.$getList("channel/getEnterpriseList", this.listQuery)
+      this.$getListQp("channel/getEnterpriseList", this.listQuery)
         .then(res => {
           this.data = [...res.data.list];
           this.paginationProps.total = res.data.totalCount * 1;

@@ -172,7 +172,7 @@ export default {
     // 查询表格数据
     getList() {
       this.tableLoading = true;
-      this.$getList("instance/getLists", this.listQuery)
+      this.$getListQp("instance/getLists", this.listQuery)
         .then(res => {
           console.log(res);
           this.data = [...res.data.list];

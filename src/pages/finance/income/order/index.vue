@@ -351,7 +351,7 @@ export default {
             this.data = this.dataAll.slice(0, this.paginationProps.pageSize);
           });
       } else {
-        // this.$getList(this.title, this.search, this.startValue, this.endValue);
+        // this.$getListQp(this.title, this.search, this.startValue, this.endValue);
         let tempSearch = this.listQuery.search;
         if (this.title == "tradeType") {
           if (this.listQuery.search == "销售") {
@@ -369,7 +369,7 @@ export default {
             this.listQuery.search = 0;
           }
         }
-        this.$getList("financialOrder/getList", this.listQuery).then(val => {
+        this.$getListQp("financialOrder/getList", this.listQuery).then(val => {
           // console.log(val, "时间请求结果");
           this.paginationProps.total = val.data.totalCount * 1;
           this.paginationProps.current = val.data.currentPage * 1;

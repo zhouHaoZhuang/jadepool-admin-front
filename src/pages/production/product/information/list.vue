@@ -194,7 +194,7 @@ export default {
       this.$router.push("/production/product/addproduct");
     },
     handleMenuClick() {
-      this.$getList("pool/selectList", this.listQuery).then(val => {
+      this.$getListQp("pool/selectList", this.listQuery).then(val => {
         this.reqList(val);     //获取列表数据并初始化数据
       });
     },
