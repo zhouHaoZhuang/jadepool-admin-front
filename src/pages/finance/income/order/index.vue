@@ -59,36 +59,39 @@
           :scroll="{ x: 1400 }"
         >
           <a slot="name" slot-scope="text">{{ text }}</a>
-          <div slot="originAmount" slot-scope="v">
-            {{v.toFixed(2)}}
+          <div slot="originAmount" slot-scope="text">
+            {{text.toFixed(2)}}
           </div>
-          <div slot="actualAmount" slot-scope="v">
-            {{v.toFixed(2)}}
+          <div slot="actualAmount" slot-scope="text">
+            {{text.toFixed(2)}}
           </div>
-          <div slot="tradeType" slot-scope="v">
-            {{ v === 1 ? "采购" : "销售" }}
+          <div slot="tradeType" slot-scope="text">
+            <span>{{feeReduction[text]}}</span>
           </div>
-          <div slot="action" slot-scope="v">
-            <a-button type="link" @click="selectPool(v)">
+          <div slot="action" slot-scope="text">
+            <a-button type="link" @click="selectPool(text)">
               查看
             </a-button>
           </div>
-          <div slot="createTime" slot-scope="v">
-            {{ v | formatDate }}
+          <div slot="createTime" slot-scope="text">
+            {{ text | formatDate }}
           </div>
-          <div slot="payTime" slot-scope="v">
-            {{ v | formatDate }}
+          <div slot="payTime" slot-scope="text">
+            {{ text | formatDate }}
           </div>
           <div
-            :class="{ green: v === 1, blue: v !== 1 }"
+            :class="{ green: text === 1, blue: text !== 1 }"
             slot="payStatus"
-            slot-scope="v"
+            slot-scope="text"
           >
-            {{ v === 1 ? "已支付" : "未支付" }}
+            {{ text === 1 ? "已支付" : "未支付" }}
           </div>
-          <div slot="select" slot-scope="v">
-            <a-button type="link" @click="selectPool(v)">
-              {{ v.payStatus === 1 ? "查看(1)" : "——————" }}
+          <div slot="select" slot-scope="text">
+            <a-button v-if="text.payStatus === 1" type="link" @click="selectPool(text)">
+              查看(1)
+            </a-button>
+            <a-button v-else type="link">
+              ——————
             </a-button>
           </div>
         </a-table>
@@ -98,10 +101,12 @@
 </template>
 
 <script>
+import { feeReduction } from "@utils/enum";
 export default {
   data() {
     return {
       title: "orderNo",
+      feeReduction,
       // search: "",
       listQuery: {
         key: undefined,
@@ -222,7 +227,7 @@ export default {
           pageSize: res.data.totalCount * 1
         })
         .then(val => {
-          console.log(val);
+          // console.log(val);
           this.paginationProps.total = val.data.totalCount * 1;
           this.paginationProps.current = val.data.currentPage * 1;
           this.dataAll = val.data.list;
@@ -319,7 +324,10 @@ export default {
         );
       }
     },
-    selectPool(v) {
+    selectPool(v, i) {
+      // if (!i && i != undefined) {
+      //   return
+      // }
       //  console.log(v.id);
       this.$router.push({
         path: "/finance/index/orderinfo",

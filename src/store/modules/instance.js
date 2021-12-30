@@ -8,11 +8,11 @@ const instance = {
 
   actions: {
     // 获取列表
-    getLists({ commit, state }, params) {
+    getLists({ commit, state }, data) {
       return request({
-        url: "/ecsProductStock/getEcsInstanceList",
-        method: "get",
-        params
+        url: `/ecsProductStock/getEcsInstanceList?pageNo=${data.pageNo}&pageSize=${data.pageSize}`,
+        method: "post",
+        data
       });
     },
     // 获取信息
