@@ -101,7 +101,7 @@
 </template>
 
 <script>
-import { feeReduction } from "@utils/enum";
+import { feeReduction } from "@/utils/enum.js";
 export default {
   data() {
     return {
