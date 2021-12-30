@@ -19,8 +19,12 @@ $ yarn install
 $ yarn serve
 ```
 
-## 打包
-### yarn
-```bash
-$ yarn build
-```
+# 打包命令
+
+#### 测试
+
+yarn build:test
+
+#### 生产
+
+yarn build

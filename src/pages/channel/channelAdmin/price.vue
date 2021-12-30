@@ -156,7 +156,7 @@ export default {
         ...this.listQuery,
         ["qp-channelCustomerName-like"]: this.listQuery.topSearch
       };
-      this.$getList("channel/getPriceList", newListQuery)
+      this.$getListQp("channel/getPriceList", newListQuery)
         .then(res => {
           this.data = [...res.data.list];
           this.paginationProps.total = res.data.totalCount * 1;
