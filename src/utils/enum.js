@@ -29,3 +29,12 @@ export const runningStatusSelect = {
   2: "已停止",
   3: "已过期"
 };
+// 降费续配
+export const  feeReduction= {
+  1: "新购",
+  5: "升配",
+  10: "降配",
+  15: "续费",
+  20: "退费"
+};
+
