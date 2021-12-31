@@ -13,11 +13,9 @@
             v-model="form.supplierCode"
             placeholder="please select your zone"
           >
-            <a-select-option value="S20211122000001">
-              阿里云
-            </a-select-option>
-            <a-select-option value="华为云">
-              华为云
+            <a-select-option :value="item.supplierCode" v-for="(item) in supplierList" :key="item.supplierCode">
+              <!-- http://rps.dev.ydidc.com/supplier?search=&currentPage=1&pageSize=10&total=500 -->
+              {{item.supplierName}}
             </a-select-option>
           </a-select>
         </a-form-model-item>
@@ -48,6 +46,7 @@ export default {
   name: "index",
   data() {
     return {
+      supplierList: [],
       labelCol: { span: 6 },
       wrapperCol: { span: 18 },
       other: "",
@@ -57,47 +56,63 @@ export default {
         accountTag: "",
         keyConfig: "",
         remark: "",
-        supplierCode: ""
+        supplierCode: "",
       },
       rules: {
         supplierCode: [
           {
             required: true,
             message: "select",
-            trigger: "change"
-          }
+            trigger: "change",
+          },
         ],
         supplierAccountCode: [
           {
             required: true,
             message: "请输入供应商标识",
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         accountTag: [
           {
             required: true,
             message: "请输入供应商侧账号ID",
-            trigger: "blur"
-          }
-        ]
+            trigger: "blur",
+          },
+        ],
       },
-      loading: false
+      loading: false,
+      listQuery: {
+        key: undefined,
+        search: "",
+        currentPage: 1,
+        pageSize: 999,
+      },
     };
   },
+  activated() {
+    this.getList();
+  },
   methods: {
+    getList() {
+      this.$getListQp("provider/getList", this.listQuery)
+        .then((res) => {
+          console.log(res);
+          this.supplierList = res.data.list;
+        })
+    },
     // 提交
     onSubmit() {
-      this.$refs.ruleForm.validate(valid => {
+      this.$refs.ruleForm.validate((valid) => {
         if (valid) {
           const obj = JSON.parse(this.form.keyConfig);
           if (typeof obj == "object" && JSON.stringify(obj) !== "{}") {
             this.$store
               .dispatch("purchase/add", {
                 ...this.form,
-                keyConfig: obj
+                keyConfig: obj,
               })
-              .then(val => {
+              .then((val) => {
                 console.log(val);
                 this.$message.success("提交成功");
                 this.$router.back();
@@ -118,10 +133,10 @@ export default {
         accountTag: "",
         keyConfig: "",
         remark: "",
-        supplierCode: ""
+        supplierCode: "",
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

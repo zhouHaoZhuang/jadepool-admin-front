@@ -49,9 +49,8 @@
             {{ text }}
           </span>
           <div class="status" slot="deleted" slot-scope="text">
-            <div v-if="text === 't'" class="dot"></div>
-            <div v-else class="dot dot-err"></div>
-            {{ text === "t" ? "正常" : "冻结" }}
+            <div v-if="text === 't'" class="dot">正常</div>
+            <div v-if="text === 'f'" class="dot dot-err">冻结</div>
           </div>
           <span slot="action" slot-scope="text, record">
             <a-button type="link" @click="goDetail(record)">
