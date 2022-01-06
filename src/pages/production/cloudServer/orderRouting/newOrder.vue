@@ -8,7 +8,7 @@
         :label-col="labelCol"
         :wrapper-col="wrapperCol"
       >
-        <a-form-model-item label="渠道商" prop="supplierName">
+        <a-form-model-item label="渠道商" prop="cusomerCode">
           <a-select
             v-model="form.cusomerCode"
             placeholder="please select your zone"
@@ -22,7 +22,7 @@
             </a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item label="采购账号" prop="supplierName">
+        <a-form-model-item label="采购账号" prop="accountCode">
           <a-select
             v-model="form.accountCode"
             placeholder="please select your zone"
@@ -57,37 +57,37 @@ export default {
       form: {
         accountCode: "",
         cusomerCode: "",
-        remark: ""
+        remark: "",
       },
       rules: {
         accountCode: [
           {
             required: true,
             message: "输入值不能为空",
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         cusomerCode: [
           {
             required: true,
-            message: "select",
-            trigger: "change"
-          }
-        ]
+            message: "输入值不能为空",
+            trigger: "blur",
+          },
+        ],
       },
       loading: false,
       cutomerList: [],
-      purchase: []
+      purchase: [],
     };
   },
   activated() {
     //   获取渠道商
-    this.$store.dispatch("channel/getList").then(val => {
+    this.$store.dispatch("channel/getList").then((val) => {
       console.log(val.data.list);
       this.cutomerList = val.data.list;
     });
     //   获取采购账号
-    this.$store.dispatch("purchase/getList").then(val => {
+    this.$store.dispatch("purchase/getList").then((val) => {
       console.log(val.data.list);
       this.purchase = val.data.list;
     });
@@ -95,12 +95,23 @@ export default {
   methods: {
     // 提交
     onSubmit() {
-      this.$refs.ruleForm.validate(valid => {
-        this.$store.dispatch("order/addList", this.form).then(val => {
-          this.$message.success("提交成功");
-          this.$router.back();
-          this.resetForm();
-        });
+      // if(this.form.){
+
+      // };
+      this.$refs.ruleForm.validate((valid) => {
+        // console.log(valid);
+        if (valid) {
+          this.$store
+            .dispatch("order/addList", this.form)
+            .then((val) => {
+              this.$message.success("提交成功");
+              this.$router.back();
+              this.resetForm();
+            })
+            .catch((err) => {
+              this.$message.error("添加失败");
+            });
+        }
       });
     },
     // 重置表单数据
@@ -109,10 +120,10 @@ export default {
       this.form = {
         accountCode: "",
         cusomerCode: "",
-        remark: ""
+        remark: "",
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

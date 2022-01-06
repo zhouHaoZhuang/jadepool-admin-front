@@ -45,7 +45,6 @@
         <a-form-model-item label="默认采购账号" prop="defaultPurchaseAccount">
           <a-select
             v-model="form.defaultPurchaseAccount"
-            placeholder="please select your zone"
           >
             <a-select-option
               v-for="v in purchase"
@@ -79,57 +78,57 @@ export default {
       wrapperCol: { span: 18 },
       other: "",
       form: {
-        productName: "",    //产品名称
-        defaultPurchaseAccount: "",     //默认采购账号
-        productCode: "",      //产品CODE
-        supplierName: "",       //供应商
-        supplierProductCode: "",    //供应商产品CODE
-        supplierProductType: "",    //供应商产品Type
-        pm: "",            //产品经理
-        remark: ""      //备注
+        productName: "", //产品名称
+        defaultPurchaseAccount: "", //默认采购账号
+        productCode: "", //产品CODE
+        supplierName: "", //供应商
+        supplierProductCode: "", //供应商产品CODE
+        supplierProductType: "", //供应商产品Type
+        pm: "", //产品经理
+        remark: "", //备注
       },
       rules: {
         productName: [
           {
             required: true,
             message: "输入值不能为空",
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         defaultPurchaseAccount: [
           {
             required: true,
-            message: "select",
-            trigger: "change"
-          }
+            message: "输入值不能为空",
+            trigger: "blur",
+          },
         ],
         productCode: [
           {
             required: true,
             message: "输入值不能为空",
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         supplierName: [
           {
             required: true,
-            message: "select",
-            trigger: "change"
-          }
-        ]
+            message: "输入值不能为空",
+            trigger: "blur",
+          },
+        ],
       },
       loading: false,
       supplierNameList: [],
-      purchase:[]
+      purchase: [],
     };
   },
   activated() {
     // 此处需要获取供应商列表
-    this.$store.dispatch("provider/getList").then(res => {
+    this.$store.dispatch("provider/getList").then((res) => {
       this.supplierNameList = res.data.list;
     });
     // 此处需要获取默认采购账号列表
-    this.$store.dispatch("purchase/getList").then(val => {
+    this.$store.dispatch("purchase/getList").then((val) => {
       // console.log(val.data.list);
       this.purchase = val.data.list;
     });
@@ -138,13 +137,15 @@ export default {
     // 提交
     onSubmit() {
       console.log(this.form);
-      this.$refs.ruleForm.validate(valid => {
-        this.$store.dispatch("pool/addList", this.form).then(val => {
-          console.log(val);
-          this.$message.success("提交成功");
-          this.$router.back();
-          this.resetForm();
-        });
+      this.$refs.ruleForm.validate((valid) => {
+        if (valid) {
+          this.$store.dispatch("pool/addList", this.form).then((val) => {
+            console.log(val);
+            this.$message.success("提交成功");
+            this.$router.back();
+            this.resetForm();
+          });
+        }
       });
     },
     // 重置表单数据
@@ -157,10 +158,10 @@ export default {
         supplierProductCode: "",
         supplierProductType: "",
         pm: "",
-        remark: ""
+        remark: "",
       };
-    }
-  }
+    },
+  },
 };
 </script>
 
