@@ -104,7 +104,7 @@ export default {
           key: "channelCustomerName"
         },
         {
-          title: "渠道商ID",
+          title: "渠道商Code",
           dataIndex: "channelCustomerCode",
           key: "channelCustomerCode"
         },
