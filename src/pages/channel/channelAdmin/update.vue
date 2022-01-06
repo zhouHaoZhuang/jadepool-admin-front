@@ -71,6 +71,7 @@
         >
           <a-input
             v-model="form.discountPrice"
+            addon-after="%"
             v-number-evolution="{ value: 2, min: 0, max: 100 }"
           />
         </a-form-model-item>
