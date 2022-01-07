@@ -9,13 +9,13 @@
         :wrapper-col="wrapperCol"
       >
         <a-form-model-item label="所属供应商" prop="supplierCode">
-          <a-select
-            v-model="form.supplierCode"
-            placeholder="please select your zone"
-          >
-            <a-select-option :value="item.supplierCode" v-for="(item) in supplierList" :key="item.supplierCode">
-              <!-- http://rps.dev.ydidc.com/supplier?search=&currentPage=1&pageSize=10&total=500 -->
-              {{item.supplierName}}
+          <a-select v-model="form.supplierCode" placeholder="请选择所属供应商">
+            <a-select-option
+              v-for="item in supplierList"
+              :key="item.supplierCode"
+              :value="item.supplierCode"
+            >
+              {{ item.supplierName }}
             </a-select-option>
           </a-select>
         </a-form-model-item>
@@ -56,38 +56,38 @@ export default {
         accountTag: "",
         keyConfig: "",
         remark: "",
-        supplierCode: "",
+        supplierCode: ""
       },
       rules: {
         supplierCode: [
           {
             required: true,
             message: "select",
-            trigger: "change",
-          },
+            trigger: "change"
+          }
         ],
         supplierAccountCode: [
           {
             required: true,
             message: "请输入供应商标识",
-            trigger: "blur",
-          },
+            trigger: "blur"
+          }
         ],
         accountTag: [
           {
             required: true,
             message: "请输入供应商侧账号ID",
-            trigger: "blur",
-          },
-        ],
+            trigger: "blur"
+          }
+        ]
       },
       loading: false,
       listQuery: {
         key: undefined,
         search: "",
         currentPage: 1,
-        pageSize: 999,
-      },
+        pageSize: 999
+      }
     };
   },
   activated() {
@@ -95,24 +95,23 @@ export default {
   },
   methods: {
     getList() {
-      this.$getListQp("provider/getList", this.listQuery)
-        .then((res) => {
-          console.log(res);
-          this.supplierList = res.data.list;
-        })
+      this.$getListQp("provider/getList", this.listQuery).then(res => {
+        console.log(res);
+        this.supplierList = res.data.list;
+      });
     },
     // 提交
     onSubmit() {
-      this.$refs.ruleForm.validate((valid) => {
+      this.$refs.ruleForm.validate(valid => {
         if (valid) {
           const obj = JSON.parse(this.form.keyConfig);
           if (typeof obj == "object" && JSON.stringify(obj) !== "{}") {
             this.$store
               .dispatch("purchase/add", {
                 ...this.form,
-                keyConfig: obj,
+                keyConfig: obj
               })
-              .then((val) => {
+              .then(val => {
                 console.log(val);
                 this.$message.success("提交成功");
                 this.$router.back();
@@ -133,10 +132,10 @@ export default {
         accountTag: "",
         keyConfig: "",
         remark: "",
-        supplierCode: "",
+        supplierCode: ""
       };
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -215,7 +215,7 @@ export default {
       }
     };
   },
-  created() {
+  activated() {
     this.getDetail();
   },
   methods: {

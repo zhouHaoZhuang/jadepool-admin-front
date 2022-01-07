@@ -81,41 +81,35 @@ export default {
       columns: [
         {
           title: "供应商ID",
-          dataIndex: "id",
-          key: "id"
+          dataIndex: "supplierCode"
         },
         {
           title: "全称",
-          dataIndex: "supplierName",
-          key: "supplierName"
+          dataIndex: "supplierName"
         },
         {
           title: "简称",
-          dataIndex: "shortName",
-          key: "shortName"
+          dataIndex: "shortName"
         },
         {
           title: "网址",
           dataIndex: "url",
-          key: "url",
           scopedSlots: { customRender: "url" }
         },
         {
           title: "状态",
           dataIndex: "deleted",
-          key: "deleted",
           scopedSlots: { customRender: "deleted" }
         },
         {
           title: "创建时间",
           dataIndex: "createTime",
-          key: "createTime",
           scopedSlots: { customRender: "createTime" },
           width: 250
         },
         {
           title: "操作",
-          key: "action",
+          dataIndex: "action",
           fixed: "right",
           scopedSlots: { customRender: "action" }
         }

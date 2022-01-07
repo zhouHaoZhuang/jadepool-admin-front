@@ -66,7 +66,7 @@ export default {
       detail: {}
     };
   },
-  created() {
+  activated() {
     this.getDetail();
   },
   methods: {
