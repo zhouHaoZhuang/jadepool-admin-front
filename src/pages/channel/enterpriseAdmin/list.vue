@@ -20,7 +20,7 @@
             </a-select>
           </a-form-model-item>
           <a-form-model-item>
-            <a-input v-model="listQuery.search" placeholder="搜索关键词" />
+            <a-input v-model="listQuery.search" allow-clear placeholder="搜索关键词" />
           </a-form-model-item>
           <a-form-model-item>
             <a-button type="primary" @click="search">

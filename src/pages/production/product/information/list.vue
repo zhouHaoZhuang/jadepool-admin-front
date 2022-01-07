@@ -11,7 +11,7 @@
           </a-select-option>
         </a-select>
         <div>
-          <a-input placeholder="搜索关键词" v-model="listQuery.search" />
+          <a-input placeholder="搜索关键词" allow-clear v-model="listQuery.search" />
         </div>
         <a-button type="primary" @click="handleMenuClick">
           查询
@@ -194,7 +194,7 @@ export default {
       this.$router.push("/production/product/addproduct");
     },
     handleMenuClick() {
-      this.$getListQp("pool/selectList", this.listQuery).then(val => {
+      this.$getListQp("pool/getList", this.listQuery).then(val => {
         this.reqList(val);     //获取列表数据并初始化数据
       });
     },
