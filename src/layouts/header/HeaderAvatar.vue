@@ -7,7 +7,7 @@
     <a-menu :class="['avatar-menu']" slot="overlay">
       <a-menu-item>
         <a-icon type="user" />
-        <span>个人中心</span>
+        <span @click="personalCenter">个人中心</span>
       </a-menu-item>
       <a-menu-item>
         <a-icon type="setting" />
@@ -39,6 +39,9 @@ export default {
       this.$store.dispatch("user/logout").then(res => {
         this.$router.push("/login");
       });
+    },
+    personalCenter() {
+      this.$router.push("/personal/account/information");
     }
   }
 };

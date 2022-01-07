@@ -25,7 +25,7 @@
             </a-select>
           </a-form-model-item>
           <a-form-model-item>
-            <a-input v-model="listQuery.search" placeholder="搜索关键词" />
+            <a-input v-model="listQuery.search" allow-clear placeholder="搜索关键词" />
           </a-form-model-item>
           <a-form-model-item>
             <a-button type="primary" @click="search">
@@ -78,8 +78,8 @@ export default {
         },
         {
           title: "所属供应商",
-          dataIndex: "supplierCode",
-          key: "supplierCode"
+          dataIndex: "supplierName",
+          key: "supplierName"
         },
         {
           title: "账号标识",

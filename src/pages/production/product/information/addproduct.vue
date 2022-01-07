@@ -15,13 +15,13 @@
         >
           <a-input v-model="form.productName" />
         </a-form-model-item>
-        <a-form-model-item
+        <!-- <a-form-model-item
           ref="productCode"
           label="资源池产品CODE"
           prop="productCode"
         >
           <a-input v-model="form.productCode" />
-        </a-form-model-item>
+        </a-form-model-item> -->
         <a-form-model-item label="供应商" prop="supplierName">
           <a-select
             v-model="form.supplierName"

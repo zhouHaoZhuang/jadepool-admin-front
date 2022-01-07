@@ -27,6 +27,7 @@
                 <a-form-model-item>
                   <a-input
                     v-model="listQuery.search"
+                    allow-clear
                     placeholder="搜索关键词"
                   />
                 </a-form-model-item>
@@ -103,13 +104,12 @@ export default {
         { title: "内存", dataIndex: "memory", key: "memory" },
         {
           title: "磁盘",
-          dataIndex: "internetMaxBandwidthOut",
-          key: "internetMaxBandwidthOut"
+          dataIndex: "dataDiskSize",
         },
         {
           title: "带宽",
-          dataIndex: "internetMaxBandwidthIn",
-          key: "internetMaxBandwidthIn"
+          dataIndex: "internetMaxBandwidthOut",
+          key: "internetMaxBandwidthOut"
         },
         {
           title: "渠道ID",
@@ -132,7 +132,7 @@ export default {
           key: "ecsProductOrderLogResDtoList[0].modifyTime"
         },
         { title: "实例状态", dataIndex: "", key: "" },
-        { title: "运行状态", dataIndex: "", key: "" },
+        { title: "运行状态", dataIndex: "status", key: "" },
         { title: "操作状态", dataIndex: "", key: "" },
         {
           title: "操作",

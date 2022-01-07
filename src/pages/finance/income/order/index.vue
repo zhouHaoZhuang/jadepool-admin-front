@@ -20,6 +20,7 @@
           <a-input
             :disabled="!isTime"
             placeholder="搜索关键词"
+            allow-clear
             v-model="listQuery.search"
           />
         </div>

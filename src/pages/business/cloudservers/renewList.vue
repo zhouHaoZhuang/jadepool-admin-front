@@ -20,7 +20,11 @@
           </a-select>
         </a-form-model-item>
         <a-form-model-item>
-          <a-input v-model="listQuery.search" placeholder="搜索关键词" />
+          <a-input
+            v-model="listQuery.search"
+            allow-clear
+            placeholder="搜索关键词"
+          />
         </a-form-model-item>
         <!-- <a-form-model-item>
           <a-select
@@ -40,9 +44,9 @@
         </a-form-model-item> -->
         <a-form-model-item>
           <a-range-picker
-            format="YYYY-MM-DD"
+            format="YYYY-MM-DD HH:mm:ss"
             :placeholder="['开始时间', '结束时间']"
-            @ok="datePickerOnOk"
+            @change="onChange"
           />
         </a-form-model-item>
         <a-form-model-item>
@@ -84,32 +88,37 @@ export default {
         endTime: "",
         currentPage: 1,
         pageSize: 10,
-        total: 0
+        total: 0,
       },
       data: [],
       columns: [
         {
           title: "ID",
-          dataIndex: "id"
+          dataIndex: "id",
         },
         {
           title: "用户ID",
-          dataIndex: "customerCode"
+          dataIndex: "customerCode",
         },
         {
           title: "服务器",
-          dataIndex: "innerInstanceId"
+          dataIndex: "innerInstanceId",
         },
         {
           title: "创建时间",
           dataIndex: "createTimeStr",
-          sorter: (a, b) => moment(a.createTimeStr) - moment(b.createTimeStr)
+          sorter: (a, b) => moment(a.createTimeStr) - moment(b.createTimeStr),
+        },
+        {
+          title: "到期时间",
+          dataIndex: "expireTimeStr",
+          sorter: (a, b) => moment(a.expireTimeStr) - moment(b.expireTimeStr),
         },
         {
           title: "执行时间",
           dataIndex: "modifyTimeStr",
-          sorter: (a, b) => moment(a.modifyTimeStr) - moment(b.modifyTimeStr)
-        }
+          sorter: (a, b) => moment(a.modifyTimeStr) - moment(b.modifyTimeStr),
+        },
         // {
         //   title: "状态",
         //   dataIndex: "runningStatus",
@@ -123,9 +132,9 @@ export default {
           `共 ${total} 条记录 第 ${this.listQuery.currentPage} / ${Math.ceil(
             total / this.listQuery.pageSize
           )} 页`,
-        onShowSizeChange: this.onShowSizeChange
+        onShowSizeChange: this.onShowSizeChange,
       },
-      tableLoading: false
+      tableLoading: false,
     };
   },
   activated() {
@@ -136,7 +145,7 @@ export default {
     getList() {
       this.tableLoading = true;
       this.$getList("instance/cloudList", this.listQuery)
-        .then(res => {
+        .then((res) => {
           this.data = [...res.data.list];
         })
         .finally(() => {
@@ -157,12 +166,12 @@ export default {
           this.$message.warning("复制失败");
         });
     },
-    // 日期选择
-    datePickerOnOk(value) {
-      this.listQuery.startTime = moment(value[0]).format("YYYY-MM-DD");
-      this.listQuery.endTime = moment(value[1]).format("YYYY-MM-DD");
-    }
-  }
+    onChange(date, dateString) {
+      // console.log(date, dateString);
+      this.listQuery.startTime = dateString[0];
+      this.listQuery.endTime = dateString[1];
+    },
+  },
 };
 </script>
 

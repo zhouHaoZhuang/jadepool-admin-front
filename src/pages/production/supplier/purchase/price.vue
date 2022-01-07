@@ -9,7 +9,7 @@
         :wrapper-col="wrapperCol"
       >
         <a-form-model-item label="所属供应商" prop="supplierCode">
-          <a-select v-model="form.supplierCode" placeholder="请选择所属供应商">
+          <a-select v-model="form.supplierCode" placeholder="请选择所属供应商" @change="handleChange">
             <a-select-option
               v-for="item in supplierList"
               :key="item.supplierCode"
@@ -19,13 +19,13 @@
             </a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item label="供应商标识" prop="supplierAccountCode">
+        <!-- <a-form-model-item label="供应商标识" prop="supplierAccountCode">
           <a-input v-model="form.supplierAccountCode" />
-        </a-form-model-item>
+        </a-form-model-item> -->
         <a-form-model-item label="供应商侧账号ID" prop="accountTag">
           <a-input v-model="form.accountTag" />
         </a-form-model-item>
-        <a-form-model-item label="账号配置">
+        <a-form-model-item label="账号配置" prop="keyConfig">
           <a-input v-model="form.keyConfig" type="keyConfig" />
         </a-form-model-item>
         <a-form-model-item label="备注">
@@ -62,7 +62,7 @@ export default {
         supplierCode: [
           {
             required: true,
-            message: "select",
+            message: "请输入所属供应商",
             trigger: "change"
           }
         ],
@@ -79,7 +79,14 @@ export default {
             message: "请输入供应商侧账号ID",
             trigger: "blur"
           }
-        ]
+        ],
+        keyConfig: [
+          {
+            required: true,
+            message: "请输入账号配置",
+            trigger: "blur"
+          }
+        ],
       },
       loading: false,
       listQuery: {
@@ -99,6 +106,9 @@ export default {
         console.log(res);
         this.supplierList = res.data.list;
       });
+    },
+    handleChange(value) {
+      console.log(`selected ${value}`);
     },
     // 提交
     onSubmit() {
