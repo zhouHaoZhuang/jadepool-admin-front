@@ -140,10 +140,11 @@
       <div class="bot-content1">
         <a-table :columns="columns" :data-source="orderInfo" rowKey = 'orderNo'>
           <a slot="name" slot-scope="text">{{ text }}</a>
-          <!-- <div slot="config" slot-scope="text">
-            CPU: <span v-if="text.cpu">{{ text.cpu }}</span>核 内存: {{ text.memory }}M 数据磁盘:
-            {{ text.dataDiskSize }}G 带宽: {{ text.internetMaxBandwidthOut }}G
-          </div> -->
+          <div slot="config" slot-scope="text">
+            <!-- CPU: <span v-if="text.cpu">{{ text.cpu }}</span>核 内存: {{ text.memory }}M 数据磁盘:
+            {{ text.dataDiskSize }}G 带宽: {{ text.internetMaxBandwidthOut }}G -->
+            {{text}}
+          </div>
           <a slot="select" slot-scope="text" @click="select(text)">查看</a>
         </a-table>
       </div>
