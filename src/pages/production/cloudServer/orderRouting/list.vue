@@ -48,8 +48,8 @@ export default {
         },
         {
           title: "渠道商简称",
-          dataIndex: "createUserName",
-          key: "createUserName",
+          dataIndex: "cusomerName",
+          key: "cusomerName",
         },
         {
           title: "采购账号ID",

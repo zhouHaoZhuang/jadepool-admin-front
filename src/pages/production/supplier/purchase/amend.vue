@@ -9,10 +9,10 @@
         :wrapper-col="wrapperCol"
       >
         <a-form-model-item label="采购账号ID" prop="accountCode">
-          {{form.accountCode}}
+          {{ form.accountCode }}
         </a-form-model-item>
         <a-form-model-item label="所属供应商" prop="supplierCode">
-          {{form.supplierCode}}
+          {{ form.supplierCode }}
         </a-form-model-item>
         <a-form-model-item label="供应商标识" prop="accountTag">
           <a-input v-model="form.accountTag" />
@@ -49,60 +49,62 @@ export default {
         accountTag: "",
         supplierAccountCode: "",
         remark: "",
-        keyConfig: ""
+        keyConfig: "",
       },
       rules: {
         accountCode: [
           {
             required: true,
             message: "请输入采购账号ID",
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         supplierCode: [
           {
             required: true,
             message: "请输入所属供应商",
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         accountTag: [
           {
             required: true,
             message: "请输入供应商标识",
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         supplierAccountCode: [
           {
             required: true,
             message: "请输入供应商侧账号ID",
-            trigger: "blur"
-          }
-        ]
+            trigger: "blur",
+          },
+        ],
       },
-      loading: false
+      loading: false,
     };
   },
-   activated() {
+  activated() {
     let id = this.$route.query.id;
     // console.log(id);
-    this.$store.dispatch("purchase/getId", id).then(res => {
-      this.form = res.data
+    this.$store.dispatch("purchase/getId", id).then((res) => {
+      this.form = res.data;
       // console.log(res.data);
     });
     // console.log(form, "********");
   },
   methods: {
     onSubmit() {
-      this.$refs.ruleForm.validate(valid => {
+      this.$refs.ruleForm.validate((valid) => {
         console.log(this.form);
-        this.$store.dispatch("purchase/edit", this.form).then(val => {
-          console.log(val);
-          this.$message.success("提交成功");
-          this.$router.back();
-          this.resetForm();
-        });
+        if (valid) {
+          this.$store.dispatch("purchase/edit", this.form).then((val) => {
+            console.log(val);
+            this.$message.success("提交成功");
+            this.$router.back();
+            this.resetForm();
+          });
+        }
       });
     },
     resetForm() {
@@ -113,10 +115,10 @@ export default {
         accountTag: "",
         supplierAccountCode: "",
         remark: "",
-        keyConfig: ""
-      }
-    }
-  }
+        keyConfig: "",
+      };
+    },
+  },
 };
 </script>
 
