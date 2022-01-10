@@ -138,12 +138,17 @@
         <span>订单信息</span>
       </div>
       <div class="bot-content1">
-        <a-table :columns="columns" :data-source="orderInfo" rowKey="orderNo">
+        <a-table
+          :columns="columns"
+          :data-source="orderInfo"
+          rowKey="orderNo"
+          :pagination="false"
+        >
           <a slot="name" slot-scope="text">{{ text }}</a>
-          <!-- <div slot="config" slot-scope="text">
-            CPU: {{ text.cpu }}核 内存: {{ text.memory }}M 数据磁盘: {{ text.dataDiskSize }}G
-            带宽: {{ text.internetMaxBandwidthOut }}G
-          </div> -->
+          <div slot="config" slot-scope="text">
+            CPU: {{ text.cpu }}核 内存: {{ text.memory }}M 数据磁盘:
+            {{ text.dataDiskSize }}G 带宽: {{ text.internetMaxBandwidthOut }}G
+          </div>
           <a slot="select" slot-scope="text" @click="select(text)">查看</a>
         </a-table>
       </div>
@@ -222,7 +227,6 @@ export default {
   },
   created() {
     this.getListas();
-    console.log(7878);
   },
   methods: {
     //获取
@@ -233,8 +237,7 @@ export default {
         .then((res) => {
           this.data = { ...res.data };
           this.orderInfo = res.data.orderInfoReDtoList;
-          this.orderInfo.config = res.data;
-          console.log(this.orderInfo.config);
+          this.orderInfo[0].config = res.data;
         });
     },
     select(text) {
