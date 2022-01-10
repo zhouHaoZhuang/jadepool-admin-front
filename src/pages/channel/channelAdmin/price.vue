@@ -27,11 +27,14 @@
               placeholder="请选择"
             >
               <a-select-option
-                v-for="item in columns.slice(0, columns.length - 1)"
+                v-for="item in columns.slice(0, columns.length - 3)"
                 :key="item.dataIndex"
                 :value="item.dataIndex"
               >
                 {{ item.title }}
+              </a-select-option>
+              <a-select-option value="discountPrice">
+                折扣
               </a-select-option>
             </a-select>
           </a-form-model-item>

@@ -6,7 +6,13 @@ export const getArrOnceData = (id, arr) => {
 // 请求列表时前端要替后端做适配，并且有点多，封装请求列表时带有搜索的接口
 // request: 调用vuex的actions名   listQuery: 传递给后端的参数
 // 设置需要处理为精确查询的名单
-const filterList = ["id", "tradeType", "payStatus", "createTime"];
+const filterList = [
+  "id",
+  "tradeType",
+  "payStatus",
+  "createTime",
+  "discountPrice"
+];
 export const getListQp = (request, listQuery) => {
   return new Promise((resolve, reject) => {
     store
