@@ -45,6 +45,19 @@
             @openChange="handleEndOpenChange"
           />
         </div>
+        <a-select
+          style="width: 120px"
+          defaultValue="0"
+          v-model="listQuery['qp-tradeType-eq']"
+        >
+          <a-select-option
+            :value="index"
+            v-for="(item, index) in feeReduction"
+            :key="index"
+          >
+            {{ item }}
+          </a-select-option>
+        </a-select>
         <a-button type="primary" @click="secectClick">
           查询
         </a-button>
@@ -61,13 +74,13 @@
         >
           <a slot="name" slot-scope="text">{{ text }}</a>
           <div slot="originAmount" slot-scope="text">
-            {{text.toFixed(2)}}
+            {{ text.toFixed(2) }}
           </div>
           <div slot="actualAmount" slot-scope="text">
-            {{text.toFixed(2)}}
+            {{ text.toFixed(2) }}
           </div>
           <div slot="tradeType" slot-scope="text">
-            <span>{{feeReduction[text]}}</span>
+            <span>{{ feeReduction[text] }}</span>
           </div>
           <div slot="action" slot-scope="text">
             <a-button type="link" @click="selectPool(text)">
@@ -85,10 +98,14 @@
             slot="payStatus"
             slot-scope="text"
           >
-            {{ text === 1 ? "已支付" : "未支付" }}
+            {{ text === 5 ? "已支付" : "未支付" }}
           </div>
           <div slot="select" slot-scope="text">
-            <a-button v-if="text.payStatus === 1" type="link" @click="selectPool(text)">
+            <a-button
+              v-if="text.payStatus === 1"
+              type="link"
+              @click="selectPool(text)"
+            >
               查看(1)
             </a-button>
             <a-button v-else type="link">
@@ -114,67 +131,68 @@ export default {
         search: "",
         currentPage: 1,
         pageSize: 10,
-        total: 0
+        total: 0,
+        "qp-tradeType-eq": "",
       },
       columns: [
         {
           title: "订单编号",
           dataIndex: "orderNo",
           key: "orderNo",
-          width: 170
+          width: 170,
         },
         {
           title: "渠道ID",
           dataIndex: "cutomerCode",
           key: "cutomerCode",
-          width: 150
+          width: 150,
         },
         {
           title: "订单类型",
           dataIndex: "tradeType",
           key: "tradeType",
           scopedSlots: { customRender: "tradeType" },
-          width: 100
+          width: 100,
         },
         {
           title: "原价",
           dataIndex: "originAmount",
           key: "originAmount",
           scopedSlots: { customRender: "originAmount" },
-          width: 100
+          width: 100,
         },
         {
           title: "成交价",
           dataIndex: "actualAmount",
           key: "actualAmount",
           scopedSlots: { customRender: "actualAmount" },
-          width: 100
+          width: 100,
         },
         {
           title: "状态",
-          dataIndex: "payStatus",
+          dataIndex: "tradeStatus",
           key: "payStatus",
           width: 100,
-          scopedSlots: { customRender: "payStatus" }
+          scopedSlots: { customRender: "payStatus" },
         },
         {
           title: "现金支付",
           dataIndex: "cashPly",
           key: "cashPly",
-          width: 100
+          width: 100,
         },
         {
           title: "代金券支付",
-          dataIndex: "discountPly",
-          key: "discountPly",
-          width: 150
+          dataIndex: "discountRate",
+          key: "discountRate",
+          width: 150,
         },
         {
           title: "创建时间",
           dataIndex: "createTime",
           key: "createTime",
           width: 190,
-          scopedSlots: { customRender: "createTime" }
+          scopedSlots: { customRender: "createTime" },
         },
 
         {
@@ -182,20 +200,20 @@ export default {
           dataIndex: "payTime",
           key: "payTime",
           width: 250,
-          scopedSlots: { customRender: "payTime" }
+          scopedSlots: { customRender: "payTime" },
         },
         {
           title: "查询",
           fixed: "right",
           key: "selects",
-          scopedSlots: { customRender: "select" }
+          scopedSlots: { customRender: "select" },
         },
         {
           title: "操作",
           key: "action",
           fixed: "right",
-          scopedSlots: { customRender: "action" }
-        }
+          scopedSlots: { customRender: "action" },
+        },
       ],
       dataAll: [],
       data: [],
@@ -212,22 +230,22 @@ export default {
             this.paginationProps.total / this.paginationProps.pageSize
           )}  页`,
         onChange: this.changepage,
-        onShowSizeChange: this.onShowSizeChange
+        onShowSizeChange: this.onShowSizeChange,
       },
       num: "",
       startValue: null,
       endValue: null,
       endOpen: false,
-      isTime: true
+      isTime: true,
     };
   },
   activated() {
-    this.$store.dispatch("financialOrder/getList").then(res => {
+    this.$store.dispatch("financialOrder/getList").then((res) => {
       this.$store
         .dispatch("financialOrder/getAllList", {
-          pageSize: res.data.totalCount * 1
+          pageSize: res.data.totalCount * 1,
         })
-        .then(val => {
+        .then((val) => {
           // console.log(val);
           this.paginationProps.total = val.data.totalCount * 1;
           this.paginationProps.current = val.data.currentPage * 1;
@@ -243,37 +261,30 @@ export default {
           title: "订单编号",
           dataIndex: "orderNo",
           key: "orderNo",
-          width: 170
+          width: 170,
         },
         {
           title: "渠道ID",
           dataIndex: "cutomerCode",
           key: "cutomerCode",
-          width: 150
-        },
-        {
-          title: "订单类型",
-          dataIndex: "tradeType",
-          key: "tradeType",
-          scopedSlots: { customRender: "tradeType" },
-          width: 100
+          width: 150,
         },
         {
           title: "状态",
           dataIndex: "payStatus",
           key: "payStatus",
           width: 100,
-          scopedSlots: { customRender: "payStatus" }
+          scopedSlots: { customRender: "payStatus" },
         },
         {
           title: "创建时间",
           dataIndex: "createTime",
           key: "createTime",
           width: 190,
-          scopedSlots: { customRender: "createTime" }
-        }
+          scopedSlots: { customRender: "createTime" },
+        },
       ];
-    }
+    },
   },
   methods: {
     disabledStartDate(startValue) {
@@ -326,15 +337,11 @@ export default {
       }
     },
     selectPool(v, i) {
-      // if (!i && i != undefined) {
-      //   return
-      // }
-      //  console.log(v.id);
       this.$router.push({
         path: "/finance/index/orderinfo",
         query: {
-          id: v.id
-        }
+          id: v.id,
+        },
       });
     },
     secectClick() {
@@ -350,9 +357,9 @@ export default {
         this.$store
           .dispatch("financialOrder/selectList", {
             startTime,
-            endTime
+            endTime,
           })
-          .then(val => {
+          .then((val) => {
             // console.log(val, "时间请求结果");
             this.paginationProps.total = val.data.totalCount * 1;
             this.paginationProps.current = val.data.currentPage * 1;
@@ -362,14 +369,6 @@ export default {
       } else {
         // this.$getListQp(this.title, this.search, this.startValue, this.endValue);
         let tempSearch = this.listQuery.search;
-        if (this.title == "tradeType") {
-          if (this.listQuery.search == "销售") {
-            this.listQuery.search = 5;
-          }
-          if (this.listQuery.search == "采购") {
-            this.listQuery.search = 1;
-          }
-        }
         if (this.title == "payStatus") {
           if (this.listQuery.search == "支付") {
             this.listQuery.search = 1;
@@ -378,14 +377,16 @@ export default {
             this.listQuery.search = 0;
           }
         }
-        this.$getListQp("financialOrder/getList", this.listQuery).then(val => {
-          // console.log(val, "时间请求结果");
-          this.paginationProps.total = val.data.totalCount * 1;
-          this.paginationProps.current = val.data.currentPage * 1;
-          this.dataAll = val.data.list;
-          this.data = this.dataAll.slice(0, this.paginationProps.pageSize);
-          this.listQuery.search = tempSearch;
-        });
+        this.$getListQp("financialOrder/getList", this.listQuery).then(
+          (val) => {
+            // console.log(val, "时间请求结果");
+            this.paginationProps.total = val.data.totalCount * 1;
+            this.paginationProps.current = val.data.currentPage * 1;
+            this.dataAll = val.data.list;
+            this.data = this.dataAll.slice(0, this.paginationProps.pageSize);
+            this.listQuery.search = tempSearch;
+          }
+        );
       }
     },
     changeKey(val) {
@@ -396,8 +397,8 @@ export default {
       } else {
         this.isTime = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

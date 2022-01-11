@@ -17,13 +17,13 @@
         <a-form-model-item label="简称" prop="shortName">
           <a-input v-model="form.shortName" />
         </a-form-model-item>
-        <a-form-model-item label="网址">
+        <a-form-model-item label="网址" prop="url">
           <a-input v-model="form.url" />
         </a-form-model-item>
-        <a-form-model-item label="联系人">
-          <a-input v-model="form.contacts" />
+        <a-form-model-item label="联系人" prop="contract">
+          <a-input v-model="form.contract" />
         </a-form-model-item>
-        <a-form-model-item label="电话">
+        <a-form-model-item label="电话" prop="number">
           <a-input v-model="form.number" />
         </a-form-model-item>
         <a-form-model-item label="描述">
@@ -63,23 +63,45 @@ export default {
         supplierName: "",
         shortName: "",
         url: "",
-        contacts: "",
+        contact: "",
         number: "",
         description: "",
         deleted: "",
       },
       rules: {
-        name: [
+        supplierName: [
           {
             required: true,
             message: "请输入供应商全称",
             trigger: "blur",
           },
         ],
-        name1: [
+        shortName: [
           {
             required: true,
             message: "请输入简称",
+            trigger: "blur",
+          },
+        ],
+        url: [
+          {
+            required: true,
+            message: "请输入网址",
+            trigger: "blur",
+          },
+        ],
+        contract: [
+          {
+            required: true,
+            message: "请输入联系人",
+            trigger: "blur",
+          },
+        ],
+        number: [
+          {
+            required: true,
+            pattern: /^1[3456789]\d{9}$/,
+            message: "请输入正确的手机号码",
             trigger: "blur",
           },
         ],
@@ -96,12 +118,14 @@ export default {
   methods: {
     onSubmit() {
       this.$refs.ruleForm.validate((valid) => {
-        this.$store.dispatch("provider/edit", this.form).then((val) => {
-          console.log(val);
-          this.$message.success("提交成功");
-          this.$router.back();
-          this.resetForm();
-        });
+        if (valid) {
+          this.$store.dispatch("provider/edit", this.form).then((val) => {
+            console.log(val);
+            this.$message.success("提交成功");
+            this.$router.back();
+            this.resetForm();
+          });
+        }
       });
     },
     resetForm() {

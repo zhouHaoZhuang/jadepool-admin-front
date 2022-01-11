@@ -78,19 +78,18 @@ export default {
         },
         {
           title: "所属供应商",
-          dataIndex: "supplierName",
-          key: "supplierName"
+          dataIndex: "supplierAccountCode",
         },
         {
           title: "账号标识",
           dataIndex: "accountTag",
           key: "accountTag"
         },
-        {
-          title: "供应商侧账号ID",
-          dataIndex: "supplierAccountCode",
-          key: "supplierAccountCode"
-        },
+        // {
+        //   title: "供应商侧账号ID",
+        //   dataIndex: "supplierAccountCode",
+        //   key: "supplierAccountCode"
+        // },
         {
           title: "备注",
           dataIndex: "remark",
