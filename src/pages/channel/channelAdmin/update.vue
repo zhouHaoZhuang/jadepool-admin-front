@@ -168,7 +168,7 @@ export default {
     // 查询表格数据
     getPriceList() {
       this.$store
-        .dispatch("channel/getPriceList", { currentPage: 1, pageSize: 999 })
+        .dispatch("pool/getList", { currentPage: 1, pageSize: 999 })
         .then(res => {
           this.priceData = [...res.data.list];
         });
@@ -197,7 +197,11 @@ export default {
               productName: this.$getArrOnceData(
                 this.form.productCode,
                 this.priceData
-              ).productName
+              ).productName,
+              productCode: this.$getArrOnceData(
+                this.form.productCode,
+                this.priceData
+              ).productCode
             };
           } else {
             newFrom = { ...this.form };
