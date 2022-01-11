@@ -107,8 +107,8 @@ export default {
         this.supplierList = res.data.list;
       });
     },
-    handleChange(value) {
-      console.log(`selected ${value}`);
+    handleChange(value,obj) {
+      this.form.supplierAccountCode = obj.componentOptions.children[0].text.trim();
     },
     // 提交
     onSubmit() {
