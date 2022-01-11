@@ -48,7 +48,7 @@
         <a-select
           style="width: 120px"
           defaultValue="0"
-          v-model="listQuery.tradeType"
+          v-model="listQuery['qp-tradeType-eq']"
         >
           <a-select-option
             :value="index"
@@ -132,7 +132,7 @@ export default {
         currentPage: 1,
         pageSize: 10,
         total: 0,
-        tradeType: "",
+        "qp-tradeType-eq": "",
       },
       columns: [
         {
@@ -183,8 +183,8 @@ export default {
         },
         {
           title: "代金券支付",
-          dataIndex: "discountPly",
-          key: "discountPly",
+          dataIndex: "discountRate",
+          key: "discountRate",
           width: 150,
         },
         {
