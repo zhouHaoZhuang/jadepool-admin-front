@@ -11,7 +11,7 @@
               placeholder="请选择"
             >
               <a-select-option
-                v-for="item in columns.slice(0, columns.length - 3)"
+                v-for="item in getFilterData"
                 :key="item.dataIndex"
                 :value="item.dataIndex"
               >
@@ -20,7 +20,27 @@
             </a-select>
           </a-form-model-item>
           <a-form-model-item>
-            <a-input v-model="listQuery.search" allow-clear placeholder="搜索关键词" />
+            <a-input
+              v-model="listQuery.search"
+              allow-clear
+              placeholder="搜索关键词"
+            />
+          </a-form-model-item>
+          <a-form-model-item>
+            <a-select
+              style="width:160px"
+              allowClear
+              v-model="listQuery['qp-corporationStatus-eq']"
+              placeholder="请选择企业状态"
+            >
+              <a-select-option
+                v-for="(value, key) in corporationStatusEnum"
+                :key="key"
+                :value="key"
+              >
+                {{ value }}
+              </a-select-option>
+            </a-select>
           </a-form-model-item>
           <a-form-model-item>
             <a-button type="primary" @click="search">
@@ -69,6 +89,14 @@
 <script>
 import { certificationStatusEnum, corporationStatusEnum } from "@/utils/enum";
 export default {
+  computed: {
+    getFilterData() {
+      const newData = [...this.columns];
+      return newData
+        .slice(0, newData.length - 3)
+        .filter(ele => ele.title !== "认证状态");
+    }
+  },
   data() {
     return {
       certificationStatusEnum,
@@ -76,6 +104,7 @@ export default {
       listQuery: {
         key: undefined,
         search: "",
+        "qp-corporationStatus-eq": undefined,
         currentPage: 1,
         pageSize: 10,
         total: 0
