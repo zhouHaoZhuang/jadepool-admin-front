@@ -92,38 +92,32 @@ export default {
       columns: [
         {
           title: "渠道商ID",
-          dataIndex: "id",
-          key: "id"
+          dataIndex: "channelCustomerCode"
         },
         {
           title: "渠道商",
-          dataIndex: "channelCustomerName",
-          key: "channelCustomerName"
+          dataIndex: "channelCustomerName"
         },
         {
           title: "资源池产品",
-          dataIndex: "productName",
-          key: "productName"
+          dataIndex: "productName"
         },
         {
           title: "资源池产品CODE",
-          dataIndex: "productCode",
-          key: "productCode"
+          dataIndex: "productCode"
         },
         {
           title: "折扣方式",
           dataIndex: "discountType",
-          key: "discountType",
           scopedSlots: { customRender: "discountType" }
         },
         {
           title: "折扣",
-          dataIndex: "discountPrice",
-          key: "discountPrice"
+          dataIndex: "discountPrice"
         },
         {
           title: "操作",
-          key: "action",
+          dataIndex: "action",
           fixed: "right",
           scopedSlots: { customRender: "action" }
         }

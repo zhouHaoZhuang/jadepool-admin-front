@@ -108,7 +108,7 @@
           <a-input v-model="form.contract" />
         </a-form-model-item>
         <a-form-model-item label="电话">
-          <a-input v-model="form.number"  maxlength="11" />
+          <a-input v-model="form.number" maxlength="11" />
         </a-form-model-item>
         <a-form-model-item label="描述">
           <a-input v-model="form.description" type="textarea" />
@@ -158,6 +158,13 @@
 <script>
 export default {
   data() {
+    const validateShortName = (rule, value, callback) => {
+      if (value.length >= this.form.cutomerName.length) {
+        callback(new Error("简称长度不可以大于全称长度"));
+      } else {
+        callback();
+      }
+    };
     return {
       detail: {},
       apiDetail: {},
@@ -187,8 +194,9 @@ export default {
           {
             required: true,
             message: "请输入简称",
-            trigger: "blur"
-          }
+            trigger: ["blur", "change"]
+          },
+          { validator: validateShortName, trigger: ["blur", "change"] }
         ]
       },
       apiForm: {
