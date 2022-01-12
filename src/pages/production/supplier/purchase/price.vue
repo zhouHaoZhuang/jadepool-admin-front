@@ -22,7 +22,7 @@
         <!-- <a-form-model-item label="供应商标识" prop="supplierAccountCode">
           <a-input v-model="form.supplierAccountCode" />
         </a-form-model-item> -->
-        <a-form-model-item label="供应商侧账号ID" prop="accountTag">
+        <a-form-model-item label="账号标识" prop="accountTag">
           <a-input v-model="form.accountTag" />
         </a-form-model-item>
         <a-form-model-item label="账号配置" prop="keyConfig">

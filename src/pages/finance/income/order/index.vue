@@ -182,7 +182,7 @@ export default {
           width: 100,
         },
         {
-          title: "代金券支付",
+          title: "折扣率",
           dataIndex: "discountRate",
           key: "discountRate",
           width: 150,
