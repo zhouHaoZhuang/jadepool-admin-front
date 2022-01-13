@@ -102,7 +102,7 @@ export default {
         },
         {
           title: "服务器",
-          dataIndex: "innerInstanceId",
+          dataIndex: "outInstanceId",
         },
         {
           title: "创建时间",

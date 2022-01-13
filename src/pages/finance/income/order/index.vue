@@ -29,9 +29,10 @@
             v-model="startValue"
             :disabled-date="disabledStartDate"
             show-time
-            format="YYYY-MM-DD HH:mm:ss"
+            format="YYYY-MM-DD 00:00:00"
             placeholder="开始时间"
             :disabled="isTime"
+            @change="changeStart"
             @openChange="handleStartOpenChange"
           />
           <span class="zhi">至</span>
@@ -40,8 +41,9 @@
             :disabled="isTime"
             :disabled-date="disabledEndDate"
             show-time
-            format="YYYY-MM-DD HH:mm:ss"
+            format="YYYY-MM-DD 00:00:00"
             placeholder="结束时间"
+            @change="changeEnd"
             @openChange="handleEndOpenChange"
           />
         </div>
@@ -132,6 +134,8 @@ export default {
         currentPage: 1,
         pageSize: 10,
         total: 0,
+        startTime: "",
+        endTime: "",
         "qp-tradeType-eq": "",
       },
       columns: [
@@ -287,6 +291,12 @@ export default {
     },
   },
   methods: {
+    changeStart(date, dateString) {
+      this.listQuery.startTime = dateString;
+    },
+    changeEnd(date, dateString) {
+      this.listQuery.endTime = dateString;
+    },
     disabledStartDate(startValue) {
       const endValue = this.endValue;
       if (!startValue || !endValue) {
@@ -347,20 +357,12 @@ export default {
     secectClick() {
       this.listQuery.key = this.title;
       if (this.title == "createTime") {
-        let startTime = this.startValue._d
-          .toLocaleString("chinese", { hour12: false })
-          .replaceAll("/", "-");
-        let endTime = this.endValue._d
-          .toLocaleString("chinese", { hour12: false })
-          .replaceAll("/", "-");
-        // console.log(this.title, this.search, startTime, endTime);
         this.$store
           .dispatch("financialOrder/selectList", {
-            startTime,
-            endTime,
+            startTime: this.listQuery.startTime,
+            endTime: this.listQuery.endTime,
           })
           .then((val) => {
-            // console.log(val, "时间请求结果");
             this.paginationProps.total = val.data.totalCount * 1;
             this.paginationProps.current = val.data.currentPage * 1;
             this.dataAll = val.data.list;
