@@ -7,7 +7,7 @@
       <div class="bot-content">
         <div class="item">
           <div class="label">企业ID:</div>
-          <div class="value">{{ detail.id }}</div>
+          <div class="value">{{ detail.corporationCode }}</div>
         </div>
         <div class="item">
           <div class="label">企业名称:</div>

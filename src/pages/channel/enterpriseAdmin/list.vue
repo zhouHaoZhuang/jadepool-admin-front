@@ -112,8 +112,7 @@ export default {
       columns: [
         {
           title: "企业ID",
-          dataIndex: "id",
-          key: "id",
+          dataIndex: "corporationCode",
           width: 250
         },
         {
