@@ -94,11 +94,10 @@
             {{ text | formatDate }}
           </div>
           <div
-            :class="{ green: text === 1, blue: text !== 1 }"
-            slot="payStatus"
+            slot="tradeStatus"
             slot-scope="text"
           >
-            {{ text === 5 ? "已支付" : "未支付" }}
+            {{ orderStatus[text] }}
           </div>
           <div slot="select" slot-scope="text">
             <a-button
@@ -119,12 +118,13 @@
 </template>
 
 <script>
-import { feeReduction } from "@/utils/enum.js";
+import { feeReduction,orderStatus } from "@/utils/enum.js";
 export default {
   data() {
     return {
       title: "orderNo",
       feeReduction,
+      orderStatus,
       // search: "",
       listQuery: {
         key: undefined,
@@ -171,9 +171,9 @@ export default {
         {
           title: "状态",
           dataIndex: "tradeStatus",
-          key: "payStatus",
+          key: "tradeStatus",
           width: 100,
-          scopedSlots: { customRender: "payStatus" },
+          scopedSlots: { customRender: "tradeStatus" },
         },
         {
           title: "现金支付",
