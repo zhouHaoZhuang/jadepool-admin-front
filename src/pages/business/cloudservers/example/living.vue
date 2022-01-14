@@ -101,14 +101,14 @@ export default {
         // { title: "弹性IP", dataIndex: "intranetIp", key: "intranetIp" },
         { title: "共享类型", dataIndex: "shareType", key: "shareType" },
         { title: "区域", dataIndex: "ecsBaseInfoResDto.region", key: "zoneId" },
-        { title: "CPU", dataIndex: "cpu", key: "cpu" },
-        { title: "内存", dataIndex: "memory", key: "memory" },
+        { title: "CPU(核)", dataIndex: "cpu", key: "cpu" },
+        { title: "内存(G)", dataIndex: "memory", key: "memory" },
         {
-          title: "磁盘",
+          title: "磁盘(G)",
           dataIndex: "dataDiskSize",
         },
         {
-          title: "带宽",
+          title: "带宽(Mbps)",
           dataIndex: "internetMaxBandwidthOut",
           key: "internetMaxBandwidthOut",
         },
