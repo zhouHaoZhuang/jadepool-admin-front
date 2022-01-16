@@ -95,10 +95,7 @@
           <div slot="payTime" slot-scope="text">
             {{ text | formatDate }}
           </div>
-          <div
-            slot="tradeStatus"
-            slot-scope="text"
-          >
+          <div slot="tradeStatus" slot-scope="text">
             {{ orderStatus[text] }}
           </div>
           <div slot="select" slot-scope="text">
@@ -120,103 +117,103 @@
 </template>
 
 <script>
-import { feeReduction,orderStatus } from "@/utils/enum.js";
+import { feeReduction, orderStatus } from '@/utils/enum.js';
 export default {
   data() {
     return {
-      title: "orderNo",
+      title: 'orderNo',
       feeReduction,
       orderStatus,
       // search: "",
       listQuery: {
         key: undefined,
-        search: "",
+        search: '',
         currentPage: 1,
         pageSize: 10,
         total: 0,
-        startTime: "",
-        endTime: "",
-        "qp-tradeType-eq": "",
+        startTime: '',
+        endTime: '',
+        'qp-tradeType-eq': '',
       },
       columns: [
         {
-          title: "订单编号",
-          dataIndex: "orderNo",
-          key: "orderNo",
+          title: '订单编号',
+          dataIndex: 'orderNo',
+          key: 'orderNo',
           width: 170,
         },
         {
-          title: "渠道ID",
-          dataIndex: "cutomerCode",
-          key: "cutomerCode",
+          title: '渠道ID',
+          dataIndex: 'cutomerCode',
+          key: 'cutomerCode',
           width: 150,
         },
         {
-          title: "订单类型",
-          dataIndex: "tradeType",
-          key: "tradeType",
-          scopedSlots: { customRender: "tradeType" },
-          width: 100,
-        },
-        {
-          title: "原价",
-          dataIndex: "originAmount",
-          key: "originAmount",
-          scopedSlots: { customRender: "originAmount" },
-          width: 100,
-        },
-        {
-          title: "成交价",
-          dataIndex: "actualAmount",
-          key: "actualAmount",
-          scopedSlots: { customRender: "actualAmount" },
-          width: 100,
-        },
-        {
-          title: "状态",
-          dataIndex: "tradeStatus",
-          key: "tradeStatus",
-          width: 100,
-          scopedSlots: { customRender: "tradeStatus" },
-        },
-        {
-          title: "现金支付",
-          dataIndex: "cashPly",
-          key: "cashPly",
-          width: 100,
-        },
-        {
-          title: "折扣率",
-          dataIndex: "discountRate",
-          key: "discountRate",
+          title: '订单类型',
+          dataIndex: 'tradeType',
+          key: 'tradeType',
+          scopedSlots: { customRender: 'tradeType' },
           width: 150,
         },
         {
-          title: "创建时间",
-          dataIndex: "createTime",
-          key: "createTime",
+          title: '原价',
+          dataIndex: 'originAmount',
+          key: 'originAmount',
+          scopedSlots: { customRender: 'originAmount' },
+          width: 100,
+        },
+        {
+          title: '成交价',
+          dataIndex: 'actualAmount',
+          key: 'actualAmount',
+          scopedSlots: { customRender: 'actualAmount' },
+          width: 100,
+        },
+        {
+          title: '状态',
+          dataIndex: 'tradeStatus',
+          key: 'tradeStatus',
+          width: 100,
+          scopedSlots: { customRender: 'tradeStatus' },
+        },
+        {
+          title: '现金支付',
+          dataIndex: 'cashPly',
+          key: 'cashPly',
+          width: 100,
+        },
+        {
+          title: '折扣率',
+          dataIndex: 'discountRate',
+          key: 'discountRate',
+          width: 150,
+        },
+        {
+          title: '创建时间',
+          dataIndex: 'createTime',
+          key: 'createTime',
           width: 190,
-          scopedSlots: { customRender: "createTime" },
+          scopedSlots: { customRender: 'createTime' },
         },
 
         {
-          title: "支付时间",
-          dataIndex: "payTime",
-          key: "payTime",
+          title: '支付时间',
+          dataIndex: 'payTime',
+          key: 'payTime',
           width: 250,
-          scopedSlots: { customRender: "payTime" },
+          scopedSlots: { customRender: 'payTime' },
         },
         {
-          title: "查询",
-          fixed: "right",
-          key: "selects",
-          scopedSlots: { customRender: "select" },
+          title: '查询',
+          fixed: 'right',
+          key: 'selects',
+          scopedSlots: { customRender: 'select' },
         },
         {
-          title: "操作",
-          key: "action",
-          fixed: "right",
-          scopedSlots: { customRender: "action" },
+          title: '操作',
+          key: 'action',
+          fixed: 'right',
+          scopedSlots: { customRender: 'action' },
         },
       ],
       dataAll: [],
@@ -225,18 +222,15 @@ export default {
       paginationProps: {
         showQuickJumper: true,
         showSizeChanger: true,
-        pageSizeOptions: ["5", "10", "20", "30"],
         total: 0,
-        current: 1, //当前页
-        pageSize: 5, //每页显示数量
         showTotal: (total, range) =>
-          `共 ${total} 条记录 第 ${this.paginationProps.current} / ${Math.ceil(
-            this.paginationProps.total / this.paginationProps.pageSize
+          `共 ${total} 条记录 第 ${this.listQuery.currentPage} / ${Math.ceil(
+            total / this.listQuery.pageSize
           )}  页`,
         onChange: this.changepage,
         onShowSizeChange: this.onShowSizeChange,
       },
-      num: "",
+      num: '',
       startValue: null,
       endValue: null,
       endOpen: false,
@@ -244,53 +238,50 @@ export default {
     };
   },
   activated() {
-    this.$store.dispatch("financialOrder/getList").then((res) => {
-      this.$store
-        .dispatch("financialOrder/getAllList", {
-          pageSize: res.data.totalCount * 1,
-        })
-        .then((val) => {
-          // console.log(val);
-          this.paginationProps.total = val.data.totalCount * 1;
-          this.paginationProps.current = val.data.currentPage * 1;
-          this.dataAll = val.data.list;
-          this.data = this.dataAll.slice(0, this.paginationProps.pageSize);
-        });
-    });
+    this.getList();
   },
+
   computed: {
     useColumns() {
       return [
         {
-          title: "订单编号",
-          dataIndex: "orderNo",
-          key: "orderNo",
+          title: '订单编号',
+          dataIndex: 'orderNo',
+          key: 'orderNo',
           width: 170,
         },
         {
-          title: "渠道ID",
-          dataIndex: "cutomerCode",
-          key: "cutomerCode",
+          title: '渠道ID',
+          dataIndex: 'cutomerCode',
+          key: 'cutomerCode',
           width: 150,
         },
         {
-          title: "状态",
-          dataIndex: "payStatus",
-          key: "payStatus",
+          title: '状态',
+          dataIndex: 'payStatus',
+          key: 'payStatus',
           width: 100,
-          scopedSlots: { customRender: "payStatus" },
+          scopedSlots: { customRender: 'payStatus' },
         },
         {
-          title: "创建时间",
-          dataIndex: "createTime",
-          key: "createTime",
+          title: '创建时间',
+          dataIndex: 'createTime',
+          key: 'createTime',
           width: 190,
-          scopedSlots: { customRender: "createTime" },
+          scopedSlots: { customRender: 'createTime' },
         },
       ];
     },
   },
   methods: {
+    getList() {
+      this.$store
+        .dispatch('financialOrder/getList', this.listQuery)
+        .then((res) => {
+          this.paginationProps.total = res.data.totalCount * 1;
+          this.data = res.data.list;
+        });
+    },
     changeStart(date, dateString) {
       this.listQuery.startTime = dateString;
     },
@@ -320,35 +311,19 @@ export default {
       this.endOpen = open;
     },
     changepage(current, pageSize) {
-      this.paginationProps.current = current;
-      this.paginationProps.pageSize = pageSize;
-      if (current === 1) {
-        this.data = this.dataAll.slice(0, pageSize);
-      } else {
-        this.data = this.dataAll.slice(
-          (current - 1) * pageSize,
-          current * pageSize
-        );
-      }
-      // console.log(current, pageSize);
-      // console.log(this.data, "data");
+      this.listQuery.currentPage = current;
+      this.listQuery.pageSize = pageSize;
+      this.getList();
     },
     onShowSizeChange(current, pageSize) {
       // console.log("改变了分页的大小", current, pageSize);
-      this.paginationProps.current = current;
+      this.paginationProps.currentPage = current;
       this.paginationProps.pageSize = pageSize;
-      if (current === 1) {
-        this.data = this.dataAll.slice(0, pageSize);
-      } else {
-        this.data = this.dataAll.slice(
-          (current - 1) * pageSize,
-          current * pageSize
-        );
-      }
+      this.getList();
     },
     selectPool(v, i) {
       this.$router.push({
-        path: "/finance/index/orderinfo",
+        path: '/finance/index/orderinfo',
         query: {
           id: v.id,
         },
@@ -356,37 +331,24 @@ export default {
     },
     secectClick() {
       this.listQuery.key = this.title;
-      if (this.title == "createTime") {
-        this.$store
-          .dispatch("financialOrder/selectList", {
-            startTime: this.listQuery.startTime,
-            endTime: this.listQuery.endTime,
-          })
-          .then((val) => {
-            this.paginationProps.total = val.data.totalCount * 1;
-            this.paginationProps.current = val.data.currentPage * 1;
-            this.dataAll = val.data.list;
-            this.data = this.dataAll.slice(0, this.paginationProps.pageSize);
-          });
+      if (this.title == 'createTime') {
+        this.getList();
       } else {
         // this.$getListQp(this.title, this.search, this.startValue, this.endValue);
-        let tempSearch = this.listQuery.search;
-        if (this.title == "payStatus") {
-          if (this.listQuery.search == "支付") {
+        // let tempSearch = this.listQuery.search;
+        if (this.title == 'payStatus') {
+          if (this.listQuery.search == '支付') {
             this.listQuery.search = 1;
           }
-          if (this.listQuery.search == "未支付") {
+          if (this.listQuery.search == '未支付') {
             this.listQuery.search = 0;
           }
         }
-        this.$getListQp("financialOrder/getList", this.listQuery).then(
+        this.$getListQp('financialOrder/getList', this.listQuery).then(
           (val) => {
             // console.log(val, "时间请求结果");
             this.paginationProps.total = val.data.totalCount * 1;
-            this.paginationProps.current = val.data.currentPage * 1;
-            this.dataAll = val.data.list;
-            this.data = this.dataAll.slice(0, this.paginationProps.pageSize);
-            this.listQuery.search = tempSearch;
+            this.data= val.data.list;
           }
         );
       }
@@ -394,7 +356,7 @@ export default {
     changeKey(val) {
       // console.log(val);
       this.title = val;
-      if (this.title !== "createTime") {
+      if (this.title !== 'createTime') {
         this.isTime = true;
       } else {
         this.isTime = false;
@@ -416,7 +378,7 @@ export default {
       width: 200px;
       margin-right: 20px;
     }
-    [type="button"] {
+    [type='button'] {
       margin-left: 20px;
     }
     .zhi {
