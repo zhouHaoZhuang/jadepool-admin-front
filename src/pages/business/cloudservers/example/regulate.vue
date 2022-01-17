@@ -234,6 +234,9 @@ export default {
   created() {
     this.getListas();
   },
+  activated() {
+    this.getListas();
+  },
   methods: {
     //获取
     getListas() {
