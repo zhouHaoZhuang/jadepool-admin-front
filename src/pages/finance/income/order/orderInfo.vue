@@ -75,6 +75,11 @@
           <span>{{data[0].cutomerCode}}</span>
         </li>
         <li>
+          <span>企业ID:</span>
+          <span>{{data[0].corporationCode}}</span>
+        </li>
+
+        <!-- <li>
           <span>企业名称:</span>
           <span>{{data[0].customerName}} </span>
         </li>
@@ -83,17 +88,13 @@
           <span>{{data[0].customerShortName}}</span>
         </li>
         <li>
-          <span>企业ID:</span>
-          <span>{{data[0].corporationCode}}</span>
-        </li>
-        <li>
           <span>企业名称:</span>
           <span>{{data[0].corporationName}}</span>
         </li>
         <li>
           <span>认证状态:</span>
           <span>{{data[0].certificationStatus}}</span>
-        </li>
+        </li> -->
       </ul>
     </div>
   </div>
