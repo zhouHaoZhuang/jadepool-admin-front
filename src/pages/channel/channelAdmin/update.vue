@@ -21,8 +21,8 @@
           >
             <a-select-option
               v-for="item in data"
-              :key="item.id"
-              :value="item.id"
+              :key="item.cutomerCode"
+              :value="item.cutomerCode"
             >
               {{ item.cutomerName }}
             </a-select-option>
@@ -42,7 +42,7 @@
             <a-select-option
               v-for="item in priceData"
               :key="item.productCode"
-              :value="item.id"
+              :value="item.productCode"
             >
               {{ item.productName }}
             </a-select-option>
@@ -192,16 +192,14 @@ export default {
               ...this.form,
               channelCustomerName: this.$getArrOnceData(
                 this.form.channelCustomerCode,
-                this.data
+                this.data,
+                "cutomerCode"
               ).cutomerName,
               productName: this.$getArrOnceData(
                 this.form.productCode,
-                this.priceData
-              ).productName,
-              productCode: this.$getArrOnceData(
-                this.form.productCode,
-                this.priceData
-              ).productCode
+                this.priceData,
+                "productCode"
+              ).productName
             };
           } else {
             newFrom = { ...this.form };

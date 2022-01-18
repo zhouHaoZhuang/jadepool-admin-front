@@ -1,4 +1,4 @@
-// import { hasAuthority } from "@/utils/authority-utils";
+import { hasPermissionMenu, setAsyncRouteMenu } from "@/utils/permission";
 import { loginIgnore } from "@/router/index";
 import NProgress from "nprogress";
 
@@ -37,24 +37,46 @@ const loginGuard = (to, from, next, options) => {
 };
 
 /**
- * 权限守卫
+ * 权限守卫--只负责检测本地是否有权限数据
+ * 同时获取下用户信息更新本地数据
+ * @param to
+ * @param form
+ * @param next
+ * @param options
+ */
+const permsGuard = async (to, from, next, options) => {
+  const { store, message, router } = options;
+  const perms = store.state.user.perms;
+  if (!loginIgnore.includes(to) && perms.length === 0) {
+    // 获取用户信息
+    await store.dispatch("user/getUserInfo");
+    // 获取权限数据
+    // await store.dispatch("user/getUserPerms");
+    // 设置动态路由
+    // const perms = store.state.user.perms;
+    // setAsyncRouteMenu(perms, router, store);
+  }
+  next();
+};
+
+/**
+ * 权限守卫--负责具体的权限菜单跳转控制
+ * vuex中存储一下当前路由的$route的meta信息
  * @param to
  * @param form
  * @param next
  * @param options
  */
 const authorityGuard = (to, from, next, options) => {
-  // console.log(options);
-  // const { store, message } = options;
-  // const permissions = store.getters["account/permissions"];
-  // const roles = store.getters["account/roles"];
-  // if (!hasAuthority(to, permissions, roles)) {
-  //   message.warning(`对不起，您无权访问页面: ${to.fullPath}，请联系管理员`);
-  //   next({ path: "/403" });
-  //   // NProgress.done()
-  // } else {
-  //   next();
+  const { store, message, router } = options;
+  const perms = store.state.user.perms;
+  // if (!loginIgnore.includes(to) && !hasPermissionMenu(to, perms, router)) {
+  //   message.warning(`对不起，您无权访问页面，请联系管理员`);
+  //   next({ path: "/login" });
+  //   NProgress.done();
   // }
+  // 存储一下当前路由的$route的meta信息
+  store.commit("setting/setRouteMeta", to.meta.perm);
   next();
 };
 
@@ -103,6 +125,12 @@ const progressDone = () => {
 };
 
 export default {
-  beforeEach: [progressStart, loginGuard, authorityGuard, redirectGuard],
+  beforeEach: [
+    progressStart,
+    loginGuard,
+    permsGuard,
+    authorityGuard,
+    redirectGuard
+  ],
   afterEach: [progressDone]
 };

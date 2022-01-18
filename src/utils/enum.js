@@ -45,3 +45,9 @@ export const orderStatus = {
   '5': '交易完成',
   '-3': '服务器创建异常',
 }
+// 权限管理-权限单选map
+export const systemAdminMapEnum = {
+  MENU: "一级菜单",
+  DATA: "二级菜单",
+  BUTTON: "三级菜单"
+};

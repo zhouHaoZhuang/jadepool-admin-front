@@ -6,7 +6,8 @@ const user = {
   namespaced: true,
   state: {
     token: "",
-    userInfo: {}
+    userInfo: {},
+    perms: []
   },
 
   mutations: {
@@ -15,6 +16,9 @@ const user = {
     },
     SET_USERINFO: (state, userInfo) => {
       state.userInfo = { ...userInfo };
+    },
+    SET_PERMS: (state, perms) => {
+      state.perms = [...perms];
     }
   },
 
@@ -28,6 +32,7 @@ const user = {
           data
         })
           .then(res => {
+            dispatch("getUserPerms");
             const token = res.data.token;
             commit("SET_TOKEN", token);
             dispatch("getUserInfo");
@@ -60,6 +65,22 @@ const user = {
       });
       authenticationClient.getCurrentUser().then(user => {
         commit("SET_USERINFO", user);
+      });
+    },
+    // 登录后获取当前用户的权限数据
+    getUserPerms({ commit, state }) {
+      return new Promise((resolve, reject) => {
+        request({
+          url: `/user/listAuthorizedResources`,
+          method: "get"
+        })
+          .then(res => {
+            commit("SET_PERMS", res.data.list);
+            resolve();
+          })
+          .catch(error => {
+            reject(error);
+          });
       });
     },
     //修改密码
