@@ -51,7 +51,7 @@
         </div>
         <div class="item">
           <div class="label">所在区域：</div>
-          <div class="value">{{ data.ecsBaseInfoResDto.region }}</div>
+          <div class="value">{{ data.ecsBaseInfoResDto.regionId }}</div>
         </div>
         <div class="item">
           <div class="label">操作系统：</div>
