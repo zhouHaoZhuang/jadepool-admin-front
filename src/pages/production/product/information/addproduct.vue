@@ -22,14 +22,15 @@
         >
           <a-input v-model="form.productCode" />
         </a-form-model-item> -->
-        <a-form-model-item label="供应商" prop="supplierName">
+        <a-form-model-item label="供应商" prop="supplierCode">
           <a-select
-            v-model="form.supplierName"
-            placeholder="please select your zone"
+            label-in-value
+            v-model="form.supplierCode"
+            @change="onChange"
           >
             <a-select-option
               v-for="v in supplierNameList"
-              :value="v.supplierName"
+              :value="v.supplierCode"
               :key="v.id"
             >
               {{ v.supplierName }}
@@ -43,9 +44,7 @@
           <a-input v-model="form.supplierProductType" />
         </a-form-model-item>
         <a-form-model-item label="默认采购账号" prop="defaultPurchaseAccount">
-          <a-select
-            v-model="form.defaultPurchaseAccount"
-          >
+          <a-select v-model="form.defaultPurchaseAccount">
             <a-select-option
               v-for="v in purchase"
               :value="v.accountCode"
@@ -76,44 +75,45 @@ export default {
     return {
       labelCol: { span: 6 },
       wrapperCol: { span: 18 },
-      other: "",
+      other: '',
       form: {
-        productName: "", //产品名称
-        defaultPurchaseAccount: "", //默认采购账号
-        productCode: "", //产品CODE
-        supplierName: "", //供应商
-        supplierProductCode: "", //供应商产品CODE
-        supplierProductType: "", //供应商产品Type
-        pm: "", //产品经理
-        remark: "", //备注
+        productName: '', //产品名称
+        defaultPurchaseAccount: '', //默认采购账号
+        productCode: '', //产品CODE
+        supplierCode: '', //供应商CODE
+        supplierName: '', //供应商
+        supplierProductCode: '', //供应商产品CODE
+        supplierProductType: '', //供应商产品Type
+        pm: '', //产品经理
+        remark: '', //备注
       },
       rules: {
         productName: [
           {
             required: true,
-            message: "输入值不能为空",
-            trigger: "blur",
+            message: '输入值不能为空',
+            trigger: 'blur',
           },
         ],
         defaultPurchaseAccount: [
           {
             required: true,
-            message: "输入值不能为空",
-            trigger: "blur",
+            message: '输入值不能为空',
+            trigger: 'blur',
           },
         ],
         productCode: [
           {
             required: true,
-            message: "输入值不能为空",
-            trigger: "blur",
+            message: '输入值不能为空',
+            trigger: 'blur',
           },
         ],
-        supplierName: [
+        supplierCode: [
           {
             required: true,
-            message: "输入值不能为空",
-            trigger: "blur",
+            message: '输入值不能为空',
+            trigger: 'blur',
           },
         ],
       },
@@ -124,11 +124,11 @@ export default {
   },
   activated() {
     // 此处需要获取供应商列表
-    this.$store.dispatch("provider/getList").then((res) => {
+    this.$store.dispatch('provider/getList').then((res) => {
       this.supplierNameList = res.data.list;
     });
     // 此处需要获取默认采购账号列表
-    this.$store.dispatch("purchase/getList").then((val) => {
+    this.$store.dispatch('purchase/getList').then((val) => {
       // console.log(val.data.list);
       this.purchase = val.data.list;
     });
@@ -136,29 +136,35 @@ export default {
   methods: {
     // 提交
     onSubmit() {
-      console.log(this.form);
+      this.form.supplierCode = this.form.supplierCode.key;
+      // console.log(this.form);
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
-          this.$store.dispatch("pool/addList", this.form).then((val) => {
+          this.$store.dispatch('pool/addList', this.form).then((val) => {
             console.log(val);
-            this.$message.success("提交成功");
+            this.$message.success('提交成功');
             this.$router.back();
             this.resetForm();
           });
         }
       });
     },
+    onChange(val) {
+      this.form.supplierName = val.label;
+      // console.log(val);
+      // this.form.supplierCode = val.key;
+    },
     // 重置表单数据
     resetForm() {
       this.$refs.ruleForm.clearValidate();
       this.form = {
-        productName: "",
-        productCode: "",
-        supplierName: "",
-        supplierProductCode: "",
-        supplierProductType: "",
-        pm: "",
-        remark: "",
+        productName: '',
+        productCode: '',
+        supplierName: '',
+        supplierProductCode: '',
+        supplierProductType: '',
+        pm: '',
+        remark: '',
       };
     },
   },
