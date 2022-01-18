@@ -8,6 +8,7 @@ import order from "./order";
 import financialOrder from "./financialOrder";
 import instance from "./instance";
 import purchase from "./purchase";
+import system from "./system";
 
 export default {
   user,
@@ -19,5 +20,6 @@ export default {
   order,
   purchase,
   financialOrder,
-  instance
+  instance,
+  system
 };

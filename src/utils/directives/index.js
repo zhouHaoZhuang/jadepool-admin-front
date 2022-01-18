@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import store from "@/store";
 
 function findInput(el) {
   if (el.nodeName === 'INPUT') {
@@ -110,3 +111,54 @@ export const numberEvolution = Vue.directive('number-evolution', {
     })
   }
 })
+
+/*
+ * role-input 输入框限制只能输入英文字母、数字、下划线 _、横线 -
+ * 在需要控制输入的输入框上使用 v-role-input
+ */
+export const roleInput = Vue.directive("role-input", {
+  inserted: function(el) {
+    el = findInput(el);
+    if (!el) return;
+    el.addEventListener("keyup", function() {
+      const newVal = el.value.replace(/[^a-zA-Z0-9_-]/g, "");
+      el.value = newVal;
+      el.dispatchEvent(new Event("input"));
+    });
+    el.addEventListener("blur", function() {
+      const newVal = el.value.replace(/[^a-zA-Z0-9_-]/g, "");
+      el.value = newVal;
+      el.dispatchEvent(new Event("input"));
+    });
+  }
+});
+
+/**
+ * 按钮权限控制指令
+ * 可传递单个权限或对个权限-并且必须拥有所传递的权限，如果传递了多个，有一个没满足，还是没权限（全部匹配）
+ * v-permission=''  或  v-permission='[]'
+ * 多个权限的话，只需要任意一个权限符合即可正常展示（任一匹配）
+ * v-permission.or=''  或  v-permission.or='[]'
+ */
+export const permission = Vue.directive("permission", {
+  inserted: function(el, binding) {
+    // 得到指令的绑定值，此值为js计算完成后的值,当前为需要的权限
+    const { value, modifiers } = binding;
+    const perms = store.state.user.perms;
+    const routeMetaPrem = store.state.setting.routeMetaPrem;
+    const routePermActions = perms.find(
+      ele => ele.code.replace(":*", "") === routeMetaPrem
+    ).actions;
+    // console.log(el, value, modifiers, perms, routeMetaPrem);
+    console.log(value, routePermActions);
+    // 如果是所有权限的话，直接放行，*代表所有权限
+    // 不是所有权限则继续进行判断
+    if (
+      routePermActions.indexOf("*") === -1 &&
+      routePermActions.indexOf(value) === -1
+    ) {
+      //如果没有权限则直接删除此节点
+      // el.parentNode && el.parentNode.removeChild(el);
+    }
+  }
+});
