@@ -1,28 +1,28 @@
-import Vue from 'vue'
+import Vue from "vue";
 import store from "@/store";
 
 function findInput(el) {
-  if (el.nodeName === 'INPUT') {
-    return el
-  } else if (el.nodeName === 'DIV') {
-    return findInputRe(el)
+  if (el.nodeName === "INPUT") {
+    return el;
+  } else if (el.nodeName === "DIV") {
+    return findInputRe(el);
   }
-  const childrenArray = [...el.children]
-  const inputIndex = childrenArray.findIndex(item => item.nodeName === 'INPUT')
+  const childrenArray = [...el.children];
+  const inputIndex = childrenArray.findIndex(item => item.nodeName === "INPUT");
   if (inputIndex > -1) {
-    return childrenArray[inputIndex]
+    return childrenArray[inputIndex];
   }
   // 简单处理下，如果还有无法适配的输入框，再处理
-  return findInput(childrenArray[0])
+  return findInput(childrenArray[0]);
 }
 function findInputRe(el) {
   for (const k of [...el.children]) {
-    const arr = [...k.children]
-    const inputIndex = arr.findIndex(item => item.nodeName === 'INPUT')
+    const arr = [...k.children];
+    const inputIndex = arr.findIndex(item => item.nodeName === "INPUT");
     if (inputIndex > -1) {
-      return arr[inputIndex]
+      return arr[inputIndex];
     } else {
-      findInputRe(k)
+      findInputRe(k);
     }
   }
 }
@@ -33,26 +33,26 @@ function findInputRe(el) {
  * 可以传数值,设置禁用的秒数 例: v-isclick="2000" (毫秒)
  * 防止用户提交时多次点击按钮,导致事件重复触发
  */
-export const isclick = Vue.directive('isclick', {
+export const isclick = Vue.directive("isclick", {
   inserted(el, binding) {
-    el.addEventListener('click', () => {
+    el.addEventListener("click", () => {
       if (!el.disabled) {
-        el.disabled = true
+        el.disabled = true;
         setTimeout(() => {
-          el.disabled = false
-        }, binding.value || 200)
+          el.disabled = false;
+        }, binding.value || 200);
       }
-    })
+    });
   }
-})
+});
 
-const hasOwnProperty = Object.prototype.hasOwnProperty
+const hasOwnProperty = Object.prototype.hasOwnProperty;
 function hasOwn(obj, key) {
-  return hasOwnProperty.call(obj, key)
+  return hasOwnProperty.call(obj, key);
 }
-const _toString = Object.prototype.toString
+const _toString = Object.prototype.toString;
 function isPlainObject(obj) {
-  return _toString.call(obj).slice(8, -1)
+  return _toString.call(obj).slice(8, -1);
 }
 /*
  * number 输入框限制只能输入数字
@@ -63,54 +63,61 @@ function isPlainObject(obj) {
  *  v-number-evolution="{ value: 0, min: 0, max: 10 }"
  *  输入框的默认值最好是undefined
  */
-export const numberEvolution = Vue.directive('number-evolution', {
+export const numberEvolution = Vue.directive("number-evolution", {
   inserted: function(el, { value = 0 }) {
-    el = findInput(el)
-    if (!el) return
-    let val = value
-    if (isPlainObject(value) === 'Object') {
-      val = value.value || 0
+    el = findInput(el);
+    if (!el) return;
+    let val = value;
+    if (isPlainObject(value) === "Object") {
+      val = value.value || 0;
     } else {
-      val = value
+      val = value;
     }
-    var RegStr = val === 0 ? `^[\\+\\-]?\\d+\\d{0,0}` : `^[\\+\\-]?\\d+\\.?\\d{0,${val}}`
-    el.addEventListener('keyup', function() {
-      console.log('键盘抬起1', el.value)
-      const inpValArr = el.value.match(new RegExp(RegStr, 'g'))
-      console.log('键盘抬起2', inpValArr)
-      const inpVal = inpValArr && Array.isArray(inpValArr) ? inpValArr[inpValArr.length - 1] : ''
-      el.value = inpVal
-      el.dispatchEvent(new Event('input'))
-    })
-    el.addEventListener('blur', function() {
-      const inpValArr = el.value.match(new RegExp(RegStr, 'g'))
-      let inpVal = inpValArr && Array.isArray(inpValArr) ? inpValArr[inpValArr.length - 1] : ''
-      if (isPlainObject(value) === 'Object') {
+    var RegStr =
+      val === 0 ? `^[\\+\\-]?\\d+\\d{0,0}` : `^[\\+\\-]?\\d+\\.?\\d{0,${val}}`;
+    el.addEventListener("keyup", function() {
+      console.log("键盘抬起1", el.value);
+      const inpValArr = el.value.match(new RegExp(RegStr, "g"));
+      console.log("键盘抬起2", inpValArr);
+      const inpVal =
+        inpValArr && Array.isArray(inpValArr)
+          ? inpValArr[inpValArr.length - 1]
+          : "";
+      el.value = inpVal;
+      el.dispatchEvent(new Event("input"));
+    });
+    el.addEventListener("blur", function() {
+      const inpValArr = el.value.match(new RegExp(RegStr, "g"));
+      let inpVal =
+        inpValArr && Array.isArray(inpValArr)
+          ? inpValArr[inpValArr.length - 1]
+          : "";
+      if (isPlainObject(value) === "Object") {
         if (Array.isArray(inpValArr)) {
-          inpVal = Math.abs(inpVal)
+          inpVal = Math.abs(inpVal);
           // const max = Object.keys(binding.modifiers)[0]
           // const min = Object.keys(binding.modifiers)[0]
-          console.log('当前的最大值是', value.max)
-          console.log('当前的最小值是', value)
-          if (hasOwn(value, 'max')) {
-            const max = value.max
-            inpVal = inpVal > max ? max : inpVal
+          console.log("当前的最大值是", value.max);
+          console.log("当前的最小值是", value);
+          if (hasOwn(value, "max")) {
+            const max = value.max;
+            inpVal = inpVal > max ? max : inpVal;
           }
-          if (hasOwn(value, 'min')) {
-            const min = value.min
-            inpVal = inpVal < min ? min : inpVal
+          if (hasOwn(value, "min")) {
+            const min = value.min;
+            inpVal = inpVal < min ? min : inpVal;
           }
-          if (value.type === 'price' && inpVal === 0) {
-            inpVal = 1
+          if (value.type === "price" && inpVal === 0) {
+            inpVal = 1;
           }
         }
       }
 
-      el.value = inpVal
-      el.dispatchEvent(new Event('input'))
-    })
+      el.value = inpVal;
+      el.dispatchEvent(new Event("input"));
+    });
   }
-})
+});
 
 /*
  * role-input 输入框限制只能输入英文字母、数字、下划线 _、横线 -
@@ -146,9 +153,11 @@ export const permission = Vue.directive("permission", {
     const { value, modifiers } = binding;
     const perms = store.state.user.perms;
     const routeMetaPrem = store.state.setting.routeMetaPrem;
-    const routePermActions = perms.find(
+    const routePermObj = perms.find(
       ele => ele.code.replace(":*", "") === routeMetaPrem
-    ).actions;
+    );
+    const routePermActions =
+      routePermObj !== undefined ? routePermObj.actions : "";
     // console.log(el, value, modifiers, perms, routeMetaPrem);
     console.log(value, routePermActions);
     // 如果是所有权限的话，直接放行，*代表所有权限
