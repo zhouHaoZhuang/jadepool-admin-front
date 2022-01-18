@@ -95,11 +95,11 @@
         </div>
         <div class="item">
           <div class="label">内存：</div>
-          <div class="value">{{ data.memory }}M</div>
+          <div class="value">{{ data.memory }}G</div>
         </div>
         <div class="item">
           <div class="label">带宽：</div>
-          <div class="value">{{ data.internetMaxBandwidthOut }}Mbps</div>
+          <div class="value">{{ data.internetMaxBandwidthOut }}M</div>
         </div>
         <div class="item">
           <div class="label">数据磁盘：</div>
@@ -115,7 +115,7 @@
       <div class="bot-content">
         <div class="item">
           <div class="label">购买时间:</div>
-          <div class="value">{{ data.creationTime }}</div>
+          <div class="value">{{ data.creationTime | formatDate }}</div>
         </div>
         <!-- <div class="item">
           <div class="label">购买时长:</div>
@@ -123,12 +123,12 @@
         </div> -->
         <div class="item">
           <div class="label">到期时间：</div>
-          <div class="value">{{ data.expiredTime }}</div>
+          <div class="value">{{ data.expiredTime | formatDate }}</div>
         </div>
         <div class="item">
           <div class="label">续费方式：</div>
           <div class="value">
-            {{ data.autoRenew == 1 ? '自动续费' : '未设置自动续费' }}
+            {{ data.autoRenew == 1 ? "自动续费" : "未设置自动续费" }}
           </div>
         </div>
         <!-- <div class="item">
@@ -149,13 +149,17 @@
           rowKey="orderNo"
           :pagination="false"
         >
-          <a slot="name" slot-scope="text">{{ text }}</a>
-          <div slot="config" slot-scope="text">
-            CPU: {{ text.cpu }}核 内存: {{ text.memory }}M 数据磁盘:
-            {{ text.dataDiskSize }}G 带宽:
-            {{ text.internetMaxBandwidthOut }}Mbps
+          <span slot="tradeType" slot-scope="text">
+            {{ tradeTypeEnum[text] }}
+          </span>
+          <div slot="ecsPrice" slot-scope="text, record">
+            CPU: {{ record.ecsPrice.cpu }}核 内存: {{ record.ecsPrice.memory }}G
+            数据磁盘: {{ record.ecsPrice.dataDiskSize }}G 带宽:
+            {{ record.ecsPrice.internetMaxBandwidthOut }}M
           </div>
-          <a slot="select" slot-scope="text" @click="select(text)">查看</a>
+          <div slot="select" slot-scope="text">
+            <a-button type="link" @click="select(text)">查看</a-button>
+          </div>
         </a-table>
       </div>
     </div>
@@ -174,65 +178,66 @@
 </template>
 
 <script>
+import { tradeTypeEnum } from "@/utils/enum";
 export default {
   data() {
     return {
+      tradeTypeEnum,
       columns: [
         {
-          title: '订单标号',
-          dataIndex: 'orderNo',
+          title: "订单标号",
+          dataIndex: "orderNo"
         },
         {
-          title: '类型',
-          dataIndex: 'tradeType',
+          title: "类型",
+          dataIndex: "tradeType",
+          scopedSlots: { customRender: "tradeType" }
         },
         {
-          title: '时间',
-          dataIndex: 'saleTime',
+          title: "时间",
+          dataIndex: "salTime"
         },
         {
-          title: '订单金额',
-          dataIndex: 'actualAmount',
+          title: "订单金额",
+          dataIndex: "actualAmount"
         },
         {
-          title: '配置信息',
-          dataIndex: 'config',
-          scopedSlots: { customRender: 'config' },
+          title: "配置信息",
+          dataIndex: "ecsPrice",
+          scopedSlots: { customRender: "ecsPrice" }
         },
         {
-          title: '查看',
-          dataIndex: 'id',
-          scopedSlots: { customRender: 'select' },
-        },
+          title: "查看",
+          dataIndex: "id",
+          fixed: "right",
+          scopedSlots: { customRender: "select" }
+        }
       ],
       columnss: [
         {
-          title: '编号',
-          dataIndex: 'id',
+          title: "编号",
+          dataIndex: "id"
         },
         {
-          title: '操作',
-          dataIndex: 'age',
+          title: "操作",
+          dataIndex: "age"
         },
         {
-          title: '操作人',
-          dataIndex: '',
+          title: "操作人",
+          dataIndex: ""
         },
         {
-          title: '时间',
-          dataIndex: '',
+          title: "时间",
+          dataIndex: ""
         },
         {
-          title: '详情',
-          dataIndex: '',
-        },
+          title: "详情",
+          dataIndex: ""
+        }
       ],
       data: null,
-      orderInfo: [],
+      orderInfo: []
     };
-  },
-  created() {
-    this.getListas();
   },
   activated() {
     this.getListas();
@@ -240,25 +245,23 @@ export default {
   methods: {
     //获取
     getListas() {
-      // console.log(this.$route.query.id);
       this.$store
-        .dispatch('instance/getListas', { id: this.$route.query.id })
-        .then((res) => {
+        .dispatch("instance/getListas", { id: this.$route.query.id })
+        .then(res => {
           this.data = { ...res.data };
           this.orderInfo = res.data.orderInfoReDtoList;
           this.orderInfo[0].config = res.data;
         });
     },
     select(id) {
-      console.log(id);
       this.$router.push({
-        path: '/finance/index/orderinfo',
+        path: "/finance/index/orderinfo",
         query: {
-          id,
-        },
+          id
+        }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
