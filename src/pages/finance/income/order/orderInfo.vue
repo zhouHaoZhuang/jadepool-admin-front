@@ -10,7 +10,7 @@
         </li>
         <li>
           <span>订单类型:</span>
-          <span>{{ orderInfo.tradeType === 1 ? "新购" : "销售" }} </span>
+          <span>{{ orderInfo.tradeType === 1 ? '新购' : '销售' }} </span>
         </li>
         <li>
           <span>创建时间:</span>
@@ -18,9 +18,7 @@
         </li>
         <li>
           <span>状态:</span>
-          <span
-            >{{ orderStatus[orderInfo.tradeStatus]}}</span
-          >
+          <span>{{ orderStatus[orderInfo.tradeStatus] }}</span>
         </li>
         <li>
           <span>支付时间:</span>
@@ -46,22 +44,17 @@
           :scroll="{ x: 1300 }"
         >
           <a slot="name" slot-scope="text">{{ text }}</a>
-          <div slot="tradeType" slot-scope="v">
-            <span v-if="v === 1">新购</span>
-            <span v-if="v === 5">升配</span>
-            <span v-if="v === 10">降配</span>
-            <span v-if="v === 15">续费</span>
-            <span v-if="v === 20">退费</span>
+          <div slot="tradeType" slot-scope="text">
+            {{ feeReduction[text] }}
           </div>
-          <div slot="ecsPrice" slot-scope="v">
-            <div>CPU：{{ v.cpu }}</div
-            ><div>内存：{{ v.memory }}</div
-            ><div>磁盘：{{ v.dataDiskSize }}</div
-            ><div>带宽：{{ v.internetMaxBandwidthOut }}</div
-            ><div>防御：{{ "20G" }}</div
-            ><div>操作系统：{{ v.osName }}</div
-            >
-            <div>所在区：{{ v.zoneId }}</div>
+          <div slot="ecsPrice" slot-scope="text">
+            <div>CPU：{{ text.cpu }}</div>
+            <div>内存：{{ text.memory }}</div>
+            <div>磁盘：{{ text.dataDiskSize }}</div>
+            <div>带宽：{{ text.internetMaxBandwidthOut }}</div>
+            <div>防御：{{ '20G' }}</div>
+            <div>操作系统：{{ text.osName }}</div>
+            <div>所在区：{{ text.zoneId }}</div>
           </div>
         </a-table>
       </div>
@@ -72,11 +65,11 @@
       <ul>
         <li>
           <span>渠道商ID:</span>
-          <span>{{data[0].cutomerCode}}</span>
+          <span>{{ data[0].cutomerCode }}</span>
         </li>
         <li>
           <span>企业ID:</span>
-          <span>{{data[0].corporationCode}}</span>
+          <span>{{ data[0].corporationCode }}</span>
         </li>
 
         <!-- <li>
@@ -101,75 +94,76 @@
 </template>
 
 <script>
-import { orderStatus } from "@/utils/enum.js";
+import { orderStatus, feeReduction } from '@/utils/enum.js';
 
 export default {
   data() {
     return {
       orderStatus,
+      feeReduction,
       orderInfo: null,
       data: [],
       columns: [
         {
-          title: "产品名称",
-          dataIndex: "productName",
-          key: "productName",
-          width: 100
+          title: '产品名称',
+          dataIndex: 'productName',
+          key: 'productName',
+          width: 100,
         },
         {
-          title: "类型",
-          dataIndex: "tradeType",
-          key: "tradeType",
-          scopedSlots: { customRender: "tradeType" }
+          title: '类型',
+          dataIndex: 'tradeType',
+          key: 'tradeType',
+          scopedSlots: { customRender: 'tradeType' },
         },
         {
-          title: "配置信息",
-          dataIndex: "ecsPrice",
-          key: "ecsPrice",
-          scopedSlots: { customRender: "ecsPrice" }
+          title: '配置信息',
+          dataIndex: 'ecsPrice',
+          key: 'ecsPrice',
+          scopedSlots: { customRender: 'ecsPrice' },
         },
         {
-          title: "数量",
-          dataIndex: "ecsPrice.amount",
-          key: "ecsPrice.amount"
+          title: '数量',
+          dataIndex: 'ecsPrice.amount',
+          key: 'ecsPrice.amount',
+        },
+        // {
+        //   title: "付费方式",
+        //   dataIndex: "ecsPrice.chargeModel",
+        //   key: "ecsPrice.chargeModel"
+        // },
+        {
+          title: '原价',
+          dataIndex: 'originAmount',
+          key: 'originAmount',
         },
         {
-          title: "付费方式",
-          dataIndex: "ecsPrice.chargeModel",
-          key: "ecsPrice.chargeModel"
+          title: '订单金额',
+          dataIndex: 'actualAmount',
+          key: 'actualAmount',
         },
         {
-          title: "原价",
-          dataIndex: "originAmount",
-          key: "originAmount"
+          title: '推广优惠',
+          key: 'discountAmount',
+          dataIndex: 'discountAmount',
         },
         {
-          title: "订单金额",
-          dataIndex: "actualAmount",
-          key: "actualAmount"
+          title: '代金券抵扣',
+          key: 'discountRate',
+          dataIndex: 'discountRate',
         },
-        {
-          title: "推广优惠",  
-          key: "discountAmount",
-          dataIndex: "discountAmount"
-        },
-        {
-          title: "代金券抵扣",
-          key: "discountRate",
-          dataIndex: "discountRate"
-        },
-        {
-          title: "现金实付",
-          key: "cash",
-          dataIndex: "cash"
-        }
-      ]
+        // {
+        //   title: "现金实付",
+        //   key: "cash",
+        //   dataIndex: "cash"
+        // }
+      ],
     };
   },
   activated() {
     let id = this.$route.query.id;
     // console.log(id);
-    this.$store.dispatch("financialOrder/getOne", id).then(res => {
+    this.$store.dispatch('financialOrder/getOne', id).then((res) => {
       // console.log(res);
       let dataDisk = res.data.ecsPrice.dataDisk;
       let dataDiskSize = 0;
@@ -183,7 +177,7 @@ export default {
       this.orderInfo = res.data;
       this.data = [res.data];
     });
-  }
+  },
 };
 </script>
 
