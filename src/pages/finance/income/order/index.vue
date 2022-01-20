@@ -176,12 +176,12 @@ export default {
           width: 100,
           scopedSlots: { customRender: 'tradeStatus' },
         },
-        {
-          title: '现金支付',
-          dataIndex: 'cashPly',
-          key: 'cashPly',
-          width: 100,
-        },
+        // {
+        //   title: '现金支付',
+        //   dataIndex: 'cashPly',
+        //   key: 'cashPly',
+        //   width: 100,
+        // },
         {
           title: '折扣率',
           dataIndex: 'discountRate',
