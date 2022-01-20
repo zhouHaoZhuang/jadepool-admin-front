@@ -51,7 +51,7 @@
         </div>
         <div class="item">
           <div class="label">所在区域：</div>
-          <div class="value">{{ data.ecsBaseInfoResDto.regionId }}</div>
+          <div class="value">{{ data.ecsBaseInfoResDto.region }}</div>
         </div>
         <div class="item">
           <div class="label">操作系统：</div>
@@ -71,7 +71,7 @@
         </div> -->
         <div class="item">
           <div class="label">运行状态：</div>
-          <div class="value">{{ runningStatusEnum[data.status] }}</div>
+          <div class="value">{{ data.statusCn }}</div>
         </div>
         <!-- <div class="item">
           <div class="label">操作状态：</div>
