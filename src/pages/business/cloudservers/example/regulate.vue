@@ -95,7 +95,7 @@
         </div>
         <div class="item">
           <div class="label">内存：</div>
-          <div class="value">{{ data.memory }}G</div>
+          <div class="value">{{ data.memory }}M</div>
         </div>
         <div class="item">
           <div class="label">带宽：</div>
