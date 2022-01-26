@@ -8,21 +8,17 @@
         :label-col="labelCol"
         :wrapper-col="wrapperCol"
       >
-        <a-form-model-item
-          ref="productName"
-          label="供应商"
-          prop="productName"
-        >
+        <a-form-model-item ref="productName" label="供应商" prop="productName">
           <span>阿里云</span>
         </a-form-model-item>
-         <a-form-model-item
+        <a-form-model-item
           ref="productName"
           label="产品代码"
           prop="productName"
         >
           <span>ddos</span>
         </a-form-model-item>
-         <a-form-model-item
+        <a-form-model-item
           ref="productName"
           label="产品类型"
           prop="productName"
@@ -71,11 +67,11 @@ export default {
         ]
       },
       loading: false,
-      purchase:[]
+      purchase: []
     };
   },
   activated() {
-     //   获取采购账号
+    //   获取采购账号
     this.$store.dispatch("purchase/getList").then(val => {
       console.log(val.data.list);
       this.purchase = val.data.list;
@@ -130,4 +126,3 @@ export default {
   }
 }
 </style>
-

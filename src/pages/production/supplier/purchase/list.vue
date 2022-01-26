@@ -25,7 +25,11 @@
             </a-select>
           </a-form-model-item>
           <a-form-model-item>
-            <a-input v-model="listQuery.search" allow-clear placeholder="搜索关键词" />
+            <a-input
+              v-model="listQuery.search"
+              allow-clear
+              placeholder="搜索关键词"
+            />
           </a-form-model-item>
           <a-form-model-item>
             <a-button type="primary" @click="search">
@@ -78,7 +82,7 @@ export default {
         },
         {
           title: "所属供应商",
-          dataIndex: "supplierAccountCode",
+          dataIndex: "supplierAccountCode"
         },
         {
           title: "账号标识",
@@ -137,7 +141,7 @@ export default {
     getList() {
       this.tableLoading = true;
       this.$getListQp("purchase/getList", this.listQuery)
-      .then(res => {
+        .then(res => {
           this.data = [...res.data.list];
           this.paginationProps.total = res.data.totalCount * 1;
         })

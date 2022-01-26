@@ -49,47 +49,47 @@ export default {
         url: "",
         contract: "",
         number: "",
-        description: "",
+        description: ""
       },
       rules: {
         supplierName: [
           {
             required: true,
             message: "请输入供应商全称",
-            trigger: "blur",
-          },
+            trigger: "blur"
+          }
         ],
         shortName: [
           {
             required: true,
             message: "请输入简称",
-            trigger: "blur",
-          },
+            trigger: "blur"
+          }
         ],
         url: [
           {
             required: true,
             message: "请输入网址",
-            trigger: "blur",
-          },
+            trigger: "blur"
+          }
         ],
         contract: [
           {
             required: true,
             message: "请输入联系人",
-            trigger: "blur",
-          },
+            trigger: "blur"
+          }
         ],
         number: [
           {
             required: true,
             pattern: /^1[3456789]\d{9}$/,
             message: "请输入正确的手机号码",
-            trigger: "blur",
-          },
-        ],
+            trigger: "blur"
+          }
+        ]
       },
-      loading: false,
+      loading: false
     };
   },
   activated() {
@@ -102,9 +102,9 @@ export default {
         this.$message.error("简称长度需要小于供应商全称长度");
         return;
       }
-      this.$refs.ruleForm.validate((valid) => {
+      this.$refs.ruleForm.validate(valid => {
         if (valid) {
-          this.$store.dispatch("provider/add", this.form).then((val) => {
+          this.$store.dispatch("provider/add", this.form).then(val => {
             console.log(val);
             this.$message.success("提交成功");
             this.$router.back();
@@ -121,10 +121,10 @@ export default {
         url: "",
         contract: "",
         number: "",
-        description: "",
+        description: ""
       };
-    },
-  },
+    }
+  }
 };
 </script>
 

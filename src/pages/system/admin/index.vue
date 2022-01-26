@@ -37,10 +37,20 @@
           </a-button>
         </span>
         <!-- 展开的行 -->
-        <div v-if="record" slot="expandedRowRender" slot-scope="record" class="actions-wrap">
+        <div
+          v-if="record"
+          slot="expandedRowRender"
+          slot-scope="record"
+          class="actions-wrap"
+        >
           <div class="title">权限操作：</div>
-          <div v-if="record.actions&&record.actions.length === 0" class="none">暂无操作</div>
-          <div v-if="record.actions&&record.actions.length > 0" class="list">
+          <div
+            v-if="record.actions && record.actions.length === 0"
+            class="none"
+          >
+            暂无操作
+          </div>
+          <div v-if="record.actions && record.actions.length > 0" class="list">
             <div
               v-for="(ele, index) in record.actions"
               :key="index"

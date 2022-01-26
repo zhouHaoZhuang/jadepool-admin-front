@@ -69,55 +69,55 @@ export default {
     return {
       labelCol: { span: 6 },
       wrapperCol: { span: 18 },
-      other: '',
+      other: "",
       form: {
-        productName: '', //产品名称
-        productCode: '', //产品CODE
-        supplierName: '', //供应商
-        supplierCode: '', //供应商CODE
-        supplierProductCode: '', //供应商产品CODE
-        supplierProductType: '', //供应商产品Type
-        pm: '', //产品经理
-        remark: '', //备注
+        productName: "", //产品名称
+        productCode: "", //产品CODE
+        supplierName: "", //供应商
+        supplierCode: "", //供应商CODE
+        supplierProductCode: "", //供应商产品CODE
+        supplierProductType: "", //供应商产品Type
+        pm: "", //产品经理
+        remark: "" //备注
       },
       rules: {
         productName: [
           {
             required: true,
-            message: '输入值不能为空',
-            trigger: 'blur',
-          },
+            message: "输入值不能为空",
+            trigger: "blur"
+          }
         ],
         productCode: [
           {
             required: true,
-            message: '输入值不能为空',
-            trigger: 'blur',
-          },
+            message: "输入值不能为空",
+            trigger: "blur"
+          }
         ],
         supplierName: [
           {
             required: true,
-            message: 'select',
-            trigger: 'change',
-          },
-        ],
+            message: "select",
+            trigger: "change"
+          }
+        ]
       },
       loading: false,
-      supplierNameList: null,
+      supplierNameList: null
     };
   },
   activated() {
     // 获取当前要修改的数据
     let id = this.$route.query.form;
-    this.$store.dispatch('pool/getOne', id).then((res) => {
+    this.$store.dispatch("pool/getOne", id).then(res => {
       this.form = res.data;
       this.form.supplierCode = {
         key: res.data.supplierCode,
-        label: res.data.supplierName,
+        label: res.data.supplierName
       };
     });
-    this.$store.dispatch('provider/getList').then((res) => {
+    this.$store.dispatch("provider/getList").then(res => {
       this.supplierNameList = res.data.list;
     });
   },
@@ -126,22 +126,22 @@ export default {
     onSubmit() {
       this.form.supplierCode = this.form.supplierCode.key;
       console.log(this.form);
-      this.$refs.ruleForm.validate((valid) => {
+      this.$refs.ruleForm.validate(valid => {
         if (valid) {
           this.$store
-            .dispatch('pool/changeList', this.form)
-            .then((res) => {
-              this.$message.success('提交成功');
+            .dispatch("pool/changeList", this.form)
+            .then(res => {
+              this.$message.success("提交成功");
               this.$router.back();
             })
-            .catch((err) => {})
+            .catch(err => {})
             .finally(() => {
               this.resetForm();
             });
         }
       });
     },
-     onChange(val) {
+    onChange(val) {
       this.form.supplierName = val.label;
       // console.log(val);
       // this.form.supplierCode = val.key;
@@ -150,16 +150,16 @@ export default {
     resetForm() {
       this.$refs.ruleForm.clearValidate();
       this.form = {
-        productName: '',
-        productCode: '',
-        supplierName: '',
-        supplierProductCode: '',
-        supplierProductType: '',
-        pm: '',
-        remark: '',
+        productName: "",
+        productCode: "",
+        supplierName: "",
+        supplierProductCode: "",
+        supplierProductType: "",
+        pm: "",
+        remark: ""
       };
-    },
-  },
+    }
+  }
 };
 </script>
 

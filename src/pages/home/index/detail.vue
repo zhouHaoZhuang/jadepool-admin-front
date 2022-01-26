@@ -45,10 +45,10 @@ export default {
     background: #ccc;
     margin: 20px 0;
   }
-  .start-title{
+  .start-title {
     margin-bottom: 10px;
   }
-  .txt{
+  .txt {
     margin: 0;
     line-height: 22px;
   }

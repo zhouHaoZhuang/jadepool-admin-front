@@ -117,64 +117,64 @@
 </template>
 
 <script>
-import { feeReduction, orderStatus } from '@/utils/enum.js';
+import { feeReduction, orderStatus } from "@/utils/enum.js";
 export default {
   data() {
     return {
-      title: 'orderNo',
+      title: "orderNo",
       feeReduction,
       orderStatus,
       // search: "",
       listQuery: {
         key: undefined,
-        search: '',
+        search: "",
         currentPage: 1,
         pageSize: 10,
         total: 0,
-        startTime: '',
-        endTime: '',
-        'qp-tradeType-eq': '',
+        startTime: "",
+        endTime: "",
+        "qp-tradeType-eq": ""
       },
       columns: [
         {
-          title: '订单编号',
-          dataIndex: 'orderNo',
-          key: 'orderNo',
-          width: 170,
+          title: "订单编号",
+          dataIndex: "orderNo",
+          key: "orderNo",
+          width: 170
         },
         {
-          title: '渠道ID',
-          dataIndex: 'cutomerCode',
-          key: 'cutomerCode',
-          width: 150,
+          title: "渠道ID",
+          dataIndex: "cutomerCode",
+          key: "cutomerCode",
+          width: 150
         },
         {
-          title: '订单类型',
-          dataIndex: 'tradeType',
-          key: 'tradeType',
-          scopedSlots: { customRender: 'tradeType' },
-          width: 150,
+          title: "订单类型",
+          dataIndex: "tradeType",
+          key: "tradeType",
+          scopedSlots: { customRender: "tradeType" },
+          width: 150
         },
         {
-          title: '原价',
-          dataIndex: 'originAmount',
-          key: 'originAmount',
-          scopedSlots: { customRender: 'originAmount' },
+          title: "原价",
+          dataIndex: "originAmount",
+          key: "originAmount",
+          scopedSlots: { customRender: "originAmount" },
+          width: 100
+        },
+        {
+          title: "成交价",
+          dataIndex: "actualAmount",
+          key: "actualAmount",
+          scopedSlots: { customRender: "actualAmount" },
+          width: 100
+        },
+        {
+          title: "状态",
+          dataIndex: "tradeStatus",
+          key: "tradeStatus",
           width: 100,
-        },
-        {
-          title: '成交价',
-          dataIndex: 'actualAmount',
-          key: 'actualAmount',
-          scopedSlots: { customRender: 'actualAmount' },
-          width: 100,
-        },
-        {
-          title: '状态',
-          dataIndex: 'tradeStatus',
-          key: 'tradeStatus',
-          width: 100,
-          scopedSlots: { customRender: 'tradeStatus' },
+          scopedSlots: { customRender: "tradeStatus" }
         },
         // {
         //   title: '现金支付',
@@ -183,38 +183,38 @@ export default {
         //   width: 100,
         // },
         {
-          title: '折扣率',
-          dataIndex: 'discountRate',
-          key: 'discountRate',
-          width: 150,
+          title: "折扣率",
+          dataIndex: "discountRate",
+          key: "discountRate",
+          width: 150
         },
         {
-          title: '创建时间',
-          dataIndex: 'createTime',
-          key: 'createTime',
+          title: "创建时间",
+          dataIndex: "createTime",
+          key: "createTime",
           width: 190,
-          scopedSlots: { customRender: 'createTime' },
+          scopedSlots: { customRender: "createTime" }
         },
 
         {
-          title: '支付时间',
-          dataIndex: 'payTime',
-          key: 'payTime',
+          title: "支付时间",
+          dataIndex: "payTime",
+          key: "payTime",
           width: 250,
-          scopedSlots: { customRender: 'payTime' },
+          scopedSlots: { customRender: "payTime" }
         },
         {
-          title: '查询',
-          fixed: 'right',
-          key: 'selects',
-          scopedSlots: { customRender: 'select' },
+          title: "查询",
+          fixed: "right",
+          key: "selects",
+          scopedSlots: { customRender: "select" }
         },
         {
-          title: '操作',
-          key: 'action',
-          fixed: 'right',
-          scopedSlots: { customRender: 'action' },
-        },
+          title: "操作",
+          key: "action",
+          fixed: "right",
+          scopedSlots: { customRender: "action" }
+        }
       ],
       dataAll: [],
       data: [],
@@ -228,13 +228,13 @@ export default {
             total / this.listQuery.pageSize
           )}  页`,
         onChange: this.changepage,
-        onShowSizeChange: this.onShowSizeChange,
+        onShowSizeChange: this.onShowSizeChange
       },
-      num: '',
+      num: "",
       startValue: null,
       endValue: null,
       endOpen: false,
-      isTime: true,
+      isTime: true
     };
   },
   activated() {
@@ -245,39 +245,39 @@ export default {
     useColumns() {
       return [
         {
-          title: '订单编号',
-          dataIndex: 'orderNo',
-          key: 'orderNo',
-          width: 170,
+          title: "订单编号",
+          dataIndex: "orderNo",
+          key: "orderNo",
+          width: 170
         },
         {
-          title: '渠道ID',
-          dataIndex: 'cutomerCode',
-          key: 'cutomerCode',
-          width: 150,
+          title: "渠道ID",
+          dataIndex: "cutomerCode",
+          key: "cutomerCode",
+          width: 150
         },
         {
-          title: '状态',
-          dataIndex: 'payStatus',
-          key: 'payStatus',
+          title: "状态",
+          dataIndex: "payStatus",
+          key: "payStatus",
           width: 100,
-          scopedSlots: { customRender: 'payStatus' },
+          scopedSlots: { customRender: "payStatus" }
         },
         {
-          title: '创建时间',
-          dataIndex: 'createTime',
-          key: 'createTime',
+          title: "创建时间",
+          dataIndex: "createTime",
+          key: "createTime",
           width: 190,
-          scopedSlots: { customRender: 'createTime' },
-        },
+          scopedSlots: { customRender: "createTime" }
+        }
       ];
-    },
+    }
   },
   methods: {
     getList() {
       this.$store
-        .dispatch('financialOrder/getList', this.listQuery)
-        .then((res) => {
+        .dispatch("financialOrder/getList", this.listQuery)
+        .then(res => {
           this.paginationProps.total = res.data.totalCount * 1;
           this.data = res.data.list;
         });
@@ -323,46 +323,44 @@ export default {
     },
     selectPool(v, i) {
       this.$router.push({
-        path: '/finance/index/orderinfo',
+        path: "/finance/index/orderinfo",
         query: {
-          id: v.id,
-        },
+          id: v.id
+        }
       });
     },
     secectClick() {
       this.listQuery.key = this.title;
-      if (this.title == 'createTime') {
+      if (this.title == "createTime") {
         this.getList();
       } else {
         // this.$getListQp(this.title, this.search, this.startValue, this.endValue);
         // let tempSearch = this.listQuery.search;
-        if (this.title == 'payStatus') {
-          if (this.listQuery.search == '支付') {
+        if (this.title == "payStatus") {
+          if (this.listQuery.search == "支付") {
             this.listQuery.search = 1;
           }
-          if (this.listQuery.search == '未支付') {
+          if (this.listQuery.search == "未支付") {
             this.listQuery.search = 0;
           }
         }
-        this.$getListQp('financialOrder/getList', this.listQuery).then(
-          (val) => {
-            // console.log(val, "时间请求结果");
-            this.paginationProps.total = val.data.totalCount * 1;
-            this.data= val.data.list;
-          }
-        );
+        this.$getListQp("financialOrder/getList", this.listQuery).then(val => {
+          // console.log(val, "时间请求结果");
+          this.paginationProps.total = val.data.totalCount * 1;
+          this.data = val.data.list;
+        });
       }
     },
     changeKey(val) {
       // console.log(val);
       this.title = val;
-      if (this.title !== 'createTime') {
+      if (this.title !== "createTime") {
         this.isTime = true;
       } else {
         this.isTime = false;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -378,7 +376,7 @@ export default {
       width: 200px;
       margin-right: 20px;
     }
-    [type='button'] {
+    [type="button"] {
       margin-left: 20px;
     }
     .zhi {
