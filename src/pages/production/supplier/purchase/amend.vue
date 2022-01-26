@@ -24,7 +24,7 @@
           <a-input v-model="form.remark" type="remark" />
         </a-form-model-item>
         <a-form-model-item label="账号配置">
-          <a-input v-model="form.keyConfig" type="keyConfig" />
+          <a-input-password v-model="form.keyConfig" type="keyConfig" />
         </a-form-model-item>
         <a-form-model-item :wrapper-col="{ span: 18, offset: 6 }">
           <a-button type="primary" @click="onSubmit" :loading="loading">
@@ -89,6 +89,7 @@ export default {
     // console.log(id);
     this.$store.dispatch("purchase/getId", id).then((res) => {
       this.form = res.data;
+      this.form.keyConfig = JSON.stringify(res.data.keyConfig);
       // console.log(res.data);
     });
     // console.log(form, "********");
@@ -97,6 +98,7 @@ export default {
     onSubmit() {
       this.$refs.ruleForm.validate((valid) => {
         console.log(this.form);
+        this.form.keyConfig = JSON.parse(this.form.keyConfig);
         if (valid) {
           this.$store.dispatch("purchase/edit", this.form).then((val) => {
             console.log(val);
