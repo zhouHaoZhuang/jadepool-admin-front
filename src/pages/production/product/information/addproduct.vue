@@ -75,60 +75,60 @@ export default {
     return {
       labelCol: { span: 6 },
       wrapperCol: { span: 18 },
-      other: '',
+      other: "",
       form: {
-        productName: '', //产品名称
-        defaultPurchaseAccount: '', //默认采购账号
-        productCode: '', //产品CODE
-        supplierCode: '', //供应商CODE
-        supplierName: '', //供应商
-        supplierProductCode: '', //供应商产品CODE
-        supplierProductType: '', //供应商产品Type
-        pm: '', //产品经理
-        remark: '', //备注
+        productName: "", //产品名称
+        defaultPurchaseAccount: "", //默认采购账号
+        productCode: "", //产品CODE
+        supplierCode: "", //供应商CODE
+        supplierName: "", //供应商
+        supplierProductCode: "", //供应商产品CODE
+        supplierProductType: "", //供应商产品Type
+        pm: "", //产品经理
+        remark: "" //备注
       },
       rules: {
         productName: [
           {
             required: true,
-            message: '输入值不能为空',
-            trigger: 'blur',
-          },
+            message: "输入值不能为空",
+            trigger: "blur"
+          }
         ],
         defaultPurchaseAccount: [
           {
             required: true,
-            message: '输入值不能为空',
-            trigger: 'blur',
-          },
+            message: "输入值不能为空",
+            trigger: "blur"
+          }
         ],
         productCode: [
           {
             required: true,
-            message: '输入值不能为空',
-            trigger: 'blur',
-          },
+            message: "输入值不能为空",
+            trigger: "blur"
+          }
         ],
         supplierCode: [
           {
             required: true,
-            message: '输入值不能为空',
-            trigger: 'blur',
-          },
-        ],
+            message: "输入值不能为空",
+            trigger: "blur"
+          }
+        ]
       },
       loading: false,
       supplierNameList: [],
-      purchase: [],
+      purchase: []
     };
   },
   activated() {
     // 此处需要获取供应商列表
-    this.$store.dispatch('provider/getList').then((res) => {
+    this.$store.dispatch("provider/getList").then(res => {
       this.supplierNameList = res.data.list;
     });
     // 此处需要获取默认采购账号列表
-    this.$store.dispatch('purchase/getList').then((val) => {
+    this.$store.dispatch("purchase/getList").then(val => {
       // console.log(val.data.list);
       this.purchase = val.data.list;
     });
@@ -138,11 +138,11 @@ export default {
     onSubmit() {
       this.form.supplierCode = this.form.supplierCode.key;
       // console.log(this.form);
-      this.$refs.ruleForm.validate((valid) => {
+      this.$refs.ruleForm.validate(valid => {
         if (valid) {
-          this.$store.dispatch('pool/addList', this.form).then((val) => {
+          this.$store.dispatch("pool/addList", this.form).then(val => {
             console.log(val);
-            this.$message.success('提交成功');
+            this.$message.success("提交成功");
             this.$router.back();
             this.resetForm();
           });
@@ -158,16 +158,16 @@ export default {
     resetForm() {
       this.$refs.ruleForm.clearValidate();
       this.form = {
-        productName: '',
-        productCode: '',
-        supplierName: '',
-        supplierProductCode: '',
-        supplierProductType: '',
-        pm: '',
-        remark: '',
+        productName: "",
+        productCode: "",
+        supplierName: "",
+        supplierProductCode: "",
+        supplierProductType: "",
+        pm: "",
+        remark: ""
       };
-    },
-  },
+    }
+  }
 };
 </script>
 

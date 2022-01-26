@@ -57,37 +57,37 @@ export default {
       form: {
         accountCode: "",
         cusomerCode: "",
-        remark: "",
+        remark: ""
       },
       rules: {
         accountCode: [
           {
             required: true,
             message: "输入值不能为空",
-            trigger: "blur",
-          },
+            trigger: "blur"
+          }
         ],
         cusomerCode: [
           {
             required: true,
             message: "输入值不能为空",
-            trigger: "blur",
-          },
-        ],
+            trigger: "blur"
+          }
+        ]
       },
       loading: false,
       cutomerList: [],
-      purchase: [],
+      purchase: []
     };
   },
   activated() {
     //   获取渠道商
-    this.$store.dispatch("channel/getList").then((val) => {
+    this.$store.dispatch("channel/getList").then(val => {
       console.log(val.data.list);
       this.cutomerList = val.data.list;
     });
     //   获取采购账号
-    this.$store.dispatch("purchase/getList").then((val) => {
+    this.$store.dispatch("purchase/getList").then(val => {
       console.log(val.data.list);
       this.purchase = val.data.list;
     });
@@ -98,17 +98,17 @@ export default {
       // if(this.form.){
 
       // };
-      this.$refs.ruleForm.validate((valid) => {
+      this.$refs.ruleForm.validate(valid => {
         // console.log(valid);
         if (valid) {
           this.$store
             .dispatch("order/addList", this.form)
-            .then((val) => {
+            .then(val => {
               this.$message.success("提交成功");
               this.$router.back();
               this.resetForm();
             })
-            .catch((err) => {
+            .catch(err => {
               this.$message.error("添加失败");
             });
         }
@@ -120,10 +120,10 @@ export default {
       this.form = {
         accountCode: "",
         cusomerCode: "",
-        remark: "",
+        remark: ""
       };
-    },
-  },
+    }
+  }
 };
 </script>
 

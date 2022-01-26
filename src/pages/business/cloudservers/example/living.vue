@@ -44,13 +44,13 @@
               :loading="tableLoading"
               :columns="columns"
               :data-source="data"
-              :rowKey="(record) => record.ecsBaseInfoResDto.ecsProductStockId"
+              :rowKey="record => record.ecsBaseInfoResDto.ecsProductStockId"
               :pagination="paginationProps"
               :scroll="{ x: 2100 }"
             >
-            <span slot="status" slot-scope="text">
-              {{ runningStatusEnum[text] }}
-            </span>
+              <span slot="status" slot-scope="text">
+                {{ runningStatusEnum[text] }}
+              </span>
               <a
                 slot="action"
                 slot-scope="text, record"
@@ -82,45 +82,45 @@ export default {
     return {
       runningStatusEnum,
       listQuery: {
-        key: 'ip',
-        search: '',
+        key: "ip",
+        search: "",
         pageNo: 1,
         pageSize: 10,
         total: 0,
-        ecsQueryReqDto: {},
+        ecsQueryReqDto: {}
       },
       columns: [
         {
-          title: '实例ID',
+          title: "实例ID",
           width: 100,
-          dataIndex: 'ecsBaseInfoResDto.ecsProductStockId',
-          fixed: 'left',
+          dataIndex: "ecsBaseInfoResDto.ecsProductStockId",
+          fixed: "left"
         },
         {
-          title: 'IP',
+          title: "IP",
           width: 100,
-          dataIndex: 'publicIp',
-          key: 'publicIp',
-          fixed: 'left',
+          dataIndex: "publicIp",
+          key: "publicIp",
+          fixed: "left"
         },
         // { title: "弹性IP", dataIndex: "intranetIp", key: "intranetIp" },
-        { title: '共享类型', dataIndex: 'shareType', key: 'shareType' },
-        { title: '区域', dataIndex: 'ecsBaseInfoResDto.region', key: 'zoneId' },
-        { title: 'CPU(核)', dataIndex: 'cpu', key: 'cpu' },
-        { title: '内存(G)', dataIndex: 'memory', key: 'memory' },
+        { title: "共享类型", dataIndex: "shareType", key: "shareType" },
+        { title: "区域", dataIndex: "ecsBaseInfoResDto.region", key: "zoneId" },
+        { title: "CPU(核)", dataIndex: "cpu", key: "cpu" },
+        { title: "内存(G)", dataIndex: "memory", key: "memory" },
         {
-          title: '磁盘(G)',
-          dataIndex: 'dataDiskSize',
+          title: "磁盘(G)",
+          dataIndex: "dataDiskSize"
         },
         {
-          title: '带宽(Mbps)',
-          dataIndex: 'internetMaxBandwidthOut',
-          key: 'internetMaxBandwidthOut',
+          title: "带宽(Mbps)",
+          dataIndex: "internetMaxBandwidthOut",
+          key: "internetMaxBandwidthOut"
         },
         {
-          title: '隶属渠道商',
-          dataIndex: 'ecsBaseInfoResDto.channelName',
-          key: 'ecsBaseInfoResDto.channelCode',
+          title: "隶属渠道商",
+          dataIndex: "ecsBaseInfoResDto.channelName",
+          key: "ecsBaseInfoResDto.channelCode"
         },
         // {
         //   title: "企业ID",
@@ -128,37 +128,37 @@ export default {
         //   key: "ecsProductOrderLogResDtoList[0].id"
         // },
         {
-          title: '实例创建时间',
-          dataIndex: 'creationTime',
-          key: 'ecsProductOrderLogResDtoList.createTime',
+          title: "实例创建时间",
+          dataIndex: "creationTime",
+          key: "ecsProductOrderLogResDtoList.createTime"
         },
         {
-          title: '实例到期时间',
-          dataIndex: 'expiredTime',
-          key: 'ecsProductOrderLogResDtoList[0].modifyTime',
+          title: "实例到期时间",
+          dataIndex: "expiredTime",
+          key: "ecsProductOrderLogResDtoList[0].modifyTime"
         },
         // { title: "实例状态", dataIndex: "", key: "" },
         {
-          title: '运行状态',
-          dataIndex: 'status',
-          key: '',
-          scopedSlots: { customRender: 'status' },
+          title: "运行状态",
+          dataIndex: "status",
+          key: "",
+          scopedSlots: { customRender: "status" }
         },
         // { title: "操作状态", dataIndex: "", key: "" },
         {
-          title: '操作',
-          key: 'operation',
-          fixed: 'right',
+          title: "操作",
+          key: "operation",
+          fixed: "right",
           width: 100,
-          scopedSlots: { customRender: 'action' },
-        },
+          scopedSlots: { customRender: "action" }
+        }
       ],
       columnsArr: [
         {
-          title: 'IP',
-          dataIndex: 'ip',
-          key: 'ip',
-        },
+          title: "IP",
+          dataIndex: "ip",
+          key: "ip"
+        }
         // { title: "区域", dataIndex: "ecsBaseInfoResDto.region", key: "zoneId" },
         // { title: "弹性IP", dataIndex: "intranetIp", key: "intranetIp" },
       ],
@@ -172,9 +172,9 @@ export default {
             total / this.listQuery.pageSize
           )} 页`,
         onChange: this.quickJump,
-        onShowSizeChange: this.onShowSizeChange,
+        onShowSizeChange: this.onShowSizeChange
       },
-      tableLoading: false,
+      tableLoading: false
     };
   },
   activated() {
@@ -192,8 +192,8 @@ export default {
     // 查询表格数据
     getList() {
       this.tableLoading = true;
-      this.$getList('instance/getList', this.listQuery)
-        .then((res) => {
+      this.$getList("instance/getList", this.listQuery)
+        .then(res => {
           // console.log(res);
           this.data = [...res.data.list];
           this.paginationProps.total = res.data.totalCount * 1;
@@ -217,11 +217,11 @@ export default {
     addChannel(record) {
       console.log(record);
       this.$router.push({
-        path: '/business/cloudservers/adds',
-        query: { id: record },
+        path: "/business/cloudservers/adds",
+        query: { id: record }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

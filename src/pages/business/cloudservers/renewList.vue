@@ -88,37 +88,37 @@ export default {
         endTime: "",
         currentPage: 1,
         pageSize: 10,
-        total: 0,
+        total: 0
       },
       data: [],
       columns: [
         {
           title: "ID",
-          dataIndex: "id",
+          dataIndex: "id"
         },
         {
           title: "用户ID",
-          dataIndex: "customerCode",
+          dataIndex: "customerCode"
         },
         {
           title: "服务器",
-          dataIndex: "outInstanceId",
+          dataIndex: "outInstanceId"
         },
         {
           title: "创建时间",
           dataIndex: "createTimeStr",
-          sorter: (a, b) => moment(a.createTimeStr) - moment(b.createTimeStr),
+          sorter: (a, b) => moment(a.createTimeStr) - moment(b.createTimeStr)
         },
         {
           title: "到期时间",
           dataIndex: "expireTimeStr",
-          sorter: (a, b) => moment(a.expireTimeStr) - moment(b.expireTimeStr),
+          sorter: (a, b) => moment(a.expireTimeStr) - moment(b.expireTimeStr)
         },
         {
           title: "执行时间",
           dataIndex: "modifyTimeStr",
-          sorter: (a, b) => moment(a.modifyTimeStr) - moment(b.modifyTimeStr),
-        },
+          sorter: (a, b) => moment(a.modifyTimeStr) - moment(b.modifyTimeStr)
+        }
         // {
         //   title: "状态",
         //   dataIndex: "runningStatus",
@@ -132,9 +132,9 @@ export default {
           `共 ${total} 条记录 第 ${this.listQuery.currentPage} / ${Math.ceil(
             total / this.listQuery.pageSize
           )} 页`,
-        onShowSizeChange: this.onShowSizeChange,
+        onShowSizeChange: this.onShowSizeChange
       },
-      tableLoading: false,
+      tableLoading: false
     };
   },
   activated() {
@@ -145,7 +145,7 @@ export default {
     getList() {
       this.tableLoading = true;
       this.$getList("instance/cloudList", this.listQuery)
-        .then((res) => {
+        .then(res => {
           this.data = [...res.data.list];
         })
         .finally(() => {
@@ -170,8 +170,8 @@ export default {
       // console.log(date, dateString);
       this.listQuery.startTime = dateString[0];
       this.listQuery.endTime = dateString[1];
-    },
-  },
+    }
+  }
 };
 </script>
 

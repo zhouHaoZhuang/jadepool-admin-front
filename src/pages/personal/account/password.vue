@@ -34,7 +34,11 @@
                   autocomplete="off"
                 ></a-input>
               </a-form-model-item>
-              <a-form-model-item has-feedback label="新密码:" prop="newPassword">
+              <a-form-model-item
+                has-feedback
+                label="新密码:"
+                prop="newPassword"
+              >
                 <a-input
                   v-model="ruleForm.newPassword"
                   type="password"
@@ -112,9 +116,7 @@ export default {
         newPassword: "",
         checkPass: ""
       },
-      form:{
-
-      },
+      form: {},
       rules: {
         password: [{ validator: validatePas, trigger: "change" }],
         pass: [{ validator: validatePass, trigger: "change" }],
@@ -129,18 +131,19 @@ export default {
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
-       console.log(valid);
-       if(valid){
-         this.$store.dispatch("user/changePassword",{
-           oldPassword:this.ruleForm.oldPassword,
-           newPassword:this.ruleForm.newPassword
-         })
-         .then(res => {
-           this.$message.success("修改成功")
-           this.new = {...res.data}
-         })
-         return false
-       }
+        console.log(valid);
+        if (valid) {
+          this.$store
+            .dispatch("user/changePassword", {
+              oldPassword: this.ruleForm.oldPassword,
+              newPassword: this.ruleForm.newPassword
+            })
+            .then(res => {
+              this.$message.success("修改成功");
+              this.new = { ...res.data };
+            });
+          return false;
+        }
       });
     },
     resetForm(formName) {

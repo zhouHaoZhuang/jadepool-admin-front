@@ -44,39 +44,39 @@ export default {
         {
           title: "渠道商ID",
           dataIndex: "cusomerCode",
-          key: "cusomerCode",
+          key: "cusomerCode"
         },
         {
           title: "渠道商简称",
           dataIndex: "cusomerName",
-          key: "cusomerName",
+          key: "cusomerName"
         },
         {
           title: "采购账号ID",
           dataIndex: "accountCode",
-          key: "accountCode",
+          key: "accountCode"
         },
         {
           title: "所属供应商",
           dataIndex: "supplier",
           key: "supplier",
-          scopedSlots: { customRender: "supplier" },
+          scopedSlots: { customRender: "supplier" }
         },
         {
           title: "账号标识",
           dataIndex: "accountTag",
           key: "accountTag",
-          scopedSlots: { customRender: "accountTag" },
+          scopedSlots: { customRender: "accountTag" }
         },
         {
           title: "供应商侧账号ID",
           dataIndex: "supplierAccountCode",
-          key: "supplierAccountCode",
+          key: "supplierAccountCode"
         },
         {
           title: "备注",
           dataIndex: "remark",
-          key: "remark",
+          key: "remark"
         },
         {
           title: "操作",
@@ -123,7 +123,7 @@ export default {
   activated() {
     // 获取订单路由列表
     this.$store.dispatch("order/getList").then(val => {
-        this.reqAfter(val)
+      this.reqAfter(val);
     });
   },
   methods: {
@@ -145,8 +145,7 @@ export default {
     addinform() {
       this.$router.push("/production/cloudServer/newOrder");
     },
-    handleMenuClick(e) {
-    },
+    handleMenuClick(e) {},
     // 分页器改变pageSize之后的回调
     onShowSizeChange(current, pageSize) {
       this.pageSize = pageSize;

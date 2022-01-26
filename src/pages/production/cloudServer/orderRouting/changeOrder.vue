@@ -55,9 +55,9 @@ export default {
       wrapperCol: { span: 18 },
       other: "",
       form: {
-        accountCode: "",    //  采购账号
-        cusomerCode: "",   //  渠道商
-        remark: ""        //  备注
+        accountCode: "", //  采购账号
+        cusomerCode: "", //  渠道商
+        remark: "" //  备注
       },
       rules: {
         cusomerCode: [

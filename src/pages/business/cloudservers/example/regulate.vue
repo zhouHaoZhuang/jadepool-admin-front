@@ -178,7 +178,7 @@
 </template>
 
 <script>
-import { tradeTypeEnum,runningStatusEnum } from "@/utils/enum";
+import { tradeTypeEnum, runningStatusEnum } from "@/utils/enum";
 export default {
   data() {
     return {

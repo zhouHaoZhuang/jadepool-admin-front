@@ -9,7 +9,11 @@
         :wrapper-col="wrapperCol"
       >
         <a-form-model-item label="所属供应商" prop="supplierCode">
-          <a-select v-model="form.supplierCode" placeholder="请选择所属供应商" @change="handleChange">
+          <a-select
+            v-model="form.supplierCode"
+            placeholder="请选择所属供应商"
+            @change="handleChange"
+          >
             <a-select-option
               v-for="item in supplierList"
               :key="item.supplierCode"
@@ -86,7 +90,7 @@ export default {
             message: "请输入账号配置",
             trigger: "blur"
           }
-        ],
+        ]
       },
       loading: false,
       listQuery: {
@@ -107,7 +111,7 @@ export default {
         this.supplierList = res.data.list;
       });
     },
-    handleChange(value,obj) {
+    handleChange(value, obj) {
       this.form.supplierAccountCode = obj.componentOptions.children[0].text.trim();
     },
     // 提交
