@@ -1,33 +1,36 @@
 <template>
   <div class="supplier-add">
     <div class="content">
-      <a-form-model
-        ref="ruleForm"
-        :model="form"
-        :rules="rules"
-        :label-col="labelCol"
-        :wrapper-col="wrapperCol"
-      >
-        <a-form-model-item label="采购账号ID" prop="accountCode">
+      <a-form-model ref="ruleForm"
+                    :model="form"
+                    :rules="rules"
+                    :label-col="labelCol"
+                    :wrapper-col="wrapperCol">
+        <a-form-model-item label="采购账号ID"
+                           prop="accountCode">
           {{ form.accountCode }}
         </a-form-model-item>
-        <a-form-model-item label="所属供应商" prop="supplierCode">
+        <a-form-model-item label="所属供应商"
+                           prop="supplierCode">
           {{ form.supplierCode }}
         </a-form-model-item>
-        <a-form-model-item label="供应商标识" prop="accountTag">
+        <!-- <a-form-model-item label="供应商标识" prop="supplierAccountCode">
+          <a-input v-model="form.supplierAccountCode" />
+        </a-form-model-item> -->
+        <a-form-model-item label="账号标识"
+                           prop="accountTag">
           <a-input v-model="form.accountTag" />
         </a-form-model-item>
-        <a-form-model-item label="账号标识" prop="supplierAccountCode">
-          <a-input v-model="form.supplierAccountCode" />
-        </a-form-model-item>
         <a-form-model-item label="描述">
-          <a-input v-model="form.remark" type="remark" />
+          <a-input v-model="form.remark" />
         </a-form-model-item>
         <a-form-model-item label="账号配置">
-          <a-input v-model="form.keyConfig" type="keyConfig" />
+          <a-input-password v-model="form.keyConfig" autoComplete="new-password" />
         </a-form-model-item>
         <a-form-model-item :wrapper-col="{ span: 18, offset: 6 }">
-          <a-button type="primary" @click="onSubmit" :loading="loading">
+          <a-button type="primary"
+                    @click="onSubmit"
+                    :loading="loading">
             提交
           </a-button>
         </a-form-model-item>
@@ -85,18 +88,20 @@ export default {
     };
   },
   activated() {
+    this.resetForm();
     let id = this.$route.query.id;
     // console.log(id);
     this.$store.dispatch("purchase/getId", id).then((res) => {
       this.form = res.data;
+      this.form.keyConfig = this.form.keyConfig ? JSON.stringify(res.data.keyConfig) : "";
       // console.log(res.data);
     });
-    // console.log(form, "********");
   },
   methods: {
     onSubmit() {
       this.$refs.ruleForm.validate((valid) => {
         console.log(this.form);
+        this.form.keyConfig = JSON.parse(this.form.keyConfig);
         if (valid) {
           this.$store.dispatch("purchase/edit", this.form).then((val) => {
             console.log(val);
