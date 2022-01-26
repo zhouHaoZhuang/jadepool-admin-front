@@ -1,18 +1,23 @@
 <template>
   <a-dropdown>
     <div class="header-avatar" style="cursor: pointer">
-      <a-avatar class="avatar" size="small" shape="circle" :src="userInfo.photo" />
+      <a-avatar
+        class="avatar"
+        size="small"
+        shape="circle"
+        :src="userInfo.photo"
+      />
       <span class="name">{{ userInfo.username }}</span>
     </div>
     <a-menu :class="['avatar-menu']" slot="overlay">
-      <a-menu-item>
+      <a-menu-item @click="handleGoUserCenter">
         <a-icon type="user" />
-        <span @click="personalCenter">个人中心</span>
+        <span>个人中心</span>
       </a-menu-item>
-      <a-menu-item>
+      <!-- <a-menu-item>
         <a-icon type="setting" />
         <span>设置</span>
-      </a-menu-item>
+      </a-menu-item> -->
       <a-menu-divider />
       <a-menu-item @click="logout">
         <a-icon style="margin-right: 8px;" type="poweroff" />
@@ -35,13 +40,15 @@ export default {
     return {};
   },
   methods: {
+    // 跳转个人中心
+    handleGoUserCenter() {
+      this.$router.push("/personal/account/information");
+    },
+    // 退出
     logout() {
       this.$store.dispatch("user/logout").then(res => {
         this.$router.push("/login");
       });
-    },
-    personalCenter() {
-      this.$router.push("/personal/account/information");
     }
   }
 };
