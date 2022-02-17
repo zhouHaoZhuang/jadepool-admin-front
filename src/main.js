@@ -15,6 +15,7 @@ import "./global.less"; // global style
 import * as Directives from "@/utils/directives/index";
 import * as Filters from "@/utils/filters/index";
 import * as utilsFun from "@/utils/index";
+import clonedeep from 'lodash.clonedeep'
 // 图片预览组件
 import preview from "vue-photo-preview";
 import "vue-photo-preview/dist/skin.css";
@@ -30,6 +31,8 @@ Vue.use(Directives);
 Vue.use(Filters);
 // 图片预览组件
 Vue.use(preview)
+// 深拷贝插件
+Vue.prototype.$clonedeep = clonedeep
 
 Vue.prototype.$getArrOnceData = utilsFun.getArrOnceData;
 Vue.prototype.$getList = utilsFun.getList;
