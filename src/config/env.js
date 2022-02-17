@@ -16,8 +16,8 @@ const domains = {
 // authing接口参数
 const authingReq = {
   dev: {
-    appId: "619c93dc69a93fbb8a1faf8c",
-    appHost: "https://resource-poor.authing.cn"
+    appId: "620e0dfc96b235290c48f824",
+    appHost: "https://yaochi.authing.cn"
   },
   test: {
     appId: "61cc12c76803e93a5f5ba9f9",
