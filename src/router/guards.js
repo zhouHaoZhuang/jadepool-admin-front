@@ -48,8 +48,8 @@ const permsGuard = async (to, from, next, options) => {
   const { store, message, router } = options;
   const perms = store.state.user.perms;
   const userInfo = store.state.user.userInfo;
-  // if (!loginIgnore.includes(to) && perms.length === 0) {
-  if (!loginIgnore.includes(to) && JSON.stringify(userInfo) === "{}") {
+  if (!loginIgnore.includes(to) && perms.length === 0) {
+    // if (!loginIgnore.includes(to) && JSON.stringify(userInfo) === "{}") {
     // 获取用户信息
     await store.dispatch("user/getUserInfo");
     // 获取权限数据

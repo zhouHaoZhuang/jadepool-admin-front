@@ -28,9 +28,10 @@ request.interceptors.request.use(async config => {
   // 多个请求地址兼容
   // form，新的服务接口请求地址
   if (config.formService) {
+    const authingId = store.state.user.userInfo.id;
     config.baseURL = env.FORM_BASE_URL;
     config.headers.system = "fs";
-    config.headers["authing-id"] = store.state.user.userInfo.id;
+    config.headers["authing-id"] = authingId;
     config.headers.domain = getDomainUrl();
   }
   config.cancelToken = axiosSource.token;

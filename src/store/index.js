@@ -6,7 +6,7 @@ import getters from "./getters";
 
 Vue.use(Vuex);
 // 配置需要持久化的模块
-const PERSIST_PATHS = ["account", "setting", "user.token"];
+const PERSIST_PATHS = ["account", "setting", "user.token", "user.userInfo"];
 const store = new Vuex.Store({
   modules,
   getters,
