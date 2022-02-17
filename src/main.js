@@ -15,6 +15,9 @@ import "./global.less"; // global style
 import * as Directives from "@/utils/directives/index";
 import * as Filters from "@/utils/filters/index";
 import * as utilsFun from "@/utils/index";
+// 图片预览组件
+import preview from "vue-photo-preview";
+import "vue-photo-preview/dist/skin.css";
 
 const router = initRouter(store.state.setting.asyncRoutes);
 const i18n = initI18n("CN", "US");
@@ -25,6 +28,8 @@ Vue.use(Viser);
 Vue.use(Plugins);
 Vue.use(Directives);
 Vue.use(Filters);
+// 图片预览组件
+Vue.use(preview)
 
 Vue.prototype.$getArrOnceData = utilsFun.getArrOnceData;
 Vue.prototype.$getList = utilsFun.getList;
