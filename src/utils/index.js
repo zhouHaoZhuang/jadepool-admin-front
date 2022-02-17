@@ -93,8 +93,7 @@ export function getBase64Str(base64, type) {
 // 将网络地址图片转换为base64
 export const imgUrlToBase64 = imgUrl => {
   let image = new Image();
-  // image.setAttribute("crossOrigin", "anonymous"); //解决跨域问题
-  image.crossOrigin = "anonymous";
+  image.crossOrigin = "anonymous"; //解决跨域问题
   image.src = imgUrl;
   return new Promise(resolve => {
     image.onload = function() {
