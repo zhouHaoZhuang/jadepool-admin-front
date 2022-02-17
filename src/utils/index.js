@@ -1,4 +1,5 @@
 import store from "@/store";
+import env from "@/config/env";
 // 根据id返回数组中对应id的对象---挂载全局 $getArrOnceData
 export const getArrOnceData = (id, arr, key) => {
   console.log(
@@ -61,4 +62,67 @@ export const getList = (request, listQuery) => {
         reject(err);
       });
   });
+};
+
+// 压缩图片
+export function base64ToFile(base64, filename) {
+  var arr = base64.split(",");
+  var mime = arr[0].match(/:(.*?);/)[1];
+  var bstr = atob(arr[1]);
+  var n = bstr.length;
+  var u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  const file = new File([u8arr], filename, { type: mime });
+  Object.assign(file, { uid: file.lastModified });
+  return file;
+}
+
+// 获取并返回图片base64字符串对象
+export function getBase64Str(base64, type) {
+  const fileContents = base64;
+  const index = type.indexOf("/");
+  const fileSuffix = type.substring(index + 1);
+  return {
+    fileContents,
+    fileSuffix
+  };
+}
+
+// 将网络地址图片转换为base64
+export const imgUrlToBase64 = imgUrl => {
+  let base64Url = "";
+  let image = new Image();
+  image.setAttribute("crossOrigin", "anonymous"); //解决跨域问题
+  image.src = imgUrl;
+  image.onload = function() {
+    //image.onload为异步加载
+    let canvas = document.createElement("canvas");
+    canvas.width = image.width;
+    canvas.height = image.height;
+    let context = canvas.getContext("2d");
+    context.drawImage(image, 0, 0, image.width, image.height);
+    //这里的base64Url就是base64类型
+    //使用toDataUrl将图片转换成jpeg的格式,不要把图片压缩成png，因为压缩成png后base64的字符串可能比不转换前的长！
+    base64Url = canvas.toDataURL("image/jpeg", 1);
+  };
+  return base64Url;
+};
+// 处理浏览器地址栏地址，截取地址中段,不需要http:// or https://和com后地址
+export const getWindowUrl = url => {
+  const newUrl = url.includes("http://")
+    ? url.replace("http://", "")
+    : url.replace("https://", "");
+  const str = newUrl.substring(0, newUrl.indexOf("/"));
+  const index1 = str.lastIndexOf(".");
+  const index2 = str.lastIndexOf(".", index1 - 1);
+  const result = str.substring(index2 + 1);
+  return result;
+};
+// 根据环境返回domain地址--后端需要请求头携带浏览器地址，字段：domain
+export const getDomainUrl = () => {
+  return process.env.VUE_APP_ENV === "dev"
+    ? env.DOMAIN_URL
+    : getWindowUrl(window.location.href);
 };

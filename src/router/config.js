@@ -551,6 +551,163 @@ export const asyncRoute = [
           }
         ]
       },
+      // 工单
+      {
+        path: "/service",
+        name: "工单",
+        component: PageView,
+        meta: {
+          perm: "userinfo"
+        },
+        children: [
+          {
+            path: "workorderManage",
+            name: "工单管理",
+            meta: {
+              icon: "home",
+              perm: "userinfo"
+            },
+            component: BlankView,
+            children: [
+              {
+                path: "list",
+                name: "工单列表",
+                meta: {
+                  icon: "home",
+                  perm: "userinfo"
+                },
+                component: () => import("@/pages/service/workorderManage/list")
+              },
+              {
+                path: "myWorkor",
+                name: "我的工单",
+                meta: {
+                  icon: "home",
+                  perm: "userinfo"
+                },
+                component: () => import("@/pages/service/workorderManage/my")
+              },
+              {
+                path: "detail",
+                name: "工单信息",
+                meta: {
+                  perm: "userinfo",
+                  invisible: true,
+                  back: true
+                },
+                component: () =>
+                  import("@/pages/service/workorderManage/detail")
+              }
+              // {
+              //   path: "appraise",
+              //   name: "工单评价",
+              //   meta: {
+              //     icon: "home",
+              //     perm: "userinfo"
+              //   },
+              //   component: () =>
+              //     import("@/pages/service/workorderManage/appraise")
+              // }
+            ]
+          },
+          {
+            path: "setting",
+            name: "工单设置",
+            meta: {
+              icon: "home",
+              perm: "userinfo"
+            },
+            component: BlankView,
+            children: [
+              {
+                path: "classify",
+                name: "工单分类",
+                meta: {
+                  icon: "home",
+                  perm: "userinfo"
+                },
+                component: () => import("@/pages/service/setting/classify")
+              },
+              // {
+              //   path: "permission",
+              //   name: "工单权限设置",
+              //   meta: {
+              //     icon: "home",
+              //     perm: "userinfo"
+              //   },
+              //   component: () => import("@/pages/service/setting/permission")
+              // },
+              {
+                path: "reply",
+                name: "快捷回复模板",
+                meta: {
+                  icon: "home",
+                  perm: "userinfo"
+                },
+                component: () => import("@/pages/service/setting/reply")
+              }
+            ]
+          }
+          // {
+          //   path: "increment",
+          //   name: "增值服务",
+          //   meta: {
+          //     icon: "home",
+          //     perm: "userinfo"
+          //   },
+          //   component: BlankView,
+          //   children: [
+          //     {
+          //       path: "list",
+          //       name: "业务列表",
+          //       meta: {
+          //         icon: "home",
+          //         perm: "userinfo"
+          //       },
+          //       component: () => import("@/pages/service/increment/list")
+          //     },
+          //     {
+          //       path: "item",
+          //       name: "服务项目",
+          //       meta: {
+          //         icon: "home",
+          //         perm: "userinfo"
+          //       },
+          //       component: () => import("@/pages/service/increment/item")
+          //     },
+          //     {
+          //       path: "grade",
+          //       name: "服务等级",
+          //       meta: {
+          //         icon: "home",
+          //         perm: "userinfo"
+          //       },
+          //       component: () => import("@/pages/service/increment/grade")
+          //     }
+          //   ]
+          // },
+          // {
+          //   path: "serviceManage",
+          //   name: "服务管理",
+          //   meta: {
+          //     icon: "home",
+          //     perm: "userinfo"
+          //   },
+          //   component: BlankView,
+          //   children: [
+          //     {
+          //       path: "push",
+          //       name: "PUSH过户",
+          //       meta: {
+          //         icon: "home",
+          //         perm: "userinfo"
+          //       },
+          //       component: () => import("@/pages/service/serviceManage/push")
+          //     }
+          //   ]
+          // }
+        ]
+      },
       // 系统
       {
         path: "/system",

@@ -2,6 +2,7 @@ import axios from "axios";
 import env from "@/config/env";
 import message from "ant-design-vue/es/message";
 import store from "@/store";
+import { getDomainUrl } from "@/utils/index";
 const axiosSource = axios.CancelToken.source();
 const { AuthenticationClient } = require("authing-js-sdk");
 const authenticationClient = new AuthenticationClient({
@@ -24,6 +25,14 @@ const errorHandler = error => {
 
 // request interceptor 请求拦截
 request.interceptors.request.use(async config => {
+  // 多个请求地址兼容
+  // form，新的服务接口请求地址
+  if (config.formService) {
+    config.baseURL = env.FORM_BASE_URL;
+    config.headers.system = "fs";
+    config.headers["authing-id"] = store.state.user.userInfo.id;
+    config.headers.domain = getDomainUrl();
+  }
   config.cancelToken = axiosSource.token;
   const token = store.state.user.token;
   // 每次请求时需要判断登录状态，未登录直接跳转登录页，并且取消本次请求
