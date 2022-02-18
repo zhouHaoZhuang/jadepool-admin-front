@@ -42,6 +42,7 @@
           :data-source="data"
           rowKey="id"
           :scroll="{ x: 1300 }"
+          :pagination='false'
         >
           <a slot="name" slot-scope="text">{{ text }}</a>
           <div slot="tradeType" slot-scope="text">
@@ -53,8 +54,8 @@
             <div>磁盘：{{ text.dataDiskSize }}</div>
             <div>带宽：{{ text.internetMaxBandwidthOut }}</div>
             <div>防御：{{ "20G" }}</div>
-            <div>操作系统：{{ text.osName }}</div>
-            <div>所在区：{{ text.zoneId }}</div>
+            <!-- <div>操作系统：{{ text.osName }}</div>
+            <div>所在区：{{ text.zoneId }}</div> -->
           </div>
         </a-table>
       </div>
