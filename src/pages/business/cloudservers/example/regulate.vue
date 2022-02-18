@@ -154,7 +154,7 @@
           </span>
           <div slot="ecsPrice" slot-scope="text, record">
             CPU: {{ record.ecsPrice.cpu }}核 内存: {{ record.ecsPrice.memory }}G
-            数据磁盘: {{ record.ecsPrice.dataDiskSize }}G 带宽:
+            数据磁盘: {{ record.ecsPrice.dataDiskSizeNum }}G 带宽:
             {{ record.ecsPrice.internetMaxBandwidthOut }}M
           </div>
           <div slot="select" slot-scope="text">
@@ -251,7 +251,24 @@ export default {
         .then(res => {
           this.data = { ...res.data };
           this.orderInfo = res.data.orderInfoReDtoList;
-          this.orderInfo[0].config = res.data;
+          this.orderInfo.forEach(item => {
+            let dataDiskSizeNum = 0;
+            item.ecsPrice.dataDisk.forEach(value => {
+              dataDiskSizeNum += value.size;
+            });
+            item.ecsPrice.dataDiskSizeNum = dataDiskSizeNum;
+          });
+          console.log(this.orderInfo,'------------');
+          // this.orderInfo[0].config = res.data;
+          // let dataDisk = res.data.ecsPrice.dataDisk;
+          // let dataDiskSize = 0;
+          // if (dataDisk) {
+          //   for (let index = 0; index < dataDisk.length; index++) {
+          //     dataDiskSize += dataDisk[index].size;
+          //   }
+          //   res.data.ecsPrice.dataDiskSize = dataDiskSize;
+          // }
+          // console.log(dataDisk);
         });
     },
     select(id) {

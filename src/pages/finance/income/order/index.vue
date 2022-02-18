@@ -51,7 +51,11 @@
           style="width: 120px"
           defaultValue="0"
           v-model="listQuery['qp-tradeType-eq']"
-        >
+        ><a-select-option
+            value=""
+          >
+            订单类型
+          </a-select-option>
           <a-select-option
             :value="index"
             v-for="(item, index) in feeReduction"
@@ -73,6 +77,7 @@
           rowKey="id"
           :pagination="paginationProps"
           :scroll="{ x: 1400 }"
+          :loading="loading"
         >
           <a slot="name" slot-scope="text">{{ text }}</a>
           <div slot="originAmount" slot-scope="text">
@@ -98,7 +103,7 @@
           <div slot="tradeStatus" slot-scope="text">
             {{ orderStatus[text] }}
           </div>
-          <div slot="select" slot-scope="text">
+          <!-- <div slot="select" slot-scope="text">
             <a-button
               v-if="text.payStatus === 1"
               type="link"
@@ -109,7 +114,7 @@
             <a-button v-else type="link">
               ——————
             </a-button>
-          </div>
+          </div> -->
         </a-table>
       </div>
     </div>
@@ -146,7 +151,7 @@ export default {
           title: "渠道ID",
           dataIndex: "cutomerCode",
           key: "cutomerCode",
-          width: 150
+          width: 180
         },
         {
           title: "订单类型",
@@ -173,7 +178,7 @@ export default {
           title: "状态",
           dataIndex: "tradeStatus",
           key: "tradeStatus",
-          width: 100,
+          width: 130,
           scopedSlots: { customRender: "tradeStatus" }
         },
         // {
@@ -186,7 +191,7 @@ export default {
           title: "折扣率",
           dataIndex: "discountRate",
           key: "discountRate",
-          width: 150
+          width: 100
         },
         {
           title: "创建时间",
@@ -203,12 +208,12 @@ export default {
           width: 250,
           scopedSlots: { customRender: "payTime" }
         },
-        {
-          title: "查询",
-          fixed: "right",
-          key: "selects",
-          scopedSlots: { customRender: "select" }
-        },
+        // {
+        //   title: "查询",
+        //   fixed: "right",
+        //   key: "selects",
+        //   scopedSlots: { customRender: "select" }
+        // },
         {
           title: "操作",
           key: "action",
@@ -234,7 +239,8 @@ export default {
       startValue: null,
       endValue: null,
       endOpen: false,
-      isTime: true
+      isTime: true,
+      loading: false
     };
   },
   activated() {
@@ -275,11 +281,13 @@ export default {
   },
   methods: {
     getList() {
+      this.loading = true;
       this.$store
         .dispatch("financialOrder/getList", this.listQuery)
         .then(res => {
           this.paginationProps.total = res.data.totalCount * 1;
           this.data = res.data.list;
+          this.loading = false;
         });
     },
     changeStart(date, dateString) {
