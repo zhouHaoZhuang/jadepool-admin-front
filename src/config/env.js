@@ -1,14 +1,14 @@
 // 默认请求地址
 const baseUrl = {
-  dev: "http://rps.dev.ydidc.com",
-  test: "http://rps.test.ydidc.com",
-  prod: "http://rps.prod.ydidc.com"
+  dev: "http://ntm.ydidc.com/server",
+  test: "http://ntm.zjyundun.com/server",
+  prod: "http://ntm.zjyundun.com/server"
 };
 // form服务接口请求地址
 const formBaseUrl = {
-  dev: "http://form.dev.ydidc.com",
-  test: "http://form.test.ydidc.com",
-  prod: "http://form.prod.ydidc.com"
+  dev: "http://www.ydidc.com/server/form",
+  test: "http://www.zjyundun.com/server/form",
+  prod: "http://www.zjyundun.com/server/form"
 };
 const domains = {
   dev: "localhost"
