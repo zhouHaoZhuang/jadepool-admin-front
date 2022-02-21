@@ -116,7 +116,7 @@ export default {
   .img-bg {
     flex: 1;
     height: 500px;
-    background: url("../../assets/img/passport/login.png") no-repeat center;
+    background: url("../../assets/img/passport/login.jpg") no-repeat center;
     background-size: cover;
     margin-right: 100px;
   }
