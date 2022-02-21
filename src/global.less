@@ -33,7 +33,7 @@
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  &>li:first-child {
+  & > li:first-child {
     position: absolute;
     left: 0;
   }
@@ -50,4 +50,19 @@
   -webkit-box-orient: vertical; /*设置弹性盒模型子元素的排列方式*/
   -webkit-line-clamp: 2; /*限制文本行数*/
   overflow: hidden; /*超出隐藏*/
+}
+// 表格鼠标进入样式
+.ant-table-content {
+  .ant-table-row {
+    td {
+      transition: none;
+    }
+    &:hover {
+      background: #e6f7ff;
+    }
+  }
+}
+// 链接样式的按钮
+.ant-btn-link {
+  padding: 0;
 }
