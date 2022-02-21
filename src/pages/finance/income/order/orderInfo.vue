@@ -54,8 +54,8 @@
             <div>磁盘：{{ text.dataDiskSize }}</div>
             <div>带宽：{{ text.internetMaxBandwidthOut }}</div>
             <div>防御：{{ "20G" }}</div>
-            <!-- <div>操作系统：{{ text.osName }}</div>
-            <div>所在区：{{ text.zoneId }}</div> -->
+            <div>操作系统：{{ text.osName }}</div>
+            <div>所在区：{{ text.zoneId }}</div>
           </div>
         </a-table>
       </div>
