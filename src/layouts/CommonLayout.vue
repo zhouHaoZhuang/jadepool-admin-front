@@ -5,7 +5,7 @@
     <!-- <page-footer :link-list="footerLinks" :copyright="copyright"></page-footer> -->
     <div class="cloud-img"></div>
     <div class="footer">
-      Copyright 2021 © 浙江云盾互联网科技有限公司 浙ICP备2021017872号-1
+      Copyright 2022 © 上海言富科技有限公司 沪ICP备2021032365号
     </div>
   </div>
 </template>
