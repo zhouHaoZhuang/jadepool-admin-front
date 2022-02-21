@@ -30,7 +30,7 @@ export default {
   activated() {
     this.getDetail();
     this.getRecord();
-    // this.startTime();
+    this.startTime();
   },
   beforeDestroy() {
     this.time && clearInterval(this.time);
@@ -61,7 +61,9 @@ export default {
               replyUrl: ele.replyUrl ? ele.replyUrl.split(",") : []
             };
           });
-          this.$previewRefresh();
+          this.$nextTick(() => {
+            this.$previewRefresh();
+          });
         });
     },
     // 头部操作后的回调

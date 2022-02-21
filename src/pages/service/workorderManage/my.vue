@@ -20,7 +20,7 @@ export default {
       tabsList: [
         {
           key: 0,
-          title: "全部"
+          title: "我负责的"
         },
         {
           key: 2,

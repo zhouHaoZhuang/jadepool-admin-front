@@ -29,7 +29,7 @@ const workorder = {
     // 我的工单列表-未处理
     myWorkOrderList1({ commit, state }, data) {
       return request({
-        url: `/workOrder/queryChannelPersonOrder/untreated`,
+        url: `/workOrder/queryResourceOrder/untreated`,
         method: "post",
         data,
         formService: true
@@ -61,12 +61,11 @@ const workorder = {
         formService: true
       });
     },
-    // 获取指定工作人员列表
+    // 获取资源池指定工作人员列表
     workOrderUserList({ commit, state }) {
       return request({
-        url: `/user/queryChannelUsers`,
-        method: "get",
-        formService: true
+        url: `/systemUser`,
+        method: "get"
       });
     },
     // 移动工单+转移到云技术客服

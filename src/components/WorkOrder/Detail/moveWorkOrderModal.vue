@@ -109,9 +109,14 @@ export default {
     },
     // 获取工作人员列表
     getUserList() {
-      this.$store.dispatch("workorder/workOrderUserList").then(res => {
-        this.userList = [...res.data];
-      });
+      this.$store
+        .dispatch("workorder/workOrderUserList", {
+          currentPage: 1,
+          pageSize: 999
+        })
+        .then(res => {
+          this.userList = [...res.data.list];
+        });
     },
     // 弹窗提交
     handleOk() {
