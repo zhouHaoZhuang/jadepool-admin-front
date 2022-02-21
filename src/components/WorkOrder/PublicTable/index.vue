@@ -2,7 +2,7 @@
   <div class="public-table-container">
     <div class="public-header-wrap">
       <a-form-model layout="inline" :model="listQuery">
-        <a-form-model-item label="搜索关键字">
+        <a-form-model-item>
           <a-select
             style="width:150px"
             allowClear
@@ -17,62 +17,44 @@
             </a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item label="搜索内容">
+        <a-form-model-item>
           <a-input
             v-model="listQuery.search"
             allowClear
             placeholder="搜索关键词"
           />
         </a-form-model-item>
-        <a-form-model-item label="问题分类">
+        <a-form-model-item label="时间类型">
           <a-select
-            style="width:170px"
+            style="width:150px"
             allowClear
-            v-model="listQuery.questionCategoryCode"
-            placeholder="请选择问题分类"
+            v-model="listQuery.timeType"
+            placeholder="请选择时间类型"
           >
-            <a-select-option
-              v-for="item in typeList"
-              :key="item.code"
-              :value="item.code"
-            >
-              {{ item.name }}
-            </a-select-option>
+            <a-select-option :value="1">创建时间 </a-select-option>
+            <a-select-option :value="2">接单时间 </a-select-option>
+            <a-select-option :value="3">完成时间 </a-select-option>
           </a-select>
+        </a-form-model-item>
+        <a-form-model-item>
+          <a-range-picker
+            :show-time="{
+              hideDisabledOptions: true,
+              defaultValue: [
+                moment('00:00:00', 'HH:mm:ss'),
+                moment('11:59:59', 'HH:mm:ss')
+              ]
+            }"
+            format="YYYY-MM-DD HH:mm:ss"
+            :placeholder="['开始时间', '结束时间']"
+            @change="datePickerOnOk"
+          />
         </a-form-model-item>
         <a-form-model-item>
           <a-button type="primary" @click="search">
             查询
           </a-button>
         </a-form-model-item>
-        <div style="margin-top:10px">
-          <a-form-model-item label="时间类型">
-            <a-select
-              style="width:150px"
-              allowClear
-              v-model="listQuery.timeType"
-              placeholder="请选择时间类型"
-            >
-              <a-select-option :value="1">创建时间 </a-select-option>
-              <a-select-option :value="2">接单时间 </a-select-option>
-              <a-select-option :value="3">完成时间 </a-select-option>
-            </a-select>
-          </a-form-model-item>
-          <a-form-model-item label="按时间">
-            <a-range-picker
-              :show-time="{
-                hideDisabledOptions: true,
-                defaultValue: [
-                  moment('00:00:00', 'HH:mm:ss'),
-                  moment('11:59:59', 'HH:mm:ss')
-                ]
-              }"
-              format="YYYY-MM-DD HH:mm:ss"
-              :placeholder="['开始时间', '结束时间']"
-              @change="datePickerOnOk"
-            />
-          </a-form-model-item>
-        </div>
       </a-form-model>
     </div>
     <div class="table-content">
@@ -233,7 +215,6 @@ export default {
         onChange: this.quickJump,
         onShowSizeChange: this.onShowSizeChange
       },
-      typeList: [],
       reqObj: {
         0: "workorder/myWorkOrderList",
         1: "workorder/myWorkOrderList1",
@@ -252,7 +233,6 @@ export default {
   },
   activated() {
     this.getList();
-    this.getTypeList();
   },
   methods: {
     // 搜索
@@ -306,20 +286,10 @@ export default {
       this.$getList(req, newListQuery)
         .then(res => {
           this.data = [...res.data.list];
+          this.paginationProps.total = res.data.totalCount * 1;
         })
         .finally(() => {
           this.tableLoading = false;
-        });
-    },
-    // 查询工单分类列表
-    getTypeList() {
-      this.$store
-        .dispatch("workorder/workOrderTypeList", {
-          currentPage: 1,
-          pageSize: 999
-        })
-        .then(res => {
-          this.typeList = [...res.data.list];
         });
     },
     // 日期选择

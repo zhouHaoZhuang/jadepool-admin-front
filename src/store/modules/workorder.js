@@ -8,15 +8,6 @@ const workorder = {
 
   actions: {
     // 工单管理-----start
-    // 工单列表
-    workOrderList({ commit, state }, data) {
-      return request({
-        url: `/workOrder/queryChannelOrder`,
-        method: "post",
-        data,
-        formService: true
-      });
-    },
     // 我的工单列表-全部+已解决
     myWorkOrderList({ commit, state }, data) {
       return request({
@@ -63,11 +54,10 @@ const workorder = {
       });
     },
     // 接单
-    orderReceiving({ commit, state }, data) {
+    orderReceiving({ commit, state }, params) {
       return request({
-        url: `/workOrder/accept`,
-        method: "post",
-        data,
+        url: `/workOrder/resource/${params.workOrderNo}`,
+        method: "get",
         formService: true
       });
     },

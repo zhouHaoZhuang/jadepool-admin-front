@@ -570,15 +570,6 @@ export const asyncRoute = [
             component: BlankView,
             children: [
               {
-                path: "list",
-                name: "工单列表",
-                meta: {
-                  icon: "home",
-                  perm: "userinfo"
-                },
-                component: () => import("@/pages/service/workorderManage/list")
-              },
-              {
                 path: "myWorkor",
                 name: "我的工单",
                 meta: {
@@ -619,15 +610,6 @@ export const asyncRoute = [
             },
             component: BlankView,
             children: [
-              {
-                path: "classify",
-                name: "工单分类",
-                meta: {
-                  icon: "home",
-                  perm: "userinfo"
-                },
-                component: () => import("@/pages/service/setting/classify")
-              },
               // {
               //   path: "permission",
               //   name: "工单权限设置",

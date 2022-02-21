@@ -115,13 +115,6 @@
             </a-button>
             <a-button
               type="primary"
-              v-if="detail.status === 2"
-              @click="handleMoveCloudCustomer"
-            >
-              转移到云技术客服
-            </a-button>
-            <a-button
-              type="primary"
               v-if="detail.status !== 3"
               :loading="loading"
               @click="handleCloseWorkOrder"
@@ -138,23 +131,15 @@
       :detail="detail"
       @success="successCallBack"
     />
-    <!-- 转移到云技术客服 -->
-    <MoveCloudCustomerModal
-      v-model="moveCloudCustomerVisible"
-      :detail="detail"
-      @success="successCallBack"
-    />
   </div>
 </template>
 
 <script>
 import { workOrderStatusEnum } from "@/utils/enum";
 import MoveWorkOrderModal from "@/components/WorkOrder/Detail/moveWorkOrderModal.vue";
-import MoveCloudCustomerModal from "@/components/WorkOrder/Detail/moveCloudCustomerModal.vue";
 export default {
   components: {
-    MoveWorkOrderModal,
-    MoveCloudCustomerModal
+    MoveWorkOrderModal
   },
   props: {
     // 工单详情
@@ -168,8 +153,7 @@ export default {
       workOrderStatusEnum,
       loading: false,
       orderReceivingLoading: false,
-      moveWorkOrderVisible: false,
-      moveCloudCustomerVisible: false
+      moveWorkOrderVisible: false
     };
   },
   methods: {
@@ -201,10 +185,6 @@ export default {
     // 移动工单
     handleMoveWorkOrder() {
       this.moveWorkOrderVisible = true;
-    },
-    // 转移到云技术客服
-    handleMoveCloudCustomer() {
-      this.moveCloudCustomerVisible = true;
     },
     // 关闭工单
     handleCloseWorkOrder() {

@@ -152,6 +152,7 @@ export default {
         .dispatch("workorder/quickReplyList", this.listQuery)
         .then(res => {
           this.data = [...res.data.list];
+          this.paginationProps.total = res.data.totalCount * 1;
         })
         .finally(() => {
           this.tableLoading = false;
