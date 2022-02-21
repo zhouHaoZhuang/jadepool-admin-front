@@ -43,6 +43,14 @@ const user = {
           });
       });
     },
+    // 发送验证码
+    sendCode({ commit, state }, data) {
+      return request({
+        url: "/sms/sendSms",
+        method: "post",
+        data
+      });
+    },
     // 登出
     logout({ commit, state }) {
       return new Promise(resolve => {
