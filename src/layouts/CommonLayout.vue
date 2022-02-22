@@ -33,18 +33,20 @@ export default {
     position: absolute;
     left: 0;
     bottom: 0;
-    background: url("../assets/img/passport/login_cloud.png") no-repeat center;
-    background-size: cover;
+    // background: url("../assets/img/passport/login_cloud.png") no-repeat center;
+    // background-size: cover;
   }
   .footer {
     width: 100%;
     text-align: center;
-    color: #ccc;
-    height: 50px;
-    line-height: 50px;
+    color: #fff;
+    height: 38px;
+    line-height: 38px;
     position: absolute;
     left: 0;
     bottom: 0;
+    background: #395fbf;
+    font-size: 12px;
   }
 }
 </style>

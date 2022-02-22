@@ -3,33 +3,45 @@
     <div class="login-wrap">
       <div class="img-bg"></div>
       <div class="login">
+        <div class="tabs-wrap">
+          <div class="tabs-item">
+            账号密码登录
+          </div>
+        </div>
         <a-form-model ref="ruleForm" :model="form" :rules="rules">
           <a-form-model-item prop="username">
-            <a-input v-model="form.username" placeholder="账户">
+            <a-input v-model="form.username" placeholder="请输入账号" size="large">
               <a-icon slot="prefix" type="user" />
             </a-input>
           </a-form-model-item>
           <a-form-model-item prop="password">
-            <a-input v-model="form.password" placeholder="密码" type="password">
+            <a-input
+              v-model="form.password"
+              placeholder="请输入密码"
+              type="password"
+              size="large"
+            >
               <a-icon slot="prefix" type="lock" />
             </a-input>
           </a-form-model-item>
           <a-form-model-item class="code-wrap" prop="code">
             <a-input
               v-model="form.code"
-              style="width:230px"
+              style="width:200px"
               placeholder="输入验证码"
               v-number-evolution
               :max-length="6"
+              size="large"
             >
               <a-icon slot="prefix" type="smile" />
             </a-input>
-            <CodeBtn :phone="form.phone" />
+            <CodeBtn :phone="form.phone" size="large" />
           </a-form-model-item>
           <a-form-model-item>
             <a-button
-              style="width:100%"
+              class="login-btn"
               type="primary"
+              size="large"
               :loading="loading"
               @click="onSubmit"
             >
@@ -115,23 +127,46 @@ export default {
   }
   .img-bg {
     flex: 1;
-    height: 500px;
+    height: 400px;
     background: url("../../assets/img/passport/login.jpg") no-repeat center;
     background-size: cover;
     margin-right: 100px;
   }
   .login {
-    width: 400px;
-    height: 330px;
+    width: 410px;
+    height: 400px;
+    border-radius: 5px;
     border-radius: 4px;
-    padding: 30px 20px 40px;
-    padding-top: 50px;
+    padding: 40px;
     background: #fff;
     // position: absolute;
     // top: 50%;
     // left: 50%;
     // transform: translate(-50%, -50%);
     // z-index: 999;
+    .tabs-wrap {
+      display: flex;
+      margin-bottom: 40px;
+      .tabs-item {
+        color: #406ad3;
+        font-size: 16px;
+        line-height: 26px;
+        cursor: pointer;
+        &::after {
+          content: "";
+          display: block;
+          margin: 3px auto 0;
+          width: 90%;
+          height: 2px;
+          background: #406ad3;
+        }
+        overflow: hidden;
+      }
+    }
+    .login-btn {
+      width: 100%;
+      background: #406ad3;
+    }
   }
 }
 </style>
