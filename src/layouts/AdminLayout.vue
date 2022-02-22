@@ -1,5 +1,5 @@
 <template>
-  <a-layout :class="['admin-layout', 'beauty-scroll']">
+  <a-layout :class="['admin-layout']">
     <drawer v-if="isMobile" v-model="drawerOpen">
       <side-menu
         :theme="theme.mode"
@@ -56,7 +56,7 @@
         v-show="fixedHeader"
       ></a-layout-header>
       <a-layout-content
-        class="admin-layout-content"
+        class="admin-layout-content beauty-scroll"
         :style="`min-height: ${minHeight}px;`"
       >
         <div style="position: relative">
@@ -209,8 +209,10 @@ export default {
   }
   .admin-layout-content {
     padding: 24px 0 0;
-    /*overflow-x: hidden;*/
-    /*min-height: calc(100vh - 64px - 122px);*/
+    height: calc(100vh - 64px) !important;
+    min-height: calc(100vh - 64px) !important;
+    max-height: calc(100vh - 64px) !important;
+    overflow-y: auto;
   }
   .setting {
     background-color: @primary-color;

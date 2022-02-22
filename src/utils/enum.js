@@ -38,7 +38,8 @@ export const feeReduction = {
   25: "资源池升配",
   26: "阿里云升配",
   35: "资源池降配",
-  36: "阿里云降配"
+  36: "阿里云降配",
+  55: "服务器退订"
 };
 // 订单状态
 export const orderStatus = {
@@ -60,7 +61,8 @@ export const tradeTypeEnum = {
   25: "云服务升配",
   35: "资源池降配",
   36: "阿里云降配",
-  45: "交易关闭"
+  45: "交易关闭",
+  55: "服务器退订"
 };
 // 工单状态
 export const workOrderStatusEnum = {

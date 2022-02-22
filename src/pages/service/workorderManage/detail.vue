@@ -74,8 +74,9 @@ export default {
     startTime() {
       this.time && clearInterval(this.time);
       this.time = setInterval(() => {
-        this.getList();
-      }, 180000);
+        this.getDetail();
+        this.getRecord();
+      }, 5000);
     }
   }
 };

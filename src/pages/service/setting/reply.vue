@@ -98,6 +98,7 @@ export default {
   data() {
     return {
       listQuery: {
+        sorter: "desc",
         currentPage: 1,
         pageSize: 10,
         total: 0

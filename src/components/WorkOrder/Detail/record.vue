@@ -17,7 +17,7 @@
             <div class="info-box">
               <div :class="`top-title ${getClassName(item.identityType)}`">
                 <span v-if="item.identityType === 1">企业客户</span>
-                <span v-if="item.identityType === 2">管理员</span>
+                <span v-if="item.identityType === 2">渠道商</span>
                 <span v-if="item.identityType === 3">云盾客服</span>
                 <span v-if="item.secret === 1" class="ml10">
                   [私密回复](仅平台客服和云技术客服可见)
@@ -26,7 +26,7 @@
               <div class="info-txt">
                 {{ item.replyDetail }}
                 <a-button
-                  v-if="item.identityType === 2"
+                  v-if="item.identityType === 3"
                   class="btn-link ml10"
                   type="link"
                   @click="handleDelRecord(item)"
