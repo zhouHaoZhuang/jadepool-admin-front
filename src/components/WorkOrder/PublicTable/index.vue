@@ -281,12 +281,15 @@ export default {
         req = this.reqObj[this.tabsKey];
       }
       // 根据不同type处理不同的请求参数-status
-      const status =
+      let status =
         this.type === "list"
           ? this.tabsKey === 0
             ? undefined
             : this.tabsKey
           : undefined;
+      if (this.type !== "list") {
+        status = this.tabsKey === 3 ? 3 : undefined;
+      }
       const timeObj = this.getReq(this.listQuery.timeType, this.listQuery);
       const newListQuery = {
         ...this.listQuery,

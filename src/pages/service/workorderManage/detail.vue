@@ -32,8 +32,16 @@ export default {
     this.getRecord();
     this.startTime();
   },
-  beforeDestroy() {
-    this.time && clearInterval(this.time);
+  watch: {
+    $route: {
+      handler(newVal) {
+        if (newVal.path !== "/service/workorderManage/detail") {
+          this.time && clearInterval(this.time);
+        }
+      },
+      immediate: true,
+      deep: true
+    }
   },
   methods: {
     // 获取我的工单详情
