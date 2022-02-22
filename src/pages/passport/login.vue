@@ -1,5 +1,11 @@
 <template>
   <common-layout class="login-container">
+    <!-- 左上角logo -->
+    <div class="logo-wrap">
+      <div class="txt">南天门</div>
+      <div class="line"></div>
+      <div class="txt">ntm.slayun.com</div>
+    </div>
     <div class="login-wrap">
       <div class="img-bg"></div>
       <div class="login">
@@ -10,7 +16,11 @@
         </div>
         <a-form-model ref="ruleForm" :model="form" :rules="rules">
           <a-form-model-item prop="username">
-            <a-input v-model="form.username" placeholder="请输入账号" size="large">
+            <a-input
+              v-model="form.username"
+              placeholder="请输入账号"
+              size="large"
+            >
               <a-icon slot="prefix" type="user" />
             </a-input>
           </a-form-model-item>
@@ -117,6 +127,25 @@ export default {
 <style lang="less" scoped>
 .login-container {
   background: #406ad3;
+  position: relative;
+  .logo-wrap{
+    position: absolute;
+    top: 60px;
+    left: 100px;
+    display: flex;
+    align-items: center;
+    .txt{
+      font-size: 28px;
+      color: #fff;
+      font-weight: 500px;
+    }
+    .line{
+      width: 2px;
+      height: 35px;
+      background: #fff;
+      margin: 0 10px;
+    }
+  }
   .login-wrap {
     width: 1200px;
     height: 100vh;

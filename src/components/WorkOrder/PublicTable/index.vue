@@ -60,7 +60,7 @@
     <div class="table-content">
       <a-table
         :loading="tableLoading"
-        :columns="columns"
+        :columns="newColumns"
         :data-source="data"
         rowKey="id"
         :pagination="paginationProps"
@@ -154,15 +154,15 @@ export default {
         total: 0
       },
       tableLoading: false,
+      dynamicColumn: {
+        title: "进度",
+        dataIndex: "schedule",
+        scopedSlots: { customRender: "schedule" }
+      },
       columns: [
         {
-          title: "ID",
-          dataIndex: "id"
-        },
-        {
-          title: "进度",
-          dataIndex: "schedule",
-          scopedSlots: { customRender: "schedule" }
+          title: "工单编号",
+          dataIndex: "workOrderNo"
         },
         {
           title: "问题内容",
@@ -223,6 +223,16 @@ export default {
         4: "workorder/myWorkOrderList4"
       }
     };
+  },
+  computed: {
+    newColumns() {
+      if (this.tabsKey === 2) {
+        const newData = [...this.columns];
+        newData.splice(1, 0, this.dynamicColumn);
+        return newData;
+      }
+      return this.columns;
+    }
   },
   watch: {
     tabsKey: {
