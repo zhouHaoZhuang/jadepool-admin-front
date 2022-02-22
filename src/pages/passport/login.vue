@@ -34,7 +34,7 @@
               <a-icon slot="prefix" type="lock" />
             </a-input>
           </a-form-model-item>
-          <a-form-model-item class="code-wrap" prop="code">
+          <!-- <a-form-model-item class="code-wrap" prop="code">
             <a-input
               v-model="form.code"
               style="width:200px"
@@ -46,7 +46,7 @@
               <a-icon slot="prefix" type="smile" />
             </a-input>
             <CodeBtn :phone="form.phone" size="large" />
-          </a-form-model-item>
+          </a-form-model-item> -->
           <a-form-model-item>
             <a-button
               class="login-btn"
@@ -66,11 +66,11 @@
 
 <script>
 import CommonLayout from "@/layouts/CommonLayout";
-import CodeBtn from "@/components/CodeBtn/index";
+// import CodeBtn from "@/components/CodeBtn/index";
 
 export default {
   name: "Login",
-  components: { CommonLayout, CodeBtn },
+  components: { CommonLayout },
   data() {
     return {
       form: {
@@ -195,6 +195,7 @@ export default {
     .login-btn {
       width: 100%;
       background: #406ad3;
+      margin-top: 20px;
     }
   }
 }

@@ -77,7 +77,7 @@
             已回复
           </a-tag>
         </div>
-        <!-- 问题内容 -->
+        <!-- 问题标题 -->
         <div slot="title1" slot-scope="text, record">
           <a-button
             class="btn-link"
@@ -165,7 +165,7 @@ export default {
           dataIndex: "workOrderNo"
         },
         {
-          title: "问题内容",
+          title: "问题标题",
           dataIndex: "title",
           scopedSlots: { customRender: "title1" }
         },

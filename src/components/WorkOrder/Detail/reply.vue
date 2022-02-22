@@ -49,7 +49,12 @@
         />
       </a-form-model-item>
       <a-form-model-item :wrapper-col="{ span: 14, offset: 3 }">
-        <a-button type="primary" :loading="loading" @click="onSubmit">
+        <a-button
+          type="primary"
+          :loading="loading"
+          :disabled="detail.status === 3"
+          @click="onSubmit"
+        >
           提交
         </a-button>
       </a-form-model-item>
@@ -107,7 +112,7 @@ export default {
       this.$store
         .dispatch("workorder/quickReplyList", this.listQuery)
         .then(res => {
-          this.replyList = [...res.data.list];
+          this.replyList = [...res.data.list].filter(item => item.status === 1);
         });
     },
     // 图片上传
