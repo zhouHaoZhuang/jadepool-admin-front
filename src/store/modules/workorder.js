@@ -53,6 +53,14 @@ const workorder = {
         formService: true
       });
     },
+    // 校验资源池当前登录人员是否可以接单
+    verifyReceiving({ commit, state }, params) {
+      return request({
+        url: `/workOrder/judgeResourceAccept/${params.workOrderNo}`,
+        method: "get",
+        formService: true
+      });
+    },
     // 接单
     orderReceiving({ commit, state }, params) {
       return request({

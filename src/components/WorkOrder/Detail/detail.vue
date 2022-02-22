@@ -93,14 +93,14 @@
           <a-space>
             <a-button
               type="primary"
-              v-if="detail.status === 2 || detail.status === 3"
+              v-if="!orderReceivingDisable"
               :disabled="true"
             >
               已接单
             </a-button>
             <a-button
               type="primary"
-              v-if="detail.status === 1"
+              v-if="orderReceivingDisable"
               :loading="orderReceivingLoading"
               @click="handleOrderReceiving"
             >
@@ -148,15 +148,36 @@ export default {
       default: () => {}
     }
   },
+  watch: {
+    detail: {
+      handler(newVal) {
+        if (newVal.workOrderNo) {
+          this.verifyReceiving();
+        }
+      },
+      immediate: true
+    }
+  },
   data() {
     return {
       workOrderStatusEnum,
       loading: false,
       orderReceivingLoading: false,
-      moveWorkOrderVisible: false
+      moveWorkOrderVisible: false,
+      orderReceivingDisable: false
     };
   },
   methods: {
+    // 校验是否可以接单
+    verifyReceiving() {
+      this.$store
+        .dispatch("workorder/verifyReceiving", {
+          workOrderNo: this.detail.workOrderNo
+        })
+        .then(res => {
+          this.orderReceivingDisable = res.data;
+        });
+    },
     // 成功回调
     successCallBack() {
       this.$emit("success");
