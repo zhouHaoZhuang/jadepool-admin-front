@@ -127,7 +127,7 @@ export default {
             ...this.form,
             workOrderNo: this.detail.workOrderNo,
             status: this.detail.status,
-            receiverType: 1,
+            receiverType: 2,
             receiverUser:
               this.form.receiverUser * 1 === -1
                 ? undefined

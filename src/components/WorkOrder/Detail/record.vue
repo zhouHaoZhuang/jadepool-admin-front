@@ -26,7 +26,7 @@
               <div class="info-txt">
                 {{ item.replyDetail }}
                 <a-button
-                  v-if="item.identityType === 3"
+                  v-if="item.identityType === 3 && detail.status !== 3"
                   class="btn-link ml10"
                   type="link"
                   @click="handleDelRecord(item)"
@@ -39,7 +39,7 @@
                   v-for="ele in item.replyUrl"
                   :key="ele"
                   :src="ele"
-                  preview='1'
+                  preview="1"
                   alt=""
                 />
               </div>
@@ -59,9 +59,7 @@
             <div class="txt">
               工单由[{{ item.transferUser }}]移交, 备注:{{ item.replyDetail }}
             </div>
-            <div class="txt">
-              移交方式: 指定人员, [{{ item.receiverUser }}]
-            </div>
+            <div class="txt">移交方式: 指定人员, [{{ item.receiverUser }}]</div>
           </div>
         </div>
       </div>
@@ -76,6 +74,11 @@ export default {
     recordList: {
       type: Array,
       default: () => []
+    },
+    // 工单详情
+    detail: {
+      type: Object,
+      default: () => {}
     }
   },
   computed: {
