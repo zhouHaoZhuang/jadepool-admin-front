@@ -72,7 +72,7 @@ const workorder = {
     // 获取资源池指定工作人员列表
     workOrderUserList({ commit, state }) {
       return request({
-        url: `/systemUser`,
+        url: `/systemUser/getAllUsers`,
         method: "get"
       });
     },

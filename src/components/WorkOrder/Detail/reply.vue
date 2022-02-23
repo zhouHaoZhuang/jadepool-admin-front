@@ -52,7 +52,7 @@
         <a-button
           type="primary"
           :loading="loading"
-          :disabled="detail.status === 3"
+          :disabled="detail.status !== 2"
           @click="onSubmit"
         >
           提交
@@ -82,6 +82,7 @@ export default {
   data() {
     return {
       listQuery: {
+        sorter: "desc",
         currentPage: 1,
         pageSize: 999
       },

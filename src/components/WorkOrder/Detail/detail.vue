@@ -275,11 +275,13 @@ export default {
     display: flex;
     margin-bottom: 13px;
     .label {
+      width: 100px;
       color: #a0a2a3;
+      text-align: right;
     }
   }
   .actions {
-    width: 66.66%;
+    width: 100%;
     align-items: center;
   }
   .wait {
