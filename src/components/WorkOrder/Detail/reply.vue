@@ -143,7 +143,7 @@ export default {
           this.loading = true;
           const data = {
             ...this.form,
-            identityType: 2,
+            identityType: 3,
             workOrderNo: this.detail.workOrderNo,
             replyUrl: this.form.replyUrl.toString(),
             secret: this.form.secret.toString() * 1
