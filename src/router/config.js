@@ -546,7 +546,28 @@ export const asyncRoute = [
                   import(
                     "@/pages/production/cloudServer/orderRouting/changeOrder.vue"
                   )
-              }
+              },
+              {
+                path: "specification",
+                name: "产品规格族配置",
+                meta: {
+                  icon: "home"
+                },
+                component: () =>
+                  import("@/pages/production/cloudServer/specification/list.vue")
+              },
+              {
+                path: "newSpecification",
+                name: "新建产品规格族",
+                meta: {
+                  invisible: true, // 不显示在左侧菜单
+                  back: true // 后退
+                },
+                component: () =>
+                  import(
+                    "@/pages/production/cloudServer/specification/newSpecification.vue"
+                  )
+              },
             ]
           }
         ]
