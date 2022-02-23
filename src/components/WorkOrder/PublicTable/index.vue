@@ -99,23 +99,25 @@
           {{ text | formatDate }}
         </div>
         <!-- 工单状态 -->
-        <div slot="status" slot-scope="text, record">
-          <div v-if="record.acceptStatus === 2">
-            <a-tag color="blue">
-              转单待接单
-            </a-tag>
-          </div>
-          <div v-else>
-            <a-tag v-if="text === 1">
-              待接单
-            </a-tag>
-            <a-tag v-if="text === 2" color="blue">
-              接单处理中
-            </a-tag>
-            <a-tag v-if="text === 3" color="green">
-              处理完成
-            </a-tag>
-          </div>
+        <div slot="status" slot-scope="text">
+          <a-tag v-if="text === 1">
+            待接单
+          </a-tag>
+          <a-tag v-if="text === 2" color="blue">
+            接单处理中
+          </a-tag>
+          <a-tag v-if="text === 3" color="green">
+            处理完成
+          </a-tag>
+        </div>
+        <!-- 转单状态 -->
+        <div slot="acceptStatus" slot-scope="text">
+          <a-tag v-if="text === 1">
+            未转单
+          </a-tag>
+          <a-tag v-if="text === 2" color="blue">
+            转单待接单
+          </a-tag>
         </div>
         <div slot="action" slot-scope="text, record">
           <a-button
@@ -194,6 +196,11 @@ export default {
           title: "工单状态",
           dataIndex: "status",
           scopedSlots: { customRender: "status" }
+        },
+        {
+          title: "转单状态",
+          dataIndex: "acceptStatus",
+          scopedSlots: { customRender: "acceptStatus" }
         },
         {
           title: "接单人",

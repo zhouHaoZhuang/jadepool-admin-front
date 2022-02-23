@@ -58,12 +58,7 @@
       </div>
       <div class="item">
         <div class="label">工单状态：</div>
-        <div v-if="detail.acceptStatus === 2" class="value">
-          <a-tag color="blue">
-            转单待接单
-          </a-tag>
-        </div>
-        <div v-else class="value">
+        <div class="value">
           <a-tag v-if="detail.status === 1">
             待接单
           </a-tag>
@@ -72,6 +67,17 @@
           </a-tag>
           <a-tag v-if="detail.status === 3" color="green">
             处理完成
+          </a-tag>
+        </div>
+      </div>
+      <div class="item">
+        <div class="label">转单状态：</div>
+        <div class="value">
+          <a-tag v-if="detail.acceptStatus === 1">
+            未转单
+          </a-tag>
+          <a-tag v-if="detail.acceptStatus === 2" color="blue">
+            转单待接单
           </a-tag>
         </div>
       </div>
