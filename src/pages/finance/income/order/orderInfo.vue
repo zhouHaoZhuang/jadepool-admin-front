@@ -41,7 +41,6 @@
           :columns="columns"
           :data-source="data"
           rowKey="id"
-          :scroll="{ x: 1300 }"
           :pagination='false'
         >
           <a slot="name" slot-scope="text">{{ text }}</a>
@@ -54,8 +53,8 @@
             <div>磁盘：{{ text.dataDiskSize }}</div>
             <div>带宽：{{ text.internetMaxBandwidthOut }}</div>
             <div>防御：{{ "20G" }}</div>
-            <div>操作系统：{{ text.osName }}</div>
-            <div>所在区：{{ text.zoneId }}</div>
+            <div>镜像：{{ text.imageId }}</div>
+            <div>所在区：{{ regionDataEnum[text.regionId] }}</div>
           </div>
         </a-table>
       </div>
@@ -72,7 +71,6 @@
           <span>企业ID:</span>
           <span>{{ data[0].corporationCode }}</span>
         </li>
-
         <!-- <li>
           <span>企业名称:</span>
           <span>{{data[0].customerName}} </span>
@@ -95,13 +93,14 @@
 </template>
 
 <script>
-import { orderStatus, feeReduction } from "@/utils/enum.js";
+import { orderStatus, feeReduction,regionDataEnum } from "@/utils/enum.js";
 
 export default {
   data() {
     return {
       orderStatus,
       feeReduction,
+      regionDataEnum,
       orderInfo: null,
       data: [],
       columns: [
