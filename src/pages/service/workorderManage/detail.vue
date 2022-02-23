@@ -48,7 +48,7 @@ export default {
     getDetail() {
       this.$store
         .dispatch("workorder/workOrderDetail", {
-          queryType: 2,
+          type: 3,
           workOrderNo: this.$route.query.workOrderNo
         })
         .then(res => {
