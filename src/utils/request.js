@@ -25,7 +25,6 @@ request.interceptors.request.use(async config => {
   if (config.formService) {
     const authingId = store.state.user.userInfo.id;
     config.baseURL = env.FORM_BASE_URL;
-    // config.baseURL = '/api';
     config.headers.system = "fs";
     config.headers["authing-id"] = authingId;
     config.headers.domain = getDomainUrl();
