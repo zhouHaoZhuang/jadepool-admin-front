@@ -1,4 +1,4 @@
-const IS_PROD = ["production", "prod"].includes(process.env.NODE_ENV);
+const IS_PROD = ["prod"].includes(process.env.VUE_APP_ENV);
 
 const plugins = [
   "@babel/plugin-proposal-optional-chaining",

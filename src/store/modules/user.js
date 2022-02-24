@@ -1,6 +1,4 @@
 import request from "@/utils/request";
-const { AuthenticationClient } = require("authing-js-sdk");
-import env from "@/config/env";
 
 const user = {
   namespaced: true,
@@ -54,25 +52,26 @@ const user = {
     // 登出
     logout({ commit, state }) {
       return new Promise(resolve => {
+        commit("SET_USERINFO", {});
+        commit("SET_PERMS", []);
         commit("SET_TOKEN", "");
-        const authenticationClient = new AuthenticationClient({
-          appId: env.appId,
-          appHost: env.appHost,
-          token: state.token
-        });
-        authenticationClient.logout();
         resolve();
       });
     },
     // 获取用户信息
     getUserInfo({ commit, state }) {
-      const authenticationClient = new AuthenticationClient({
-        appId: env.appId,
-        appHost: env.appHost,
-        token: state.token
-      });
-      authenticationClient.getCurrentUser().then(user => {
-        commit("SET_USERINFO", user);
+      return new Promise((resolve, reject) => {
+        request({
+          url: "/uc/getByToken",
+          method: "get"
+        })
+          .then(res => {
+            commit("SET_USERINFO", res.data);
+            resolve(res.data);
+          })
+          .catch(error => {
+            reject(error);
+          });
       });
     },
     // 登录后获取当前用户的权限数据
