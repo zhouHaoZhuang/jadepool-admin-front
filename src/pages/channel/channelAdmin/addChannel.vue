@@ -21,7 +21,7 @@
           <a-input v-model="form.contract" />
         </a-form-model-item>
         <a-form-model-item label="电话">
-          <a-input v-model="form.number" />
+          <a-input v-model="form.number" v-number-evolution :max-length="11" />
         </a-form-model-item>
         <a-form-model-item label="描述">
           <a-input v-model="form.description" type="textarea" />

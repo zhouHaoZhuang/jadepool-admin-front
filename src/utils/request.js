@@ -26,6 +26,11 @@ const errorHandler = error => {
 // request interceptor 请求拦截
 request.interceptors.request.use(async config => {
   // 多个请求地址兼容
+  // idc地址
+  if (config.idc) {
+    config.baseURL = env.IDC_BASE_URL;
+    config.headers.system = "tenant";
+  }
   // form，新的服务接口请求地址
   if (config.formService) {
     const authingId = store.state.user.userInfo.id;

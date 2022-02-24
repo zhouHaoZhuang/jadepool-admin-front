@@ -12,14 +12,16 @@ const tenant = {
       return request({
         url: "/ccChannelCustomer",
         method: "get",
-        params
+        params,
+        idc: true
       });
     },
     // 获取详情
     getDetail({ commit, state }, data) {
       return request({
         url: `/ccChannelCustomer/${data.id}`,
-        method: "get"
+        method: "get",
+        idc: true
       });
     },
     // 编辑
@@ -27,7 +29,8 @@ const tenant = {
       return request({
         url: `/ccChannelCustomer/${data.id}`,
         method: "patch",
-        data
+        data,
+        idc: true
       });
     }
   }
