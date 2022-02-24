@@ -16,7 +16,7 @@
         <a-form-model layout="inline" :model="listQuery">
           <a-form-model-item>
             <a-button type="primary" icon="plus" @click="updatePrice('add')">
-              新建产品采购价格
+              新建渠道采购价格
             </a-button>
           </a-form-model-item>
           <a-form-model-item>

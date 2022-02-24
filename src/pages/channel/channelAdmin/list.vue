@@ -83,8 +83,8 @@ export default {
       columns: [
         {
           title: "渠道商ID",
-          dataIndex: "id",
-          key: "id",
+          dataIndex: "cutomerCode",
+          key: "cutomerCode",
           width: 260
         },
         {
