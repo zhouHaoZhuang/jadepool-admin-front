@@ -554,7 +554,9 @@ export const asyncRoute = [
                   icon: "home"
                 },
                 component: () =>
-                  import("@/pages/production/cloudServer/specification/list.vue")
+                  import(
+                    "@/pages/production/cloudServer/specification/list.vue"
+                  )
               },
               {
                 path: "newSpecification",
@@ -567,7 +569,7 @@ export const asyncRoute = [
                   import(
                     "@/pages/production/cloudServer/specification/newSpecification.vue"
                   )
-              },
+              }
             ]
           }
         ]
@@ -709,6 +711,49 @@ export const asyncRoute = [
           //     }
           //   ]
           // }
+        ]
+      },
+      // 租户 一级菜单
+      {
+        path: "/tenant",
+        name: "租户",
+        component: PageView,
+        meta: {
+          perm: "userinfo"
+        },
+        children: [
+          // 二级菜单
+          {
+            path: "index",
+            name: "租户管理",
+            meta: {
+              icon: "home",
+              perm: "userinfo"
+            },
+            component: BlankView,
+            children: [
+              // 三级菜单
+              {
+                path: "list",
+                name: "租户列表",
+                meta: {
+                  icon: "home",
+                  perm: "userinfo"
+                },
+                component: () => import("@/pages/tenant/admin/list")
+              },
+              {
+                path: "detail",
+                name: "租户详情",
+                meta: {
+                  invisible: true, // 不显示在左侧菜单
+                  back: true, // 是否需要返回标题
+                  perm: "userinfo"
+                },
+                component: () => import("@/pages/tenant/admin/detail")
+              }
+            ]
+          }
         ]
       },
       // 系统

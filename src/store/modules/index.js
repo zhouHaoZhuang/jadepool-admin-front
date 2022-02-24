@@ -11,6 +11,7 @@ import purchase from "./purchase";
 import system from "./system";
 import workorder from "./workorder";
 import specification from "./specification";
+import tenant from "./tenant";
 
 export default {
   user,
@@ -25,5 +26,6 @@ export default {
   instance,
   system,
   workorder,
-  specification
+  specification,
+  tenant
 };
