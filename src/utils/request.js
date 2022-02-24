@@ -23,7 +23,7 @@ request.interceptors.request.use(async config => {
   // 多个请求地址兼容
   // form，新的服务接口请求地址
   if (config.formService) {
-    const authingId = store.state.user.userInfo.id;
+    const authingId = store.state.user.userInfo.userCode;
     config.baseURL = env.FORM_BASE_URL;
     config.headers.system = "fs";
     config.headers["authing-id"] = authingId;

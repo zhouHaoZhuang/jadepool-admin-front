@@ -5,7 +5,7 @@
         <div class="bot-content">
           <div class="item">
             <div class="label">ID:</div>
-            <div class="value">{{ userInfo.id }}</div>
+            <div class="value">{{ userInfo.userCode }}</div>
           </div>
           <div class="item">
             <div class="label">姓名:</div>
