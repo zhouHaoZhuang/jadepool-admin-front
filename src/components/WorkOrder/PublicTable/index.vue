@@ -171,6 +171,11 @@ export default {
         dataIndex: "schedule",
         scopedSlots: { customRender: "schedule" }
       },
+      acceptStatusColumn: {
+        title: "转单状态",
+        dataIndex: "acceptStatus",
+        scopedSlots: { customRender: "acceptStatus" }
+      },
       columns: [
         {
           title: "工单编号",
@@ -199,11 +204,6 @@ export default {
           title: "工单状态",
           dataIndex: "status",
           scopedSlots: { customRender: "status" }
-        },
-        {
-          title: "转单状态",
-          dataIndex: "acceptStatus",
-          scopedSlots: { customRender: "acceptStatus" }
         },
         {
           title: "接单人",
@@ -246,6 +246,11 @@ export default {
       if (this.tabsKey === 2) {
         const newData = [...this.columns];
         newData.splice(1, 0, this.dynamicColumn);
+        return newData;
+      }
+      if (this.tabsKey === 1) {
+        const newData = [...this.columns];
+        newData.splice(6, 0, this.acceptStatusColumn);
         return newData;
       }
       return this.columns;
