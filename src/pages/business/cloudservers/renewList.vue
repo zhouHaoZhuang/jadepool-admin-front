@@ -127,7 +127,7 @@ export default {
       ],
       paginationProps: {
         showSizeChanger: true,
-        total: 1,
+        total: 0,
         showTotal: (total, range) =>
           `共 ${total} 条记录 第 ${this.listQuery.currentPage} / ${Math.ceil(
             total / this.listQuery.pageSize
@@ -147,6 +147,7 @@ export default {
       this.$getList("instance/cloudList", this.listQuery)
         .then(res => {
           this.data = [...res.data.list];
+          this.paginationProps.total = res.data.totalCount;
         })
         .finally(() => {
           this.tableLoading = false;
