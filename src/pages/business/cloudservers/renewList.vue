@@ -11,7 +11,7 @@
             placeholder="请选择"
           >
             <a-select-option
-              v-for="item in columns.slice(0, columns.length - 3)"
+              v-for="item in selectColumns"
               :key="item.dataIndex"
               :value="item.dataIndex"
             >
@@ -91,6 +91,16 @@ export default {
         total: 0
       },
       data: [],
+      selectColumns: [
+        {
+          title: "用户ID",
+          dataIndex: "customerCode"
+        },
+        {
+          title: "服务器",
+          dataIndex: "outInstanceId"
+        }
+      ],
       columns: [
         {
           title: "ID",
