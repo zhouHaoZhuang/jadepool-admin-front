@@ -1,13 +1,13 @@
 // 默认请求地址
 const baseUrl = {
-  local: "/server",
+  local: "http://ntm.ydidc.com/server",
   dev: "/server",
   test: "/server",
   prod: "/server"
 };
 // form服务接口请求地址
 const formBaseUrl = {
-  local: "/form",
+  local: "http://site.ydidc.com/server/form",
   dev: "/server/form",
   test: "/server/form",
   prod: "/server/form"
