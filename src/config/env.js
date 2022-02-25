@@ -13,7 +13,7 @@ const formBaseUrl = {
   prod: "/server/form"
 };
 const domains = {
-  local: "t946464351140401152.site.ydidc.com"
+  local: "t946471742443573248.site.ydidc.com"
 };
 
 export default {

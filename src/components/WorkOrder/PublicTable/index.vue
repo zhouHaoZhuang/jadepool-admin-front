@@ -113,10 +113,13 @@
         <!-- 转单状态 -->
         <div slot="acceptStatus" slot-scope="text">
           <a-tag v-if="text === 1">
-            未转单
+            未接单
           </a-tag>
           <a-tag v-if="text === 2" color="blue">
-            转单待接单
+            转单未接单
+          </a-tag>
+          <a-tag v-if="text === 3" color="green">
+            接单处理状态
           </a-tag>
         </div>
         <div slot="action" slot-scope="text, record">

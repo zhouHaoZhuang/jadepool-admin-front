@@ -74,10 +74,13 @@
         <div class="label">转单状态：</div>
         <div class="value">
           <a-tag v-if="detail.acceptStatus === 1">
-            未转单
+            未接单
           </a-tag>
           <a-tag v-if="detail.acceptStatus === 2" color="blue">
-            转单待接单
+            转单未接单
+          </a-tag>
+          <a-tag v-if="detail.acceptStatus === 3" color="green">
+            接单处理状态
           </a-tag>
         </div>
       </div>
