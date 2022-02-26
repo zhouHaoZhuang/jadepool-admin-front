@@ -82,7 +82,7 @@ export default {
   data() {
     return {
       listQuery: {
-        sorter: "desc",
+        sorter: "asc-sort",
         currentPage: 1,
         pageSize: 999
       },
