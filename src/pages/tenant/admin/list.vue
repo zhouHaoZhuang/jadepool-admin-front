@@ -1,6 +1,6 @@
 <template>
   <div class="tenant-list-container">
-    <div class="public-header-wrap">
+    <div class="public-header-wrap" v-show="false">
       <a-form-model ref="ruleForm" :model="listQuery" layout="inline">
         <a-form-model-item label="渠道商名称" prop="channelName">
           <a-input
@@ -43,39 +43,42 @@
         :data-source="data"
         :pagination="paginationProps"
       >
-        <div slot="name" slot-scope="text, record">
+        <div slot="name" slot-scope="text">
           <div class="wide">{{ text || "--" }}</div>
-          <div>{{ record.channelCode || "--" }}</div>
+          <!-- <div>{{ record.channelCode || "--" }}</div> -->
         </div>
         <div slot="nameTitle">
-          <div class="wide">渠道商名称</div>
-          <div class="wide">渠道商ID</div>
+          <!-- <div class="wide">渠道商名称</div> -->
+          <!-- <div class="wide">渠道商ID</div> -->
+          <div class="wide">租户ID</div>
         </div>
-        <div slot="age" slot-scope="text, record">
+        <div slot="age" slot-scope="text">
           <div>{{ text || "--" }}</div>
-          <div>{{ record.channelAdminName || "--" }}</div>
+          <!-- <div>{{ record.channelAdminName || "--" }}</div> -->
         </div>
         <div slot="ageTitle">
-          <div class="wide">用户名</div>
-          <div class="wide">姓名</div>
+          <!-- <div class="wide">用户名</div>
+          <div class="wide">姓名</div> -->
+          <div class="wide">租户名称</div>
         </div>
-        <div slot="number" slot-scope="text, record">
+        <div slot="number" slot-scope="text">
           <div>{{ text || "--" }}</div>
-          <div>{{ record.channelAdminEmail || "--" }}</div>
+          <!-- <div>{{ record.channelAdminEmail || "--" }}</div> -->
         </div>
         <div slot="numberTitle">
-          <div class="wide">手机号</div>
-          <div class="wide">邮箱</div>
+          <!-- <div class="wide">手机号</div>
+          <div class="wide">邮箱</div> -->
+          <div class="wide">注册时间</div>
         </div>
-        <div slot="status" slot-scope="text, record">
+        <div slot="status" slot-scope="text">
           <div :class="text === 1 ? 'green' : 'red'">
             {{ text === 1 ? "正常" : "冻结" }}
           </div>
-          <div>{{ record.channelRegisterTime || "--" }}</div>
+          <!-- <div>{{ record.channelRegisterTime || "--" }}</div> -->
         </div>
         <div slot="statusTitle">
           <div class="wide">租户状态</div>
-          <div class="wide">注册时间</div>
+          <!-- <div class="wide">注册时间</div> -->
         </div>
         <div slot="handleTitle">
           <div class="wide">操作</div>
@@ -95,40 +98,40 @@ export default {
       data: [],
       columns: [
         {
-          width: 20,
+          width: 20,   //租户ID
           key: "channelName",
-          dataIndex: "channelName",
+          dataIndex: "tenantId",
           slots: { title: "nameTitle" },
           scopedSlots: { customRender: "name" }
         },
         {
-          width: 20,
+          width: 20,   //租户名称
           key: "channelAdminUsername",
-          dataIndex: "channelAdminUsername",
+          dataIndex: "cutomerName",
           slots: { title: "ageTitle" },
           scopedSlots: { customRender: "age" }
         },
         {
-          width: 20,
+          width: 20,   //注册时间
           key: "channelAdminPhone",
-          dataIndex: "channelAdminPhone",
+          dataIndex: "createTime",
           slots: { title: "numberTitle" },
           scopedSlots: { customRender: "number" }
         },
         {
-          width: 20,
+          width: 20,    //租户状态
           key: "channelStatus",
-          dataIndex: "channelStatus",
+          dataIndex: "customerStatus",
           slots: { title: "statusTitle" },
           scopedSlots: { customRender: "status" }
-        },
-        {
-          width: 20,
-          key: "action",
-          dataIndex: "action",
-          slots: { title: "handleTitle" },
-          scopedSlots: { customRender: "action" }
         }
+        // {
+        //   width: 20,
+        //   key: "action",
+        //   dataIndex: "action",
+        //   slots: { title: "handleTitle" },
+        //   scopedSlots: { customRender: "action" }
+        // }
       ],
       listQuery: {
         channelName: "",
@@ -140,7 +143,7 @@ export default {
       paginationProps: {
         showQuickJumper: true,
         showSizeChanger: true,
-        total: 1,
+        total: 0,
         showTotal: (total, range) =>
           `共 ${total} 条记录 第 ${this.listQuery.currentPage} / ${Math.ceil(
             total / this.listQuery.pageSize

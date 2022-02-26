@@ -49,7 +49,7 @@
               :scroll="{ x: 2100 }"
             >
               <span slot="status" slot-scope="text">
-                {{ runningStatusEnum[text] }}
+                {{ runningStatusEnum[`${text}`] }}
               </span>
               <a
                 slot="action"

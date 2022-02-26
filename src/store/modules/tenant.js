@@ -10,7 +10,7 @@ const tenant = {
     // 获取表列,查询列表
     getList({ commit, state }, params) {
       return request({
-        url: "/ccChannelCustomer",
+        url: "/channelCustomer",
         method: "get",
         params,
         idc: true
