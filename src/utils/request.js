@@ -54,6 +54,13 @@ request.interceptors.response.use(response => {
   const errno = data.code;
   const errmsg = data.msg;
   if (errno !== "000000") {
+    // 判断是否登录失效
+    if (errno === "000001") {
+      message.warning("登录已失效，请重新登录");
+      store.dispatch("user/logout");
+      window.location.replace("/login");
+      return Promise.reject(data);
+    }
     message.warning(errmsg);
     return Promise.reject(data);
   }
