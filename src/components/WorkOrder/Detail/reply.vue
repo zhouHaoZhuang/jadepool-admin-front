@@ -52,7 +52,7 @@
         <a-button
           type="primary"
           :loading="loading"
-          :disabled="detail.status !== 2"
+          :disabled="detail.acceptChannel && detail.status !== 2"
           @click="onSubmit"
         >
           提交
