@@ -47,9 +47,9 @@
             {{ text }}
           </span>
           <div class="status" slot="customerStatus" slot-scope="text">
-            <div v-if="text === 0" class="dot"></div>
-            <div v-else class="dot dot-err"></div>
-            {{ text === 0 ? "正常" : "冻结" }}
+            <div v-if="text === 0" class="dot dot-err"></div>
+            <div v-else class="dot"></div>
+            {{ text === 1 ? "正常" : "冻结" }}
           </div>
           <span slot="createTime" slot-scope="text">
             {{ text | formatDate }}
