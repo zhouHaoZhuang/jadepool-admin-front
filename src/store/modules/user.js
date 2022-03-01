@@ -62,7 +62,7 @@ const user = {
     getUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         request({
-          url: "/uc/getByToken",
+          url: "/user/getByToken",
           method: "get"
         })
           .then(res => {
