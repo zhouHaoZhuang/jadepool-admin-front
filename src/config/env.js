@@ -1,16 +1,16 @@
 // 默认请求地址
 const baseUrl = {
-  local: "http://ntm.ydidc.com/server",
-  dev: "/server",
-  test: "/server",
-  prod: "/server"
+  local: "http://ntm.ydidc.com/rps",
+  dev: "/rps",
+  test: "/rps",
+  prod: "/rps"
 };
 // form服务接口请求地址
 const formBaseUrl = {
-  local: "http://site.ydidc.com/server/form",
-  dev: "/server/form",
-  test: "/server/form",
-  prod: "/server/form"
+  local: "http://site.ydidc.com/fs",
+  dev: "/fs",
+  test: "/fs",
+  prod: "/fs"
 };
 const domains = {
   local: "t946471742443573248.site.ydidc.com"
