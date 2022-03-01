@@ -366,15 +366,15 @@ export const asyncRoute = [
             },
             component: BlankView,
             children: [
-              {
-                path: "information",
-                name: "个人信息",
-                meta: {
-                  icon: "home"
-                },
-                component: () =>
-                  import("@/pages/personal/account/information.vue")
-              },
+              // {
+              //   path: "information",
+              //   name: "个人信息",
+              //   meta: {
+              //     icon: "home"
+              //   },
+              //   component: () =>
+              //     import("@/pages/personal/account/information.vue")
+              // },
               {
                 path: "password",
                 name: "修改密码",
