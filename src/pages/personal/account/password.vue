@@ -3,7 +3,7 @@
     <div class="enterprise-list-detail">
       <div class="tabs-content">
         <div class="bot-content">
-          <div class="item">
+          <!-- <div class="item">
             <div class="label">姓名：</div>
             <div class="value">{{ userInfo.username }}</div>
           </div>
@@ -18,7 +18,7 @@
           <div class="item">
             <div class="label">角色:</div>
             <div class="value">{{ userInfo.limit }}</div>
-          </div>
+          </div> -->
           <div class="item1">
             <a-form-model
               ref="ruleForm"
@@ -160,6 +160,7 @@ export default {
     background: #fff;
     .bot-content {
       align-items: center;
+      padding: 50px;
       .item {
         padding-left: 175px;
         width: 33.3%;
