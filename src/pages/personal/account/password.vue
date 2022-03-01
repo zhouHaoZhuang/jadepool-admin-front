@@ -22,47 +22,62 @@
           <div class="item1">
             <a-form-model
               ref="ruleForm"
-              :model="ruleForm"
+              :model="form"
               :rules="rules"
               v-bind="layout"
             >
-              <a-form-model-item has-feedback label="旧密码" prop="oldPassword">
+              <!-- <a-form-model-item has-feedback label="旧密码" prop="oldPassword">
                 <a-input
                   style="width:250px"
                   v-model="ruleForm.oldPassword"
                   type="password"
                   autocomplete="off"
                 ></a-input>
-              </a-form-model-item>
-              <a-form-model-item
-                has-feedback
-                label="新密码:"
-                prop="newPassword"
-              >
+              </a-form-model-item> -->
+              <a-form-model-item prop="phone" label="手机号码">
                 <a-input
-                  v-model="ruleForm.newPassword"
-                  type="password"
-                  autocomplete="off"
-                  style="width:250px"
+                  v-model="form.phone"
+                  addon-before="+86"
+                  style="width:360px"
+                  placeholder="11位手机号"
+                  v-number-evolution
+                  :max-length="11"
+                  size="large"
                 />
               </a-form-model-item>
-              <a-form-model-item has-feedback label="确认密码" prop="checkPass">
+              <a-form-model-item class="code-wrap" prop="code" label="验证码">
                 <a-input
-                  v-model="ruleForm.checkPass"
-                  type="password"
-                  autocomplete="off"
+                  v-model="form.code"
                   style="width:250px"
+                  placeholder="输入验证码"
+                  v-number-evolution
+                  :max-length="6"
+                  size="large"
+                />
+                <CodeBtn :phone="form.phone" codeType="1" size="large" />
+              </a-form-model-item>
+              <a-form-model-item prop="password" label="新密码">
+                <a-input-password
+                  v-model="form.password"
+                  :max-length="20"
+                  autocomplete="new-password"
+                  placeholder="6 - 20位密码，区分大小写"
+                  size="large"
+                  @keydown.native="keydown($event)"
+                />
+              </a-form-model-item>
+              <a-form-model-item prop="confirmPassword" label="确认密码">
+                <a-input-password
+                  v-model="form.confirmPassword"
+                  :max-length="20"
+                  placeholder="确认密码"
+                  size="large"
+                  @keydown.native="keydown($event)"
                 />
               </a-form-model-item>
               <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
-                <a-button type="primary" @click="submitForm('ruleForm')">
-                  确认
-                </a-button>
-                <a-button
-                  style="margin-left: 10px"
-                  @click="resetForm('ruleForm')"
-                >
-                  重置
+                <a-button type="primary" @click="handleRegister">
+                  确认修改
                 </a-button>
               </a-form-model-item>
             </a-form-model>
@@ -75,79 +90,115 @@
 
 <script>
 import { mapState } from "vuex";
+import CodeBtn from "@/components/CodeBtn/index";
+
 export default {
   computed: {
     ...mapState({
       userInfo: state => state.user.userInfo
     })
   },
+  components: { CodeBtn },
   data() {
-    let validatePas = (rule, value, callback) => {
+    const validatePass = (rule, value, callback) => {
       if (value === "") {
-        callback(new Error("请输入原密码"));
+        callback(new Error("请输入密码"));
       } else {
-        if (this.ruleForm.checkPass !== "")
-          this.$refs.ruleForm.validateField("checkPass");
-      }
-      callback();
-    };
-    let validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入新密码"));
-      } else {
-        if (this.ruleForm.checkPass !== "") {
-          this.$refs.ruleForm.validateField("checkPass");
+        if (!this.pwdReg.test(value)) {
+          callback(new Error("密码格式不正确"));
         }
         callback();
       }
     };
-    let validatePass2 = (rule, value, callback) => {
+    const validatePass2 = (rule, value, callback) => {
       if (value === "") {
-        callback(new Error("请确认输入的密码"));
-      } else if (value !== this.ruleForm.newPassword) {
-        callback(new Error("两次密码不匹配!"));
+        callback(new Error("请输入确认密码"));
+      } else if (value !== this.form.password) {
+        callback(new Error("两次密码不一致"));
       } else {
         callback();
       }
     };
     return {
-      ruleForm: {
-        oldPassword: "",
-        newPassword: "",
-        checkPass: ""
+      pwdReg: /(?=.*[0-9])(?=.*[a-z]).{6,20}/,
+      form: {
+        phone: "",
+        code: "",
+        password: "",
+        confirmPassword: ""
       },
-      form: {},
       rules: {
-        password: [{ validator: validatePas, trigger: "change" }],
-        pass: [{ validator: validatePass, trigger: "change" }],
-        checkPass: [{ validator: validatePass2, trigger: "change" }]
+        phone: [
+          {
+            required: true,
+            message: "请输入手机号",
+            trigger: ["blur", "change"]
+          }
+        ],
+        code: [
+          {
+            required: true,
+            message: "请输入验证码",
+            trigger: ["blur", "change"]
+          }
+        ],
+        password: [
+          { validator: validatePass, trigger: ["blur", "change"] },
+          {
+            required: true,
+            message: "请输入新密码",
+            trigger: ["blur", "change"]
+          }
+        ],
+        confirmPassword: [
+          { validator: validatePass2, trigger: ["blur", "change"] },
+          {
+            required: true,
+            message: "请输入确认密码",
+            trigger: ["blur", "change"]
+          }
+        ]
       },
       layout: {
         labelCol: { span: 4 },
-        wrapperCol: { span: 14 }
+        wrapperCol: { span: 5 }
       }
     };
   },
   methods: {
-    submitForm(formName) {
-      this.$refs[formName].validate(valid => {
-        console.log(valid);
+    // 禁止输入空格
+    keydown(event) {
+      if (event.keyCode == 32) {
+        event.returnValue = false;
+      }
+    },
+    // 修改密码
+    handleRegister() {
+      console.log("点击", this.form);
+      this.$refs.ruleForm.validate(valid => {
         if (valid) {
+          this.loading = true;
           this.$store
-            .dispatch("user/changePassword", {
-              oldPassword: this.ruleForm.oldPassword,
-              newPassword: this.ruleForm.newPassword
-            })
+            .dispatch("user/changePassword", this.form)
             .then(res => {
               this.$message.success("修改成功");
-              this.new = { ...res.data };
+              this.$router.push("/login");
+            })
+            .finally(() => {
+              this.loading = false;
             });
-          return false;
         }
       });
     },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
+    // 重置表单数据
+    resetForm() {
+      this.$refs.ruleForm.clearValidate();
+      this.form = {
+        phone: "",
+        code: "",
+        password: "",
+        confirmPassword: ""
+      };
     }
   }
 };

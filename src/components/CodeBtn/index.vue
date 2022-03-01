@@ -18,6 +18,10 @@ export default {
     size: {
       type: String,
       default: "default"
+    },
+    codeType: {
+      type: String,
+      default: ""
     }
   },
   data() {
@@ -45,7 +49,10 @@ export default {
       if (this.loading) return;
       this.loading = true;
       this.$store
-        .dispatch("user/sendCode", { receiver: this.phone })
+        .dispatch("user/sendCode", {
+          receiverAccount: this.phone,
+          codeType: this.codeType
+        })
         .then(res => {
           this.startTime();
         })
