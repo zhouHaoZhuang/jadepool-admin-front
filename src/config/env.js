@@ -13,7 +13,7 @@ const formBaseUrl = {
   prod: "/fs"
 };
 const domains = {
-  local: "t946471742443573248.site.ydidc.com"
+  local: "t946471742443573248.site.sailayun.com"
 };
 
 export default {
