@@ -128,7 +128,7 @@
             type="link"
             @click="handleJumpDetail(record)"
           >
-            管理
+            查看
           </a-button>
         </div>
       </a-table>
