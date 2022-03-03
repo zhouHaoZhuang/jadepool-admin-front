@@ -37,8 +37,8 @@
               <a-form-model-item prop="phone" label="手机号码">
                 <a-input
                   v-model="form.phone"
+                  style="width:260px"
                   addon-before="+86"
-                  style="width:360px"
                   placeholder="11位手机号"
                   v-number-evolution
                   :max-length="11"
@@ -48,7 +48,7 @@
               <a-form-model-item class="code-wrap" prop="code" label="验证码">
                 <a-input
                   v-model="form.code"
-                  style="width:250px"
+                  style="width:150px"
                   placeholder="输入验证码"
                   v-number-evolution
                   :max-length="6"
@@ -161,7 +161,7 @@ export default {
       },
       layout: {
         labelCol: { span: 4 },
-        wrapperCol: { span: 5 }
+        wrapperCol: { span: 8 }
       }
     };
   },
@@ -213,8 +213,6 @@ export default {
       align-items: center;
       padding: 50px;
       .item {
-        padding-left: 175px;
-        width: 33.3%;
         display: flex;
         align-items: center;
         margin-bottom: 15px;
