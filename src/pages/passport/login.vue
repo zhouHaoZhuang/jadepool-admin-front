@@ -30,6 +30,7 @@
               placeholder="请输入密码"
               type="password"
               size="large"
+              @pressEnter="onSubmit"
             >
               <a-icon slot="prefix" type="lock" />
             </a-input>
