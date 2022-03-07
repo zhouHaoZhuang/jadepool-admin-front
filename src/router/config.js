@@ -32,7 +32,7 @@ export const asyncRoute = [
     path: "/",
     name: "默认",
     component: TabsView,
-    redirect: "/dashboard",
+    redirect: "/dashboard/index/home",
     children: [
       // 首页 一级菜单
       {
@@ -755,7 +755,7 @@ export const asyncRoute = [
             ]
           }
         ]
-      },
+      }
       // 系统
       // {
       //   path: "/system",

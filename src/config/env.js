@@ -1,19 +1,19 @@
 // 默认请求地址
 const baseUrl = {
-  local: "http://ntm.ydidc.com/rps",
+  local: "http://ntm.sailayun.com/rps",
   dev: "/rps",
   test: "/rps",
   prod: "/rps"
 };
 // form服务接口请求地址
 const formBaseUrl = {
-  local: "http://site.ydidc.com/fs",
+  local: "http://ntm.sailayun.com/fs",
   dev: "/fs",
   test: "/fs",
   prod: "/fs"
 };
 const domains = {
-  local: "t946471742443573248.site.ydidc.com"
+  local: "t946471742443573248.site.sailayun.com"
 };
 
 export default {
