@@ -3,11 +3,11 @@
     <div class="channel-list-container">
       <div class="public-header-wrap">
         <a-form-model layout="inline" :model="listQuery">
-          <a-form-model-item>
+          <!-- <a-form-model-item>
             <a-button type="primary" icon="plus" @click="addChannel">
               新建渠道
             </a-button>
-          </a-form-model-item>
+          </a-form-model-item> -->
           <a-form-model-item>
             <a-select
               style="width:120px"
