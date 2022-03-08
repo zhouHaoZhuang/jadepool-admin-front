@@ -1,30 +1,32 @@
 <template>
   <div class="orderList">
-    <div class="orderTop">
-      <a-space>
-        <a-select
-          style="width:150px"
-          :placeholder="title"
-          v-model="title"
-          @change="changeKey"
-        >
-          <a-select-option
-            :value="v.key"
-            v-for="v in useColumns"
-            :key="v.title"
+    <div class="public-header-wrap">
+      <a-form-model layout="inline" :model="listQuery">
+        <a-form-model-item>
+          <a-select
+            style="width:150px"
+            :placeholder="title"
+            v-model="title"
+            @change="changeKey"
           >
-            {{ v.title }}
-          </a-select-option>
-        </a-select>
-        <div class="sechkey">
+            <a-select-option
+              :value="v.key"
+              v-for="v in useColumns"
+              :key="v.title"
+            >
+              {{ v.title }}
+            </a-select-option>
+          </a-select>
+        </a-form-model-item>
+        <a-form-model-item>
           <a-input
             :disabled="!isTime"
             placeholder="搜索关键词"
             allow-clear
             v-model="listQuery.search"
           />
-        </div>
-        <div>
+        </a-form-model-item>
+        <a-form-model-item>
           <a-date-picker
             v-model="startValue"
             :disabled-date="disabledStartDate"
@@ -46,64 +48,82 @@
             @change="changeEnd"
             @openChange="handleEndOpenChange"
           />
-        </div>
-        <a-select
-          style="width: 120px"
-          defaultValue="0"
-          v-model="listQuery['qp-tradeType-eq']"
-        ><a-select-option
-            value=""
-          >
-            订单类型
-          </a-select-option>
-          <a-select-option
-            :value="index"
-            v-for="(item, index) in feeReduction"
-            :key="index"
-          >
-            {{ item }}
-          </a-select-option>
-        </a-select>
-        <a-button type="primary" @click="secectClick">
-          查询
-        </a-button>
-      </a-space>
+        </a-form-model-item>
+        <a-form-model-item>
+          <a-select
+            style="width: 120px"
+            defaultValue="0"
+            v-model="listQuery['qp-tradeType-eq']"
+            ><a-select-option value="">
+              订单类型
+            </a-select-option>
+            <a-select-option
+              :value="index"
+              v-for="(item, index) in feeReduction"
+              :key="index"
+            >
+              {{ item }}
+            </a-select-option>
+          </a-select>
+        </a-form-model-item>
+        <a-form-model-item>
+          <a-select
+            style="width: 130px"
+            defaultValue="0"
+            v-model="listQuery['qp-tradeStatus-eq']"
+            ><a-select-option value="">
+              状态
+            </a-select-option>
+            <a-select-option
+              :value="index"
+              v-for="(item, index) in orderStatus"
+              :key="index"
+            >
+              {{ item }}
+            </a-select-option>
+          </a-select>
+        </a-form-model-item>
+        <a-form-model-item>
+          <a-button type="primary" @click="secectClick">
+            查询
+          </a-button>
+        </a-form-model-item>
+      </a-form-model>
     </div>
-    <div class="orderTable">
-      <div>
-        <a-table
-          :columns="columns"
-          :data-source="data"
-          rowKey="id"
-          :pagination="paginationProps"
-          :scroll="{ x: 1400 }"
-          :loading="loading"
-        >
-          <a slot="name" slot-scope="text">{{ text }}</a>
-          <div slot="originAmount" slot-scope="text">
-            {{ text.toFixed(2) }}
-          </div>
-          <div slot="actualAmount" slot-scope="text">
-            {{ text.toFixed(2) }}
-          </div>
-          <div slot="tradeType" slot-scope="text">
-            <span>{{ feeReduction[text] }}</span>
-          </div>
-          <div slot="action" slot-scope="text">
-            <a-button type="link" @click="selectPool(text)">
-              查看
-            </a-button>
-          </div>
-          <div slot="createTime" slot-scope="text">
-            {{ text | formatDate }}
-          </div>
-          <div slot="payTime" slot-scope="text">
-            {{ text | formatDate }}
-          </div>
-          <div slot="tradeStatus" slot-scope="text">
-            {{ orderStatus[text] }}
-          </div>
-          <!-- <div slot="select" slot-scope="text">
+    <div class="public-table-wrap">
+      <a-table
+        :columns="columns"
+        :data-source="data"
+        rowKey="id"
+        :pagination="paginationProps"
+        :scroll="{ x: 1400 }"
+        :loading="loading"
+      >
+        <a slot="name" slot-scope="text">{{ text }}</a>
+        <div slot="originAmount" slot-scope="text">
+          {{ text.toFixed(2) }}
+        </div>
+        <div slot="actualAmount" slot-scope="text">
+          {{ text.toFixed(2) }}
+        </div>
+        <div slot="tradeType" slot-scope="text">
+          <span>{{ feeReduction[text] }}</span>
+        </div>
+        <div slot="action" slot-scope="text">
+          <a-button type="link" @click="selectPool(text)">
+            查看
+          </a-button>
+        </div>
+        <div slot="createTime" slot-scope="text">
+          {{ text | formatDate }}
+        </div>
+        <div slot="payTime" slot-scope="text">
+          {{ text | formatDate }}
+        </div>
+        <div slot="tradeStatus" slot-scope="text">
+          {{ orderStatus[text] }}
+        </div>
+        <!-- <div slot="select" slot-scope="text">
             <a-button
               v-if="text.payStatus === 1"
               type="link"
@@ -115,8 +135,7 @@
               ——————
             </a-button>
           </div> -->
-        </a-table>
-      </div>
+      </a-table>
     </div>
   </div>
 </template>
@@ -136,9 +155,10 @@ export default {
         currentPage: 1,
         pageSize: 10,
         total: 0,
-        startTime: "",
-        endTime: "",
-        "qp-tradeType-eq": ""
+        "qp-createTime-ge": "",
+        "qp-createTime-le": "",
+        "qp-tradeType-eq": "",
+        "qp-tradeStatus-eq": ""
       },
       columns: [
         {
@@ -263,13 +283,6 @@ export default {
           width: 150
         },
         {
-          title: "状态",
-          dataIndex: "payStatus",
-          key: "payStatus",
-          width: 100,
-          scopedSlots: { customRender: "payStatus" }
-        },
-        {
           title: "创建时间",
           dataIndex: "createTime",
           key: "createTime",
@@ -291,10 +304,10 @@ export default {
         });
     },
     changeStart(date, dateString) {
-      this.listQuery.startTime = dateString;
+      this.listQuery["qp-createTime-ge"] = dateString;
     },
     changeEnd(date, dateString) {
-      this.listQuery.endTime = dateString;
+      this.listQuery["qp-createTime-le"] = dateString;
     },
     disabledStartDate(startValue) {
       const endValue = this.endValue;
@@ -375,21 +388,10 @@ export default {
 <style lang="less" scoped>
 .orderList {
   margin: 0 20px;
-  padding: 10px;
+  padding: 20px;
   background-color: #fff;
-  .orderTop {
-    display: flex;
-    margin-bottom: 25px;
-    .sechkey {
-      width: 200px;
-      margin-right: 20px;
-    }
-    [type="button"] {
-      margin-left: 20px;
-    }
-    .zhi {
-      margin: 10px;
-    }
+  .zhi {
+    margin: 10px;
   }
   .orderTable {
     .green {
