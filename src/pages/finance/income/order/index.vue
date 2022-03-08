@@ -67,6 +67,23 @@
           </a-select>
         </a-form-model-item>
         <a-form-model-item>
+          <a-select
+            style="width: 130px"
+            defaultValue="0"
+            v-model="listQuery['qp-tradeStatus-eq']"
+            ><a-select-option value="">
+              状态
+            </a-select-option>
+            <a-select-option
+              :value="index"
+              v-for="(item, index) in orderStatus"
+              :key="index"
+            >
+              {{ item }}
+            </a-select-option>
+          </a-select>
+        </a-form-model-item>
+        <a-form-model-item>
           <a-button type="primary" @click="secectClick">
             查询
           </a-button>
@@ -138,9 +155,10 @@ export default {
         currentPage: 1,
         pageSize: 10,
         total: 0,
-        startTime: "",
-        endTime: "",
-        "qp-tradeType-eq": ""
+        "qp-createTime-ge": "",
+        "qp-createTime-le": "",
+        "qp-tradeType-eq": "",
+        "qp-tradeStatus-eq": ""
       },
       columns: [
         {
@@ -265,13 +283,6 @@ export default {
           width: 150
         },
         {
-          title: "状态",
-          dataIndex: "payStatus",
-          key: "payStatus",
-          width: 100,
-          scopedSlots: { customRender: "payStatus" }
-        },
-        {
           title: "创建时间",
           dataIndex: "createTime",
           key: "createTime",
@@ -293,10 +304,10 @@ export default {
         });
     },
     changeStart(date, dateString) {
-      this.listQuery.startTime = dateString;
+      this.listQuery["qp-createTime-ge"] = dateString;
     },
     changeEnd(date, dateString) {
-      this.listQuery.endTime = dateString;
+      this.listQuery["qp-createTime-le"] = dateString;
     },
     disabledStartDate(startValue) {
       const endValue = this.endValue;
