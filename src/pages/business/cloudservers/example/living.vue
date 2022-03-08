@@ -92,13 +92,11 @@ export default {
       columns: [
         {
           title: "实例ID",
-          width: 100,
           dataIndex: "ecsBaseInfoResDto.ecsProductStockId",
           fixed: "left"
         },
         {
           title: "IP",
-          width: 100,
           dataIndex: "publicIp",
           key: "publicIp",
           fixed: "left"
