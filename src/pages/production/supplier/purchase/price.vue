@@ -32,8 +32,25 @@
         <a-form-model-item label="账号配置" prop="keyConfig">
           <a-input v-model="form.keyConfig" type="keyConfig" />
         </a-form-model-item>
+        <a-form-model-item label="开启预警信息通知" prop="notice">
+          <a-radio-group v-model="form.notice">
+            <a-radio :value="true">
+              开启
+            </a-radio>
+            <a-radio :value="false">
+              关闭
+            </a-radio>
+          </a-radio-group>
+        </a-form-model-item>
+        <a-form-model-item
+          label="采购账号预警值"
+          prop="warningValue"
+          help="该值为数字"
+        >
+          <a-input-number v-model="form.warningValue" :min="0" />
+        </a-form-model-item>
         <a-form-model-item label="备注">
-          <a-input v-model="form.remark" type="remark" />
+          <a-input v-model="form.remark" />
         </a-form-model-item>
         <a-form-model-item :wrapper-col="{ span: 18, offset: 6 }">
           <a-button type="primary" @click="onSubmit" :loading="loading">
@@ -60,7 +77,9 @@ export default {
         accountTag: "",
         keyConfig: "",
         remark: "",
-        supplierCode: ""
+        supplierCode: "",
+        notice: true,
+        warningValue: ""
       },
       rules: {
         supplierCode: [
@@ -88,6 +107,20 @@ export default {
           {
             required: true,
             message: "请输入账号配置",
+            trigger: "blur"
+          }
+        ],
+        notice: [
+          {
+            required: true,
+            message: "请选择是否开启预警信息通知",
+            trigger: "change"
+          }
+        ],
+        warningValue: [
+          {
+            required: true,
+            message: "请输入采购账号预警值",
             trigger: "blur"
           }
         ]
@@ -146,7 +179,9 @@ export default {
         accountTag: "",
         keyConfig: "",
         remark: "",
-        supplierCode: ""
+        supplierCode: "",
+        notice: true,
+        warningValue: ""
       };
     }
   }
