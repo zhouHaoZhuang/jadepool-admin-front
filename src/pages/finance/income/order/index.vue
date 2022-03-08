@@ -70,7 +70,7 @@
           <a-select
             style="width: 130px"
             defaultValue="0"
-            v-model="listQuery.tradeStatus"
+            v-model="listQuery['qp-tradeStatus-eq']"
             ><a-select-option value="">
               状态
             </a-select-option>
@@ -158,7 +158,7 @@ export default {
         "qp-createTime-ge": "",
         "qp-createTime-le": "",
         "qp-tradeType-eq": "",
-        tradeStatus: ""
+        "qp-tradeStatus-eq": ""
       },
       columns: [
         {
