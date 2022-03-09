@@ -259,6 +259,17 @@ export default {
   watch: {
     tabsKey: {
       handler() {
+        this.listQuery = {
+          key: undefined,
+          search: "",
+          questionCategoryCode: undefined,
+          timeType: undefined,
+          startTime: "",
+          endTime: "",
+          currentPage: 1,
+          pageSize: 10,
+          total: 0
+        };
         this.getList();
       }
     }
