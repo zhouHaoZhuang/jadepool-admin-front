@@ -356,6 +356,9 @@ export const asyncRoute = [
       {
         path: "/personal",
         name: "个人中心",
+        meta: {
+          invisible: true
+        },
         component: PageView,
         children: [
           {
