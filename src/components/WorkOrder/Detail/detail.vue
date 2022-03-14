@@ -44,7 +44,7 @@
           {{ detail.createTime | formatDate }}
         </div>
       </div>
-      <div class="item">
+      <div v-if="detail.status !== 1" class="item">
         <div class="label">接单时间：</div>
         <div class="value">
           {{ detail.acceptTime | formatDate }}
