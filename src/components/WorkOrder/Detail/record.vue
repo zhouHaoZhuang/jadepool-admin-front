@@ -156,6 +156,7 @@ export default {
       justify-content: space-between;
 
       .left {
+        flex: 1;
         display: flex;
         .ava {
           width: 64px;
@@ -167,6 +168,7 @@ export default {
           }
         }
         .info-box {
+          flex: 1;
           .top-title {
             font-weight: bold;
             color: #555;
@@ -193,6 +195,8 @@ export default {
         }
       }
       .right {
+        width: 140px;
+        text-align: right;
         color: #999;
       }
     }
