@@ -130,3 +130,33 @@ export const getDomainUrl = () => {
     ? env.DOMAIN_URL
     : getWindowUrl(window.location.href);
 };
+
+const identifyCodes = [
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "a",
+  "b",
+  "c",
+  "d"
+]; //根据实际需求加入自己想要的字符
+// 生成随机数
+export const randomNum = (min, max) => {
+  max = max + 1;
+  return Math.floor(Math.random() * (max - min) + min);
+};
+// 随机生成验证码字符串
+export const getRandomCode = (len = 4) => {
+  let identifyCode = "";
+  for (let i = 0; i < len; i++) {
+    identifyCode += identifyCodes[randomNum(0, identifyCodes.length - 1)];
+  }
+  return identifyCode;
+};
