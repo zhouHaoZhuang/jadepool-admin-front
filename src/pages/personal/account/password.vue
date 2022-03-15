@@ -198,7 +198,7 @@ export default {
         labelCol: { span: 4 },
         wrapperCol: { span: 8 }
       },
-      identifyCode:''
+      identifyCode: ""
     };
   },
   mounted() {
@@ -222,6 +222,9 @@ export default {
             .then(res => {
               this.$message.success("修改成功");
               this.$router.push("/login");
+            })
+            .catch(() => {
+              this.refreshCode();
             })
             .finally(() => {
               this.loading = false;
