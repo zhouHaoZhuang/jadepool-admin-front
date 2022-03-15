@@ -46,6 +46,16 @@ export default {
         this.$message.warning("手机号格式不正确");
         return;
       }
+      //判断父组件是否传递图片校验的方法
+      if (this.$listeners["validate"]) {
+        let flag;
+        this.$emit("validate", val => {
+          flag = val;
+        });
+        if (!flag) {
+          return;
+        }
+      }
       if (this.loading) return;
       this.loading = true;
       this.$store
