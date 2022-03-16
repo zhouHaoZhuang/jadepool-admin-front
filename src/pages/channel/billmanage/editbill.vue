@@ -5,10 +5,7 @@
         <a-descriptions-item label="发票ID">
           FP20220314001
         </a-descriptions-item>
-        <a-descriptions-item label="客户名称"> 上海XX公司 </a-descriptions-item>
-        <a-descriptions-item label="开具类型">
-          企业
-        </a-descriptions-item>
+        <a-descriptions-item label="渠道商名称"> 上海XX公司 </a-descriptions-item>
         <a-descriptions-item label="发票类型">
           增值税专用发票
         </a-descriptions-item>
@@ -29,7 +26,7 @@
           2016-09-21 08:50:08
         </a-descriptions-item>
         <a-descriptions-item label="反馈说明">
-          阿萨德hasla
+          阿萨大厦
         </a-descriptions-item>
       </a-descriptions>
       <a-descriptions style="margin: 20px 0" title="收件人信息">
@@ -78,19 +75,27 @@ export default {
       data: [],
       columns: [
         {
-          title: "订单ID",
+          title: "资源池订单ID",
           dataIndex: "orderId"
+        },
+        {
+          title: "云商城订单ID",
+          dataIndex: "yunorderId"
         },
         {
           title: "产品名称",
           dataIndex: "productName"
         },
         {
+          title: "客户名称",
+          dataIndex: "customerName"
+        },
+        {
           title: "可开票金额",
           dataIndex: "canInvoiceAmount"
         },
         {
-          title: "订单创建时间",
+          title: "创建时间",
           dataIndex: "orderCreateTime"
         }
       ],
