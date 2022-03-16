@@ -229,6 +229,49 @@ export const asyncRoute = [
             component: BlankView,
             children: [
               {
+                path: "billmanage",
+                name: "发票管理",
+                meta: {
+                  icon: "home",
+                  perm: "finance-book-order",
+                },
+                component: () =>
+                  import("@/pages/channel/billmanage/index.vue"),
+              },
+              {
+                path: "billInfo",
+                name: "发票申请详情",
+                meta: {
+                  icon: "home",
+                  back: true,
+                  perm: "finance-book-order",
+                },
+                component: () =>
+                  import("@/pages/channel/billmanage/billInfo.vue"),
+              },
+              {
+                path: "auditbill",
+                name: "审核发票申请",
+                meta: {
+                  icon: "home",
+                  back: true,
+                  perm: "finance-book-order",
+                },
+                component: () =>
+                  import("@/pages/channel/billmanage/auditbill.vue"),
+              },
+              {
+                path: "editbill",
+                name: "编辑发票申请",
+                meta: {
+                  icon: "home",
+                  back: true,
+                  perm: "finance-book-order",
+                },
+                component: () =>
+                  import("@/pages/channel/billmanage/editbill.vue"),
+              },
+              {
                 path: "payment",
                 name: "人工入款",
                 meta: {
@@ -239,14 +282,6 @@ export const asyncRoute = [
               {
                 path: "remittance",
                 name: "线下汇款",
-                meta: {
-                  icon: "home"
-                },
-                component: () => import("@/pages/channel/channelAdmin/price")
-              },
-              {
-                path: "invoice",
-                name: "发票管理",
                 meta: {
                   icon: "home"
                 },
