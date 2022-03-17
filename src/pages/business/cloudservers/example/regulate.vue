@@ -273,7 +273,7 @@ export default {
     },
     select(id) {
       this.$router.push({
-        path: "/finance/index/orderinfo",
+        path: "/finance/order/detail",
         query: {
           id
         }
