@@ -220,17 +220,21 @@ export default {
         code: "",
         password: "",
         confirmPassword: "",
-        verificationCode:''
+        verificationCode: ""
       };
     },
     // 获取验证码组件校验图形验证
     validateImgCode(callback) {
       let flag = false;
-      this.$refs.ruleForm.validateField(
-        "verificationCode",
-        err => (flag = err ? false : true)
-      );
-      callback(flag);
+      if (this.$refs.verificationCode.value) {
+        console.log(this.$refs.verificationCode.value, "1111111111");
+        this.$refs.ruleForm.validateField(
+          "verificationCode",
+          err => (flag = err ? false : true)
+        );
+        callback(flag);
+      }
+      console.log(this.$refs.verificationCode.value, "22222");
     },
     // 更新验证码
     refreshCode() {
@@ -324,6 +328,6 @@ export default {
   cursor: pointer;
   position: absolute;
   right: 0;
-  top:0;
+  top: 0;
 }
 </style>

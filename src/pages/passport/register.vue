@@ -102,7 +102,11 @@
             </a-button>
           </a-form-model-item>
         </a-form-model>
-        <div><a-radio @change="toCheck"></a-radio>我已阅读并同意<a href="">《用户注册服务协议》</a>,<a href="">《隐私协议》</a></div>
+        <div>
+          <a-radio @change="toCheck"></a-radio>我已阅读并同意<a href=""
+            >《用户注册服务协议》</a
+          >,<a href="">《隐私协议》</a>
+        </div>
       </div>
     </div>
   </common-layout>
@@ -143,7 +147,7 @@ export default {
         code: "",
         password: "",
         confirmPassword: "",
-        verificationCode: "", //输入的图片验证码
+        verificationCode: "" //输入的图片验证码
       },
       pwdReg: /(?=.*[0-9])(?=.*[a-z]).{6,20}/,
       rules: {
@@ -189,8 +193,8 @@ export default {
       },
       loading: false,
       identifyCode: "", //要核对的验证码
-      showVerfication: false ,//是否进行图片验证码
-      isCheck:false, //是否勾选了协议
+      showVerfication: false, //是否进行图片验证码
+      isCheck: false //是否勾选了协议
     };
   },
   mounted() {
@@ -208,28 +212,28 @@ export default {
       }
     },
     handleRegister() {
-      if(this.isCheck == false){
+      if (this.isCheck == false) {
         this.$message.warning("请勾选协议");
-        return
+        return;
       }
       this.$refs.ruleForm.validate(valid => {
         console.log("点击了注册");
-        // if (valid) {
-        //   this.loading = true;
-        //   this.$store
-        //     .dispatch("user/register", this.form)
-        //     .then(res => {
-        //       if (res.data?.id) {
-        //         this.$message.success("注册成功");
-        //         this.$router.push("/login");
-        //       } else {
-        //         this.$message.warning("注册失败");
-        //       }
-        //     })
-        //     .finally(() => {
-        //       this.loading = false;
-        //     });
-        // }
+        if (valid) {
+          this.loading = true;
+          this.$store
+            .dispatch("user/register", this.form)
+            .then(res => {
+              if (res.data?.id) {
+                this.$message.success("注册成功");
+                this.$router.push("/login");
+              } else {
+                this.$message.warning("注册失败");
+              }
+            })
+            .finally(() => {
+              this.loading = false;
+            });
+        }
       });
     },
     // 重置表单数据
@@ -246,11 +250,15 @@ export default {
     // 获取验证码组件校验图形验证
     validateImgCode(callback) {
       let flag = false;
-      this.$refs.ruleForm.validateField(
-        "verificationCode",
-        err => (flag = err ? false : true)
-      );
-      callback(flag);
+      if (this.$refs.verificationCode.value) {
+        console.log(this.$refs.verificationCode.value, "1111111111");
+        this.$refs.ruleForm.validateField(
+          "verificationCode",
+          err => (flag = err ? false : true)
+        );
+        callback(flag);
+      }
+      console.log(this.$refs.verificationCode.value, "22222");
     },
     // 是否显示图片校验
     showValidate(callback) {
@@ -270,8 +278,8 @@ export default {
       }
     },
     //勾选协议选项
-    toCheck(e){
-      this.isCheck = e.target.checked
+    toCheck(e) {
+      this.isCheck = e.target.checked;
     }
   }
 };
@@ -300,7 +308,7 @@ export default {
       height: 510px;
       border-radius: 5px;
       border-radius: 4px;
-      padding: 20px  40px 40px;
+      padding: 20px 40px 40px;
       background: #fff;
       // position: absolute;
       // top: 50%;
