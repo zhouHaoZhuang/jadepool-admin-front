@@ -58,7 +58,7 @@
             </a-button>
           </a-form-model-item>
 
-          <a-form-model-item class="btn-box">
+          <!-- <a-form-model-item class="btn-box">
             <a-button
               size="large"
               class="btn1"
@@ -75,7 +75,7 @@
             >
               免费注册
             </a-button>
-          </a-form-model-item>
+          </a-form-model-item> -->
         </a-form-model>
       </div>
     </div>
