@@ -82,6 +82,21 @@ export const workOrderTypeEnum = {
   1: "普通类型工单",
   2: "可转接资源池类型工单",
 };
+// 订单状态
+export const orderStatusEnum = {
+  "-3": "操作服务器异常",
+  "-1": "交易关闭",
+  1: "待支付",
+  3: "支付中",
+  5: "交易完成"
+};
+export const orderTypeMap = {
+  1: "云服务新购",
+  15: "云服务续费",
+  25: "云服务升配",
+  35: "云服务降配",
+  55: "服务器退订"
+};
 // 地域列表map
 export const regionDataEnum = {
   "cn-qingdao": "华北1（青岛）",

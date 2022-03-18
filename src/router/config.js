@@ -306,6 +306,41 @@ export const asyncRoute = [
           }
         ]
       },
+        // 产品
+        {
+          path: "/product",
+          name: "产品",
+          component: PageView,
+          children: [
+            {
+              path: "index",
+              name: "CDN云加速",
+              meta: {
+                icon: "home"
+              },
+              component: BlankView,
+              children: [
+                {
+                  path: "domain",
+                  name: "域名管理",
+                  meta: {
+                    icon: "home"
+                  },
+                  component: () => import("@/pages/product/domain.vue")
+                },
+                {
+                  path: "bill",
+                  name: "账单管理",
+                  meta: {
+                    icon: "home",
+                  },
+                  component: () =>
+                    import("@/pages/product/bill.vue")
+                },
+              ]
+            },
+          ]
+        },
       //业务
       {
         path: "/business",
