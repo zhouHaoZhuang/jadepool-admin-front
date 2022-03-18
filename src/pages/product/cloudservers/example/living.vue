@@ -215,7 +215,7 @@ export default {
     addChannel(record) {
       console.log(record);
       this.$router.push({
-        path: "/business/cloudservers/adds",
+        path: "/product/cloudservers/adds",
         query: { id: record }
       });
     }

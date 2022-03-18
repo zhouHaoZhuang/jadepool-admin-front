@@ -318,7 +318,7 @@ export const asyncRoute = [
       },
       // 产品
       {
-        path: "/business",
+        path: "/product",
         name: "产品",
         component: PageView,
         children: [
@@ -337,7 +337,7 @@ export const asyncRoute = [
                   icon: "home"
                 },
                 component: () =>
-                  import("@/pages/business/cloudservers/example/living.vue")
+                  import("@/pages/product/cloudservers/example/living.vue")
               },
               {
                 path: "adds",
@@ -347,7 +347,7 @@ export const asyncRoute = [
                   back: true
                 },
                 component: () =>
-                  import("@/pages/business/cloudservers/example/regulate.vue")
+                  import("@/pages/product/cloudservers/example/regulate.vue")
               },
               {
                 path: "renew",
@@ -356,7 +356,7 @@ export const asyncRoute = [
                   icon: "home"
                 },
                 component: () =>
-                  import("@/pages/business/cloudservers/renewList.vue")
+                  import("@/pages/product/cloudservers/renewList.vue")
               }
             ]
           },
@@ -374,7 +374,7 @@ export const asyncRoute = [
                 meta: {
                   icon: "home"
                 },
-                component: () => import("@/pages/product/domain.vue")
+                component: () => import("@/pages/product/domain/index.vue")
               },
               {
                 path: "bill",
@@ -383,7 +383,7 @@ export const asyncRoute = [
                   icon: "home",
                 },
                 component: () =>
-                  import("@/pages/product/bill.vue")
+                  import("@/pages/product/bill/index.vue")
               },
             ]
           }
