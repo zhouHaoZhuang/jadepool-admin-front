@@ -344,7 +344,7 @@ export default {
     },
     selectPool(v, i) {
       this.$router.push({
-        path: "/finance/index/orderinfo",
+        path: "/finance/order/detail",
         query: {
           id: v.id
         }

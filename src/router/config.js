@@ -185,24 +185,6 @@ export const asyncRoute = [
             component: BlankView,
             children: [
               {
-                path: "order",
-                name: "订单管理",
-                meta: {
-                  icon: "home"
-                },
-                component: () => import("@/pages/finance/income/order")
-              },
-              {
-                path: "orderinfo",
-                name: "订单详情",
-                meta: {
-                  invisible: true,
-                  back: true
-                },
-                component: () =>
-                  import("@/pages/finance/income/order/orderInfo.vue")
-              },
-              {
                 path: "detailed",
                 name: "财务明细",
                 meta: {
@@ -217,6 +199,34 @@ export const asyncRoute = [
                   icon: "home"
                 },
                 component: () => import("@/pages/channel/channelAdmin/price")
+              }
+            ]
+          },
+          {
+            path: "order",
+            name: "订单管理",
+            meta: {
+              icon: "home"
+            },
+            component: BlankView,
+            children: [
+              {
+                path: "list",
+                name: "订单列表",
+                meta: {
+                  icon: "home"
+                },
+                component: () => import("@/pages/finance/income/order")
+              },
+              {
+                path: "detail",
+                name: "订单详情",
+                meta: {
+                  invisible: true,
+                  back: true
+                },
+                component: () =>
+                  import("@/pages/finance/income/order/orderInfo.vue")
               }
             ]
           },
@@ -306,45 +316,10 @@ export const asyncRoute = [
           }
         ]
       },
-        // 产品
-        {
-          path: "/product",
-          name: "产品",
-          component: PageView,
-          children: [
-            {
-              path: "index",
-              name: "CDN云加速",
-              meta: {
-                icon: "home"
-              },
-              component: BlankView,
-              children: [
-                {
-                  path: "domain",
-                  name: "域名管理",
-                  meta: {
-                    icon: "home"
-                  },
-                  component: () => import("@/pages/product/domain.vue")
-                },
-                {
-                  path: "bill",
-                  name: "账单管理",
-                  meta: {
-                    icon: "home",
-                  },
-                  component: () =>
-                    import("@/pages/product/bill.vue")
-                },
-              ]
-            },
-          ]
-        },
-      //业务
+      // 产品
       {
         path: "/business",
-        name: "业务",
+        name: "产品",
         component: PageView,
         children: [
           {
@@ -383,6 +358,33 @@ export const asyncRoute = [
                 component: () =>
                   import("@/pages/business/cloudservers/renewList.vue")
               }
+            ]
+          },
+          {
+            path: "cdn",
+            name: "CDN云加速",
+            meta: {
+              icon: "home"
+            },
+            component: BlankView,
+            children: [
+              {
+                path: "domain",
+                name: "域名管理",
+                meta: {
+                  icon: "home"
+                },
+                component: () => import("@/pages/product/domain.vue")
+              },
+              {
+                path: "bill",
+                name: "账单管理",
+                meta: {
+                  icon: "home",
+                },
+                component: () =>
+                  import("@/pages/product/bill.vue")
+              },
             ]
           }
         ]
