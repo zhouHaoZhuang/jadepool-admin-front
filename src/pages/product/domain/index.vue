@@ -20,11 +20,7 @@
           </a-select>
         </a-form-model-item>
         <a-form-model-item>
-          <a-input
-            allowClear
-            placeholder="请输入"
-            v-model="listQuery.search"
-          />
+          <a-input allowClear placeholder="请输入" v-model="listQuery.search" />
         </a-form-model-item>
         <a-form-model-item>
           <a-range-picker
@@ -48,7 +44,6 @@
           :columns="columns"
           :data-source="data"
           :loading="tableLoading"
-          rowKey="id"
           :pagination="paginationProps"
           :scroll="{ x: 1400 }"
         >
@@ -70,7 +65,7 @@
           <div slot="tradeType" slot-scope="text">
             <span>{{ orderTypeMap[text] }}</span>
           </div>
-          <div slot="createTime" slot-scope="text" v-if="text">
+          <div slot="expiredTime" slot-scope="text" v-if="text">
             {{ text | formatDate }}
           </div>
           <div slot="payTime" slot-scope="text" v-if="text">
@@ -84,12 +79,11 @@
             {{ orderStatusEnum[text] }}
           </span>
           <div slot="action" slot-scope="text, record">
-            <a-button
-              v-permission="'view'"
-              type="link"
-              @click="handleSelectDetail(record)"
-            >
-              查询
+            <a-button v-permission="'view'" type="link" @click="toOnline(record)">
+              上线
+            </a-button>
+               <a-button v-permission="'view'" type="link" @click="toOffline(record)">
+              下线
             </a-button>
           </div>
           <div slot-scope="text" slot="cashPay" v-if="text != undefined">
@@ -106,7 +100,7 @@
 
 <script>
 import moment from "moment";
-import { orderStatusEnum, orderTypeMap } from "@/utils/enum.js";
+import { orderStatusEnum, orderTypeMap } from "@/utils/enum.js";;
 export default {
   data() {
     return {
@@ -128,7 +122,7 @@ export default {
         {
           title: "域名",
           dataIndex: "orderNo",
-          width: 170
+          width: 170,
         },
         {
           title: "所属终端客户",
@@ -156,11 +150,12 @@ export default {
         },
         {
           title: "创建时间",
-          dataIndex: "createTime",
+          dataIndex: "expiredTime",
           width: 190,
-          scopedSlots: { customRender: "createTime" },
+          scopedSlots: { customRender: "expiredTime" },
           sorter: (a, b) =>
-            new Date(a.createTime).getTime() - new Date(b.createTime).getTime()
+            new Date(a.expiredTime).getTime() -
+            new Date(b.expiredTime).getTime()
         },
         {
           title: "操作",
@@ -191,21 +186,21 @@ export default {
     useColumns() {
       return [
         {
-          title: "退单编号",
-          dataIndex: "orderNo",
-          key: "orderNo",
+          title: "域名",
+          dataIndex: "ordero",
+          key: "ordero",
           width: 170
         },
         {
-          title: "订单编号",
-          dataIndex: "orderNo",
-          key: "orderNo",
+          title: "所属终端客户",
+          dataIndex: "orderN",
+          key: "orderN",
           width: 170
         },
         {
           title: "渠道商名称",
-          dataIndex: "orderNo",
-          key: "orderNo",
+          dataIndex: "oNo",
+          key: "oNo",
           width: 170
         },
         {
@@ -220,15 +215,16 @@ export default {
   methods: {
     //查询表格数据
     getList() {
-      // this.tableLoading = true;
-      // this.$getList("member/getList", this.listQuery)
-      //   .then(res => {
-      //     this.data = [...res.data.list];
-      //     this.paginationProps.total = res.data.totalCount * 1;
-      //   })
-      //   .finally(() => {
-      //     this.tableLoading = false;
-      //   });
+      this.tableLoading = true;
+      this.$getList("instance/getList", this.listQuery)
+        .then(res => {
+          // console.log(res);
+          this.data = [...res.data.list];
+          this.paginationProps.total = res.data.totalCount * 1;
+        })
+        .finally(() => {
+          this.tableLoading = false;
+        });
     },
     // 搜索
     handleSearch() {
@@ -263,12 +259,31 @@ export default {
       this.listQuery.pageSize = pageSize;
       this.getList();
     },
-    // 查看详情
-    handleSelectDetail(record) {
-      this.$router.push({
-        path: "/sale/unsubscribe/detail",
-        query: {
-          id: record.orderNo
+    // 上线操作
+    toOnline(record) {
+      this.$confirm({
+        title: "是否要恢复该域名的CDN服务？",
+        onOk: () => {
+          // this.$store
+          //   .dispatch("channel/delPrice", { id: record.id })
+          //   .then(res => {
+          //     this.$message.success("操作成功");
+          //     this.getList();
+          //   });
+        }
+      });
+    },
+    //下线
+    toOffline(record) {
+         this.$confirm({
+        title: "下线后，该域名将停止CDN服务，确定下线吗？",
+        onOk: () => {
+          // this.$store
+          //   .dispatch("channel/delPrice", { id: record.id })
+          //   .then(res => {
+          //     this.$message.success("操作成功");
+          //     this.getList();
+          //   });
         }
       });
     }

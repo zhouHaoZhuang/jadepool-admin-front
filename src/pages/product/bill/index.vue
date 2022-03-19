@@ -1,68 +1,138 @@
 <template>
-  <div>
-    <div class="channel-list-container">
-      <div class="public-header-wrap">
-        <a-form-model layout="inline" :model="listQuery">
-          <!-- <a-form-model-item>
-            <a-button type="primary" icon="plus" @click="addChannel">
-              新建渠道
-            </a-button>
-          </a-form-model-item> -->
-          <a-form-model-item>
-            <a-select
-              style="width:120px"
-              allowClear
-              v-model="listQuery.key"
-              placeholder="请选择"
+  <div class="orderList">
+    <div class="public-header-wrap">
+      <a-form-model layout="inline" :model="listQuery">
+        <a-form-model-item>
+          <a-select
+            class="sechkey"
+            style="width:150px"
+            placeholder="请选择"
+            v-model="listQuery.key"
+            allowClear
+          >
+            <a-select-option
+              :value="v.key"
+              v-for="v in useColumns"
+              :key="v.title"
             >
-              <a-select-option
-                v-for="item in columns.slice(0, columns.length - 3)"
-                :key="item.dataIndex"
-                :value="item.dataIndex"
-              >
-                {{ item.title }}
-              </a-select-option>
-            </a-select>
-          </a-form-model-item>
-          <a-form-model-item>
-            <a-input v-model="listQuery.search" placeholder="搜索关键词" />
-          </a-form-model-item>
-          <a-form-model-item>
-            <a-button type="primary" @click="search">
-              查询
-            </a-button>
-          </a-form-model-item>
-        </a-form-model>
-      </div>
-      <div class="public-table-wrap">
+              {{ v.title }}
+            </a-select-option>
+          </a-select>
+        </a-form-model-item>
+        <a-form-model-item>
+          <a-input allowClear placeholder="请输入" v-model="listQuery.search" />
+        </a-form-model-item>
+        <a-form-model-item>
+          <a-range-picker
+            style="margin-right: 10px"
+            show-time
+            format="YYYY-MM-DD HH:mm:ss"
+            :placeholder="['开始时间', '结束时间']"
+            @change="datePickerOnOk"
+          />
+        </a-form-model-item>
+        <a-form-model-item>
+          <a-button type="primary" @click="handleSearch">
+            查询
+          </a-button>
+        </a-form-model-item>
+      </a-form-model>
+    </div>
+    <div class="orderTable">
+      <div>
         <a-table
-          :loading="tableLoading"
           :columns="columns"
           :data-source="data"
-          rowKey="id"
+          :loading="tableLoading"
           :pagination="paginationProps"
-          :scroll="{ x: 1300 }"
+          :scroll="{ x: 1400 }"
         >
-          <span slot="addressProject" slot-scope="text" style="color:#1890ff">
+          <span slot="corporationCode" slot-scope="text" style="color: #00aaff">
             {{ text }}
           </span>
-          <div class="status" slot="customerStatus" slot-scope="text">
-            <div v-if="text === 0" class="dot dot-err"></div>
-            <div v-else class="dot"></div>
-            {{ text === 1 ? "正常" : "冻结" }}
+          <div v-if="text" slot="originAmount" slot-scope="text">
+            {{ text }}
           </div>
-          <span slot="createTime" slot-scope="text">
+          <span slot="customTitle">
+            支付状态
+            <a-tooltip placement="top">
+              <template slot="title">
+                <span>
+                  未结算：已消费，未出帐的账单<br />
+                  未结清：已出帐，未支付的账单</span
+                >
+              </template>
+              <a-icon type="question-circle" />
+            </a-tooltip>
+          </span>
+          <span slot="channel" slot-scope="text" style="color: #00aaff">
+            {{ text }}
+          </span>
+          <div v-if="text" slot="actualAmount" slot-scope="text">
+            {{ text }}
+          </div>
+          <span slot="Amount">
+            账单金额
+            <a-tooltip placement="top">
+              <template slot="title">
+                <span> 账单金额=单价*实际用量</span>
+              </template>
+              <a-icon type="question-circle" />
+            </a-tooltip>
+          </span>
+          <span slot="Amoun">
+            成本金额
+            <a-tooltip placement="top">
+              <template slot="title">
+                <span>
+                  成本金额=渠道折扣金额*实际用量
+                </span>
+              </template>
+              <a-icon type="question-circle" />
+            </a-tooltip>
+          </span>
+          <span slot="arrearage">
+            欠费金额
+            <a-tooltip placement="top">
+              <template slot="title">
+                <span>
+                  已出帐未结清的金额
+                </span>
+              </template>
+              <a-icon type="question-circle" />
+            </a-tooltip>
+          </span>
+          <div slot="tradeType" slot-scope="text">
+            <span>{{ orderTypeMap[text] }}</span>
+          </div>
+          <div slot="expiredTime" slot-scope="text" v-if="text">
             {{ text | formatDate }}
+          </div>
+          <div slot="payTime" slot-scope="text" v-if="text">
+            {{ text | formatDate }}
+          </div>
+          <span
+            :class="{ green: text === 9, blue: text !== 9 }"
+            slot="tradeStatus"
+            slot-scope="text"
+          >
+            {{ orderStatusEnum[text] }}
           </span>
-          <span slot="action" slot-scope="text, record">
-            <a-button type="link" @click="goDetail(record)">
-              查看
+          <!-- <div slot="action" slot-scope="text, record">
+            <a-button
+              v-permission="'view'"
+              type="link"
+              @click="handleSelectDetail(record)"
+            >
+              查询
             </a-button>
-            <a-divider type="vertical" />
-            <a-button type="link" @click="handleFrozen(record)">
-              {{ record.customerStatus !== 0 ? "解冻" : "冻结" }}
-            </a-button>
-          </span>
+          </div> -->
+          <div slot-scope="text" slot="cashPay" v-if="text != undefined">
+            {{ text.toFixed(2) }}
+          </div>
+          <div slot-scope="text" slot="actualPrice" v-if="text != undefined">
+            {{ text.toFixed(2) }}
+          </div>
         </a-table>
       </div>
     </div>
@@ -70,94 +140,171 @@
 </template>
 
 <script>
+import moment from "moment";
+import { orderStatusEnum, orderTypeMap } from "@/utils/enum.js";
 export default {
   data() {
     return {
+      orderStatusEnum,
+      orderTypeMap,
       listQuery: {
         key: undefined,
         search: "",
+        startTime: "",
+        endTime: "",
+        tradeType: undefined,
+        tradeStatus: undefined,
         currentPage: 1,
         pageSize: 10,
         total: 0
       },
+      tableLoading: false,
       columns: [
         {
-          title: "渠道商ID",
-          dataIndex: "cutomerCode",
-          key: "cutomerCode",
-          width: 260
+          title: "账单编号",
+          dataIndex: "orderNo"
         },
         {
-          title: "全称",
-          dataIndex: "cutomerName",
-          key: "cutomerName"
+          title: "订单编号",
+          dataIndex: "No"
         },
         {
-          title: "简称",
-          dataIndex: "shortName",
-          key: "shortName"
+          title: "所属终端客户",
+          dataIndex: "corporationCode",
+          scopedSlots: { customRender: "corporationCode" }
         },
         {
-          title: "项目网址",
-          dataIndex: "addressProject",
-          key: "addressProject",
-          scopedSlots: { customRender: "addressProject" }
+          slots: { title: "customTitle" },
+          dataIndex: "receipt_file"
         },
         {
-          title: "状态",
-          dataIndex: "customerStatus",
-          key: "customerStatus",
-          scopedSlots: { customRender: "customerStatus" }
+          title: "单价",
+          dataIndex: "tradeType",
+          scopedSlots: { customRender: "tradeType" }
         },
         {
-          title: "创建时间",
-          dataIndex: "createTime",
-          key: "createTime",
-          scopedSlots: { customRender: "createTime" },
-          width: 250
+          title: "单价单位",
+          dataIndex: "originAmount",
+          scopedSlots: { customRender: "originAmount" }
         },
         {
-          title: "操作",
-          key: "action",
-          fixed: "right",
-          scopedSlots: { customRender: "action" }
+          dataIndex: "Amount",
+          slots: { title: "Amount" }
+        },
+        {
+          dataIndex: "Amoun",
+          slots: { title: "Amoun" }
+        },
+        {
+          slots: { title: "arrearage" },
+          dataIndex: "arrearage"
+        },
+        {
+          title: "消费时间",
+          dataIndex: "expiredTime",
+          scopedSlots: { customRender: "expiredTime" },
+          sorter: (a, b) =>
+            new Date(a.expiredTime).getTime() -
+            new Date(b.expiredTime).getTime()
+        },
+        {
+          title: "计费项",
+          dataIndex: "aaa"
+        },
+        {
+          title: "实际用量",
+          dataIndex: "num"
         }
+        // {
+        //   title: "操作",
+        //   dataIndex: "action",
+        //   fixed: "right",
+        //   scopedSlots: { customRender: "action" }
+        // }
       ],
       data: [],
+      // 表格分页器配置
       paginationProps: {
         showQuickJumper: true,
         showSizeChanger: true,
-        total: 1,
+        total: 0,
         showTotal: (total, range) =>
           `共 ${total} 条记录 第 ${this.listQuery.currentPage} / ${Math.ceil(
             total / this.listQuery.pageSize
           )} 页`,
         onChange: this.quickJump,
         onShowSizeChange: this.onShowSizeChange
-      },
-      tableLoading: false
+      }
     };
   },
   activated() {
     this.getList();
   },
+  computed: {
+    useColumns() {
+      return [
+        {
+          title: "退单编号",
+          dataIndex: "orderNo",
+          key: "orderNo",
+          width: 170
+        },
+        {
+          title: "订单编号",
+          dataIndex: "orderNo",
+          key: "orderNo",
+          width: 170
+        },
+        {
+          title: "渠道商名称",
+          dataIndex: "orderNo",
+          key: "orderNo",
+          width: 170
+        },
+        {
+          title: "渠道商ID",
+          dataIndex: "channel",
+          key: "channel",
+          width: 150
+        }
+      ];
+    }
+  },
   methods: {
-    // 查询
-    search() {
+    //查询表格数据
+    getList() {
+      // this.tableLoading = true;
+      // this.$getList("instance/getList", this.listQuery)
+      //   .then(res => {
+      //     // console.log(res);
+      //     this.data = [...res.data.list];
+      //     this.paginationProps.total = res.data.totalCount * 1;
+      //   })
+      //   .finally(() => {
+      //     this.tableLoading = false;
+      //   });
+    },
+    // 搜索
+    handleSearch() {
       this.listQuery.currentPage = 1;
       this.getList();
     },
-    // 查询表格数据
-    getList() {
-      this.tableLoading = true;
-      this.$getListQp("channel/getList", this.listQuery)
-        .then(res => {
-          this.data = [...res.data.list];
-          this.paginationProps.total = res.data.totalCount * 1;
-        })
-        .finally(() => {
-          this.tableLoading = false;
-        });
+    // 日期选择
+    datePickerOnOk(value) {
+      console.log(value);
+      if (value.length !== 0) {
+        this.listQuery.startTime = moment(value[0]).format(
+          "YYYY-MM-DD HH:mm:ss"
+        );
+        this.listQuery.endTime = moment(value[1]).format("YYYY-MM-DD HH:mm:ss");
+      } else {
+        this.listQuery.startTime = "";
+        this.listQuery.endTime = "";
+      }
+    },
+    // 禁用日期--禁用当天之后+当天前一个月所有
+    disabledDate(current) {
+      return current > moment() || current < moment().subtract(1, "month");
     },
     // 表格分页快速跳转n页
     quickJump(currentPage) {
@@ -170,54 +317,49 @@ export default {
       this.listQuery.pageSize = pageSize;
       this.getList();
     },
-    // 查看
-    goDetail(record) {
-      this.$router.push({
-        path: "/channel/index/detail",
-        query: { id: record.id }
-      });
-    },
-    // 冻结
-    handleFrozen(record) {
-      const customerStatus = record.customerStatus === 0 ? 1 : 0;
-      this.$store
-        .dispatch("channel/updateStatus", {
-          id: record.id,
-          customerStatus
-        })
-        .then(res => {
-          this.$message.success("操作成功");
-          const index = this.data.findIndex(ele => ele.id === record.id);
-          this.data.splice(index, 1, { ...record, customerStatus });
-        });
-    },
-    // 新增渠道
-    addChannel() {
-      this.$router.push("/channel/index/add");
-    }
   }
 };
 </script>
 
 <style lang="less" scoped>
-.channel-list-container {
-  background: #fff;
-  padding: 20px;
-  margin: 0 24px;
-  .public-table-wrap {
-    .status {
-      display: flex;
-      align-items: center;
-      .dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: green;
-        margin-right: 5px;
-      }
-      .dot-err {
-        background: red;
-      }
+.orderList {
+  margin: 0 20px;
+  padding: 10px;
+  background-color: #fff;
+  .orderTop {
+    display: flex;
+    margin-bottom: 25px;
+    .sechkey {
+      width: 200px;
+      margin-right: 10px;
+    }
+    [type="button"] {
+      margin-left: 10px;
+    }
+    .zhi {
+      margin: 10px;
+    }
+  }
+  .orderTable {
+    .green {
+      background-color: rgb(115, 209, 61);
+      color: rgb(255, 255, 255);
+      font-size: 12px;
+      padding: 2px 5px;
+      height: 20px;
+      text-align: center;
+      line-height: 20px;
+      border-radius: 2px;
+    }
+    .blue {
+      background-color: rgb(64, 169, 255);
+      color: rgb(255, 255, 255);
+      font-size: 12px;
+      padding: 2px 5px;
+      height: 20px;
+      text-align: center;
+      line-height: 20px;
+      border-radius: 2px;
     }
   }
 }
