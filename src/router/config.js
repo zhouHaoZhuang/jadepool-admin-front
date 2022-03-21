@@ -415,7 +415,7 @@ export const asyncRoute = [
       // 生产
       {
         path: "/production",
-        name: "生产",
+        name: "采购",
         component: PageView,
         children: [
           {
