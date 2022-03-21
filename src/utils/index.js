@@ -145,7 +145,11 @@ const identifyCodes = [
   "a",
   "b",
   "c",
-  "d"
+  "d",
+  'A',
+  'B',
+  'C',
+  'D'
 ]; //根据实际需求加入自己想要的字符
 // 生成随机数
 export const randomNum = (min, max) => {
