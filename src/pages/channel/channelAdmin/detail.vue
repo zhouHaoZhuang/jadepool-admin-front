@@ -256,9 +256,9 @@ export default {
         this.$message.warning("请输入格式正确的手机号");
         return;
       }
-      this.confirmLoadingDetail = true;
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
+          this.confirmLoadingDetail = true;
           this.$store
             .dispatch("channel/edit", this.form)
             .then(res => {
