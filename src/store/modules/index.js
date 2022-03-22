@@ -12,7 +12,7 @@ import system from "./system";
 import workorder from "./workorder";
 import specification from "./specification";
 import tenant from "./tenant";
-
+import withdraw from './withdraw'
 export default {
   user,
   account,
@@ -27,5 +27,6 @@ export default {
   system,
   workorder,
   specification,
-  tenant
+  tenant,
+  withdraw
 };

@@ -109,3 +109,12 @@ export const regionDataEnum = {
   "me-east-1": "阿联酋（迪拜）",
   "eu-central-1": "德国（法兰克福）",
 };
+//提现申请状态
+export const applyStatus = {
+  0: "草稿",
+  1: "已完成",
+  2: "已提交",
+  3: "已驳回",
+  4: "已取消",
+  5: "待处理"
+};
