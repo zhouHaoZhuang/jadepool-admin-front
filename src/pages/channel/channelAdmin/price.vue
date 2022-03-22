@@ -276,20 +276,6 @@ export default {
         this.listQuery["qp-modifyTime-le"] = "";
       }
     },
-    cancelOrder(record) {
-      this.$confirm({
-        title: "确认要取消申请吗？",
-        onOk: () => {
-          console.log("点击了取消");
-          // this.$store
-          //   .dispatch("income/cancelOrder", { id: record.id })
-          //   .then((res) => {
-          //     this.$message.success("取消成功");
-          //     this.getList();
-          //   });
-        }
-      });
-    },
     //接收
     receive(record) {
       this.$confirm({

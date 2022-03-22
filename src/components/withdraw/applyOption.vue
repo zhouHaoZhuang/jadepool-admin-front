@@ -161,6 +161,8 @@ export default {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
           let title;
+          let obj={}
+          obj.id=this.form.id
           if (this.title != 1) {
             console.log(this.$refs.feedback.value);
             if (!this.$refs.feedback.value) {
@@ -169,17 +171,17 @@ export default {
             }
           }
           if (val == "ok") {
-            this.form.status = 1;
+            obj.status = 1;
             title = "确定提现嘛?";
           }
           if (val == "reject") {
-            this.form.status = 3;
+            obj.status = 3;
             title = "确认要驳回申请吗?";
           }
           this.$confirm({
             title: title,
             onOk: () => {
-              this.$store.dispatch("withdraw/approval", this.form).then(res => {
+              this.$store.dispatch("withdraw/approval", obj).then(res => {
                 this.$message.success("操作成功");
                 this.$emit("changeVisible", false);
                 this.$emit("success");
