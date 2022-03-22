@@ -197,10 +197,6 @@ export default {
         }
       });
     },
-    addinform() {
-      //添加资源池产品，跳转至添加页面路由
-      this.$router.push("/production/product/addproduct");
-    },
     handleMenuClick() {
       this.$getListQp("pool/getList", this.listQuery).then(val => {
         this.reqList(val); //获取列表数据并初始化数据
@@ -229,13 +225,17 @@ export default {
       this.current = page;
       this.paginationProps.current = page;
     },
+    addinform() {
+      //添加资源池产品，跳转至添加页面路由
+      this.$router.push("/production/product/updateProduct");
+    },
     // 跳转至修改页面
     editPool(v) {
       // console.log(v);
       this.$router.push({
-        path: "/production/product/editproduct",
+        path: "/production/product/updateProduct",
         query: {
-          form: v.id
+          id: v.id
         }
       });
     }
