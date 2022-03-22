@@ -26,7 +26,6 @@
               placeholder="请输入密码"
               type="password"
               size="large"
-              @pressEnter="onSubmit"
             >
               <a-icon slot="prefix" type="lock" />
             </a-input>
@@ -39,8 +38,9 @@
               v-model="form.verificationCode"
               placeholder="请输入图片验证码"
               :max-length="6"
+              @pressEnter="onSubmit"
             >
-            <a-icon slot="prefix" type="safety-certificate" />
+              <a-icon slot="prefix" type="safety-certificate" />
             </a-input>
             <div @click="refreshCode()" class="code" title="点击切换验证码">
               <Identify :identifyCode="identifyCode" />
