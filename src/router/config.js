@@ -11,6 +11,16 @@ export const basicRoute = [
     component: () => import("@/pages/passport/login")
   },
   {
+    path: "/register",
+    name: "注册页",
+    component: () => import("@/pages/passport/register")
+  },
+  {
+    path: "/resetpassword",
+    name: "重置密码页",
+    component: () => import("@/pages/passport/resetpassword")
+  },
+  {
     path: "*",
     name: "404",
     component: () => import("@/pages/exception/404")

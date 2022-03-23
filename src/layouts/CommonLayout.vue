@@ -1,5 +1,13 @@
 <template>
   <div class="common-layout">
+    <div class="header">
+      <!-- 左上角logo -->
+      <div class="logo-wrap">
+        <div class="txt">南天门</div>
+        <div class="line"></div>
+        <div class="txt">ntm.slayun.com</div>
+      </div>
+    </div>
     <div class="content"><slot></slot></div>
     <!-- 底部 -->
     <!-- <page-footer :link-list="footerLinks" :copyright="copyright"></page-footer> -->
@@ -26,6 +34,24 @@ export default {
 .common-layout {
   height: 100vh;
   position: relative;
+  .logo-wrap {
+    position: absolute;
+    top: 60px;
+    left: 100px;
+    display: flex;
+    align-items: center;
+    .txt {
+      font-size: 28px;
+      color: #fff;
+      font-weight: 500px;
+    }
+    .line {
+      width: 2px;
+      height: 35px;
+      background: #fff;
+      margin: 0 10px;
+    }
+  }
   .footer {
     width: 100%;
     text-align: center;
