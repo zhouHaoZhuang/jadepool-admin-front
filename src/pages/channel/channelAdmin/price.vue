@@ -189,15 +189,13 @@ export default {
           title: "创建时间",
           dataIndex: "createTime",
           scopedSlots: { customRender: "createTime" },
-          sorter: true,
-          sortDirections: ["ascend", "descend"]
+          sorter: (a, b) => moment(a.createTime) - moment(b.createTime)
         },
         {
           title: "反馈时间",
           dataIndex: "modifyTime",
           scopedSlots: { customRender: "modifyTime" },
-          sorter: true,
-          sortDirections: ["ascend", "descend"]
+         sorter: (a, b) => moment(a.modifyTime) - moment(b.modifyTime)
         },
         {
           title: "备注",
