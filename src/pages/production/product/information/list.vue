@@ -98,11 +98,6 @@ export default {
           scopedSlots: { customRender: "supplierProductCode" }
         },
         {
-          title: "供应商产品Type",
-          dataIndex: "supplierProductType",
-          key: "supplierProductType"
-        },
-        {
           title: "备注",
           dataIndex: "remark",
           key: "remark"
