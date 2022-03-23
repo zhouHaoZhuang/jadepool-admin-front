@@ -40,6 +40,7 @@ module.exports = {
     proxy: {
       "/rps": {
         target: "http://ntm.ydidc.com/rps",
+         // target: "http://ntm.sailayun.com/rps",
         changeOrigin: true,
         pathRewrite: {
           "^/rps": ""

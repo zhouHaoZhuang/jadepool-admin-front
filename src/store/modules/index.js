@@ -14,7 +14,7 @@ import specification from "./specification";
 import tenant from "./tenant";
 import bills from './bills'
 import cdnDomain from "./cdnDomain";
-
+import withdraw from './withdraw'
 export default {
   user,
   account,
@@ -31,5 +31,6 @@ export default {
   specification,
   tenant,
   bills,
-  cdnDomain
+  cdnDomain,
+  withdraw
 };

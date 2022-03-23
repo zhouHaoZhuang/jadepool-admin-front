@@ -1,50 +1,53 @@
 <template>
-  <div class="channel-price-container">
-    <div class="top-search">
-      <a-input
-        v-model="listQuery.topSearch"
-        style="width:500px"
-        size="large"
-        placeholder="请选择渠道商"
-      />
-      <a-button type="primary" size="large" @click="search">
-        查询
-      </a-button>
-    </div>
-    <div class="price-content">
+  <div>
+    <div class="channel-list-container">
       <div class="public-header-wrap">
         <a-form-model layout="inline" :model="listQuery">
           <a-form-model-item>
-            <a-button type="primary" icon="plus" @click="updatePrice('add')">
-              新建渠道采购价格
-            </a-button>
+            <a-input
+              v-model="listQuery['qp-orderNo-eq']"
+              placeholder="请输入申请单号"
+            />
+          </a-form-model-item>
+          <a-form-model-item>
+            <a-input
+              v-model="listQuery['qp-customerName-eq']"
+              placeholder="请输入客户名称"
+            />
+          </a-form-model-item>
+          <a-form-model-item>
+            <a-range-picker
+              :show-time="{
+                hideDisabledOptions: true,
+                defaultValue: [
+                  moment('00:00:00', 'HH:mm:ss'),
+                  moment('11:59:59', 'HH:mm:ss')
+                ]
+              }"
+              format="YYYY-MM-DD HH:mm:ss"
+              :placeholder="['创建开始时间', '创建结束时间']"
+              @change="datePickerOnOk"
+            />
           </a-form-model-item>
           <a-form-model-item>
             <a-select
-              style="width:120px"
+              style="width: 120px"
               allowClear
-              v-model="listQuery.key"
-              placeholder="请选择"
+              v-model="listQuery['qp-status-eq']"
+              placeholder="请选择状态"
             >
               <a-select-option
-                v-for="item in columns.slice(0, columns.length - 3)"
-                :key="item.dataIndex"
-                :value="item.dataIndex"
+                v-for="(item, keyIndex) in applyStatus"
+                :key="item"
+                :value="keyIndex"
               >
-                {{ item.title }}
-              </a-select-option>
-              <a-select-option value="discountPrice">
-                折扣
+                {{ item }}
               </a-select-option>
             </a-select>
           </a-form-model-item>
+
           <a-form-model-item>
-            <a-input v-model="listQuery.search" placeholder="搜索关键词" />
-          </a-form-model-item>
-          <a-form-model-item>
-            <a-button type="primary" @click="search">
-              查询
-            </a-button>
+            <a-button type="primary" @click="search"> 查询 </a-button>
           </a-form-model-item>
         </a-form-model>
       </div>
@@ -55,65 +58,156 @@
           :data-source="data"
           rowKey="id"
           :pagination="paginationProps"
-          :scroll="{ x: 1300 }"
         >
-          <span slot="discountType" slot-scope="text">
-            {{ channelPriceType[text] }}
+          <span slot="orderNo" style="color: #00aaff" slot-scope="text">
+            {{ text }}
           </span>
+
+          <span slot="status" style="color: #ff6600" slot-scope="text">
+            <a-tag
+              :color="
+                text == 1
+                  ? '#87d068'
+                  : text == 2
+                  ? '#2db7f5'
+                  : text == 3
+                  ? 'red'
+                  : text == 4
+                  ? 'orange'
+                  : text == 5
+                  ? 'blue'
+                  : 'gray'
+              "
+              >{{ applyStatus[text] }}</a-tag
+            >
+          </span>
+          <div slot="createTime" slot-scope="text">
+            {{ text | formatDate }}
+          </div>
+          <div slot="modifyTime" slot-scope="text">
+            {{ text | formatDate }}
+          </div>
           <span slot="action" slot-scope="text, record">
-            <a-button type="link" @click="updatePrice('edit', record)">
-              编辑
+            <!-- <a-button type="link" @click="goDetail(record, 'detail')">
+              详情
             </a-button>
-            <a-divider type="vertical" />
-            <a-button type="link" @click="handleDel(record)">
-              删除
+            <a-divider type="vertical" /> -->
+
+            <a-button
+              type="link"
+              v-if="record.status == 2"
+              @click="receive(record)"
+            >
+              接收
+            </a-button>
+            <a-divider
+              type="vertical"
+              v-if="(record.status == 2) & (record.status == 5)"
+            />
+            <a-button
+              type="link"
+              @click="goDetail(record, 'confirm')"
+              v-if="record.status == 5"
+            >
+              确认
+            </a-button>
+            <a-divider type="vertical" v-if="record.status == 5" />
+            <a-button
+              type="link"
+              @click="goDetail(record, 'refuse')"
+              v-if="record.status == 5"
+            >
+              驳回
             </a-button>
           </span>
         </a-table>
       </div>
     </div>
+    <!-- 提现管理操作弹框 -->
+    <applyOption
+      v-model="visibleDetail"
+      :detailInfo="detailInfo"
+      :title="title"
+      :type="2"
+      @success="getList"
+    />
   </div>
 </template>
 
 <script>
-import { channelPriceType } from "@/utils/enum";
+import moment from "moment";
+import applyOption from "@/components/withdraw/applyOption.vue";
+import { applyStatus } from "@/utils/enum";
 export default {
+  components: { applyOption },
   data() {
     return {
-      channelPriceType,
+      applyStatus,
+      moment,
+      title: "",
+      visibleDetail: false, //是否显示申请详情的弹框
+      detailInfo: {}, //详情信息
       listQuery: {
-        key: undefined,
-        topSearch: "",
-        search: "",
         currentPage: 1,
         pageSize: 10,
         total: 0
       },
       columns: [
         {
-          title: "渠道商ID",
-          dataIndex: "channelCustomerCode"
+          title: "申请单号",
+          dataIndex: "orderNo",
+          scopedSlots: { customRender: "orderNo" }
         },
         {
-          title: "渠道商",
-          dataIndex: "channelCustomerName"
+          title: "状态",
+          dataIndex: "status",
+          width: 120,
+          scopedSlots: { customRender: "status" }
         },
         {
-          title: "资源池产品",
-          dataIndex: "productName"
+          title: "客户名称",
+          width: 170,
+          dataIndex: "customerName"
         },
         {
-          title: "资源池产品CODE",
-          dataIndex: "productCode"
+          title: "提现金额",
+          width: 100,
+          dataIndex: "dealAmount",
+          scopedSlots: { customRender: "dealAmount" }
         },
         {
-          title: "折扣方式",
-          dataIndex: "discountType",
-          scopedSlots: { customRender: "discountType" }
+          title: "收款账号",
+          width: 100,
+          dataIndex: "accountNo",
+          scopedSlots: { customRender: "accountNo" }
         },
         {
-          title: "折扣",
-          dataIndex: "discountPrice"
+          title: "收款人",
+          dataIndex: "accountName"
+        },
+        {
+          title: "创建时间",
+          dataIndex: "createTime",
+          scopedSlots: { customRender: "createTime" },
+          sorter: true,
+          sortDirections: ["ascend", "descend"]
+        },
+        {
+          title: "反馈时间",
+          dataIndex: "modifyTime",
+          scopedSlots: { customRender: "modifyTime" },
+          sorter: true,
+          sortDirections: ["ascend", "descend"]
+        },
+        {
+          title: "备注",
+          dataIndex: "memo",
+          scopedSlots: { customRender: "memo" }
+        },
+        {
+          title: "反馈信息",
+          dataIndex: "feedback",
+          scopedSlots: { customRender: "feedback" }
         },
         {
           title: "操作",
@@ -137,7 +231,7 @@ export default {
       tableLoading: false
     };
   },
-  activated() {
+  created() {
     this.getList();
   },
   methods: {
@@ -148,18 +242,13 @@ export default {
     },
     // 查询表格数据
     getList() {
-      this.tableLoading = true;
-      const newListQuery = {
-        ...this.listQuery,
-        ["qp-channelCustomerName-like"]: this.listQuery.topSearch
-      };
-      this.$getListQp("channel/getPriceList", newListQuery)
+      //   this.tableLoading = true;
+      this.$store
+        .dispatch("withdraw/getApplyList", this.listQuery)
         .then(res => {
-          this.data = [...res.data.list];
-          this.paginationProps.total = res.data.totalCount * 1;
-        })
-        .finally(() => {
           this.tableLoading = false;
+          this.data = res.data.list;
+          this.paginationProps.total = res.data.totalCount * 1;
         });
     },
     // 表格分页快速跳转n页
@@ -173,55 +262,77 @@ export default {
       this.listQuery.pageSize = pageSize;
       this.getList();
     },
-    // 新增/编辑
-    updatePrice(type, record) {
-      if (type === "add") {
-        this.$router.push("/channel/index/update");
+    // 日期选择
+    datePickerOnOk(value) {
+      if (value.length !== 0) {
+        this.listQuery["qp-createTime-ge"] = moment(value[0]).format(
+          "YYYY-MM-DD HH:mm:ss"
+        );
+        this.listQuery["qp-modifyTime-le"] = moment(value[1]).format(
+          "YYYY-MM-DD HH:mm:ss"
+        );
       } else {
-        this.$router.push({
-          path: "/channel/index/update",
-          query: { id: record.id }
-        });
+        this.listQuery["qp-createTime-ge"] = "";
+        this.listQuery["qp-modifyTime-le"] = "";
       }
     },
-    // 删除
-    handleDel(record) {
+    //接收
+    receive(record) {
       this.$confirm({
-        title: "确认要删除吗？",
+        title: "确认要接收申请吗？",
         onOk: () => {
-          this.$store
-            .dispatch("channel/delPrice", { id: record.id })
-            .then(res => {
-              this.$message.success("删除成功");
-              this.getList();
-            });
+          this.$store.dispatch("withdraw/receiveApply", record.id).then(res => {
+            this.$message.success("接收成功");
+            this.getList();
+          });
         }
       });
+    },
+    // 查看
+    goDetail(record, status) {
+      console.log(status);
+      //   1 : 提现申请详情 , 2:驳回提现申请 , 3:确认提现申请
+      if (status == "detail") {
+        this.title = 1;
+      } else if (status == "refuse") {
+        this.title = 2;
+      } else if (status == "confirm") {
+        this.title = 3;
+      }
+      this.$store
+        .dispatch("withdraw/getApplyDetail", record.id)
+        .then(res => {
+          this.detailInfo = res.data;
+        })
+        .finally(() => {
+          this.visibleDetail = true;
+        });
+      this.detailData = {};
+      this.visibleDetail = true;
     }
   }
 };
 </script>
 
 <style lang="less" scoped>
-.channel-price-container {
-  margin-top: -24px;
-  .top-search {
-    height: 80px;
-    background: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    input {
-      border-radius: 0 !important;
+.channel-list-container {
+  background: #fff;
+  padding: 24px;
+  .public-table-wrap {
+    .status {
+      display: flex;
+      align-items: center;
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: green;
+        margin-right: 5px;
+      }
+      .dot-err {
+        background: red;
+      }
     }
-    .ant-btn-lg {
-      border-radius: 0 4px 4px 0 !important;
-    }
-  }
-  .price-content {
-    padding: 20px;
-    margin: 20px;
-    background: #fff;
   }
 }
 </style>
