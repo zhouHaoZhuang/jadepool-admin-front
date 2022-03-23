@@ -415,7 +415,7 @@ export const asyncRoute = [
       // 生产
       {
         path: "/production",
-        name: "生产",
+        name: "采购",
         component: PageView,
         children: [
           {
@@ -504,27 +504,15 @@ export const asyncRoute = [
                   import("@/pages/production/product/information/list.vue")
               },
               {
-                path: "addproduct",
-                name: "新建产品线",
+                path: "updateProduct",
+                name: "产品线",
                 meta: {
                   invisible: true, // 不显示在左侧菜单
                   back: true // 后退
                 },
                 component: () =>
                   import(
-                    "@/pages/production/product/information/addproduct.vue"
-                  )
-              },
-              {
-                path: "editproduct",
-                name: "编辑产品线",
-                meta: {
-                  invisible: true, // 不显示在左侧菜单
-                  back: true // 后退
-                },
-                component: () =>
-                  import(
-                    "@/pages/production/product/information/editproduct.vue"
+                    "@/pages/production/product/information/updateProduct.vue"
                   )
               }
             ]

@@ -1,6 +1,7 @@
 // 默认请求地址
 const baseUrl = {
-  local: "http://ntm.sailayun.com/rps",
+  // local: "http://ntm.sailayun.com/rps",
+  local: "/rps",
   dev: "/rps",
   test: "/rps",
   prod: "/rps"
