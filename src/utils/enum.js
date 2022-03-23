@@ -124,3 +124,14 @@ export const regionDataEnum = {
   "me-east-1": "阿联酋（迪拜）",
   "eu-central-1": "德国（法兰克福）",
 };
+
+//cdn状态
+export const cdnStatus = {
+  0:"校验域名",
+  1: "正常运行",
+  2: "停用",
+  3: "配置中",
+  4: "配置失败",
+  5: "正在审核",
+  6:"审核失败"
+};

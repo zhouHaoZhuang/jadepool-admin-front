@@ -71,7 +71,7 @@
           <div v-if="text" slot="actualAmount" slot-scope="text">
             {{ text }}
           </div>
-          <span slot="Amount">
+          <span slot="actualAmount">
             账单金额
             <a-tooltip placement="top">
               <template slot="title">
@@ -91,7 +91,7 @@
               <a-icon type="question-circle" />
             </a-tooltip>
           </span>
-          <span slot="arrearage">
+          <span slot="owe">
             欠费金额
             <a-tooltip placement="top">
               <template slot="title">
@@ -162,58 +162,57 @@ export default {
       columns: [
         {
           title: "账单编号",
-          dataIndex: "orderNo"
+          dataIndex: "billNo"
         },
         {
           title: "订单编号",
-          dataIndex: "No"
+          dataIndex: "orderNo"
         },
         {
           title: "所属终端客户",
-          dataIndex: "corporationCode",
-          scopedSlots: { customRender: "corporationCode" }
+          dataIndex: "channelName",
         },
         {
           slots: { title: "customTitle" },
-          dataIndex: "receipt_file"
+          // dataIndex: "receipt_file"
         },
         {
           title: "单价",
-          dataIndex: "tradeType",
-          scopedSlots: { customRender: "tradeType" }
+          dataIndex: "unitPrice",
+          scopedSlots: { customRender: "unitPrice" }
         },
         {
           title: "单价单位",
-          dataIndex: "originAmount",
-          scopedSlots: { customRender: "originAmount" }
+          dataIndex: "unitPricePerUnit",
+          scopedSlots: { customRender: "unitPricePerUnit" }
         },
         {
-          dataIndex: "Amount",
-          slots: { title: "Amount" }
+          dataIndex: "actualAmount",
+          slots: { title: "actualAmount" }
         },
         {
           dataIndex: "Amoun",
           slots: { title: "Amoun" }
         },
         {
-          slots: { title: "arrearage" },
-          dataIndex: "arrearage"
+          slots: { title: "owe" },
+          dataIndex: "owe"
         },
-        {
-          title: "消费时间",
-          dataIndex: "expiredTime",
-          scopedSlots: { customRender: "expiredTime" },
-          sorter: (a, b) =>
-            new Date(a.expiredTime).getTime() -
-            new Date(b.expiredTime).getTime()
-        },
+        // {
+        //   title: "消费时间",
+        //   dataIndex: "expiredTime",
+        //   scopedSlots: { customRender: "expiredTime" },
+        //   sorter: (a, b) =>
+        //     new Date(a.expiredTime).getTime() -
+        //     new Date(b.expiredTime).getTime()
+        // },
         {
           title: "计费项",
-          dataIndex: "aaa"
+          dataIndex: "billItem"
         },
         {
           title: "实际用量",
-          dataIndex: "num"
+          dataIndex: "useData"
         }
         // {
         //   title: "操作",
@@ -251,20 +250,20 @@ export default {
         },
         {
           title: "订单编号",
-          dataIndex: "orderNo",
-          key: "orderNo",
+          dataIndex: "billNo",
+          key: "billNo",
           width: 170
         },
         {
           title: "渠道商名称",
-          dataIndex: "orderNo",
-          key: "orderNo",
+          dataIndex: "channelName",
+          key: "channelName",
           width: 170
         },
         {
           title: "渠道商ID",
-          dataIndex: "channel",
-          key: "channel",
+          dataIndex: "channelCode",
+          key: "channelCode",
           width: 150
         }
       ];
@@ -273,16 +272,15 @@ export default {
   methods: {
     //查询表格数据
     getList() {
-      // this.tableLoading = true;
-      // this.$getList("instance/getList", this.listQuery)
-      //   .then(res => {
-      //     // console.log(res);
-      //     this.data = [...res.data.list];
-      //     this.paginationProps.total = res.data.totalCount * 1;
-      //   })
-      //   .finally(() => {
-      //     this.tableLoading = false;
-      //   });
+      this.tableLoading = true;
+      this.$getList("bills/getList", this.listQuery)
+        .then(res => {
+          this.data = [...res.data.list];
+          this.paginationProps.total = res.data.totalCount * 1;
+        })
+        .finally(() => {
+          this.tableLoading = false;
+        });
     },
     // 搜索
     handleSearch() {

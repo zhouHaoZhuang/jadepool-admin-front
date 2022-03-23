@@ -47,42 +47,38 @@
           :pagination="paginationProps"
           :scroll="{ x: 1400 }"
         >
-          <span slot="corporationCode" slot-scope="text" style="color: #00aaff">
+          <span slot="domain" slot-scope="text" style="color: #00aaff">
             {{ text }}
           </span>
-          <div v-if="text" slot="originAmount" slot-scope="text">
-            {{ text }}
-          </div>
-          <span slot="customer" slot-scope="text" style="color: #00aaff">
+          <span slot="cnameValue" slot-scope="text" style="color: #00aaff">
             {{ text }}
           </span>
-          <span slot="channel" slot-scope="text" style="color: #00aaff">
-            {{ text }}
-          </span>
-          <div v-if="text" slot="actualAmount" slot-scope="text">
-            {{ text }}
-          </div>
-          <div slot="tradeType" slot-scope="text">
-            <span>{{ orderTypeMap[text] }}</span>
-          </div>
-          <div slot="expiredTime" slot-scope="text" v-if="text">
+          <div slot="createTime" slot-scope="text" v-if="text">
             {{ text | formatDate }}
           </div>
-          <div slot="payTime" slot-scope="text" v-if="text">
-            {{ text | formatDate }}
+          <div slot="cdnStatus" slot-scope="text">
+            {{ cdnStatus[text] }}
           </div>
-          <span
-            :class="{ green: text === 9, blue: text !== 9 }"
-            slot="tradeStatus"
-            slot-scope="text"
-          >
-            {{ orderStatusEnum[text] }}
-          </span>
+          <div slot="httpsStatus" slot-scope="text">
+            <a-tag :color="text == 1 ? 'gray' : text == 2 ? 'green' : ''">{{
+              text == 1 ? "未启用" : "已启用"
+            }}</a-tag>
+          </div>
           <div slot="action" slot-scope="text, record">
-            <a-button v-permission="'view'" type="link" @click="toOnline(record)">
+            <a-button
+             v-if="record.cdnStatus == 6"
+              v-permission="'view'"
+              type="link"
+              @click="operationline('offline',record)"
+            >
               上线
             </a-button>
-               <a-button v-permission="'view'" type="link" @click="toOffline(record)">
+            <a-button
+              v-if="record.cdnStatus == 1"
+              v-permission="'view'"
+              type="link"
+              @click="operationline('online',record)"
+            >
               下线
             </a-button>
           </div>
@@ -100,19 +96,17 @@
 
 <script>
 import moment from "moment";
-import { orderStatusEnum, orderTypeMap } from "@/utils/enum.js";;
+import { cdnStatus } from "@/utils/enum.js";
+
 export default {
   data() {
     return {
-      orderStatusEnum,
-      orderTypeMap,
+      cdnStatus,
       listQuery: {
         key: undefined,
         search: "",
-        startTime: "",
+        createTime: "",
         endTime: "",
-        tradeType: undefined,
-        tradeStatus: undefined,
         currentPage: 1,
         pageSize: 10,
         total: 0
@@ -121,41 +115,34 @@ export default {
       columns: [
         {
           title: "域名",
-          dataIndex: "orderNo",
-          width: 170,
+          dataIndex: "domain",
+          scopedSlots: { customRender: "domain" }
         },
         {
           title: "所属终端客户",
-          dataIndex: "corporationCode",
-          width: 170,
-          scopedSlots: { customRender: "corporationCode" }
+          dataIndex: "channelName"
         },
         {
           title: "CNAME",
-          dataIndex: "tradeType",
-          scopedSlots: { customRender: "tradeType" },
-          width: 130
+          dataIndex: "cnameValue",
+          scopedSlots: { customRender: "cnameValue" }
         },
         {
           title: "状态",
-          dataIndex: "customer",
-          width: 170,
-          scopedSlots: { customRender: "customer" }
+          dataIndex: "cdnStatus",
+          scopedSlots: { customRender: "cdnStatus" }
         },
         {
           title: "HTTPS",
-          dataIndex: "originAmount",
-          scopedSlots: { customRender: "originAmount" },
-          width: 100
+          dataIndex: "httpsStatus",
+          scopedSlots: { customRender: "httpsStatus" }
         },
         {
           title: "创建时间",
-          dataIndex: "expiredTime",
-          width: 190,
-          scopedSlots: { customRender: "expiredTime" },
+          dataIndex: "createTime",
+          scopedSlots: { customRender: "createTime" },
           sorter: (a, b) =>
-            new Date(a.expiredTime).getTime() -
-            new Date(b.expiredTime).getTime()
+            new Date(a.createTime).getTime() - new Date(b.createTime).getTime()
         },
         {
           title: "操作",
@@ -187,26 +174,26 @@ export default {
       return [
         {
           title: "域名",
-          dataIndex: "ordero",
-          key: "ordero",
+          dataIndex: "domain",
+          key: "domain",
           width: 170
         },
         {
-          title: "所属终端客户",
-          dataIndex: "orderN",
-          key: "orderN",
+          title: "cname",
+          dataIndex: "cnameValue",
+          key: "cnameValue",
           width: 170
         },
         {
           title: "渠道商名称",
-          dataIndex: "oNo",
-          key: "oNo",
+          dataIndex: "channelName",
+          key: "channelName",
           width: 170
         },
         {
           title: "渠道商ID",
-          dataIndex: "channel",
-          key: "channel",
+          dataIndex: "channelCode",
+          key: "channelCode",
           width: 150
         }
       ];
@@ -216,9 +203,8 @@ export default {
     //查询表格数据
     getList() {
       this.tableLoading = true;
-      this.$getList("instance/getList", this.listQuery)
+      this.$getList("cdnDomain/getList", this.listQuery)
         .then(res => {
-          // console.log(res);
           this.data = [...res.data.list];
           this.paginationProps.total = res.data.totalCount * 1;
         })
@@ -235,12 +221,12 @@ export default {
     datePickerOnOk(value) {
       console.log(value);
       if (value.length !== 0) {
-        this.listQuery.startTime = moment(value[0]).format(
+        this.listQuery.createTime = moment(value[0]).format(
           "YYYY-MM-DD HH:mm:ss"
         );
         this.listQuery.endTime = moment(value[1]).format("YYYY-MM-DD HH:mm:ss");
       } else {
-        this.listQuery.startTime = "";
+        this.listQuery.createTime = "";
         this.listQuery.endTime = "";
       }
     },
@@ -260,33 +246,31 @@ export default {
       this.getList();
     },
     // 上线操作
-    toOnline(record) {
+    operationline(val,record) {
+      let title;
+      let obj = {}
+      obj.domainName=record.domain
+      if(val == 'online'){
+        title =  '是否要恢复该域名的CDN服务?'
+        obj.type='online'
+      }
+      if(val == 'offline'){
+        title = '下线后，该域名将停止CDN服务，确定下线吗'
+        obj.type='offline'
+      }
+
       this.$confirm({
-        title: "是否要恢复该域名的CDN服务？",
+        title: title,
         onOk: () => {
-          // this.$store
-          //   .dispatch("channel/delPrice", { id: record.id })
-          //   .then(res => {
-          //     this.$message.success("操作成功");
-          //     this.getList();
-          //   });
+          this.$store
+            .dispatch("cdnDomain/onlineOrOffline", obj)
+            .then(res => {
+              this.$message.success("操作成功");
+              this.getList();
+            });
         }
       });
     },
-    //下线
-    toOffline(record) {
-         this.$confirm({
-        title: "下线后，该域名将停止CDN服务，确定下线吗？",
-        onOk: () => {
-          // this.$store
-          //   .dispatch("channel/delPrice", { id: record.id })
-          //   .then(res => {
-          //     this.$message.success("操作成功");
-          //     this.getList();
-          //   });
-        }
-      });
-    }
   }
 };
 </script>
