@@ -37,6 +37,7 @@
             style="width:100%"
             allowClear
             v-model="form.productCode"
+            @change="handleProductChange"
             placeholder="资源池产品"
           >
             <a-select-option
@@ -48,14 +49,35 @@
             </a-select-option>
           </a-select>
         </a-form-model-item>
+        <a-form-model-item
+          v-if="type === 'add'"
+          label="产品分类"
+          prop="supplierProductCode"
+        >
+          <a-select v-model="form.productTypeCode">
+            <a-select-option
+              v-for="item in productList"
+              :value="item.productTypeCode"
+              :key="item.productTypeCode"
+            >
+              {{ item.productTypeName }}
+            </a-select-option>
+          </a-select>
+        </a-form-model-item>
         <a-form-model-item v-if="type === 'edit'" label="渠道商名称">
           {{ form.channelCustomerCode }}
         </a-form-model-item>
         <a-form-model-item v-if="type === 'edit'" label="资源池产品">
           {{ form.productCode }}
         </a-form-model-item>
+        <a-form-model-item v-if="type === 'edit'" label="产品分类">
+          {{ form.productTypeName }}
+        </a-form-model-item>
         <a-form-model-item label="折扣方式" prop="discountType">
-          <a-radio-group v-model="form.discountType">
+          <a-radio-group
+            v-model="form.discountType"
+            @change="handleRadioChange"
+          >
             <a-radio value="0">
               固定价格
             </a-radio>
@@ -65,12 +87,25 @@
           </a-radio-group>
         </a-form-model-item>
         <a-form-model-item
-          v-if="form.discountType === '1'"
+          v-show="form.discountType === '0'"
+          label="固定价格"
+          prop="discountPrice"
+        >
+          <a-input
+            style="width:150px"
+            v-model="form.discountPrice"
+            v-number-evolution="{ value: 2, min: 0, max: 99999 }"
+            :addon-after="'元/' + inputUnit"
+          />
+        </a-form-model-item>
+        <a-form-model-item
+          v-show="form.discountType === '1'"
           label="折扣比例"
           prop="discountPrice"
         >
           <a-input
             v-model="form.discountPrice"
+            style="width:150px"
             addon-after="%"
             v-number-evolution="{ value: 2, min: 0, max: 100 }"
           />
@@ -98,7 +133,8 @@ export default {
         productCode: undefined,
         productName: "",
         discountType: "1",
-        discountPrice: undefined
+        discountPrice: undefined,
+        productTypeCode: undefined
       },
       rules: {
         channelCustomerCode: [
@@ -125,14 +161,16 @@ export default {
         discountPrice: [
           {
             required: true,
-            message: "请输入折扣比例",
+            message: "请输入",
             trigger: "blur"
           }
         ]
       },
       loading: false,
       data: [],
-      priceData: []
+      priceData: [],
+      productList: [],
+      inputUnit: ""
     };
   },
   watch: {
@@ -179,7 +217,25 @@ export default {
         .dispatch("channel/getPriceDetail", { id: this.$route.query.id })
         .then(res => {
           this.form = { ...res.data };
+          this.inputUnit = res.data.chargeUnit;
         });
+    },
+    // 资源池产品切换
+    handleProductChange(val) {
+      const productObj = this.priceData.find(ele => ele.productCode === val);
+      const flag =
+        Object.keys(productObj).includes("productType") &&
+        productObj.productType.productTypes.length > 0;
+      this.productList = flag ? [...productObj.productType.productTypes] : [];
+      if (!flag) {
+        this.form.productTypeCode = undefined;
+      } else {
+        this.form.productTypeCode = this.productList[0].productTypeCode;
+        this.inputUnit = this.productList[0].chargeUnit;
+      }
+    },
+    handleRadioChange() {
+      this.form.discountPrice = "";
     },
     // 提交
     onSubmit() {
@@ -233,8 +289,11 @@ export default {
         productCode: undefined,
         productName: "",
         discountType: "1",
-        discountPrice: ""
+        discountPrice: "",
+        productTypeCode: undefined
       };
+      this.productList = [];
+      this.inputUnit = "";
     }
   }
 };
