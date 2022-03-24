@@ -286,7 +286,7 @@ export const asyncRoute = [
                 meta: {
                   icon: "home"
                 },
-                component: () => import("@/pages/channel/channelAdmin/price")
+                component: () => import("@/pages/examine/withdrawal/index")
               },
               {
                 path: "refund",
