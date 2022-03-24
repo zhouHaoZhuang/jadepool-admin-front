@@ -88,10 +88,10 @@
             {{ text | formatDate }}
           </div>
           <span slot="action" slot-scope="text, record">
-            <!-- <a-button type="link" @click="goDetail(record, 'detail')">
+            <a-button type="link" @click="goDetail(record, 'detail')">
               详情
             </a-button>
-            <a-divider type="vertical" /> -->
+            <a-divider type="vertical"  v-if="record.status == 2"/>
 
             <a-button
               type="link"
