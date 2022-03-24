@@ -273,7 +273,7 @@ export default {
     //查询表格数据
     getList() {
       this.tableLoading = true;
-      this.$getList("bills/getList", this.listQuery)
+      this.$getListQp("bills/getList", this.listQuery)
         .then(res => {
           this.data = [...res.data.list];
           this.paginationProps.total = res.data.totalCount * 1;

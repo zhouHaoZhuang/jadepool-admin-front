@@ -66,10 +66,10 @@
           </div>
           <div slot="action" slot-scope="text, record">
             <a-button
-             v-if="record.cdnStatus == 6"
+              v-if="record.cdnStatus == 6"
               v-permission="'view'"
               type="link"
-              @click="operationline('offline',record)"
+              @click="operationline('offline', record)"
             >
               上线
             </a-button>
@@ -77,7 +77,7 @@
               v-if="record.cdnStatus == 1"
               v-permission="'view'"
               type="link"
-              @click="operationline('online',record)"
+              @click="operationline('online', record)"
             >
               下线
             </a-button>
@@ -105,8 +105,6 @@ export default {
       listQuery: {
         key: undefined,
         search: "",
-        createTime: "",
-        endTime: "",
         currentPage: 1,
         pageSize: 10,
         total: 0
@@ -203,7 +201,7 @@ export default {
     //查询表格数据
     getList() {
       this.tableLoading = true;
-      this.$getList("cdnDomain/getList", this.listQuery)
+      this.$getListQp("cdnDomain/getList", this.listQuery)
         .then(res => {
           this.data = [...res.data.list];
           this.paginationProps.total = res.data.totalCount * 1;
@@ -221,13 +219,15 @@ export default {
     datePickerOnOk(value) {
       console.log(value);
       if (value.length !== 0) {
-        this.listQuery.createTime = moment(value[0]).format(
+        this.listQuery["qp-createTime-eq"] = moment(value[0]).format(
           "YYYY-MM-DD HH:mm:ss"
         );
-        this.listQuery.endTime = moment(value[1]).format("YYYY-MM-DD HH:mm:ss");
+        this.listQuery["qp-modifyTime-eq"] = moment(value[1]).format(
+          "YYYY-MM-DD HH:mm:ss"
+        );
       } else {
-        this.listQuery.createTime = "";
-        this.listQuery.endTime = "";
+        this.listQuery["qp-createTime-eq"] = "";
+        this.listQuery["qp-modifyTime-eq"] = "";
       }
     },
     // 禁用日期--禁用当天之后+当天前一个月所有
@@ -246,31 +246,28 @@ export default {
       this.getList();
     },
     // 上线操作
-    operationline(val,record) {
+    operationline(val, record) {
       let title;
-      let obj = {}
-      obj.domainName=record.domain
-      if(val == 'online'){
-        title =  '是否要恢复该域名的CDN服务?'
-        obj.type='online'
+      let obj = {};
+      obj.domainName = record.domain;
+      if (val == "online") {
+        title = "是否要恢复该域名的CDN服务?";
+        obj.type = "online";
       }
-      if(val == 'offline'){
-        title = '下线后，该域名将停止CDN服务，确定下线吗'
-        obj.type='offline'
+      if (val == "offline") {
+        title = "下线后，该域名将停止CDN服务，确定下线吗";
+        obj.type = "offline";
       }
-
       this.$confirm({
         title: title,
         onOk: () => {
-          this.$store
-            .dispatch("cdnDomain/onlineOrOffline", obj)
-            .then(res => {
-              this.$message.success("操作成功");
-              this.getList();
-            });
+          this.$store.dispatch("cdnDomain/onlineOrOffline", obj).then(res => {
+            this.$message.success("操作成功");
+            this.getList();
+          });
         }
       });
-    },
+    }
   }
 };
 </script>
