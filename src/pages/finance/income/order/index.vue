@@ -103,7 +103,18 @@
         <div slot="originAmount" slot-scope="text">
           {{ text.toFixed(2) }}
         </div>
-        <div slot="actualAmount" slot-scope="text">
+        <div slot="customerName" slot-scope="text, record">
+          {{ record.customerName }}
+          <span> {{ record.customerCode }}</span>
+        </div>
+        <div slot="corporationCode" slot-scope="text, record">
+          {{ text }}
+          <span> {{ record.corporationName }}</span>
+        </div>
+        <div slot="chargingType" slot-scope="text">
+          {{ text == 'AfterPay' ?'后支付':'预支付' }}
+        </div>
+          <div slot="actualAmount" slot-scope="text">
           {{ text.toFixed(2) }}
         </div>
         <div slot="tradeType" slot-scope="text">
@@ -154,11 +165,7 @@ export default {
         search: "",
         currentPage: 1,
         pageSize: 10,
-        total: 0,
-        "qp-createTime-ge": "",
-        "qp-createTime-le": "",
-        "qp-tradeType-eq": "",
-        "qp-tradeStatus-eq": ""
+        total: 0
       },
       columns: [
         {
@@ -168,18 +175,26 @@ export default {
           width: 170
         },
         {
-          title: "渠道ID",
-          dataIndex: "cutomerCode",
-          key: "cutomerCode",
-          width: 180
-        },
-        {
           title: "订单类型",
           dataIndex: "tradeType",
           key: "tradeType",
           scopedSlots: { customRender: "tradeType" },
           width: 150
+        },    {
+          title: "所属渠道商",
+          dataIndex: "customerName",
+          key: "customerName",
+          width: 180,
+          scopedSlots: { customRender: "customerName" }
         },
+        {
+          title: "所属终端客户",
+          dataIndex: "corporationCode",
+          key: "corporationCode",
+          width: 180,
+          scopedSlots: { customRender: "corporationCode" }
+        },
+    
         {
           title: "原价",
           dataIndex: "originAmount",
@@ -194,6 +209,13 @@ export default {
           scopedSlots: { customRender: "actualAmount" },
           width: 100
         },
+            {
+          title: "折扣率",
+          dataIndex: "discountRate",
+          key: "discountRate",
+          scopedSlots: { customRender: "discountRate" },
+          width: 100
+        },
         {
           title: "状态",
           dataIndex: "tradeStatus",
@@ -201,17 +223,12 @@ export default {
           width: 130,
           scopedSlots: { customRender: "tradeStatus" }
         },
-        // {
-        //   title: '现金支付',
-        //   dataIndex: 'cashPly',
-        //   key: 'cashPly',
-        //   width: 100,
-        // },
         {
-          title: "折扣率",
-          dataIndex: "discountRate",
-          key: "discountRate",
-          width: 100
+          title: '计费方式',
+          dataIndex: 'chargingType',
+          key: 'chargingType',
+          width: 100,
+          scopedSlots: { customRender: "chargingType" }
         },
         {
           title: "创建时间",

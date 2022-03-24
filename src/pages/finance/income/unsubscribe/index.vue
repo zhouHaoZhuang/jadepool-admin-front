@@ -109,9 +109,9 @@
           <span slot="customer" slot-scope="text" style="color: #00aaff">
             {{ text }}
           </span>
-          <span slot="channel" slot-scope="text" style="color: #00aaff">
-            {{ text }}
-          </span>
+        <div slot="chargingType" slot-scope="text">
+          {{ text == 'AfterPay' ?'后支付':'预支付' }}
+        </div>
           <div v-if="text" slot="actualAmount" slot-scope="text">
             {{ text }}
           </div>
@@ -173,16 +173,16 @@ export default {
       },
       tableLoading: false,
       columns: [
-        {
-          title: "退单编号",
-          dataIndex: "orderNo",
-          width: 170
-        },
+        // {
+        //   title: "退单编号",
+        //   dataIndex: "orderNo",
+        //   width: 170
+        // },
         {
           title: "订单编号",
-          dataIndex: "corporationCode",
+          dataIndex: "orderNo",
           width: 170,
-          scopedSlots: { customRender: "corporationCode" }
+          scopedSlots: { customRender: "orderNo" }
         },
         {
           title: "订单类型",
@@ -192,22 +192,22 @@ export default {
         },
         {
           title: "所属终端客户",
-          dataIndex: "customer",
+          dataIndex: "corporationCode",
           width: 170,
-          scopedSlots: { customRender: "customer" }
+          scopedSlots: { customRender: "corporationCode" }
         },
         {
           title: "订单金额",
-          dataIndex: "originAmount",
-          scopedSlots: { customRender: "originAmount" },
-          width: 100
-        },
-        {
-          title: "退款金额",
           dataIndex: "actualAmount",
           scopedSlots: { customRender: "actualAmount" },
           width: 100
         },
+        // {
+        //   title: "退款金额",
+        //   dataIndex: "actualAmount",
+        //   scopedSlots: { customRender: "actualAmount" },
+        //   width: 100
+        // },
         {
           title: "状态",
           dataIndex: "tradeStatus",
@@ -216,8 +216,8 @@ export default {
         },
         {
           title: "计费方式",
-          dataIndex: "cashPay",
-          scopedSlots: { customRender: "cashPay" }
+          dataIndex: "chargingType",
+          scopedSlots: { customRender: "chargingType" }
         },
         {
           title: "创建时间",
@@ -269,8 +269,8 @@ export default {
         },
         {
           title: "渠道商名称",
-          dataIndex: "orderNo",
-          key: "orderNo",
+          dataIndex: "customerName",
+          key: "customerName",
           width: 170
         },
         {
@@ -284,16 +284,15 @@ export default {
   },
   methods: {
     //查询表格数据
-    getList() {
-      // this.tableLoading = true;
-      // this.$getList("member/getList", this.listQuery)
-      //   .then(res => {
-      //     this.data = [...res.data.list];
-      //     this.paginationProps.total = res.data.totalCount * 1;
-      //   })
-      //   .finally(() => {
-      //     this.tableLoading = false;
-      //   });
+   getList() {
+      this.loading = true;
+      this.$store
+        .dispatch("financialOrder/getList", this.listQuery)
+        .then(res => {
+          this.paginationProps.total = res.data.totalCount * 1;
+          this.data = res.data.list;
+          this.loading = false;
+        });
     },
     // 搜索
     handleSearch() {
@@ -331,9 +330,9 @@ export default {
     // 查看详情
     handleSelectDetail(record) {
       this.$router.push({
-        path: "/sale/unsubscribe/detail",
+        path: "/finance/order/unsubscribe/detail",
         query: {
-          id: record.orderNo
+          id: record.id
         }
       });
     }

@@ -40,14 +40,16 @@ export const feeReduction = {
   26: "阿里云升配",
   35: "资源池降配",
   36: "阿里云降配",
-  55: "服务器退订"
+  55: "服务器退订",
+  65:'CDN产品'
 };
 // 订单状态
 export const orderStatus = {
   "-1": "交易关闭",
   "1": "订单待支付",
   "5": "交易完成",
-  "-3": "服务器创建异常"
+  "-3": "服务器创建异常",
+  '0':'支付失败'
 };
 // 权限管理-权限单选map
 export const systemAdminMapEnum = {

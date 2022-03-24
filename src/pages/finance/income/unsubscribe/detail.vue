@@ -6,32 +6,23 @@
       <ul>
         <li>
           <span>退单编号:</span>
-          <!-- <span>{{ orderInfo.orderNo }}</span> -->
-          <span>1</span>
+          <span>{{ orderInfo.orderNo }}</span>
         </li>
         <li>
           <span>订单编号:</span>
-          <span>1</span>
-
-          <!-- <span>{{ orderInfo.orderNo }}</span> -->
+          <span>{{ orderInfo.orderNo }}</span>
         </li>
         <li>
           <span>订单类型:</span>
-          <span>1</span>
-
-          <!-- <span>{{ orderTypeMap[orderInfo.tradeType] }} </span> -->
+          <span>{{ orderInfo.tradeType === 1 ? "新购" : "销售" }} </span>
         </li>
         <li>
           <span>创建时间:</span>
-          <span>1</span>
-
-          <!-- <span>{{ orderInfo.createTime | formatDate }}</span> -->
+          <span>{{ orderInfo.createTime | formatDate }}</span>
         </li>
         <li>
           <span>退款原因:</span>
-          <span>1</span>
-
-          <!-- <span>{{ orderStatusEnum[orderInfo.tradeStatus] }}</span> -->
+          <span>{{ orderInfo.remark }}</span>
         </li>
       </ul>
     </div>
@@ -41,15 +32,11 @@
       <ul>
         <li>
           <span>退款金额:</span>
-          <span>1</span>
-
-          <!-- <span>{{ data[0].corporationCode }}</span> -->
+          <span>{{ orderInfo.actualAmount }}</span>
         </li>
         <li>
           <span>退款状态:</span>
-          <span>1</span>
-
-          <!-- <span>{{ data[0].realName }} </span> -->
+          <span>{{ orderInfo.payStatus == 1 ? "待退款" : "已退款" }}</span>
         </li>
       </ul>
     </div>
@@ -63,9 +50,8 @@
           rowKey="corporationCode"
           :pagination="false"
         >
-          <div slot="tradeType" slot-scope="text">
-            {{ text }}
-            <!-- {{ orderTypeMap[text] }} -->
+          <div slot="chargingType" slot-scope="text">
+            {{ text == "AfterPay" ? "后支付" : "预支付" }}
           </div>
           <div slot="productConfig" slot-scope="text, record">
             <div>CPU:{{ record.cpu }}核</div>
@@ -87,15 +73,11 @@
       <ul>
         <li>
           <span>客户ID:</span>
-          <span>1</span>
-
-          <!-- <span>{{ data[0].corporationCode }}</span> -->
+          <span>{{ data[0].corporationCode }} </span>
         </li>
         <li>
           <span>客户名称:</span>
-          <span>1</span>
-
-          <!-- <span>{{ data[0].realName }} </span> -->
+          <span>{{ data[0].corporationName }} </span>
         </li>
       </ul>
     </div>
@@ -121,15 +103,15 @@ export default {
         },
         {
           title: "具体配置",
-          key: "productConfig",
-          width: 250,
-          scopedSlots: { customRender: "productConfig" }
+          dataIndex: "ecsPrice",
+          key: "ecsPrice",
+          scopedSlots: { customRender: "ecsPrice" }
         },
         {
           title: "计费方式",
-          dataIndex: "chargeModel",
-          key: "chargeModel",
-          scopedSlots: { customRender: "chargeModel" }
+          dataIndex: "chargingType",
+          key: "chargingType",
+          scopedSlots: { customRender: "chargingType" }
         },
         {
           title: "订单金额",
@@ -138,27 +120,24 @@ export default {
         },
         {
           title: "退款金额",
-          dataIndex: "originAmount",
-          key: "originAmount"
+          dataIndex: "actualAmount",
+          key: "actualAmount1"
         }
       ]
     };
   },
   activated() {
     let id = this.$route.query.id;
-    // console.log(id);
     this.$store.dispatch("financialOrder/getOne", id).then(res => {
-      console.log(res);
-      // let dataDisk = res.data.ecsPrice.dataDisk;
-      // let dataDiskSize = 0;
-      // if (dataDisk) {
-      //   for (let index = 0; index < dataDisk.length; index++) {
-      //     dataDiskSize += dataDisk[index].size;
-      //   }
-      //   res.data.ecsPrice.dataDiskSize = dataDiskSize;
-      // }
-      // console.log(dataDisk);
-      this.orderInfo = {};
+      let dataDisk = res.data.ecsPrice.dataDisk;
+      let dataDiskSize = 0;
+      if (dataDisk) {
+        for (let index = 0; index < dataDisk.length; index++) {
+          dataDiskSize += dataDisk[index].size;
+        }
+        res.data.ecsPrice.dataDiskSize = dataDiskSize;
+      }
+      this.orderInfo = res.data;
       this.data = [res.data];
     });
   }

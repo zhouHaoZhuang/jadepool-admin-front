@@ -5,7 +5,7 @@
       <p>订单信息</p>
       <ul>
         <li>
-          <span>订单ID:</span>
+          <span>订单编号:</span>
           <span>{{ orderInfo.orderNo }}</span>
         </li>
         <li>
@@ -13,39 +13,45 @@
           <span>{{ orderInfo.tradeType === 1 ? "新购" : "销售" }} </span>
         </li>
         <li>
-          <span>创建时间:</span>
-          <span>{{ orderInfo.createTime | formatDate }}</span>
-        </li>
-        <li>
           <span>状态:</span>
           <span>{{ orderStatus[orderInfo.tradeStatus] }}</span>
         </li>
         <li>
+          <span>创建时间:</span>
+          <span>{{ orderInfo.createTime | formatDate }}</span>
+        </li>
+        <!-- <li>
           <span>支付时间:</span>
           <span>{{ orderInfo.payTime | formatDate }}</span>
+        </li> -->
+      </ul>
+    </div>
+    <!-- 支付信息 -->
+    <div class="channel">
+      <p>支付信息</p>
+      <ul>
+        <li>
+          <span>支付金额:</span>
+          <span>{{ orderInfo.actualAmount }}</span>
+        </li>
+        <li>
+          <span>支付状态:</span>
+          <span>{{ orderInfo.payStatus == 1 ? "待支付" : "已支付" }}</span>
         </li>
       </ul>
+    </div>
+    <!-- 产品信息 -->
+    <div class="channel">
+      <p>产品信息</p>
       <div class="config">
-        <div>
-          <span>价格备注:</span>
-          <span>{{ orderInfo.priceRemark }}</span>
-        </div>
-        <div>
-          <span>订单备注:</span>
-          <span>{{ orderInfo.remark }}</span>
-        </div>
-        <div>
-          <span>配置信息</span>
-        </div>
         <a-table
           :columns="columns"
           :data-source="data"
-          rowKey="id"
-          :pagination='false'
+          rowKey="corporationCode"
+          :pagination="false"
         >
-          <a slot="name" slot-scope="text">{{ text }}</a>
-          <div slot="tradeType" slot-scope="text">
-            {{ feeReduction[text] }}
+          <div slot="chargingType" slot-scope="text">
+             {{ text == 'AfterPay' ?'后支付':'预支付' }}
           </div>
           <div slot="ecsPrice" slot-scope="text">
             <div>CPU：{{ text.cpu }}</div>
@@ -59,42 +65,37 @@
         </a-table>
       </div>
     </div>
-    <!-- 渠道商及企业信息 -->
+    <!-- 客户信息 -->
     <div class="channel">
-      <p>渠道商及企业信息</p>
+      <p>客户信息</p>
       <ul>
         <li>
           <span>渠道商ID:</span>
-          <span>{{ data[0].cutomerCode }}</span>
+          <span>{{ data[0].customerCode }}</span>
         </li>
         <li>
-          <span>企业ID:</span>
-          <span>{{ data[0].corporationCode }}</span>
-        </li>
-        <!-- <li>
-          <span>企业名称:</span>
-          <span>{{data[0].customerName}} </span>
+          <span>渠道商名称:</span>
+          <span>{{ data[0].customerName }}</span>
         </li>
         <li>
-          <span>简称:</span>
-          <span>{{data[0].customerShortName}}</span>
+          <span>租户ID:</span>
+          <span>{{ data[0].tenantId }}</span>
         </li>
         <li>
-          <span>企业名称:</span>
-          <span>{{data[0].corporationName}}</span>
+          <span>客户ID:</span>
+          <span>{{ data[0].corporationCode }} </span>
         </li>
         <li>
-          <span>认证状态:</span>
-          <span>{{data[0].certificationStatus}}</span>
-        </li> -->
+          <span>客户名称:</span>
+          <span>{{ data[0].corporationName }} </span>
+        </li>
       </ul>
     </div>
   </div>
 </template>
 
 <script>
-import { orderStatus, feeReduction,regionDataEnum } from "@/utils/enum.js";
-
+import { orderStatus, feeReduction, regionDataEnum } from "@/utils/enum.js";
 export default {
   data() {
     return {
@@ -111,52 +112,44 @@ export default {
           width: 100
         },
         {
-          title: "类型",
-          dataIndex: "tradeType",
-          key: "tradeType",
-          scopedSlots: { customRender: "tradeType" }
-        },
-        {
-          title: "配置信息",
+          title: "具体配置",
           dataIndex: "ecsPrice",
           key: "ecsPrice",
           scopedSlots: { customRender: "ecsPrice" }
         },
         {
+          title: "计费方式",
+          dataIndex: "chargingType",
+          key: "chargingType",
+          scopedSlots: { customRender: "chargingType" }
+        },
+        {
           title: "数量",
           dataIndex: "ecsPrice.amount",
-          key: "ecsPrice.amount"
+          key: "ecsPrice.amount",
+          width: 100
         },
-        // {
-        //   title: "付费方式",
-        //   dataIndex: "ecsPrice.chargeModel",
-        //   key: "ecsPrice.chargeModel"
-        // },
         {
           title: "原价",
           dataIndex: "originAmount",
           key: "originAmount"
         },
         {
-          title: "订单金额",
+          title: "推广优惠",
+          dataIndex: "discountAmount",
+          key: "discountAmount",
+          width: 100
+        },
+        {
+          title: "折扣",
+          dataIndex: "discountRate",
+          key: "discountRate"
+        },
+        {
+          title: "成交价",
           dataIndex: "actualAmount",
           key: "actualAmount"
-        },
-        {
-          title: "推广优惠",
-          key: "discountAmount",
-          dataIndex: "discountAmount"
-        },
-        {
-          title: "代金券抵扣",
-          key: "discountRate",
-          dataIndex: "discountRate"
         }
-        // {
-        //   title: "现金实付",
-        //   key: "cash",
-        //   dataIndex: "cash"
-        // }
       ]
     };
   },
