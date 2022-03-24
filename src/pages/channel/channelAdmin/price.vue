@@ -4,16 +4,10 @@
       <div class="public-header-wrap">
         <a-form-model layout="inline" :model="listQuery">
           <a-form-model-item>
-            <a-input
-              v-model="listQuery['qp-orderNo-eq']"
-              placeholder="请输入申请单号"
-            />
+            <a-input v-model="listQuery.search" placeholder="请输入申请单号" />
           </a-form-model-item>
           <a-form-model-item>
-            <a-input
-              v-model="listQuery['qp-customerName-eq']"
-              placeholder="请输入客户名称"
-            />
+            <a-input v-model="listQuery.name" placeholder="请输入客户名称" />
           </a-form-model-item>
           <a-form-model-item>
             <a-range-picker
@@ -33,15 +27,15 @@
             <a-select
               style="width: 120px"
               allowClear
-              v-model="listQuery['qp-status-eq']"
+              v-model="listQuery.key"
               placeholder="请选择状态"
             >
               <a-select-option
-                v-for="(item, keyIndex) in applyStatus"
-                :key="item"
-                :value="keyIndex"
+                v-for="item in columns.slice(0, columns.length - 3)"
+                :key="item.dataIndex"
+                :value="item.dataIndex"
               >
-                {{ item }}
+                {{ item.title }}
               </a-select-option>
             </a-select>
           </a-form-model-item>
@@ -62,61 +56,43 @@
           <span slot="orderNo" style="color: #00aaff" slot-scope="text">
             {{ text }}
           </span>
+          <span slot="discountAmount" style="color: #ff6600" slot-scope="text">
+            {{ text }}
+          </span>
 
-          <span slot="status" style="color: #ff6600" slot-scope="text">
-            <a-tag
-              :color="
-                text == 1
-                  ? '#87d068'
-                  : text == 2
-                  ? '#2db7f5'
-                  : text == 3
-                  ? 'red'
-                  : text == 4
-                  ? 'orange'
-                  : text == 5
-                  ? 'blue'
-                  : 'gray'
-              "
-              >{{ applyStatus[text] }}</a-tag
-            >
+          <span slot="tradeStatus" style="color: #ff6600" slot-scope="text">
+            {{ text }}
+          </span>
+          <span slot="name" style="color: #ff6600" slot-scope="text">
+            {{ text }}
+          </span>
+          <span slot="account" style="color: #ff6600" slot-scope="text">
+            {{ text }}
+          </span>
+          <span slot="accountName" style="color: #ff6600" slot-scope="text">
+            {{ text }}
           </span>
           <div slot="createTime" slot-scope="text">
             {{ text | formatDate }}
           </div>
-          <div slot="modifyTime" slot-scope="text">
-            {{ text | formatDate }}
+          <div slot="tradeType" slot-scope="text">
+            {{ text }}
           </div>
+          <span slot="message" slot-scope="text">
+            {{ text }}
+          </span>
           <span slot="action" slot-scope="text, record">
-            <!-- <a-button type="link" @click="goDetail(record, 'detail')">
+            <a-button type="link" @click="goDetail(record, 'detail')">
               详情
             </a-button>
-            <a-divider type="vertical" /> -->
-
-            <a-button
-              type="link"
-              v-if="record.status == 2"
-              @click="receive(record)"
-            >
-              接收
-            </a-button>
-            <a-divider
-              type="vertical"
-              v-if="(record.status == 2) & (record.status == 5)"
-            />
-            <a-button
-              type="link"
-              @click="goDetail(record, 'confirm')"
-              v-if="record.status == 5"
-            >
+            <a-divider type="vertical" />
+            <a-button type="link"> 接收 </a-button>
+            <a-divider type="vertical" />
+            <a-button type="link" @click="goDetail(record, 'confirm')">
               确认
             </a-button>
-            <a-divider type="vertical" v-if="record.status == 5" />
-            <a-button
-              type="link"
-              @click="goDetail(record, 'refuse')"
-              v-if="record.status == 5"
-            >
+            <a-divider type="vertical" />
+            <a-button type="link" @click="goDetail(record, 'refuse')">
               驳回
             </a-button>
           </span>
@@ -126,10 +102,9 @@
     <!-- 提现管理操作弹框 -->
     <applyOption
       v-model="visibleDetail"
-      :detailInfo="detailInfo"
+      :detailData="detailData"
       :title="title"
       :type="2"
-      @success="getList"
     />
   </div>
 </template>
@@ -137,17 +112,18 @@
 <script>
 import moment from "moment";
 import applyOption from "@/components/withdraw/applyOption.vue";
-import { applyStatus } from "@/utils/enum";
 export default {
   components: { applyOption },
   data() {
     return {
-      applyStatus,
       moment,
       title: "",
       visibleDetail: false, //是否显示申请详情的弹框
-      detailInfo: {}, //详情信息
+      detailData: {}, //详情信息
       listQuery: {
+        key: undefined,
+        search: "",
+        name: "",
         currentPage: 1,
         pageSize: 10,
         total: 0
@@ -160,30 +136,29 @@ export default {
         },
         {
           title: "状态",
-          dataIndex: "status",
-          width: 120,
-          scopedSlots: { customRender: "status" }
+          dataIndex: "tradeStatus",
+          width: 100,
+          scopedSlots: { customRender: "tradeStatus" }
         },
         {
           title: "客户名称",
-          width: 170,
-          dataIndex: "customerName"
+          dataIndex: "name",
+          scopedSlots: { customRender: "name" }
         },
         {
           title: "提现金额",
-          width: 100,
-          dataIndex: "dealAmount",
-          scopedSlots: { customRender: "dealAmount" }
+          dataIndex: "discountAmount",
+          scopedSlots: { customRender: "discountAmount" }
         },
         {
           title: "收款账号",
-          width: 100,
-          dataIndex: "accountNo",
-          scopedSlots: { customRender: "accountNo" }
+          dataIndex: "account",
+          scopedSlots: { customRender: "account" }
         },
         {
           title: "收款人",
-          dataIndex: "accountName"
+          dataIndex: "accountName",
+          scopedSlots: { customRender: "accountName" }
         },
         {
           title: "创建时间",
@@ -199,18 +174,17 @@ export default {
         },
         {
           title: "备注",
-          dataIndex: "memo",
-          scopedSlots: { customRender: "memo" }
+          dataIndex: "tradeType",
+          scopedSlots: { customRender: "tradeType" }
         },
         {
           title: "反馈信息",
-          dataIndex: "feedback",
-          scopedSlots: { customRender: "feedback" }
+          dataIndex: "message",
+          scopedSlots: { customRender: "message" }
         },
         {
           title: "操作",
           dataIndex: "action",
-          fixed: "right",
           scopedSlots: { customRender: "action" }
         }
       ],
@@ -241,13 +215,13 @@ export default {
     // 查询表格数据
     getList() {
       //   this.tableLoading = true;
-      this.$store
-        .dispatch("withdraw/getApplyList", this.listQuery)
-        .then(res => {
+      this.$getListQp("product/getProductDiscountList", this.listQuery).then(
+        res => {
           this.tableLoading = false;
           this.data = res.data.list;
           this.paginationProps.total = res.data.totalCount * 1;
-        });
+        }
+      );
     },
     // 表格分页快速跳转n页
     quickJump(currentPage) {
@@ -260,53 +234,45 @@ export default {
       this.listQuery.pageSize = pageSize;
       this.getList();
     },
-    // 日期选择
-    datePickerOnOk(value) {
-      if (value.length !== 0) {
-        this.listQuery["qp-createTime-ge"] = moment(value[0]).format(
-          "YYYY-MM-DD HH:mm:ss"
-        );
-        this.listQuery["qp-modifyTime-le"] = moment(value[1]).format(
-          "YYYY-MM-DD HH:mm:ss"
-        );
-      } else {
-        this.listQuery["qp-createTime-ge"] = "";
-        this.listQuery["qp-modifyTime-le"] = "";
-      }
-    },
-    //接收
-    receive(record) {
-      this.$confirm({
-        title: "确认要接收申请吗？",
-        onOk: () => {
-          this.$store.dispatch("withdraw/receiveApply", record.id).then(res => {
-            this.$message.success("接收成功");
-            this.getList();
-          });
-        }
-      });
-    },
     // 查看
     goDetail(record, status) {
       console.log(status);
-      //   1 : 提现申请详情 , 2:驳回提现申请 , 3:确认提现申请
+    //   1 : 提现申请详情 , 2:驳回提现申请 , 3:确认提现申请
       if (status == "detail") {
-        this.title = 1;
+        this.title =1;
       } else if (status == "refuse") {
         this.title = 2;
       } else if (status == "confirm") {
         this.title = 3;
       }
-      this.$store
-        .dispatch("withdraw/getApplyDetail", record.id)
-        .then(res => {
-          this.detailInfo = res.data;
-        })
-        .finally(() => {
-          this.visibleDetail = true;
-        });
       this.detailData = {};
       this.visibleDetail = true;
+    },
+    // 日期选择
+    datePickerOnOk(value) {
+      if (value.length !== 0) {
+        this.listQuery.startTime = moment(value[0]).format(
+          "YYYY-MM-DD HH:mm:ss"
+        );
+        this.listQuery.endTime = moment(value[1]).format("YYYY-MM-DD HH:mm:ss");
+      } else {
+        this.listQuery.startTime = "";
+        this.listQuery.endTime = "";
+      }
+    },
+    cancelOrder(record) {
+      this.$confirm({
+        title: "确认要取消申请吗？",
+        onOk: () => {
+          console.log("点击了取消");
+          // this.$store
+          //   .dispatch("income/cancelOrder", { id: record.id })
+          //   .then((res) => {
+          //     this.$message.success("取消成功");
+          //     this.getList();
+          //   });
+        }
+      });
     }
   }
 };
