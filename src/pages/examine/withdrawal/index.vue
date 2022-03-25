@@ -37,7 +37,7 @@
               placeholder="请选择状态"
             >
               <a-select-option
-                v-for="(item, keyIndex) in applyStatus"
+                v-for="(item, keyIndex) in applyMenStatus"
                 :key="item"
                 :value="keyIndex"
               >
@@ -57,6 +57,7 @@
           :columns="columns"
           :data-source="data"
           rowKey="id"
+          :scroll="{ x: 1300 }"
           :pagination="paginationProps"
         >
           <span slot="orderNo" style="color: #00aaff" slot-scope="text">
@@ -78,7 +79,7 @@
                   ? 'blue'
                   : 'gray'
               "
-              >{{ applyStatus[text] }}</a-tag
+              >{{ applyMenStatus[text] }}</a-tag
             >
           </span>
           <div slot="createTime" slot-scope="text">
@@ -88,37 +89,32 @@
             {{ text | formatDate }}
           </div>
           <span slot="action" slot-scope="text, record">
-            <a-button type="link" @click="goDetail(record, 'detail')">
-              详情
-            </a-button>
-            <a-divider type="vertical"  v-if="record.status == 2"/>
-
-            <a-button
-              type="link"
-              v-if="record.status == 2"
-              @click="receive(record)"
-            >
-              接收
-            </a-button>
-            <a-divider
-              type="vertical"
-              v-if="(record.status == 2) & (record.status == 5)"
-            />
-            <a-button
-              type="link"
-              @click="goDetail(record, 'confirm')"
-              v-if="record.status == 5"
-            >
-              确认
-            </a-button>
-            <a-divider type="vertical" v-if="record.status == 5 || record.status == 2" />
-            <a-button
-              type="link"
-              @click="goDetail(record, 'refuse')"
-              v-if="record.status == 5 || record.status == 2"
-            >
-              驳回
-            </a-button>
+            <a-space>
+              <a-button type="link" @click="goDetail(record, 'detail')">
+                详情
+              </a-button>
+              <a-button
+                type="link"
+                v-if="record.status == 2"
+                @click="receive(record)"
+              >
+                接收
+              </a-button>
+              <a-button
+                type="link"
+                @click="goDetail(record, 'confirm')"
+                v-if="record.status == 5"
+              >
+                确认
+              </a-button>
+              <a-button
+                type="link"
+                @click="goDetail(record, 'refuse')"
+                v-if="record.status == 5 || record.status == 2"
+              >
+                驳回
+              </a-button>
+            </a-space>
           </span>
         </a-table>
       </div>
@@ -137,12 +133,12 @@
 <script>
 import moment from "moment";
 import applyOption from "@/components/withdraw/applyOption.vue";
-import { applyStatus } from "@/utils/enum";
+import { applyMenStatus } from "@/utils/enum";
 export default {
   components: { applyOption },
   data() {
     return {
-      applyStatus,
+      applyMenStatus,
       moment,
       title: "",
       visibleDetail: false, //是否显示申请详情的弹框
@@ -195,7 +191,7 @@ export default {
           title: "反馈时间",
           dataIndex: "finishTime",
           scopedSlots: { customRender: "finishTime" },
-         sorter: (a, b) => moment(a.finishTime) - moment(b.finishTime)
+          sorter: (a, b) => moment(a.finishTime) - moment(b.finishTime)
         },
         {
           title: "备注",
