@@ -50,6 +50,16 @@
           <span slot="domain" slot-scope="text" style="color: #00aaff">
             {{ text }}
           </span>
+          <div slot="channelName" slot-scope="text,record">
+            {{record.channelName}}
+            <br/>
+            <span style="color:#ccc">  {{record.channelCode}}</span>
+          </div>
+           <div slot="corporationCode" slot-scope="text,record">
+            {{record.corporationName}}
+            <br/>
+            <span style="color:#ccc">{{record.corporationCode}}</span>
+          </div>
           <span slot="cnameValue" slot-scope="text" style="color: #00aaff">
             {{ text }}
           </span>
@@ -69,7 +79,7 @@
               v-if="record.cdnStatus == 6"
               v-permission="'view'"
               type="link"
-              @click="operationline('offline', record)"
+              @click="operationline('online', record)"
             >
               上线
             </a-button>
@@ -77,7 +87,7 @@
               v-if="record.cdnStatus == 1"
               v-permission="'view'"
               type="link"
-              @click="operationline('online', record)"
+              @click="operationline('offline', record)"
             >
               下线
             </a-button>
@@ -117,8 +127,15 @@ export default {
           scopedSlots: { customRender: "domain" }
         },
         {
+          title: "所属渠道商",
+          dataIndex: "channelName",
+          width:180,
+          scopedSlots: { customRender: "channelName" }
+        },
+        {
           title: "所属终端客户",
-          dataIndex: "channelName"
+          dataIndex: "corporationCode",
+          scopedSlots: { customRender: "corporationCode" }
         },
         {
           title: "CNAME",
