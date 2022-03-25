@@ -73,11 +73,8 @@
               />
             </a-form-model-item>
             <a-form-model-item>
-              <a-month-picker
-                :defaultValue="moment(getCurrentData(), 'YYYY-MM')"
-                placeholder="请选择账期"
-                @change="onChange"
-              />
+              <!--  :defaultValue="moment(getCurrentData(), 'YYYY-MM')" -->
+              <a-month-picker placeholder="请选择账期" @change="onChange" />
             </a-form-model-item>
             <a-form-model-item>
               <a-button type="primary" @click="handleSearch">
@@ -91,7 +88,9 @@
     <div class="orderTable">
       <div>
         <a-table
-          :columns="listQuery['qp-billType-eq'] == 'day' ? columnsDay : columnsMonth"
+          :columns="
+            listQuery['qp-billType-eq'] == 'day' ? columnsDay : columnsMonth
+          "
           :data-source="data"
           :loading="tableLoading"
           :pagination="paginationProps"
@@ -120,8 +119,8 @@
               <a-icon type="question-circle" />
             </a-tooltip>
           </span>
-          <span slot="customTitle" slot-scope="text,record">
-            {{ record.owe == '0.00' ? "已结清" : "未结清" }}
+          <span slot="customTitle" slot-scope="text, record">
+            {{ record.owe == "0.00" ? "已结清" : "未结清" }}
           </span>
           <span slot="channel" slot-scope="text" style="color: #00aaff">
             {{ text }}
@@ -166,7 +165,7 @@
           <div slot-scope="text" slot="actualPrice" v-if="text != undefined">
             {{ text.toFixed(2) }}
           </div>
-            <div slot-scope="text" slot="owe" v-if="text != undefined">
+          <div slot-scope="text" slot="owe" v-if="text != undefined">
             {{ text.toFixed(2) }}
           </div>
         </a-table>
@@ -188,8 +187,7 @@ export default {
         search: "",
         startTime: "",
         endTime: "",
-        'qp-billType-eq': "day",
-        'qp-billPeriod-eq':'',
+        "qp-billType-eq": "day",
         currentPage: 1,
         pageSize: 10,
         total: 0
@@ -198,16 +196,16 @@ export default {
       columnsDay: [
         {
           title: "账单编号",
-          dataIndex: "billNo",
+          dataIndex: "billNo"
         },
         {
           title: "订单编号",
-          dataIndex: "orderNo",
+          dataIndex: "orderNo"
         },
         {
           title: "所属渠道商",
           dataIndex: "channelName",
-          width:190,
+          width: 190,
           scopedSlots: { customRender: "channelName" }
         },
         {
@@ -267,7 +265,7 @@ export default {
         {
           title: "所属渠道商",
           dataIndex: "channelName",
-          width:190,
+          width: 190,
           scopedSlots: { customRender: "channelName" }
         },
         {
@@ -322,8 +320,8 @@ export default {
   activated() {
     this.getList();
   },
-  created(){
-     this.getCurrentData()
+  created() {
+    this.getCurrentData();
   },
   computed: {
     useColumns() {
@@ -359,6 +357,7 @@ export default {
     moment,
     //查询表格数据
     getList() {
+      console.log(this.listQuery["qp-billPeriod-eq"]);
       this.tableLoading = true;
       this.$getListQp("bills/getList", this.listQuery)
         .then(res => {
@@ -374,8 +373,8 @@ export default {
     },
     //切换tab
     callback(key) {
-      this.listQuery['qp-billType-eq']= key;
-      this.listQuery.currentPage = 1;
+      this.listQuery["qp-billType-eq"] = key;
+      this.listQuery = { currentPage: 1, pageSize: 10, total: 0 };
       this.getList();
     },
     // 搜索
@@ -390,7 +389,8 @@ export default {
       if (nowMonth >= 1 && nowMonth <= 9) {
         nowMonth = "0" + nowMonth;
       }
-      this.listQuery['qp-billPeriod-eq'] = new Date().getFullYear() + "-" + nowMonth
+      this.listQuery["qp-billPeriod-eq"] =
+        new Date().getFullYear() + "-" + nowMonth;
       return new Date().getFullYear() + "-" + nowMonth;
     },
     // 日期选择
