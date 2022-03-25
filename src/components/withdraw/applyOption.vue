@@ -170,6 +170,7 @@ export default {
               return;
             }
           }
+          obj.feedback = this.$refs.feedback.value
           if (val == "ok") {
             obj.status = 1;
             title = "确定提现嘛?";
