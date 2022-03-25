@@ -91,7 +91,7 @@
     <div class="orderTable">
       <div>
         <a-table
-          :columns="listQuery.billType == 'day'?columnsDay:columnsMonth"
+          :columns="listQuery['qp-billType-eq'] == 'day' ? columnsDay : columnsMonth"
           :data-source="data"
           :loading="tableLoading"
           :pagination="paginationProps"
@@ -102,6 +102,11 @@
           </span>
           <div v-if="text" slot="originAmount" slot-scope="text">
             {{ text }}
+          </div>
+          <div slot="channelName" slot-scope="text, record">
+            {{ record.channelName }}
+            <br />
+            <span style="color:#ccc">{{ record.channelCode }}</span>
           </div>
           <span slot="customTitle">
             支付状态
@@ -114,6 +119,9 @@
               </template>
               <a-icon type="question-circle" />
             </a-tooltip>
+          </span>
+          <span slot="customTitle" slot-scope="text,record">
+            {{ record.owe == '0.00' ? "已结清" : "未结清" }}
           </span>
           <span slot="channel" slot-scope="text" style="color: #00aaff">
             {{ text }}
@@ -130,7 +138,7 @@
               <a-icon type="question-circle" />
             </a-tooltip>
           </span>
-          <span slot="Amoun">
+          <span slot="originAmount">
             成本金额
             <a-tooltip placement="top">
               <template slot="title">
@@ -152,10 +160,13 @@
               <a-icon type="question-circle" />
             </a-tooltip>
           </span>
-          <div slot="expiredTime" slot-scope="text" v-if="text">
+          <div slot="consumeTime" slot-scope="text" v-if="text">
             {{ text | formatDate }}
           </div>
           <div slot-scope="text" slot="actualPrice" v-if="text != undefined">
+            {{ text.toFixed(2) }}
+          </div>
+            <div slot-scope="text" slot="owe" v-if="text != undefined">
             {{ text.toFixed(2) }}
           </div>
         </a-table>
@@ -177,7 +188,8 @@ export default {
         search: "",
         startTime: "",
         endTime: "",
-        billType: "day",
+        'qp-billType-eq': "day",
+        'qp-billPeriod-eq':'',
         currentPage: 1,
         pageSize: 10,
         total: 0
@@ -186,20 +198,23 @@ export default {
       columnsDay: [
         {
           title: "账单编号",
-          dataIndex: "billNo"
+          dataIndex: "billNo",
         },
         {
           title: "订单编号",
-          dataIndex: "orderNo"
+          dataIndex: "orderNo",
         },
         {
           title: "所属渠道商",
-          dataIndex: "channelName"
+          dataIndex: "channelName",
+          width:190,
+          scopedSlots: { customRender: "channelName" }
         },
         {
           //支付状态
-          slots: { title: "customTitle" }
-          // dataIndex: "receipt_file"
+          slots: { title: "customTitle" },
+          // dataIndex: "customTitle"
+          scopedSlots: { customRender: "customTitle" }
         },
         {
           title: "单价",
@@ -218,8 +233,8 @@ export default {
         },
         {
           //成本金额
-          dataIndex: "Amoun",
-          slots: { title: "Amoun" }
+          dataIndex: "originAmount",
+          slots: { title: "originAmount" }
         },
         {
           //欠费金额
@@ -228,11 +243,11 @@ export default {
         },
         {
           title: "消费时间",
-          dataIndex: "expiredTime",
-          scopedSlots: { customRender: "expiredTime" },
+          dataIndex: "consumeTime",
+          scopedSlots: { customRender: "consumeTime" },
           sorter: (a, b) =>
-            new Date(a.expiredTime).getTime() -
-            new Date(b.expiredTime).getTime()
+            new Date(a.consumeTime).getTime() -
+            new Date(b.consumeTime).getTime()
         },
         {
           title: "计费项",
@@ -251,9 +266,11 @@ export default {
         },
         {
           title: "所属渠道商",
-          dataIndex: "channelName"
+          dataIndex: "channelName",
+          width:190,
+          scopedSlots: { customRender: "channelName" }
         },
-     {
+        {
           title: "计费项",
           dataIndex: "billItem"
         },
@@ -267,7 +284,7 @@ export default {
           dataIndex: "unitPricePerUnit",
           scopedSlots: { customRender: "unitPricePerUnit" }
         },
-         {
+        {
           title: "实际用量",
           dataIndex: "useData"
         },
@@ -278,14 +295,14 @@ export default {
         },
         {
           //成本金额
-          dataIndex: "Amoun",
-          slots: { title: "Amoun" }
+          dataIndex: "originAmount",
+          slots: { title: "originAmount" }
         },
         {
           //欠费金额
           slots: { title: "owe" },
           dataIndex: "owe"
-        },
+        }
       ],
       data: [],
       // 表格分页器配置
@@ -305,19 +322,22 @@ export default {
   activated() {
     this.getList();
   },
+  created(){
+     this.getCurrentData()
+  },
   computed: {
     useColumns() {
       return [
         {
-          title: "退单编号",
-          dataIndex: "orderNo",
-          key: "orderNo",
+          title: "账单编号",
+          dataIndex: "billNo",
+          key: "billNo",
           width: 170
         },
         {
           title: "订单编号",
-          dataIndex: "billNo",
-          key: "billNo",
+          dataIndex: "orderNo",
+          key: "orderNo",
           width: 170
         },
         {
@@ -350,11 +370,11 @@ export default {
         });
     },
     onChange(value) {
-      this.listQuery["qp-xxx-eq"] = moment(value).format("YYYY-MM");
+      this.listQuery["qp-billPeriod-eq"] = moment(value).format("YYYY-MM");
     },
     //切换tab
     callback(key) {
-      this.listQuery.billType = key;
+      this.listQuery['qp-billType-eq']= key;
       this.listQuery.currentPage = 1;
       this.getList();
     },
@@ -370,6 +390,7 @@ export default {
       if (nowMonth >= 1 && nowMonth <= 9) {
         nowMonth = "0" + nowMonth;
       }
+      this.listQuery['qp-billPeriod-eq'] = new Date().getFullYear() + "-" + nowMonth
       return new Date().getFullYear() + "-" + nowMonth;
     },
     // 日期选择
