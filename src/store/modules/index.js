@@ -12,6 +12,8 @@ import system from "./system";
 import workorder from "./workorder";
 import specification from "./specification";
 import tenant from "./tenant";
+import bills from './bills'
+import cdnDomain from "./cdnDomain";
 import withdraw from './withdraw'
 import unsubscribe from "./unsubscribe";
 export default {
@@ -29,6 +31,8 @@ export default {
   workorder,
   specification,
   tenant,
+  bills,
+  cdnDomain,
   withdraw,
   unsubscribe
 };

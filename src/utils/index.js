@@ -18,7 +18,7 @@ const filterList = [
   "tradeType",
   "payStatus",
   "createTime",
-  "discountPrice"
+  "discountPrice",
 ];
 export const getListQp = (request, listQuery) => {
   return new Promise((resolve, reject) => {

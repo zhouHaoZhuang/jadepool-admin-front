@@ -35,10 +35,12 @@ const assetsCDN = {
 };
 
 module.exports = {
+  lintOnSave:false,
   devServer: {
     proxy: {
       "/rps": {
-        target: "http://ntm.sailayun.com/rps",
+        target: "http://ntm.ydidc.com/rps",
+         // target: "http://ntm.sailayun.com/rps",
         changeOrigin: true,
         pathRewrite: {
           "^/rps": ""
