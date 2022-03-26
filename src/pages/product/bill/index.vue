@@ -373,8 +373,8 @@ export default {
     },
     //切换tab
     callback(key) {
-      this.listQuery["qp-billType-eq"] = key;
       this.listQuery = { currentPage: 1, pageSize: 10, total: 0 };
+      this.listQuery["qp-billType-eq"] = key;
       this.getList();
     },
     // 搜索
