@@ -237,6 +237,33 @@ export const asyncRoute = [
                 },
                 component: () =>
                   import("@/pages/finance/income/order/orderInfo.vue")
+              },
+              {
+                path: "unsubscribe/list",
+                name: "订单退单管理",
+                meta: {
+                  icon: "home"
+                },
+                component: () =>
+                  import("@/pages/finance/income/unsubscribe/index")
+              },
+              {
+                path: "unsubscribe/detail",
+                name: "退订详情",
+                meta: {
+                  invisible: true,
+                  back: true
+                },
+                component: () =>
+                  import("@/pages/finance/income/unsubscribe/detail")
+              },
+              {
+                path: "bill",
+                name: "采购账单",
+                meta: {
+                  icon: "home"
+                },
+                component: () => import("@/pages/finance/income/bill/index.vue")
               }
             ]
           },
