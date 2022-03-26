@@ -53,7 +53,7 @@
           <div slot="chargingType" slot-scope="text">
              {{ text == 'AfterPay' ?'后支付':'预支付' }}
           </div>
-          <div slot="ecsPrice" slot-scope="text">
+          <!-- <div slot="ecsPrice" slot-scope="text">
             <div>CPU：{{ text.cpu }}</div>
             <div>内存：{{ text.memory }}</div>
             <div>磁盘：{{ text.dataDiskSize }}</div>
@@ -61,7 +61,7 @@
             <div>防御：{{ "20G" }}</div>
             <div>镜像：{{ text.imageId }}</div>
             <div>所在区：{{ regionDataEnum[text.regionId] }}</div>
-          </div>
+          </div> -->
         </a-table>
       </div>
     </div>
@@ -158,15 +158,15 @@ export default {
     // console.log(id);
     this.$store.dispatch("financialOrder/getOne", id).then(res => {
       // console.log(res);
-      let dataDisk = res.data.ecsPrice.dataDisk;
-      let dataDiskSize = 0;
-      if (dataDisk) {
-        for (let index = 0; index < dataDisk.length; index++) {
-          dataDiskSize += dataDisk[index].size;
-        }
-        res.data.ecsPrice.dataDiskSize = dataDiskSize;
-      }
-      console.log(dataDisk);
+      // let dataDisk = res.data.ecsPrice.dataDisk;
+      // let dataDiskSize = 0;
+      // if (dataDisk) {
+      //   for (let index = 0; index < dataDisk.length; index++) {
+      //     dataDiskSize += dataDisk[index].size;
+      //   }
+      //   res.data.ecsPrice.dataDiskSize = dataDiskSize;
+      // }
+      // console.log(dataDisk);
       this.orderInfo = res.data;
       this.data = [res.data];
     });

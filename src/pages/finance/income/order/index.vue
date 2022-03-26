@@ -105,6 +105,7 @@
         </div>
         <div slot="customerName" slot-scope="text, record">
           {{ record.customerName }}
+          <br>
           <span> {{ record.customerCode }}</span>
         </div>
         <div slot="corporationCode" slot-scope="text, record">
@@ -165,7 +166,7 @@ export default {
         search: "",
         currentPage: 1,
         pageSize: 10,
-        total: 0
+        total: 0,
       },
       columns: [
         {
@@ -321,10 +322,10 @@ export default {
         });
     },
     changeStart(date, dateString) {
-      this.listQuery["qp-createTime-ge"] = dateString;
+      this.listQuery["qp-consumeTime-ge"] = dateString;
     },
     changeEnd(date, dateString) {
-      this.listQuery["qp-createTime-le"] = dateString;
+      this.listQuery["qp-consumeTime-le"] = dateString;
     },
     disabledStartDate(startValue) {
       const endValue = this.endValue;

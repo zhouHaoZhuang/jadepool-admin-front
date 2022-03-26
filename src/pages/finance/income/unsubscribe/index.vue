@@ -35,7 +35,7 @@
             @change="datePickerOnOk"
           />
         </a-form-model-item>
-        <a-form-model-item>
+        <!-- <a-form-model-item>
           <a-select
             style="width:150px;margin-right: 10px"
             placeholder="订单类型"
@@ -50,7 +50,7 @@
               {{ value }}
             </a-select-option>
           </a-select>
-        </a-form-model-item>
+        </a-form-model-item> -->
         <a-form-model-item>
           <a-select
             style="width:150px"
@@ -165,6 +165,7 @@ export default {
         search: "",
         startTime: "",
         endTime: "",
+        'qp-tradeType-eq':55,
         tradeType: undefined,
         tradeStatus: undefined,
         currentPage: 1,
@@ -287,7 +288,7 @@ export default {
    getList() {
       this.loading = true;
       this.$store
-        .dispatch("financialOrder/getList", this.listQuery)
+        .dispatch("financialOrder/getUnList", this.listQuery)
         .then(res => {
           this.paginationProps.total = res.data.totalCount * 1;
           this.data = res.data.list;
@@ -303,13 +304,13 @@ export default {
     datePickerOnOk(value) {
       console.log(value);
       if (value.length !== 0) {
-        this.listQuery.startTime = moment(value[0]).format(
+        this.listQuery['qp-consumeTime-ge'] = moment(value[0]).format(
           "YYYY-MM-DD HH:mm:ss"
         );
-        this.listQuery.endTime = moment(value[1]).format("YYYY-MM-DD HH:mm:ss");
+        this.listQuery['qp-consumeTime-le'] = moment(value[1]).format("YYYY-MM-DD HH:mm:ss");
       } else {
-        this.listQuery.startTime = "";
-        this.listQuery.endTime = "";
+        this.listQuery['qp-consumeTime-ge'] = "";
+        this.listQuery['qp-consumeTime-le'] = "";
       }
     },
     // 禁用日期--禁用当天之后+当天前一个月所有

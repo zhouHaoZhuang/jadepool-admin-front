@@ -18,6 +18,14 @@ const financialOrder = {
     // 获取列表
     getList({ commit, state }, params) {
       return request({
+        url: `/order?qp-tradeType-ne=55&qp-tradeType-ne=56`,
+        method: "get",
+        params
+      });
+    },
+    //退订列表
+    getUnList({ commit, state }, params) {
+      return request({
         url: `/order`,
         method: "get",
         params
@@ -65,7 +73,15 @@ const financialOrder = {
         url: `/order/one?id=${id}`,
         method: "get"
       });
-    }
+    },
+       // 财务-订单管理-采购账单列表
+       getBillList({ commit, state }, params) {
+        return request({
+          url: `/bill`,
+          method: "get",
+          params
+        });
+      },
   }
 };
 
