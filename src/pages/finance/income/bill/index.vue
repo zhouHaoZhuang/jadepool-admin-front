@@ -108,7 +108,7 @@
             <span style="color:#ccc">{{ record.corporationCode }}</span>
           </div>
           <div slot="shopName">
-           阿里云
+            阿里云
           </div>
           <span slot="customTitle">
             支付状态
@@ -162,9 +162,6 @@
               <a-icon type="question-circle" />
             </a-tooltip>
           </span>
-          <div slot="consumeTime" slot-scope="text" v-if="text">
-            {{ text | formatDate }}
-          </div>
           <div slot-scope="text" slot="actualPrice" v-if="text != undefined">
             {{ text.toFixed(2) }}
           </div>
@@ -211,7 +208,7 @@ export default {
         //   width: 190,
         //   scopedSlots: { customRender: "channelName" }
         // },
-           {
+        {
           title: "云厂商",
           dataIndex: "shopName",
           width: 190,
@@ -245,7 +242,6 @@ export default {
         {
           title: "消费时间",
           dataIndex: "consumeTime",
-          scopedSlots: { customRender: "consumeTime" },
           sorter: (a, b) =>
             new Date(a.consumeTime).getTime() -
             new Date(b.consumeTime).getTime()
@@ -340,7 +336,7 @@ export default {
           dataIndex: "orderNo",
           key: "orderNo",
           width: 170
-        },
+        }
       ];
     }
   },
@@ -354,13 +350,16 @@ export default {
         .then(res => {
           this.data = [...res.data.list];
           this.paginationProps.total = res.data.totalCount * 1;
+          this.data.forEach(element => {
+            element.consumeTime = moment(element.consumeTime).format("YYYY-MM")
+          });
         })
         .finally(() => {
           this.tableLoading = false;
         });
     },
     onChange(value) {
-      this.listQuery["qp-billPeriod-eq"] = moment(value).format("YYYY-MM");
+      this.listQuery["qp-billPeriod-eq"] = moment(value).format("YYYY-MM-DD");
     },
     //切换tab
     callback(key) {
@@ -381,20 +380,24 @@ export default {
       if (nowMonth >= 1 && nowMonth <= 9) {
         nowMonth = "0" + nowMonth;
       }
-      this.listQuery["qp-billPeriod-eq"] =
-        new Date().getFullYear() + "-" + nowMonth;
+      if (this.listQuery["qp-billType-eq"] == "month") {
+        this.listQuery["qp-billPeriod-eq"] =
+          new Date().getFullYear() + "-" + nowMonth;
+      }
       return new Date().getFullYear() + "-" + nowMonth;
     },
     // 日期选择
     datePickerOnOk(value) {
       if (value.length !== 0) {
-        this.listQuery.startTime = moment(value[0]).format(
-          "YYYY-MM-DD HH:mm:ss"
+        this.listQuery["qp-consumeTime-ge"] = moment(value[0]).format(
+          "YYYY-MM-DD"
         );
-        this.listQuery.endTime = moment(value[1]).format("YYYY-MM-DD HH:mm:ss");
+        this.listQuery["qp-consumeTime-le"] = moment(value[1]).format(
+          "YYYY-MM-DD"
+        );
       } else {
-        this.listQuery.startTime = "";
-        this.listQuery.endTime = "";
+        this.listQuery["qp-consumeTime-ge"] = "";
+        this.listQuery["qp-consumeTime-le"] = "";
       }
     },
     // 禁用日期--禁用当天之后+当天前一个月所有
