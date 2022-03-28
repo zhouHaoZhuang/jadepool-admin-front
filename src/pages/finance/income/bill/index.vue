@@ -32,7 +32,7 @@
               <a-range-picker
                 style="margin-right: 10px"
                 show-time
-                format="YYYY-MM-DD HH:mm:ss"
+                format="YYYY-MM-DD"
                 :placeholder="['开始时间', '结束时间']"
                 @change="datePickerOnOk"
               />
