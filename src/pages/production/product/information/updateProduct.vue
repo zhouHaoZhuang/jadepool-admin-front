@@ -102,8 +102,8 @@
             </a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item label="供应商产品类型" prop="supplierProductType">
-           <a-input v-model="form.supplierProductType" />
+        <a-form-model-item v-if="form.supplierProductType" label="供应商产品类型">
+           <span>{{form.supplierProductType}}</span>
         </a-form-model-item>
         <a-form-model-item label="备注" ref="remark">
           <a-textarea v-model="form.remark" :row="4" />
@@ -165,13 +165,6 @@ export default {
             trigger: "change"
           }
         ],
-        supplierProductType: [
-          {
-            required: true,
-            message: "输入值不能为空",
-            trigger: ["blur", "change"]
-          }
-        ]
       },
       loading: false,
       supplierNameList: [],
@@ -256,6 +249,7 @@ export default {
       const productObj = this.productList.find(
         ele => ele.supplierProductCode === val
       );
+      this.form.supplierProductType = productObj.supplierProductType;
       this.form.productType.productTypes = [...productObj.productTypes];
     },
     // 重置表单数据
