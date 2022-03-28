@@ -32,7 +32,7 @@
               <a-range-picker
                 style="margin-right: 10px"
                 show-time
-                format="YYYY-MM-DD HH:mm:ss"
+                format="YYYY-MM-DD"
                 :placeholder="['开始时间', '结束时间']"
                 @change="datePickerOnOk"
               />
@@ -159,9 +159,6 @@
               <a-icon type="question-circle" />
             </a-tooltip>
           </span>
-          <div slot="consumeTime" slot-scope="text" v-if="text">
-            {{ text | formatDate }}
-          </div>
           <div slot-scope="text" slot="actualPrice" v-if="text != undefined">
             {{ text.toFixed(2) }}
           </div>
@@ -242,7 +239,6 @@ export default {
         {
           title: "消费时间",
           dataIndex: "consumeTime",
-          scopedSlots: { customRender: "consumeTime" },
           sorter: (a, b) =>
             new Date(a.consumeTime).getTime() -
             new Date(b.consumeTime).getTime()
@@ -363,6 +359,11 @@ export default {
         .then(res => {
           this.data = [...res.data.list];
           this.paginationProps.total = res.data.totalCount * 1;
+          this.data.forEach(element => {
+            element.consumeTime = moment(element.consumeTime).format(
+              "YYYY-MM-DD"
+            );
+          });
         })
         .finally(() => {
           this.tableLoading = false;
@@ -389,20 +390,25 @@ export default {
       if (nowMonth >= 1 && nowMonth <= 9) {
         nowMonth = "0" + nowMonth;
       }
-      this.listQuery["qp-billPeriod-eq"] =
-        new Date().getFullYear() + "-" + nowMonth;
+      if (this.listQuery["qp-billType-eq"] == "month") {
+        this.listQuery["qp-billPeriod-eq"] =
+          new Date().getFullYear() + "-" + nowMonth;
+      }
+
       return new Date().getFullYear() + "-" + nowMonth;
     },
     // 日期选择
     datePickerOnOk(value) {
       if (value.length !== 0) {
-        this.listQuery.startTime = moment(value[0]).format(
-          "YYYY-MM-DD HH:mm:ss"
+        this.listQuery["qp-consumeTime-ge"] = moment(value[0]).format(
+          "YYYY-MM-DD"
         );
-        this.listQuery.endTime = moment(value[1]).format("YYYY-MM-DD HH:mm:ss");
+        this.listQuery["qp-consumeTime-le"] = moment(value[1]).format(
+          "YYYY-MM-DD"
+        );
       } else {
-        this.listQuery.startTime = "";
-        this.listQuery.endTime = "";
+        this.listQuery["qp-consumeTime-ge"] = "";
+        this.listQuery["qp-consumeTime-le"] = "";
       }
     },
     // 禁用日期--禁用当天之后+当天前一个月所有

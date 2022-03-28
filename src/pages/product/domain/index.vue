@@ -236,15 +236,15 @@ export default {
     datePickerOnOk(value) {
       console.log(value);
       if (value.length !== 0) {
-        this.listQuery["qp-createTime-eq"] = moment(value[0]).format(
+        this.listQuery["qp-createTime-ge"] = moment(value[0]).format(
           "YYYY-MM-DD HH:mm:ss"
         );
-        this.listQuery["qp-modifyTime-eq"] = moment(value[1]).format(
+        this.listQuery["qp-createTime-le"] = moment(value[1]).format(
           "YYYY-MM-DD HH:mm:ss"
         );
       } else {
-        this.listQuery["qp-createTime-eq"] = "";
-        this.listQuery["qp-modifyTime-eq"] = "";
+        this.listQuery["qp-createTime-ge"] = "";
+        this.listQuery["qp-createTime-le"] = "";
       }
     },
     // 禁用日期--禁用当天之后+当天前一个月所有
