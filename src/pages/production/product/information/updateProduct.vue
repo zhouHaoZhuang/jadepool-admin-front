@@ -102,6 +102,9 @@
             </a-select-option>
           </a-select>
         </a-form-model-item>
+        <a-form-model-item label="供应商产品类型" prop="supplierProductType">
+           <a-input v-model="form.supplierProductType" />
+        </a-form-model-item>
         <a-form-model-item label="备注" ref="remark">
           <a-textarea v-model="form.remark" :row="4" />
         </a-form-model-item>
@@ -127,6 +130,7 @@ export default {
         supplierName: "", //供应商
         supplierProductCode: "", //供应商产品CODE
         remark: "", //备注
+        supplierProductType: "", //供应商产品类型
         productType: {
           productTypes: []
         },
@@ -159,6 +163,13 @@ export default {
             required: true,
             message: "请选择默认采购账号",
             trigger: "change"
+          }
+        ],
+        supplierProductType: [
+          {
+            required: true,
+            message: "输入值不能为空",
+            trigger: ["blur", "change"]
           }
         ]
       },
