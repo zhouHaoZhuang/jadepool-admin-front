@@ -102,6 +102,9 @@
             </a-select-option>
           </a-select>
         </a-form-model-item>
+        <a-form-model-item v-if="form.supplierProductType" label="供应商产品类型">
+           <span>{{form.supplierProductType}}</span>
+        </a-form-model-item>
         <a-form-model-item label="备注" ref="remark">
           <a-textarea v-model="form.remark" :row="4" />
         </a-form-model-item>
@@ -127,6 +130,7 @@ export default {
         supplierName: "", //供应商
         supplierProductCode: "", //供应商产品CODE
         remark: "", //备注
+        supplierProductType: "", //供应商产品类型
         productType: {
           productTypes: []
         },
@@ -160,7 +164,7 @@ export default {
             message: "请选择默认采购账号",
             trigger: "change"
           }
-        ]
+        ],
       },
       loading: false,
       supplierNameList: [],
@@ -245,6 +249,7 @@ export default {
       const productObj = this.productList.find(
         ele => ele.supplierProductCode === val
       );
+      this.form.supplierProductType = productObj.supplierProductType;
       this.form.productType.productTypes = [...productObj.productTypes];
     },
     // 重置表单数据
