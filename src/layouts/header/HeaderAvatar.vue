@@ -1,12 +1,12 @@
 <template>
   <a-dropdown>
     <div class="header-avatar" style="cursor: pointer">
-      <a-avatar
+      <!-- <a-avatar
         class="avatar"
         size="small"
         shape="circle"
         :src="userInfo.photo"
-      />
+      /> -->
       <span class="name">{{ userInfo.username }}</span>
     </div>
     <a-menu :class="['avatar-menu']" slot="overlay">
@@ -60,12 +60,16 @@ export default {
   .avatar,
   .name {
     align-self: center;
+    margin-right: 40px;
   }
   .avatar {
     margin-right: 8px;
   }
   .name {
     font-weight: 500;
+  }
+  &:hover{
+    background: transparent !important;
   }
 }
 .avatar-menu {

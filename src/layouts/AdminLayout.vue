@@ -124,7 +124,7 @@ export default {
     ]),
     ...mapGetters("setting", ["firstMenu", "subMenu", "menuData"]),
     sideMenuWidth() {
-      return this.collapsed ? "80px" : "256px";
+      return this.collapsed ? "80px" : "200px";
     },
     headerStyle() {
       let width =

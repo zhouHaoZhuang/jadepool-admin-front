@@ -2,7 +2,7 @@
   <a-layout-sider
     :theme="sideTheme"
     :class="['side-menu', 'beauty-scroll', isMobile ? null : 'shadow']"
-    width="256px"
+    width="200px"
     :collapsible="collapsible"
     v-model="collapsed"
     :trigger="null"
