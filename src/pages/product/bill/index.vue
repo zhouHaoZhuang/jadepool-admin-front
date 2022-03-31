@@ -58,7 +58,7 @@
               >
                 <a-select-option
                   :value="v.key"
-                  v-for="v in useColumns"
+                  v-for="v in monthColumns"
                   :key="v.title"
                 >
                   {{ v.title }}
@@ -101,6 +101,9 @@
           </span>
           <div v-if="text" slot="originAmount" slot-scope="text">
             {{ text }}
+          </div>
+          <div slot="useData" slot-scope="text, record">
+            {{ text }}{{ record.unitPricePerUnit }}
           </div>
           <div slot="channelName" slot-scope="text, record">
             {{ record.channelName }}
@@ -249,7 +252,8 @@ export default {
         },
         {
           title: "实际用量",
-          dataIndex: "useData"
+          dataIndex: "useData",
+          scopedSlots: { customRender: "useData" }
         }
       ],
       columnsMonth: [
@@ -280,7 +284,8 @@ export default {
         },
         {
           title: "实际用量",
-          dataIndex: "useData"
+          dataIndex: "useData",
+          scopedSlots: { customRender: "useData" }
         },
         {
           //账单金额
@@ -334,6 +339,22 @@ export default {
           key: "orderNo",
           width: 170
         },
+        {
+          title: "渠道商名称",
+          dataIndex: "channelName",
+          key: "channelName",
+          width: 170
+        },
+        {
+          title: "渠道商ID",
+          dataIndex: "channelCode",
+          key: "channelCode",
+          width: 150
+        }
+      ];
+    },
+    monthColumns() {
+      return [
         {
           title: "渠道商名称",
           dataIndex: "channelName",
