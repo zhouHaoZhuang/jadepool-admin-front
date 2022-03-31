@@ -102,6 +102,9 @@
           <div v-if="text" slot="originAmount" slot-scope="text">
             {{ text }}
           </div>
+          <div slot="useData" slot-scope="text, record">
+            {{ text }}{{ record.unitPricePerUnit }}
+          </div>
           <div slot="channelName" slot-scope="text, record">
             {{ record.channelName }}
             <br />
@@ -252,7 +255,8 @@ export default {
         },
         {
           title: "实际用量",
-          dataIndex: "useData"
+          dataIndex: "useData",
+          scopedSlots: { customRender: "useData" }
         }
       ],
       columnsMonth: [
@@ -283,7 +287,8 @@ export default {
         },
         {
           title: "实际用量",
-          dataIndex: "useData"
+          dataIndex: "useData",
+          scopedSlots: { customRender: "useData" }
         },
         {
           //账单金额
@@ -351,7 +356,7 @@ export default {
           this.data = [...res.data.list];
           this.paginationProps.total = res.data.totalCount * 1;
           this.data.forEach(element => {
-            element.consumeTime = moment(element.consumeTime).format("YYYY-MM")
+            element.consumeTime = moment(element.consumeTime).format("YYYY-MM");
           });
         })
         .finally(() => {
