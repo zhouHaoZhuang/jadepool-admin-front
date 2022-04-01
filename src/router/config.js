@@ -319,6 +319,39 @@ export const asyncRoute = [
                   import("@/pages/channel/billmanage/editbill.vue"),
               },
               {
+                path: "refundmanage",
+                name: "退票管理",
+                meta: {
+                  icon: "home",
+                  back: true,
+                  perm: "finance-book-order",
+                },
+                component: () =>
+                  import("@/pages/channel/refundmanage/list.vue")
+              },
+              {
+                path: "refundApply",
+                name: "退票申请详情",
+                meta: {
+                  icon: "home",
+                  back: true,
+                  perm: "finance-book-order",
+                },
+                component: () =>
+                  import("@/pages/channel/refundmanage/refundApply.vue")
+              },
+              {
+                path: "reviewRefund",
+                name: "审核退票申请",
+                meta: {
+                  icon: "home",
+                  back: true,
+                  perm: "finance-book-order",
+                },
+                component: () =>
+                  import("@/pages/channel/refundmanage/reviewRefund.vue")
+              },
+              {
                 path: "payment",
                 name: "人工入款",
                 meta: {

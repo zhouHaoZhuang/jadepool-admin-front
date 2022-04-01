@@ -8,6 +8,18 @@ export const certificationStatusEnum = {
   0: "已认证",
   1: "未认证"
 };
+// 发票开票记录状态
+export const invoiceStatusEnum = {
+  1: "开票中（已提交）",
+  2: "已取消",
+  3: "审核中",
+  4: "已驳回",
+  5: "已开票（已通过）",
+  6: "退票中（退票申请中）",
+  7: "退票申请取消",
+  8: "退票申请已拒绝",
+  9: "已退票（退票申请确认）"
+};
 // 企业列表企业状态
 export const corporationStatusEnum = {
   0: "正常",
