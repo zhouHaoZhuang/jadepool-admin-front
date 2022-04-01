@@ -68,7 +68,9 @@
         <div slot="action" slot-scope="text, record">
           <a-button
             type="link"
-            @click="$router.push('/finance/examine/refundApply?id=' + record.id)"
+            @click="
+              $router.push('/finance/examine/refundApply?id=' + record.id)
+            "
           >
             详情
           </a-button>
@@ -76,7 +78,9 @@
             type="link"
             style="margin-left: 10px"
             :disabled="record.status !== 6"
-            @click="$router.push('/finance/examine/reviewRefund?id=' + record.id)"
+            @click="
+              $router.push('/finance/examine/reviewRefund?id=' + record.id)
+            "
           >
             审核
           </a-button>
@@ -130,7 +134,7 @@ export default {
         },
         {
           title: "退票申请创建时间",
-          dataIndex: "refundCreateTimeShow",
+          dataIndex: "refundCreateTimeShow"
         },
         {
           title: "备注",
@@ -138,7 +142,7 @@ export default {
         },
         {
           title: "退票申请反馈时间",
-          dataIndex: "feedbackTimeShow",
+          dataIndex: "feedbackTimeShow"
         },
         {
           title: "退票申请反馈说明",
