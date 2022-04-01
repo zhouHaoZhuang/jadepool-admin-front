@@ -67,7 +67,7 @@ export default {
         }
       }
       if (this.loading) return;
-      this.getMsg();
+      // this.getMsg();
     },
     startTime() {
       this.time = setInterval(() => {
@@ -84,6 +84,7 @@ export default {
     },
     // 发送验证码
     getMsg() {
+      if (this.loading) return;
       this.loading = true;
       this.$store
         .dispatch("user/sendCode", {
@@ -93,8 +94,10 @@ export default {
         .then(res => {
           this.startTime();
         })
-        .catch(err => {
-          this.loading = false;
+        .finally(err => {
+          setTimeout(() => {
+            this.loading = false;
+          }, 500);
         });
     }
   }
