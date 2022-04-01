@@ -48,7 +48,7 @@
       <a-tab-pane key="month" tab="月账单" force-render>
         <div class="public-header-wrap">
           <a-form-model layout="inline" :model="listQuery">
-            <a-form-model-item>
+            <!-- <a-form-model-item>
               <a-select
                 class="sechkey"
                 style="width:150px"
@@ -71,7 +71,7 @@
                 placeholder="请输入"
                 v-model="listQuery.search"
               />
-            </a-form-model-item>
+            </a-form-model-item> -->
             <a-form-model-item>
               <!--  :defaultValue="moment(getCurrentData(), 'YYYY-MM')" -->
               <a-month-picker placeholder="请选择账期" @change="onChange" />
@@ -265,11 +265,17 @@ export default {
           // colSpan:0,     //隐藏表头
           dataIndex: "billPeriod"
         },
+        // {
+        //   title: "所属渠道商",
+        //   dataIndex: "channelName",
+        //   width: 190,
+        //   scopedSlots: { customRender: "channelName" }
+        // },
         {
-          title: "所属渠道商",
-          dataIndex: "channelName",
+          title: "云厂商",
+          dataIndex: "shopName",
           width: 190,
-          scopedSlots: { customRender: "channelName" }
+          scopedSlots: { customRender: "shopName" }
         },
         {
           title: "计费项",
@@ -343,7 +349,7 @@ export default {
           width: 170
         }
       ];
-    }
+    },
   },
   methods: {
     moment,
@@ -356,7 +362,7 @@ export default {
           this.data = [...res.data.list];
           this.paginationProps.total = res.data.totalCount * 1;
           this.data.forEach(element => {
-            element.consumeTime = moment(element.consumeTime).format("YYYY-MM");
+            element.consumeTime = moment(element.consumeTime).format("YYYY-MM-DD");
           });
         })
         .finally(() => {
