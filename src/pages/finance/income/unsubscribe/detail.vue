@@ -14,7 +14,7 @@
         </li>
         <li>
           <span>订单类型:</span>
-          <span>{{ orderInfo.tradeType === 1 ? "新购" : "销售" }} </span>
+          <span>{{ orderTypeMap[orderInfo.tradeType] }} </span>
         </li>
         <li>
           <span>创建时间:</span>
@@ -36,7 +36,7 @@
         </li>
         <li>
           <span>退款状态:</span>
-          <span>{{ orderInfo.payStatus == 1 ? "待退款" : "已退款" }}</span>
+          <span>{{ orderStatusEnum[orderInfo.tradeStatus] }}</span>
         </li>
       </ul>
     </div>
@@ -51,18 +51,22 @@
           :pagination="false"
         >
           <div slot="chargingType" slot-scope="text">
-            {{ text == "AfterPay" ? "后支付" : "预支付" }}
+            {{ charingStatus[text] }}
           </div>
           <div slot="productConfig" slot-scope="text, record">
-            <div>CPU:{{ record.cpu }}核</div>
-            <div>内存:{{ record.memory }}G</div>
-            <div>带宽:{{ record.internetMaxBandwidthOut }}M</div>
-            <div>系统盘:{{ record.systemDiskSize }}G</div>
-            <div>数据盘:{{ record.dataDiskSize }}G</div>
-            <div>操作系统:{{ record.osName }}</div>
-            <div>所在区:{{ regionDataEnum[record.regionId] }}</div>
+            <div v-if="record.chargingType == 'AfterPay'">
+              {{ record.productName }}功能开通：按流量计费
+            </div>
+            <div>
+              <div>CPU:{{ record.cpu }}核</div>
+              <div>内存:{{ record.memory }}G</div>
+              <div>带宽:{{ record.internetMaxBandwidthOut }}M</div>
+              <div>系统盘:{{ record.systemDiskSize }}G</div>
+              <div>数据盘:{{ record.dataDiskSize }}G</div>
+              <div>操作系统:{{ record.osName }}</div>
+              <div>所在区:{{ regionDataEnum[record.regionId] }}</div>
+            </div>
           </div>
-          <span slot="chargeModel">包年包月</span>
         </a-table>
       </div>
     </div>
@@ -85,7 +89,12 @@
 </template>
 
 <script>
-import { orderStatusEnum, orderTypeMap, regionDataEnum } from "@/utils/enum.js";
+import {
+  orderStatusEnum,
+  orderTypeMap,
+  regionDataEnum,
+  charingStatus
+} from "@/utils/enum.js";
 export default {
   data() {
     return {
@@ -94,6 +103,7 @@ export default {
       orderStatusEnum,
       orderTypeMap,
       regionDataEnum,
+      charingStatus,
       columns: [
         {
           title: "产品名称",
