@@ -72,10 +72,10 @@
             style="width:150px"
             placeholder="计费方式"
             allowClear
-            v-model="listQuery.tradeStatus"
+            v-model="listQuery.chargingType"
           >
             <a-select-option
-              v-for="(value, key) in orderStatusEnum"
+              v-for="(value, key) in charingStatus"
               :key="key"
               :value="key"
             >
@@ -110,9 +110,9 @@
             {{ text }}
           </span>
         <div slot="chargingType" slot-scope="text">
-          {{ text == 'AfterPay' ?'后支付':'预支付' }}
+           {{ charingStatus[text] }}
         </div>
-          <div v-if="text" slot="actualAmount" slot-scope="text">
+          <div slot="actualAmount" slot-scope="text">
             {{ text }}
           </div>
           <div slot="tradeType" slot-scope="text">
@@ -154,12 +154,13 @@
 
 <script>
 import moment from "moment";
-import { orderStatusEnum, orderTypeMap } from "@/utils/enum.js";
+import { orderStatusEnum, orderTypeMap,charingStatus } from "@/utils/enum.js";
 export default {
   data() {
     return {
       orderStatusEnum,
       orderTypeMap,
+      charingStatus,
       listQuery: {
         key: undefined,
         search: "",
@@ -268,18 +269,18 @@ export default {
           key: "orderNo",
           width: 170
         },
-        {
-          title: "渠道商名称",
-          dataIndex: "customerName",
-          key: "customerName",
-          width: 170
-        },
-        {
-          title: "渠道商ID",
-          dataIndex: "channel",
-          key: "channel",
-          width: 150
-        }
+        // {
+        //   title: "渠道商名称",
+        //   dataIndex: "customerName",
+        //   key: "customerName",
+        //   width: 170
+        // },
+        // {
+        //   title: "渠道商ID",
+        //   dataIndex: "channel",
+        //   key: "channel",
+        //   width: 150
+        // }
       ];
     }
   },
@@ -287,8 +288,7 @@ export default {
     //查询表格数据
    getList() {
       this.loading = true;
-      this.$store
-        .dispatch("financialOrder/getUnList", this.listQuery)
+      this.$getListQp("financialOrder/getUnList", this.listQuery)
         .then(res => {
           this.paginationProps.total = res.data.totalCount * 1;
           this.data = res.data.list;

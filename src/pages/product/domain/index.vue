@@ -77,19 +77,21 @@
           <div slot="action" slot-scope="text, record">
             <a-space>
             <a-button
-             :disabled="record.systemLockStatus == 1"
+             
               v-permission="'view'"
               type="link"
               @click="operationline('online', record)"
             >
+            <!-- :disabled="record.systemLockStatus == 1" -->
               上线
             </a-button>
             <a-button
-            :disabled="record.systemLockStatus == 0"
+            
               v-permission="'view'"
               type="link"
               @click="operationline('offline', record)"
             >
+            <!-- :disabled="record.systemLockStatus == 0" -->
               下线
             </a-button>
             </a-space>

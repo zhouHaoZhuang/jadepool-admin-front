@@ -146,11 +146,12 @@ export const applyMenStatus = {
 };
 // 订单状态
 export const orderStatusEnum = {
-  "-3": "操作服务器异常",
+  "-3": "交易异常",
   "-1": "交易关闭",
   1: "待支付",
-  3: "支付中",
-  5: "交易完成"
+  3: "订单支付中",
+  5: "交易完成",
+  "-5": "退款失败"
 };
 export const orderTypeMap = {
   1: "云服务新购",
@@ -159,3 +160,8 @@ export const orderTypeMap = {
   35: "云服务降配",
   55: "服务器退订"
 };
+// 计费方式、
+export const charingStatus ={
+  "AfterPay":'包年包月',
+  "BeforePay":'按量付费'
+}
