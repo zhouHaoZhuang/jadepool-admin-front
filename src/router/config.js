@@ -394,6 +394,24 @@ export const asyncRoute = [
             ]
           },
           {
+            path: "recon",
+            name: "对账管理",
+            meta: {
+              icon: "home"
+            },
+            component: BlankView,
+            children: [
+              {
+                path: "reconManage",
+                name: "对账单管理",
+                meta: {
+                  icon: "home"
+                },
+                component: () => import("@/pages/channel/enterpriseAdmin/list")
+              },
+            ]
+          },
+          {
             path: "report",
             name: "财务报表",
             meta: {

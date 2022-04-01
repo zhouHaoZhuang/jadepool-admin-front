@@ -68,7 +68,7 @@
         <div slot="action" slot-scope="text, record">
           <a-button
             type="link"
-            @click="$router.push('/sale/finance/refundApply?id=' + record.id)"
+            @click="$router.push('/finance/examine/refundApply?id=' + record.id)"
           >
             详情
           </a-button>
@@ -76,7 +76,7 @@
             type="link"
             style="margin-left: 10px"
             :disabled="record.status !== 6"
-            @click="$router.push('/sale/finance/reviewRefund?id=' + record.id)"
+            @click="$router.push('/finance/examine/reviewRefund?id=' + record.id)"
           >
             审核
           </a-button>
