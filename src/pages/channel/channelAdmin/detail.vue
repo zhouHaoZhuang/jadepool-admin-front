@@ -96,7 +96,7 @@
           {{ detail.id }}
         </a-form-model-item>
         <a-form-model-item label="渠道商全称" prop="cutomerName">
-          <a-input v-model="form.cutomerName" />
+          <a-input v-model="form.cutomerName" @change="handleInputChange" />
         </a-form-model-item>
         <a-form-model-item label="简称" prop="shortName">
           <a-input v-model="form.shortName" />
@@ -228,6 +228,12 @@ export default {
     this.getDetail();
   },
   methods: {
+    // 输入框change事件
+    handleInputChange() {
+      if (this.form.shortName) {
+        this.$refs.ruleForm.validateField("shortName");
+      }
+    },
     // 获取基础资料详情
     getDetail() {
       this.$store
@@ -256,9 +262,9 @@ export default {
         this.$message.warning("请输入格式正确的手机号");
         return;
       }
-      this.confirmLoadingDetail = true;
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
+          this.confirmLoadingDetail = true;
           this.$store
             .dispatch("channel/edit", this.form)
             .then(res => {

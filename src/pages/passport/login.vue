@@ -1,19 +1,14 @@
 <template>
   <common-layout class="login-container">
-    <!-- 左上角logo -->
-    <div class="logo-wrap">
-      <div class="txt">南天门</div>
-      <div class="line"></div>
-      <div class="txt">ntm.slayun.com</div>
-    </div>
     <div class="login-wrap">
       <div class="img-bg"></div>
       <div class="login">
         <div class="tabs-wrap">
           <div class="tabs-item">
-            账号密码登录
+            登录
           </div>
         </div>
+
         <a-form-model ref="ruleForm" :model="form" :rules="rules">
           <a-form-model-item prop="username">
             <a-input
@@ -24,30 +19,33 @@
               <a-icon slot="prefix" type="user" />
             </a-input>
           </a-form-model-item>
+
           <a-form-model-item prop="password">
             <a-input
               v-model="form.password"
               placeholder="请输入密码"
               type="password"
               size="large"
-              @pressEnter="onSubmit"
             >
               <a-icon slot="prefix" type="lock" />
             </a-input>
           </a-form-model-item>
-          <!-- <a-form-model-item class="code-wrap" prop="code">
+          <a-form-model-item prop="verificationCode">
             <a-input
-              v-model="form.code"
+              type="text"
               style="width:200px"
-              placeholder="输入验证码"
-              v-number-evolution
-              :max-length="6"
               size="large"
+              v-model="form.verificationCode"
+              placeholder="请输入图片验证码"
+              :max-length="6"
+              @pressEnter="onSubmit"
             >
-              <a-icon slot="prefix" type="smile" />
+              <a-icon slot="prefix" type="safety-certificate" />
             </a-input>
-            <CodeBtn :phone="form.phone" size="large" />
-          </a-form-model-item> -->
+            <div @click="refreshCode()" class="code" title="点击切换验证码">
+              <Identify :identifyCode="identifyCode" />
+            </div>
+          </a-form-model-item>
           <a-form-model-item>
             <a-button
               class="login-btn"
@@ -59,6 +57,25 @@
               登录
             </a-button>
           </a-form-model-item>
+
+          <!-- <a-form-model-item class="btn-box">
+            <a-button
+              size="large"
+              class="btn1"
+              type="link"
+              @click="resetPassword"
+            >
+              忘记密码
+            </a-button>
+            <a-button
+              size="large"
+              class="btn2"
+              type="link"
+              @click="handleJumpRegister"
+            >
+              免费注册
+            </a-button>
+          </a-form-model-item> -->
         </a-form-model>
       </div>
     </div>
@@ -67,17 +84,18 @@
 
 <script>
 import CommonLayout from "@/layouts/CommonLayout";
-// import CodeBtn from "@/components/CodeBtn/index";
-
+import Identify from "@/components/Identify";
+import { getRandomCode } from "@/utils/index";
 export default {
   name: "Login",
-  components: { CommonLayout },
+  components: { CommonLayout, Identify },
   data() {
     return {
+      loginStatus: "pwd",
       form: {
         username: "",
         password: "",
-        code: ""
+        verificationCode: ""
       },
       rules: {
         username: [
@@ -94,16 +112,29 @@ export default {
             trigger: "blur"
           }
         ],
-        code: [
+        verificationCode: [
           {
             required: true,
-            message: "请输入验证码",
+            message: "请输入图片校验码",
+            trigger: ["blur", "change"]
+          },
+          {
+            validator: (rule, value, callback) => {
+              if (value !== this.identifyCode) {
+                callback(new Error("图形验证码不正确"));
+              }
+              callback();
+            },
             trigger: ["blur", "change"]
           }
         ]
       },
-      loading: false
+      loading: false,
+      identifyCode: ""
     };
+  },
+  mounted() {
+    this.refreshCode();
   },
   methods: {
     onSubmit() {
@@ -120,6 +151,27 @@ export default {
             });
         }
       });
+    },
+    // 获取验证码组件校验图形验证
+    validateImgCode(callback) {
+      let flag = false;
+      this.$refs.ruleForm.validateField(
+        "verificationCode",
+        err => (flag = err ? false : true)
+      );
+      callback(flag);
+    },
+    // 更新验证码
+    refreshCode() {
+      this.identifyCode = getRandomCode();
+    },
+    // 跳转注册
+    handleJumpRegister() {
+      this.$router.push("/register");
+    },
+    // 跳转重置密码
+    resetPassword() {
+      this.$router.push("/resetpassword");
     }
   }
 };
@@ -129,23 +181,12 @@ export default {
 .login-container {
   background: #406ad3;
   position: relative;
-  .logo-wrap{
-    position: absolute;
-    top: 60px;
-    left: 100px;
-    display: flex;
-    align-items: center;
-    .txt{
-      font-size: 28px;
-      color: #fff;
-      font-weight: 500px;
-    }
-    .line{
-      width: 2px;
-      height: 35px;
-      background: #fff;
-      margin: 0 10px;
-    }
+  .img-bg {
+    flex: 1;
+    height: 450px;
+    background: url("../../assets/img/passport/login.jpg") no-repeat center;
+    background-size: cover;
+    margin-right: 100px;
   }
   .login-wrap {
     width: 1200px;
@@ -155,16 +196,10 @@ export default {
     align-items: center;
     justify-content: space-between;
   }
-  .img-bg {
-    flex: 1;
-    height: 400px;
-    background: url("../../assets/img/passport/login.jpg") no-repeat center;
-    background-size: cover;
-    margin-right: 100px;
-  }
+
   .login {
     width: 410px;
-    height: 400px;
+    height: 450px;
     border-radius: 5px;
     border-radius: 4px;
     padding: 40px;
@@ -186,7 +221,7 @@ export default {
           content: "";
           display: block;
           margin: 3px auto 0;
-          width: 90%;
+          width: 100%;
           height: 2px;
           background: #406ad3;
         }
@@ -198,6 +233,11 @@ export default {
       background: #406ad3;
       margin-top: 20px;
     }
+  }
+  .code {
+    position: absolute;
+    right: -128px;
+    top: -10px;
   }
 }
 </style>

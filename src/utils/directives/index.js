@@ -140,6 +140,28 @@ export const roleInput = Vue.directive("role-input", {
   }
 });
 
+
+/*
+ * password-input 输入框限制只能输入英文字母、数字、还有指定特殊字符
+ * 在需要控制输入的输入框上使用 v-password-input
+ */
+export const passwordInput = Vue.directive("password-input", {
+  inserted: function(el) {
+    el = findInput(el);
+    if (!el) return;
+    el.addEventListener("keyup", function() {
+      const newVal = el.value.replace(/[^a-zA-Z0-9,-._=+!#$%*()<>?:""''@]/g, "");
+      el.value = newVal;
+      el.dispatchEvent(new Event("input"));
+    });
+    el.addEventListener("blur", function() {
+      const newVal = el.value.replace(/[^a-zA-Z0-9,.-_=+!#$%*()<>?:""''@]/g, "");
+      el.value = newVal;
+      el.dispatchEvent(new Event("input"));
+    });
+  }
+});
+
 /**
  * 按钮权限控制指令
  * 可传递单个权限或对个权限-并且必须拥有所传递的权限，如果传递了多个，有一个没满足，还是没权限（全部匹配）
@@ -171,3 +193,4 @@ export const permission = Vue.directive("permission", {
     }
   }
 });
+

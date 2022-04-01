@@ -11,6 +11,16 @@ export const basicRoute = [
     component: () => import("@/pages/passport/login")
   },
   {
+    path: "/register",
+    name: "注册页",
+    component: () => import("@/pages/passport/register")
+  },
+  {
+    path: "/resetpassword",
+    name: "重置密码页",
+    component: () => import("@/pages/passport/resetpassword")
+  },
+  {
     path: "*",
     name: "404",
     component: () => import("@/pages/exception/404")
@@ -185,24 +195,6 @@ export const asyncRoute = [
             component: BlankView,
             children: [
               {
-                path: "order",
-                name: "订单管理",
-                meta: {
-                  icon: "home"
-                },
-                component: () => import("@/pages/finance/income/order")
-              },
-              {
-                path: "orderinfo",
-                name: "订单详情",
-                meta: {
-                  invisible: true,
-                  back: true
-                },
-                component: () =>
-                  import("@/pages/finance/income/order/orderInfo.vue")
-              },
-              {
                 path: "detailed",
                 name: "财务明细",
                 meta: {
@@ -217,6 +209,61 @@ export const asyncRoute = [
                   icon: "home"
                 },
                 component: () => import("@/pages/channel/channelAdmin/price")
+              }
+            ]
+          },
+          {
+            path: "order",
+            name: "订单管理",
+            meta: {
+              icon: "home"
+            },
+            component: BlankView,
+            children: [
+              {
+                path: "list",
+                name: "订单列表",
+                meta: {
+                  icon: "home"
+                },
+                component: () => import("@/pages/finance/income/order")
+              },
+              {
+                path: "detail",
+                name: "订单详情",
+                meta: {
+                  invisible: true,
+                  back: true
+                },
+                component: () =>
+                  import("@/pages/finance/income/order/orderInfo.vue")
+              },
+              {
+                path: "unsubscribe/list",
+                name: "订单退单管理",
+                meta: {
+                  icon: "home"
+                },
+                component: () =>
+                  import("@/pages/finance/income/unsubscribe/index")
+              },
+              {
+                path: "unsubscribe/detail",
+                name: "退订详情",
+                meta: {
+                  invisible: true,
+                  back: true
+                },
+                component: () =>
+                  import("@/pages/finance/income/unsubscribe/detail")
+              },
+              {
+                path: "bill",
+                name: "采购账单",
+                meta: {
+                  icon: "home"
+                },
+                component: () => import("@/pages/finance/income/bill/index.vue")
               }
             ]
           },
@@ -301,7 +348,7 @@ export const asyncRoute = [
                 meta: {
                   icon: "home"
                 },
-                component: () => import("@/pages/channel/channelAdmin/price")
+                component: () => import("@/pages/examine/withdrawal/index")
               },
               {
                 path: "refund",
@@ -341,10 +388,10 @@ export const asyncRoute = [
           }
         ]
       },
-      //业务
+      // 产品
       {
-        path: "/business",
-        name: "业务",
+        path: "/product",
+        name: "产品",
         component: PageView,
         children: [
           {
@@ -362,7 +409,7 @@ export const asyncRoute = [
                   icon: "home"
                 },
                 component: () =>
-                  import("@/pages/business/cloudservers/example/living.vue")
+                  import("@/pages/product/cloudservers/example/living.vue")
               },
               {
                 path: "adds",
@@ -372,7 +419,7 @@ export const asyncRoute = [
                   back: true
                 },
                 component: () =>
-                  import("@/pages/business/cloudservers/example/regulate.vue")
+                  import("@/pages/product/cloudservers/example/regulate.vue")
               },
               {
                 path: "renew",
@@ -381,8 +428,35 @@ export const asyncRoute = [
                   icon: "home"
                 },
                 component: () =>
-                  import("@/pages/business/cloudservers/renewList.vue")
+                  import("@/pages/product/cloudservers/renewList.vue")
               }
+            ]
+          },
+          {
+            path: "cdn",
+            name: "CDN云加速",
+            meta: {
+              icon: "home"
+            },
+            component: BlankView,
+            children: [
+              {
+                path: "domain",
+                name: "域名管理",
+                meta: {
+                  icon: "home"
+                },
+                component: () => import("@/pages/product/domain/index.vue")
+              },
+              {
+                path: "bill",
+                name: "账单管理",
+                meta: {
+                  icon: "home",
+                },
+                component: () =>
+                  import("@/pages/product/bill/index.vue")
+              },
             ]
           }
         ]
@@ -430,7 +504,7 @@ export const asyncRoute = [
       // 生产
       {
         path: "/production",
-        name: "生产",
+        name: "采购",
         component: PageView,
         children: [
           {
@@ -519,27 +593,15 @@ export const asyncRoute = [
                   import("@/pages/production/product/information/list.vue")
               },
               {
-                path: "addproduct",
-                name: "新建产品线",
+                path: "updateProduct",
+                name: "产品线",
                 meta: {
                   invisible: true, // 不显示在左侧菜单
                   back: true // 后退
                 },
                 component: () =>
                   import(
-                    "@/pages/production/product/information/addproduct.vue"
-                  )
-              },
-              {
-                path: "editproduct",
-                name: "编辑产品线",
-                meta: {
-                  invisible: true, // 不显示在左侧菜单
-                  back: true // 后退
-                },
-                component: () =>
-                  import(
-                    "@/pages/production/product/information/editproduct.vue"
+                    "@/pages/production/product/information/updateProduct.vue"
                   )
               }
             ]

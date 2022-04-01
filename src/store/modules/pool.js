@@ -32,7 +32,7 @@ const pool = {
     changeList({ commit, state }, data) {
       return request({
         url: `/productDetail/${data.id}`,
-        method: "put",
+        method: "patch",
         data
       });
     },
@@ -49,6 +49,13 @@ const pool = {
       console.log(state);
       return request({
         url: `/productDetail/one?id=${id}`,
+        method: "get"
+      });
+    },
+    // 获取供应商产品列表
+    getProductList({ commit, state }) {
+      return request({
+        url: `/productDetail/supplier/productInfo`,
         method: "get"
       });
     }

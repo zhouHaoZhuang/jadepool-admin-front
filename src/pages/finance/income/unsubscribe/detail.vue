@@ -1,9 +1,13 @@
 <template>
-  <div class="orderInfo" v-if="data[0]">
+  <div class="orderInfo">
     <!-- 订单信息 -->
-    <div v-if="orderInfo" class="channel">
+    <div class="channel">
       <p>订单信息</p>
       <ul>
+        <li>
+          <span>退单编号:</span>
+          <span>{{ orderInfo.orderNo }}</span>
+        </li>
         <li>
           <span>订单编号:</span>
           <span>{{ orderInfo.orderNo }}</span>
@@ -13,30 +17,26 @@
           <span>{{ orderInfo.tradeType === 1 ? "新购" : "销售" }} </span>
         </li>
         <li>
-          <span>状态:</span>
-          <span>{{ orderStatus[orderInfo.tradeStatus] }}</span>
-        </li>
-        <li>
           <span>创建时间:</span>
           <span>{{ orderInfo.createTime | formatDate }}</span>
         </li>
-        <!-- <li>
-          <span>支付时间:</span>
-          <span>{{ orderInfo.payTime | formatDate }}</span>
-        </li> -->
+        <li>
+          <span>退款原因:</span>
+          <span>{{ orderInfo.remark }}</span>
+        </li>
       </ul>
     </div>
-    <!-- 支付信息 -->
+    <!-- 退款信息 -->
     <div class="channel">
-      <p>支付信息</p>
+      <p>退款信息</p>
       <ul>
         <li>
-          <span>支付金额:</span>
+          <span>退款金额:</span>
           <span>{{ orderInfo.actualAmount }}</span>
         </li>
         <li>
-          <span>支付状态:</span>
-          <span>{{ orderInfo.payStatus == 1 ? "待支付" : "已支付" }}</span>
+          <span>退款状态:</span>
+          <span>{{ orderInfo.payStatus == 1 ? "待退款" : "已退款" }}</span>
         </li>
       </ul>
     </div>
@@ -51,36 +51,26 @@
           :pagination="false"
         >
           <div slot="chargingType" slot-scope="text">
-             {{ text == 'AfterPay' ?'后支付':'预支付' }}
+            {{ text == "AfterPay" ? "后支付" : "预支付" }}
           </div>
-          <!-- <div slot="ecsPrice" slot-scope="text">
-            <div>CPU：{{ text.cpu }}</div>
-            <div>内存：{{ text.memory }}</div>
-            <div>磁盘：{{ text.dataDiskSize }}</div>
-            <div>带宽：{{ text.internetMaxBandwidthOut }}</div>
-            <div>防御：{{ "20G" }}</div>
-            <div>镜像：{{ text.imageId }}</div>
-            <div>所在区：{{ regionDataEnum[text.regionId] }}</div>
-          </div> -->
+          <div slot="productConfig" slot-scope="text, record">
+            <div>CPU:{{ record.cpu }}核</div>
+            <div>内存:{{ record.memory }}G</div>
+            <div>带宽:{{ record.internetMaxBandwidthOut }}M</div>
+            <div>系统盘:{{ record.systemDiskSize }}G</div>
+            <div>数据盘:{{ record.dataDiskSize }}G</div>
+            <div>操作系统:{{ record.osName }}</div>
+            <div>所在区:{{ regionDataEnum[record.regionId] }}</div>
+          </div>
+          <span slot="chargeModel">包年包月</span>
         </a-table>
       </div>
     </div>
+
     <!-- 客户信息 -->
     <div class="channel">
       <p>客户信息</p>
       <ul>
-        <li>
-          <span>渠道商ID:</span>
-          <span>{{ data[0].customerCode }}</span>
-        </li>
-        <li>
-          <span>渠道商名称:</span>
-          <span>{{ data[0].customerName }}</span>
-        </li>
-        <li>
-          <span>租户ID:</span>
-          <span>{{ data[0].tenantId }}</span>
-        </li>
         <li>
           <span>客户ID:</span>
           <span>{{ data[0].corporationCode }} </span>
@@ -95,15 +85,15 @@
 </template>
 
 <script>
-import { orderStatus, feeReduction, regionDataEnum } from "@/utils/enum.js";
+import { orderStatusEnum, orderTypeMap, regionDataEnum } from "@/utils/enum.js";
 export default {
   data() {
     return {
-      orderStatus,
-      feeReduction,
-      regionDataEnum,
       orderInfo: null,
       data: [],
+      orderStatusEnum,
+      orderTypeMap,
+      regionDataEnum,
       columns: [
         {
           title: "产品名称",
@@ -124,49 +114,29 @@ export default {
           scopedSlots: { customRender: "chargingType" }
         },
         {
-          title: "数量",
-          dataIndex: "ecsPrice.amount",
-          key: "ecsPrice.amount",
-          width: 100
-        },
-        {
-          title: "原价",
-          dataIndex: "originAmount",
-          key: "originAmount"
-        },
-        {
-          title: "推广优惠",
-          dataIndex: "discountAmount",
-          key: "discountAmount",
-          width: 100
-        },
-        {
-          title: "折扣",
-          dataIndex: "discountRate",
-          key: "discountRate"
-        },
-        {
-          title: "成交价",
+          title: "订单金额",
           dataIndex: "actualAmount",
           key: "actualAmount"
+        },
+        {
+          title: "退款金额",
+          dataIndex: "actualAmount",
+          key: "actualAmount1"
         }
       ]
     };
   },
   activated() {
     let id = this.$route.query.id;
-    // console.log(id);
     this.$store.dispatch("financialOrder/getOne", id).then(res => {
-      // console.log(res);
-      // let dataDisk = res.data.ecsPrice.dataDisk;
-      // let dataDiskSize = 0;
-      // if (dataDisk) {
-      //   for (let index = 0; index < dataDisk.length; index++) {
-      //     dataDiskSize += dataDisk[index].size;
-      //   }
-      //   res.data.ecsPrice.dataDiskSize = dataDiskSize;
-      // }
-      // console.log(dataDisk);
+      let dataDisk = res.data.ecsPrice.dataDisk;
+      let dataDiskSize = 0;
+      if (dataDisk) {
+        for (let index = 0; index < dataDisk.length; index++) {
+          dataDiskSize += dataDisk[index].size;
+        }
+        res.data.ecsPrice.dataDiskSize = dataDiskSize;
+      }
       this.orderInfo = res.data;
       this.data = [res.data];
     });
@@ -210,6 +180,13 @@ export default {
           color: rgba(0, 0, 0, 0.847);
         }
       }
+    }
+    .allocation {
+      display: inline-block;
+      width: 80px;
+      text-align: right;
+      margin-right: 5px;
+      line-height: 65px;
     }
     .config {
       > div {

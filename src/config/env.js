@@ -1,6 +1,7 @@
 // 默认请求地址
 const baseUrl = {
-  local: "http://ntm.sailayun.com/rps",
+  // local: "http://ntm.sailayun.com/rps",
+  local: "/rps",
   dev: "/rps",
   test: "/rps",
   prod: "/rps"
@@ -8,6 +9,7 @@ const baseUrl = {
 // form服务接口请求地址
 const formBaseUrl = {
   local: "http://ntm.sailayun.com/fs",
+  // local:'/fs',
   dev: "/fs",
   test: "/fs",
   prod: "/fs"
