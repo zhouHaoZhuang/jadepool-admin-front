@@ -1,7 +1,7 @@
 <template>
   <div class="bill-select">
     <div class="bill-info" v-if="data">
-      <a-descriptions style="margin: 20px 0" title="申请信息">
+      <a-descriptions style="margin: 20px 0" title="退票申请信息">
         <a-descriptions-item label="发票ID">
           {{ data.invoiceNo }}
         </a-descriptions-item>
@@ -36,7 +36,7 @@
           {{ data.refundFeedbackRemark }}
         </a-descriptions-item>
       </a-descriptions>
-      <a-descriptions style="margin: 20px 0" title="收件人信息">
+      <a-descriptions style="margin: 20px 0" title="物流信息">
         <a-descriptions-item label="物流单号">
           {{ data.businessExpressDelivery }}
         </a-descriptions-item>
@@ -67,6 +67,11 @@
         <div v-if="text" slot="createTime" slot-scope="text">
           {{ text | formatDate }}
         </div>
+        <div slot="action">
+          <a-button type="link">
+            详情
+          </a-button>
+        </div>
       </a-table>
     </div>
   </div>
@@ -91,20 +96,25 @@ export default {
       },
       columns: [
         {
-          title: "订单ID",
+          title: "对账单号",
           dataIndex: "orderNo"
         },
         {
-          title: "产品名称",
+          title: "账期",
           dataIndex: "productName"
         },
         {
-          title: "开票金额",
+          title: "账单总金额",
           dataIndex: "originalAmountShow"
         },
         {
-          title: "订单创建时间",
+          title: "可开票总金额",
           dataIndex: "createTimeShow"
+        },
+        {
+          title: "操作",
+          dataIndex: "action",
+          scopedSlots: { customRender: "action" }
         }
       ],
       paginationProps: {

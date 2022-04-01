@@ -5,11 +5,8 @@
         <a-descriptions-item label="发票ID">
           {{ data.invoiceNo }}
         </a-descriptions-item>
-        <a-descriptions-item label="客户名称">
+        <a-descriptions-item label="渠道商名称">
           {{ data.invoiceInfo.createUserName }}
-        </a-descriptions-item>
-        <a-descriptions-item label="开具类型">
-          {{ issueTypeMap[data.invoiceInfo.issueType] }}
         </a-descriptions-item>
         <a-descriptions-item label="发票类型">
           {{ invoiceTypeMap[data.invoiceInfo.invoiceType] }}
@@ -33,7 +30,7 @@
           {{ data.refundRemark }}
         </a-descriptions-item>
       </a-descriptions>
-      <a-descriptions style="margin: 20px 0" title="收件人信息">
+      <a-descriptions style="margin: 20px 0" title="物流信息">
         <a-descriptions-item label="物流单号">
           {{ data.expressDelivery }}
         </a-descriptions-item>
