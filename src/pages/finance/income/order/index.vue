@@ -6,6 +6,7 @@
           <a-select
             style="width:150px"
             v-model="listQuery.key"
+            allowClear
             placeholder="请选择"
           >
             <a-select-option
@@ -67,6 +68,7 @@
             style="width: 120px"
             defaultValue="0"
             placeholder="订单类型"
+            allowClear
             v-model="listQuery['qp-tradeType-eq']"
           >
             <a-select-option
@@ -83,6 +85,7 @@
             style="width: 130px"
             defaultValue="0"
             placeholder="状态"
+            allowClear
             v-model="listQuery['qp-tradeStatus-eq']"
           >
             <a-select-option
@@ -318,25 +321,24 @@ export default {
           key: "cutomerCode",
           width: 150
         },
-        {
-          title: "创建时间",
-          dataIndex: "createTime",
-          key: "createTime",
-          width: 190,
-          scopedSlots: { customRender: "createTime" }
-        }
+        // {
+        //   title: "创建时间",
+        //   dataIndex: "createTime",
+        //   key: "createTime",
+        //   width: 190,
+        //   scopedSlots: { customRender: "createTime" }
+        // }
       ];
     }
   },
   methods: {
     getList() {
       this.loading = true;
-      this.$getListQp("financialOrder/getList", this.listQuery)
-        .then(res => {
-          this.paginationProps.total = res.data.totalCount * 1;
-          this.data = res.data.list;
-          this.loading = false;
-        });
+      this.$getListQp("financialOrder/getList", this.listQuery).then(res => {
+        this.paginationProps.total = res.data.totalCount * 1;
+        this.data = res.data.list;
+        this.loading = false;
+      });
     },
     changeStart(date, dateString) {
       this.listQuery["qp-createTime-ge"] = dateString;
@@ -386,9 +388,9 @@ export default {
       });
     },
     secectClick() {
-     this.listQuery.currentPage = 1;
+      this.listQuery.currentPage = 1;
       this.getList();
-    },
+    }
   }
 };
 </script>
