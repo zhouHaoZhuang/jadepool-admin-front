@@ -180,17 +180,6 @@
           <span>¥ 2213.00</span>
         </div>
       </a-descriptions>
-      <div class="bottom-button">
-        <a-button type="primary">
-          保存
-        </a-button>
-        <a-button type="primary" style="margin-left: 10px;">
-          发布
-        </a-button>
-        <a-button style="margin-left: 10px;">
-          取消
-        </a-button>
-      </div>
     </div>
   </div>
 </template>

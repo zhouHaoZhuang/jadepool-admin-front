@@ -43,6 +43,13 @@ const recon = {
         method: "get"
       });
     },
+    // 拉去账单明细
+    getReconDetailList({ commit, state }, params) {
+      return request({
+        url: "/purchaseAccount/" + params.id + "/detail",
+        method: "get"
+      });
+    },
     // 新增采购
     add({ commit, state }, data) {
       return request({

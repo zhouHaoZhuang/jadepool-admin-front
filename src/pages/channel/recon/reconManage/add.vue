@@ -43,7 +43,7 @@
           <a-input v-model="form.name" placeholder="请输入订单号" />
         </a-form-model-item>
         <a-form-model-item>
-          <a-button type="primary" @click="onSubmit">
+          <a-button type="primary" @click="getList">
             查询
           </a-button>
         </a-form-model-item>
@@ -365,18 +365,20 @@ export default {
     onSubmit() {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
-          alert("submit!");
+          this.$store.dispatch('recon/getReconDetailList',this.form).then((res)=>{
+            this.$message.success('拉取成功')
+          })
         }
       });
     },
     resetForm() {
       this.$refs.ruleForm.resetFields();
     },
-    //查询数据表格
+    //查询数据表格 对账单明细
     getList() {
-      this.$getList("word/getList", this.listQuery).then(res => {
+      this.$getList("recon/getReconDetail", this.listQuery).then(res => {
         console.log(res);
-        this.actualCata = [...res.data.list];
+        this.data = [...res.data.list];
         this.paginationProps.total = res.data.totalCount * 1;
       });
     },
@@ -391,11 +393,11 @@ export default {
       this.listQuery.pageSize = pageSize;
       this.getList();
     },
-    //查询数据表格
+    //查询数据表格（调整单明细）
     getActualList() {
       this.$getList("word/getList", this.actualListQuery).then(res => {
         console.log(res);
-        this.data = [...res.data.list];
+        this.actualCata = [...res.data.list];
         this.actualPaginationProps.total = res.data.totalCount * 1;
       });
     },
