@@ -3,7 +3,12 @@
     <div class="public-header-wrap">
       <a-form-model layout="inline">
         <a-form-model-item>
-          <a-button type="primary">新增</a-button>
+          <a-button
+            type="primary"
+            @click="$router.push('/finance/recon/addreconManage')"
+          >
+            新增
+          </a-button>
         </a-form-model-item>
         <a-form-model-item>
           <a-button type="primary">批量生成</a-button>
@@ -34,7 +39,6 @@
           >
           </a-date-picker>
         </a-form-model-item>
-
         <a-form-model-item>
           <a-select
             placeholder="请选择状态"
@@ -90,7 +94,7 @@ export default {
       },
       columns: [
         {
-          title: "发票ID",
+          title: "对账单号",
           dataIndex: "id"
         },
         {
@@ -98,28 +102,32 @@ export default {
           dataIndex: "status"
         },
         {
-          title: "客户名称",
+          title: "开票状态",
           dataIndex: "companyName"
         },
         {
-          title: "开票金额",
+          title: "账期",
           dataIndex: "amount"
         },
         {
-          title: "发票抬头",
+          title: "渠道商ID",
           dataIndex: "title"
         },
         {
-          title: "创建时间",
+          title: "渠道商名称",
           dataIndex: "createTime"
         },
         {
-          title: "反馈时间",
+          title: "对账单总金额（元）",
           dataIndex: "feedbackTime"
         },
         {
-          title: "反馈信息",
+          title: "最新更新人",
           dataIndex: "feedbackMsg"
+        },
+        {
+          title: "最新更新时间",
+          dataIndex: "feedbackTime"
         },
         {
           title: "操作",
@@ -148,14 +156,14 @@ export default {
   },
   methods: {
     startValue(date, dateString) {
-      // this.listQuery.startTime = dateString;
+      this.listQuery.startTime = dateString;
     },
     endValue(date, dateString) {
-      // this.listQuery.endTime = dateString;
+      this.listQuery.endTime = dateString;
     },
     //查询数据表格
     getList() {
-      this.$getListQp("word/getList", this.listQuery).then(res => {
+      this.$getList("word/getList", this.listQuery).then(res => {
         console.log(res);
         this.data = [...res.data.list];
         this.paginationProps.total = res.data.totalCount * 1;
