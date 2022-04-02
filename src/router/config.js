@@ -407,7 +407,7 @@ export const asyncRoute = [
                 meta: {
                   icon: "home"
                 },
-                component: () => import("@/pages/channel/enterpriseAdmin/list")
+                component: () => import("@/pages/channel/recon/reconManage/list")
               },
             ]
           },
