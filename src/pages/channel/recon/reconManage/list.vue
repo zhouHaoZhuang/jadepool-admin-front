@@ -5,6 +5,7 @@
         <a-form-model-item>
           <a-button
             type="primary"
+            icon="plus"
             @click="$router.push('/finance/recon/addreconManage')"
           >
             新增
@@ -55,7 +56,7 @@
           </a-select>
         </a-form-model-item>
         <a-form-model-item>
-          <a-button type="primary">查询</a-button>
+          <a-button type="primary" @click="getList">查询</a-button>
         </a-form-model-item>
       </a-form-model>
     </div>
@@ -64,7 +65,12 @@
         :pagination="paginationProps"
         rowKey="id"
         :columns="columns"
+        :loading="loading"
         :data-source="data"
+        :row-selection="{
+          selectedRowKeys: selectedRowKeys,
+          onChange: onSelectChange
+        }"
       >
         <div slot="companyName" slot-scope="text">{{ text }}</div>
         <div slot="action">
@@ -107,7 +113,7 @@ export default {
         },
         {
           title: "账期",
-          dataIndex: "amount"
+          dataIndex: "accountType"
         },
         {
           title: "渠道商ID",
@@ -119,7 +125,7 @@ export default {
         },
         {
           title: "对账单总金额（元）",
-          dataIndex: "feedbackTime"
+          dataIndex: "feedback"
         },
         {
           title: "最新更新人",
@@ -138,6 +144,7 @@ export default {
         }
       ],
       data: [],
+      selectedRowKeys: [], // Check here to configure the default column
       paginationProps: {
         showQuickJumper: true,
         showSizeChanger: true,
@@ -148,13 +155,18 @@ export default {
           )} 页`,
         onChange: this.quickJump,
         onShowSizeChange: this.onShowSizeChange
-      }
+      },
+      loading: false
     };
   },
   activated() {
     // this.getList();
   },
   methods: {
+    onSelectChange(selectedRowKeys) {
+      console.log("selectedRowKeys changed: ", selectedRowKeys);
+      this.selectedRowKeys = selectedRowKeys;
+    },
     startValue(date, dateString) {
       this.listQuery.startTime = dateString;
     },
@@ -163,10 +175,13 @@ export default {
     },
     //查询数据表格
     getList() {
-      this.$getList("word/getList", this.listQuery).then(res => {
+      this.loading = true;
+      this.$store.dispatch("recon/getReconList", this.listQuery).then(res => {
         console.log(res);
         this.data = [...res.data.list];
         this.paginationProps.total = res.data.totalCount * 1;
+      }).finally(() => {
+        this.loading = false;
       });
     },
     //表格分页跳转

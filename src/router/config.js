@@ -417,6 +417,14 @@ export const asyncRoute = [
                 },
                 component: () => import("@/pages/channel/recon/reconManage/add")
               },
+              {
+                path: "reconManageInfo",
+                name: "对账单详情",
+                meta: {
+                  icon: "home"
+                },
+                component: () => import("@/pages/channel/recon/reconManage/info")
+              },
             ]
           },
           {

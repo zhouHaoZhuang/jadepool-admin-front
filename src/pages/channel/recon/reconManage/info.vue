@@ -1,49 +1,44 @@
 <template>
   <div class="add-reconManage">
-    <!-- <a-table :columns="columns" ></a-table> -->
-    <h1>基础信息</h1>
-    <a-form-model
-      ref="ruleForm"
-      :model="form"
-      :rules="rules"
-      :label-col="labelCol"
-      :wrapper-col="wrapperCol"
-    >
-      <a-form-model-item label="渠道商" prop="name">
-        <a-input
-          v-model="form.name"
-          placeholder="请输入渠道商ID/渠道商名称模糊查询"
-        />
-      </a-form-model-item>
-      <a-form-model-item label="账期">
-        <a-month-picker
-          placeholder="账期"
-          format="YYYY-MM"
-          @change="startValue"
-        >
-        </a-month-picker>
-      </a-form-model-item>
-      <a-form-model-item label="备注">
-        <a-textarea
-          v-model="form.name"
-          placeholder="请输入备注，不超过100字"
-          :auto-size="{ minRows: 3, maxRows: 5 }"
-        />
-      </a-form-model-item>
-      <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
-        <a-button type="primary" @click="onSubmit">
-          拉取对账单明细
-        </a-button>
-      </a-form-model-item>
-    </a-form-model>
-    <h1>对账单明细</h1>
-    <div>
+    <a-descriptions title="基础信息" style="margin-bottom:20px">
+      <a-descriptions-item label="对账单号">
+        DZ2100000210
+      </a-descriptions-item>
+      <a-descriptions-item label="渠道商">
+        浙江曙云科技有限公司
+      </a-descriptions-item>
+      <a-descriptions-item label="账期">
+        2022-02
+      </a-descriptions-item>
+      <a-descriptions-item label="状态">
+        确认
+      </a-descriptions-item>
+      <a-descriptions-item label="开票状态">
+        未开票
+      </a-descriptions-item>
+      <a-descriptions-item label="最后更新人">
+        浙江云盾科技有限公司
+      </a-descriptions-item>
+      <a-descriptions-item label="最后更新时间">
+        2022-03-01 00:00:00
+      </a-descriptions-item>
+      <a-descriptions-item label="备注">
+        测试
+      </a-descriptions-item>
+    </a-descriptions>
+    <div style="margin-bottom:20px">
+      <span class="title-table">对账单明细</span>
+      <a-button size="small" style="margin-left:20px" type="primary">
+        导出对账单明细
+      </a-button>
+    </div>
+    <div style="margin-bottom:10px">
       <a-form-model layout="inline">
         <a-form-model-item>
-          <a-input v-model="form.name" placeholder="请输入订单号" />
+          <a-input v-model="listQuery.orderNo" placeholder="请输入订单号" />
         </a-form-model-item>
         <a-form-model-item>
-          <a-button type="primary" @click="onSubmit">
+          <a-button type="primary" @click="getList">
             查询
           </a-button>
         </a-form-model-item>
@@ -57,18 +52,15 @@
         :data-source="data"
       >
         <div slot="companyName" slot-scope="text">{{ text }}</div>
-        <div slot="action">
-          <a-button type="link" @click="showModal">调整</a-button>
-        </div>
       </a-table>
-      <p>
+      <b>
         账单拉取总金额：
         <span>¥ 2233.00</span>
         可开票拉取总金额：
         <span>
           ¥ 2233
         </span>
-      </p>
+      </b>
     </div>
     <!-- 新增建议调整项 窗口 -->
     <a-modal
@@ -106,7 +98,46 @@
         </a-form-model-item>
       </a-form-model>
     </a-modal>
-    <h1>调整单明细</h1>
+    <a-descriptions style="margin-top:30px" title="调整单明细">
+    </a-descriptions>
+    <b>建议调整项</b>
+    <div>
+      <a-form-model layout="inline">
+        <a-form-model-item>
+          <a-input
+            v-model="actualListQuery.orderNo"
+            placeholder="请输入订单号"
+          />
+        </a-form-model-item>
+        <a-form-model-item>
+          <a-button type="primary">
+            查询
+          </a-button>
+        </a-form-model-item>
+      </a-form-model>
+    </div>
+    <div>
+      <a-table
+        :pagination="actualPaginationProps"
+        rowKey="id"
+        :columns="actualColumns"
+        :data-source="actualData"
+      >
+        <div slot="companyName" slot-scope="text">{{ text }}</div>
+        <div slot="action">
+          <a-button type="link">删除</a-button>
+        </div>
+      </a-table>
+      <b>
+        建议账单调整总金额：
+        <span>¥ 2233.00</span>
+        建议可开票调整总金额：
+        <span>
+          ¥ 2233
+        </span>
+      </b>
+    </div>
+    <b style="display: block;margin-top:20px">实际调整项</b>
     <div>
       <a-form-model layout="inline">
         <a-form-model-item>
@@ -121,32 +152,34 @@
     </div>
     <div>
       <a-table
-        :pagination="actualPaginationProps"
+        :pagination="recomPaginationProps"
         rowKey="id"
         :columns="actualColumns"
-        :data-source="actualCata"
+        :data-source="recomData"
       >
         <div slot="companyName" slot-scope="text">{{ text }}</div>
         <div slot="action">
           <a-button type="link">删除</a-button>
         </div>
       </a-table>
-      <p>
+      <b>
         实际账单调整总金额：
         <span>¥ 2233.00</span>
         实际可开票调整总金额：
         <span>
           ¥ 2233
         </span>
-      </p>
+      </b>
     </div>
     <div>
-      <p>
-        对账单总金额：
-        <span>¥ 2213.00</span>
-        可开票总金额：
-        <span>¥ 2213.00</span>
-      </p>
+      <a-descriptions style="margin-top:30px">
+        <div slot="title">
+          对账单总金额：
+          <span>¥ 2213.00</span>
+          可开票总金额：
+          <span>¥ 2213.00</span>
+        </div>
+      </a-descriptions>
       <div class="bottom-button">
         <a-button type="primary">
           保存
@@ -166,6 +199,7 @@
 export default {
   data() {
     return {
+      dataInfo: null, //详情描述数据
       visible: false,
       confirmLoading: false,
       labelCol: { span: 4 },
@@ -230,11 +264,6 @@ export default {
         {
           title: "可开票金额（元）",
           dataIndex: "kamount"
-        },
-        {
-          title: "操作",
-          dataIndex: "action",
-          key: "action"
         }
       ],
       listQuery: {
@@ -243,7 +272,7 @@ export default {
         currentPage: 1,
         pageSize: 10,
         total: 0,
-        status: ""
+        orderNo: ""
       },
       paginationProps: {
         showQuickJumper: true,
@@ -257,6 +286,7 @@ export default {
         onShowSizeChange: this.onShowSizeChange
       },
       actualListQuery: {
+        orderNo: "",
         key: "",
         search: "",
         currentPage: 1,
@@ -275,7 +305,7 @@ export default {
         onChange: this.quickJumpActual,
         onShowSizeChange: this.onShowSizeChangeActual
       },
-      actualCata: [],
+      actualData: [],
       actualColumns: [
         {
           title: "订单号",
@@ -321,16 +351,37 @@ export default {
         {
           title: "调整后可开票金额（元）",
           dataIndex: "kamount"
-        },
-        {
-          title: "操作",
-          dataIndex: "action",
-          key: "action"
         }
-      ]
+      ],
+      recomListQuery: {
+        key: "",
+        search: "",
+        currentPage: 1,
+        pageSize: 10,
+        total: 0,
+        orderNo: ""
+      },
+      recomData: [],
+      recomPaginationProps: {
+        showQuickJumper: true,
+        showSizeChanger: true,
+        total: 0,
+        showTotal: (total, range) =>
+          `共 ${total} 条记录 第 ${this.recomListQuery.currentPage} / ${Math.ceil(
+            total / this.recomListQuery.pageSize
+          )} 页`,
+        onChange: this.quickJumpRecom,
+        onShowSizeChange: this.onShowSizeChangeRecom
+      },
     };
   },
   methods: {
+    // 获取详情数据
+    getData() {
+      this.$store.dispatch("recon/getOneRecon", { id: this.$route.query.id }).then(res => {
+        this.dataInfo = res.data;
+      });
+    },
     showModal() {
       this.visible = true;
     },
@@ -372,9 +423,9 @@ export default {
     resetForm() {
       this.$refs.ruleForm.resetFields();
     },
-    //查询数据表格
+    //查询对账单明细列表
     getList() {
-      this.$getList("word/getList", this.listQuery).then(res => {
+      this.$store.dispatch("recon/getReconDetail", this.listQuery).then(res => {
         console.log(res);
         this.actualCata = [...res.data.list];
         this.paginationProps.total = res.data.totalCount * 1;
@@ -391,13 +442,30 @@ export default {
       this.listQuery.pageSize = pageSize;
       this.getList();
     },
-    //查询数据表格
+    //查询数据表格(建议)
     getActualList() {
-      this.$getList("word/getList", this.actualListQuery).then(res => {
+      this.$getList("recon/getActualList", this.actualListQuery).then(res => {
         console.log(res);
-        this.data = [...res.data.list];
+        this.actualData = [...res.data.list];
         this.actualPaginationProps.total = res.data.totalCount * 1;
       });
+    },
+    // 获取实际对账单列表
+    getRecomDataList(){
+      this.$getList("recon/getRecomDataList", this.recomListQuery).then(res => {
+        console.log(res);
+        this.recomData = [...res.data.list];
+        this.recomPaginationProps.total = res.data.totalCount * 1;
+      });
+    },
+    quickJumpRecom(currentPage) {
+      this.recomListQuery.currentPage = currentPage;
+      this.getRecomDataList();
+    },
+    onShowSizeChangeRecom(current, pageSize) {
+      this.recomListQuery.currentPage = current;
+      this.recomListQuery.pageSize = pageSize;
+      this.getRecomDataList();
     },
     //表格分页跳转
     quickJumpActual(currentPage) {
@@ -422,5 +490,12 @@ export default {
 }
 .bottom-button {
   text-align: center;
+}
+.title-table {
+  margin-bottom: 20px;
+  color: #000000d9;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 1.5;
 }
 </style>
