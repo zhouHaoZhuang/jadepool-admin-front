@@ -53,18 +53,18 @@
           <div slot="chargingType" slot-scope="text">
             {{ charingStatus[text] }}
           </div>
-          <div slot="productConfig" slot-scope="text, record">
+           <div slot="ecsPrice" slot-scope="text, record">
             <div v-if="record.chargingType == 'AfterPay'">
               {{ record.productName }}功能开通：按流量计费
             </div>
-            <div>
-              <div>CPU:{{ record.cpu }}核</div>
-              <div>内存:{{ record.memory }}G</div>
-              <div>带宽:{{ record.internetMaxBandwidthOut }}M</div>
-              <div>系统盘:{{ record.systemDiskSize }}G</div>
-              <div>数据盘:{{ record.dataDiskSize }}G</div>
-              <div>操作系统:{{ record.osName }}</div>
-              <div>所在区:{{ regionDataEnum[record.regionId] }}</div>
+            <div v-else>
+              <div>CPU：{{ text.cpu }}</div>
+              <div>内存：{{ text.memory }}</div>
+              <div>磁盘：{{ text.dataDiskSize }}</div>
+              <div>带宽：{{ text.internetMaxBandwidthOut }}</div>
+              <div>防御：{{ "20G" }}</div>
+              <div>镜像：{{ text.imageId }}</div>
+              <div>所在区：{{ regionDataEnum[text.regionId] }}</div>
             </div>
           </div>
         </a-table>
@@ -111,7 +111,7 @@ export default {
           key: "productName",
           width: 100
         },
-        {
+       {
           title: "具体配置",
           dataIndex: "ecsPrice",
           key: "ecsPrice",
