@@ -50,6 +50,28 @@ const recon = {
         method: "get"
       });
     },
+    // 新增--------保存
+    save({ commit, state }, params) {
+      return request({
+        url: "/purchaseAccount",
+        method: "post",
+        data: params
+      });
+    },
+    // 新增--------发布
+    publish({ commit, state }, params) {
+      return request({
+        url: "/purchaseAccount/" + params.id + "/publish",
+        method: "post"
+      });
+    },
+    // 新增--------取消
+    cancel({ commit, state }, params) {
+      return request({
+        url: "/purchaseAccount/" + params.id + "/cancel",
+        method: "post"
+      });
+    },
     // 新增采购
     add({ commit, state }, data) {
       return request({

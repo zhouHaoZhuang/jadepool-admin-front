@@ -148,10 +148,10 @@
         <span>¥ 2213.00</span>
       </p>
       <div class="bottom-button">
-        <a-button type="primary">
+        <a-button type="primary" @click="save">
           保存
         </a-button>
-        <a-button type="primary" style="margin-left: 10px;">
+        <a-button type="primary" style="margin-left: 10px;" @click="publish">
           发布
         </a-button>
         <a-button style="margin-left: 10px;">
@@ -331,6 +331,33 @@ export default {
     };
   },
   methods: {
+    // 保存
+    save() {
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          this.$store.dispatch("recon/save").then(res => {
+            this.$message.success("保存成功");
+          });
+        }
+      });
+    },
+    // 发布
+    publish() {
+      this.$store.dispatch("recon/publish").then(res => {
+        this.$message.success("发布成功");
+      });
+    },
+    // 取消
+    cancel() {
+      this.$confirm({
+        title: "确定要取消吗?",
+        onOk: () => {
+          this.$store.dispatch("recon/cancel").then(res => {
+            this.$message.success("取消成功");
+          });
+        }
+      });
+    },
     showModal() {
       this.visible = true;
     },
@@ -365,9 +392,11 @@ export default {
     onSubmit() {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
-          this.$store.dispatch('recon/getReconDetailList',this.form).then((res)=>{
-            this.$message.success('拉取成功')
-          })
+          this.$store
+            .dispatch("recon/getReconDetailList", this.form)
+            .then(res => {
+              this.$message.success("拉取成功");
+            });
         }
       });
     },
