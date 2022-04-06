@@ -18,24 +18,26 @@
           <a-button type="primary">批量发布</a-button>
         </a-form-model-item>
         <a-form-model-item>
-          <a-input placeholder="请输入对账单号" />
+          <a-input style="width:130px" placeholder="请输入对账单号" />
         </a-form-model-item>
         <a-form-model-item>
-          <a-input placeholder="请输入渠道商名称" />
+          <a-input style="width:150px" placeholder="请输入渠道商名称" />
         </a-form-model-item>
         <a-form-model-item>
           <a-date-picker
             placeholder="开始账期"
             format="YYYY-MM-DD HH:mm:ss"
+            style="width:170px"
             @change="startValue"
           >
           </a-date-picker>
         </a-form-model-item>
-        <a-form-model-item> --</a-form-model-item>
+        <a-form-model-item>--</a-form-model-item>
         <a-form-model-item>
           <a-date-picker
             placeholder="结束账期"
             format="YYYY-MM-DD HH:mm:ss"
+            style="width:170px"
             @change="endValue"
           >
           </a-date-picker>
