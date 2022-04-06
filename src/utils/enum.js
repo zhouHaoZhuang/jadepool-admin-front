@@ -162,6 +162,6 @@ export const orderTypeMap = {
 };
 // 计费方式、
 export const charingStatus ={
-  "AfterPay":'包年包月',
-  "BeforePay":'按量付费'
+  "AfterPay":'按量付费',
+  "BeforePay":'包年包月'
 }
