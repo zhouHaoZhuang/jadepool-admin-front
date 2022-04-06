@@ -36,6 +36,11 @@ import Icon from "ant-design-vue/es/icon";
 import fastEqual from "fast-deep-equal";
 import { getI18nKey } from "@/utils/routerUtil";
 
+// 菜单字体图标组件---使用iconfont图标
+const IconFont = Icon.createFromIconfontCN({
+  scriptUrl: "//at.alicdn.com/t/font_3289613_yfq06drv4mb.js"
+});
+
 const { Item, SubMenu } = Menu;
 
 const resolvePath = (path, params = {}) => {
@@ -153,7 +158,7 @@ export default {
       }
       return !icon || icon == "none"
         ? null
-        : h(Icon, { props: { type: icon } });
+        : h(IconFont, { props: { type: icon } });
     },
     renderMenuItem: function(h, menu) {
       let tag = "router-link";
