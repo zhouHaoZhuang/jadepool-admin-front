@@ -154,7 +154,7 @@
         <a-button type="primary" style="margin-left: 10px;" @click="publish">
           发布
         </a-button>
-        <a-button style="margin-left: 10px;">
+        <a-button @click="cancel" style="margin-left: 10px;">
           取消
         </a-button>
       </div>

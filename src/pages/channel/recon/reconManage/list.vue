@@ -73,10 +73,31 @@
         }"
       >
         <div slot="companyName" slot-scope="text">{{ text }}</div>
-        <div slot="action">
-          <a-button type="link">详情</a-button>
-          <a-button type="link">调整</a-button>
-          <a-button type="link">编辑</a-button>
+        <div slot="action" slot-scope="text, record">
+          <a-button
+            type="link"
+            @click="
+              $router.push('/finance/recon/reconManageInfo?id=' + record.id)
+            "
+          >
+            详情
+          </a-button>
+          <a-button
+            type="link"
+            @click="
+              $router.push('/finance/recon/addreconManage?id=' + record.id)
+            "
+          >
+            调整
+          </a-button>
+          <a-button
+            type="link"
+            @click="
+              $router.push('/finance/recon/addreconManage?id=' + record.id)
+            "
+          >
+            编辑
+          </a-button>
         </div>
       </a-table>
     </div>
@@ -144,7 +165,7 @@ export default {
         }
       ],
       data: [],
-      selectedRowKeys: [], // Check here to configure the default column
+      selectedRowKeys: [],
       paginationProps: {
         showQuickJumper: true,
         showSizeChanger: true,
@@ -176,13 +197,16 @@ export default {
     //查询数据表格
     getList() {
       this.loading = true;
-      this.$store.dispatch("recon/getReconList", this.listQuery).then(res => {
-        console.log(res);
-        this.data = [...res.data.list];
-        this.paginationProps.total = res.data.totalCount * 1;
-      }).finally(() => {
-        this.loading = false;
-      });
+      this.$store
+        .dispatch("recon/getReconList", this.listQuery)
+        .then(res => {
+          console.log(res);
+          this.data = [...res.data.list];
+          this.paginationProps.total = res.data.totalCount * 1;
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
     //表格分页跳转
     quickJump(currentPage) {

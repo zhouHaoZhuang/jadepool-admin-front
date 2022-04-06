@@ -18,6 +18,7 @@ import withdraw from './withdraw'
 import unsubscribe from "./unsubscribe";
 import refundmangage from "./refundmangage";
 import recon from "./recon";
+import billmangage from "./billmangage";
 export default {
   user,
   account,
@@ -38,5 +39,6 @@ export default {
   withdraw,
   unsubscribe,
   refundmangage,
-  recon
+  recon,
+  billmangage
 };
