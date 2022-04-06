@@ -96,21 +96,19 @@
               >
                 <div slot="name" slot-scope="text, record">
                   <a-input-group compact>
-                    <a-input
-                      style=" width: 50px; text-align: center"
-                    />
+                    <a-input style=" width: 80px; text-align: center" />
                     <a-input
                       style=" width: 30px; border-left: 0; pointer-events: none; backgroundColor: #fff"
                       placeholder="~"
                       disabled
                     />
                     <a-input
-                      style="width: 50px; text-align: center; border-left: 0"
+                      style="width: 80px; text-align: center; border-left: 0"
                     />
                   </a-input-group>
                 </div>
-                <div slot="age" slot-scope="text,record">
-                  <a-input></a-input>
+                <div slot="age" slot-scope="text, record">
+                  <a-input style="width:80px"></a-input>
                 </div>
                 <template slot="operation" slot-scope="text, record">
                   <a-popconfirm
@@ -128,7 +126,6 @@
             </div>
           </div>
         </div>
-
         <a-button
           type="primary"
           @click="onSubmit"
@@ -179,7 +176,7 @@ export default {
         {
           title: "固定价格(元)",
           dataIndex: "age",
-           scopedSlots: { customRender: "age" }
+          scopedSlots: { customRender: "age" }
         },
         {
           title: "操作",
