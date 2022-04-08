@@ -55,7 +55,7 @@ export const asyncRoute = [
             path: "index",
             name: "后台首页",
             meta: {
-              icon: "home"
+              icon: "icon-applicationgroup"
             },
             component: BlankView,
             children: [
@@ -95,7 +95,7 @@ export const asyncRoute = [
             path: "index",
             name: "渠道管理",
             meta: {
-              icon: "home"
+              icon: "icon-qudaoliebiao"
             },
             component: BlankView,
             children: [
@@ -145,7 +145,7 @@ export const asyncRoute = [
             path: "enterprise",
             name: "企业管理",
             meta: {
-              icon: "home"
+              icon: "icon-qiyeguanli"
             },
             component: BlankView,
             children: [
@@ -179,7 +179,7 @@ export const asyncRoute = [
             path: "index",
             name: "收支账簿",
             meta: {
-              icon: "home"
+              icon: "icon-shouzhizhangbao"
             },
             component: BlankView,
             children: [
@@ -201,7 +201,7 @@ export const asyncRoute = [
             path: "order",
             name: "订单管理",
             meta: {
-              icon: "home"
+              icon: "icon-dingdanguanli"
             },
             component: BlankView,
             children: [
@@ -250,7 +250,7 @@ export const asyncRoute = [
             path: "examine",
             name: "财务审核",
             meta: {
-              icon: "home"
+              icon: "icon-caiwushenhe"
             },
             component: BlankView,
             children: [
@@ -296,7 +296,7 @@ export const asyncRoute = [
             path: "report",
             name: "财务报表",
             meta: {
-              icon: "home"
+              icon: "icon-caiwubaobiao"
             },
             component: BlankView,
             children: [
@@ -326,7 +326,7 @@ export const asyncRoute = [
             path: "cloudservers",
             name: "云服务器",
             meta: {
-              icon: "home"
+              icon: "icon-yunfuwuqi"
             },
             component: BlankView,
             children: [
@@ -360,7 +360,7 @@ export const asyncRoute = [
             path: "cdn",
             name: "CDN云加速",
             meta: {
-              icon: "home"
+              icon: "icon-CDNyunjiasu"
             },
             component: BlankView,
             children: [
@@ -428,7 +428,7 @@ export const asyncRoute = [
             path: "supplier",
             name: "供应商管理",
             meta: {
-              icon: "home"
+              icon: "icon-gongyingshangguanli"
             },
             component: BlankView,
             children: [
@@ -492,7 +492,7 @@ export const asyncRoute = [
             path: "product",
             name: "产品管理",
             meta: {
-              icon: "home"
+              icon: "icon-chanpinguanli"
             },
             component: BlankView,
             children: [
@@ -521,7 +521,7 @@ export const asyncRoute = [
             path: "price",
             name: "产品标准价格管理",
             meta: {
-              icon: "home"
+              icon: "icon-chanpinguanli"
             },
             component: BlankView,
             children: [
@@ -535,8 +535,8 @@ export const asyncRoute = [
                 path: "addPrice",
                 name: "新建产品标准价格",
                 meta: {
-                  invisible: true, 
-                  back: true 
+                  invisible: true,
+                  back: true
                 },
                 component: () =>
                   import("@/pages/production/price/priceDetail.vue")
@@ -545,8 +545,8 @@ export const asyncRoute = [
                 path: "updatePrice",
                 name: "编辑产品标准价格",
                 meta: {
-                  invisible: true, 
-                  back: true 
+                  invisible: true,
+                  back: true
                 },
                 component: () =>
                   import("@/pages/production/price/priceDetail.vue")
@@ -555,21 +555,36 @@ export const asyncRoute = [
                 path: "priceDetail",
                 name: "产品标准价格详情",
                 meta: {
-                  invisible: true, 
+                  invisible: true,
                   back: true
                 },
                 component: () =>
-                  import(
-                    "@/pages/production/price/priceDetail.vue"
-                  )
+                  import("@/pages/production/price/priceDetail.vue")
               }
             ]
           },
           {
+            path: "territory",
+            name: "地域管理",
+            meta: {
+              icon: "icon-chanpinguanli"
+            },
+            component: BlankView,
+            children: [
+              {
+                path: "territory/list",
+                name: "地域管理",
+                meta: {},
+                component: () => import("@/pages/production/territory/list.vue")
+              }
+            ]
+          },
+
+          {
             path: "cloudServer",
             name: "云服务器",
             meta: {
-              icon: "home"
+              icon: "icon-yunfuwuqi"
             },
             component: BlankView,
             children: [
@@ -642,7 +657,7 @@ export const asyncRoute = [
             path: "workorderManage",
             name: "工单管理",
             meta: {
-              icon: "home",
+              icon: "icon-gongdanguanli",
               perm: "userinfo"
             },
             component: BlankView,
@@ -681,7 +696,7 @@ export const asyncRoute = [
             path: "setting",
             name: "工单设置",
             meta: {
-              icon: "home",
+              icon: "icon-gongdanshezhi",
               perm: "userinfo"
             },
             component: BlankView,
@@ -774,7 +789,7 @@ export const asyncRoute = [
             path: "index",
             name: "租户管理",
             meta: {
-              icon: "home",
+              icon: "icon-zuhuguanli",
               perm: "userinfo"
             },
             component: BlankView,
