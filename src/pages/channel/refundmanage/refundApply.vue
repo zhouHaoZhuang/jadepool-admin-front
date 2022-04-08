@@ -138,7 +138,7 @@ export default {
     };
   },
   activated() {
-    // this.getData();
+    this.getData();
   },
   methods: {
     //查询数据表格

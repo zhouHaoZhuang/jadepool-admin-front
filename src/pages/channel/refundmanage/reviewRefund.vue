@@ -159,9 +159,9 @@ export default {
     };
   },
   activated() {
-    // this.getData();
     this.$nextTick(() => {
       this.resetForm();
+      this.getData();
     });
   },
   methods: {

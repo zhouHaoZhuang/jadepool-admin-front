@@ -193,7 +193,7 @@ export default {
       this.listQuery.currentPage = currentPage;
       this.getList();
     },
-    //表格分页切换每页条数
+    //表格分页切换每页条数  
     onShowSizeChange(current, pageSize) {
       this.listQuery.currentPage = current;
       this.listQuery.pageSize = pageSize;
