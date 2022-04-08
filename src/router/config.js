@@ -544,6 +544,55 @@ export const asyncRoute = [
             ]
           },
           {
+            path: "territory",
+            name: "地域管理",
+            meta: {
+              icon: "home"
+            },
+            component: BlankView,
+            children: [
+              {
+                path: "territory/list",
+                name: "地域管理",
+                meta: {
+                },
+                component: () =>
+                  import("@/pages/production/territory/list.vue")
+              },
+            ]
+          },
+          // 哈哈哈
+          // {
+          //   path: "product",
+          //   name: "产品标准价格管理",
+          //   meta: {
+          //     icon: "home"
+          //   },
+          //   component: BlankView,
+          //   children: [
+          //     {
+          //       path: "information",
+          //       name: "产品信息管理",
+          //       meta: {
+          //       },
+          //       component: () =>
+          //         import("@/pages/production/product/information/list.vue")
+          //     },
+          //     {
+          //       path: "updateProduct",
+          //       name: "产品线",
+          //       meta: {
+          //         invisible: true, // 不显示在左侧菜单
+          //         back: true // 后退
+          //       },
+          //       component: () =>
+          //         import(
+          //           "@/pages/production/product/information/updateProduct.vue"
+          //         )
+          //     }
+          //   ]
+          // },
+          {
             path: "cloudServer",
             name: "云服务器",
             meta: {
