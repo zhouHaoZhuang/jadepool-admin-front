@@ -11,7 +11,7 @@
         </a-form-model-item>
         <a-form-model-item>
           <a-input
-            v-model="listQuery.companyName"
+            v-model="listQuery.createUserName"
             placeholder="请输入渠道商名称"
             allowClear
           />
@@ -24,7 +24,7 @@
           >
           </a-date-picker>
         </a-form-model-item>
-        <a-form-model-item> --</a-form-model-item>
+        <a-form-model-item>--</a-form-model-item>
         <a-form-model-item>
           <a-date-picker
             placeholder="创建结束日期"
@@ -81,7 +81,7 @@
         <div slot="action" slot-scope="text, record">
           <a-button
             type="link"
-            @click="$router.push('/sale/finance/billInfo?id=' + record.id)"
+            @click="$router.push('/finance/examine/billInfo?id=' + record.id)"
           >
             详情
           </a-button>
@@ -96,7 +96,7 @@
           <a-button
             type="link"
             style="margin-left:10px"
-            @click="$router.push('/sale/finance/auditbill?id=' + record.id)"
+            @click="$router.push('/finance/examine/auditbill?id=' + record.id)"
             :disabled="record.status !== 3"
           >
             审核
@@ -105,7 +105,7 @@
             type="link"
             v-if="record.status === 5"
             style="margin-left:10px"
-            @click="$router.push('/sale/finance/editbill?id=' + record.id)"
+            @click="$router.push('/finance/examine/editbill?id=' + record.id)"
           >
             编辑
           </a-button>
@@ -129,7 +129,7 @@ export default {
         total: 0,
         startTime: "",
         endTime: "",
-        companyName: "",
+        createUserName: "",
         invoiceNo: "",
         status: undefined
       },
@@ -145,7 +145,7 @@ export default {
         },
         {
           title: "渠道商名称",
-          dataIndex: "companyName"
+          dataIndex: "createUserName"
         },
         {
           title: "开票金额",
@@ -191,7 +191,7 @@ export default {
     };
   },
   activated() {
-    // this.getList();
+    this.getList();  
   },
   methods: {
     takeOver(id) {

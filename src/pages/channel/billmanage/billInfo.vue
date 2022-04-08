@@ -9,13 +9,13 @@
           {{ data.invoiceInfo.createUserName }}
         </a-descriptions-item>
         <a-descriptions-item label="发票类型">
-          {{ issueTypeMap[data.invoiceInfo.issueType] }}
+          {{ invoiceTypeMap[data.invoiceType] }}
         </a-descriptions-item>
         <!-- <a-descriptions-item label="发票类型">
           {{ invoiceTypeMap[data.invoiceInfo.invoiceType] }}
         </a-descriptions-item> -->
         <a-descriptions-item label="发票抬头">
-          {{ data.invoiceInfo.invoiceTitle }}
+          {{ data.invoiceTitle }}
         </a-descriptions-item>
         <a-descriptions-item label="税务登记号">
           {{ data.invoiceInfo.registerNo }}

@@ -291,6 +291,7 @@ export const asyncRoute = [
                 meta: {
                   icon: "home",
                   back: true,
+                  invisible: true,
                   perm: "finance-book-order",
                 },
                 component: () =>
@@ -302,6 +303,7 @@ export const asyncRoute = [
                 meta: {
                   icon: "home",
                   back: true,
+                  invisible: true,
                   perm: "finance-book-order",
                 },
                 component: () =>
@@ -313,6 +315,7 @@ export const asyncRoute = [
                 meta: {
                   icon: "home",
                   back: true,
+                  invisible: true,
                   perm: "finance-book-order",
                 },
                 component: () =>
@@ -335,6 +338,7 @@ export const asyncRoute = [
                 meta: {
                   icon: "home",
                   back: true,
+                  invisible: true,
                   perm: "finance-book-order",
                 },
                 component: () =>
@@ -346,6 +350,7 @@ export const asyncRoute = [
                 meta: {
                   icon: "home",
                   back: true,
+                  invisible: true,
                   perm: "finance-book-order",
                 },
                 component: () =>

@@ -7,7 +7,7 @@
         </a-form-model-item>
         <a-form-model-item>
           <a-input
-            v-model="listQuery.companyName"
+            v-model="listQuery.createUserName"
             placeholder="请输入渠道商名称"
           />
         </a-form-model-item>
@@ -39,7 +39,7 @@
               :value="inx"
               v-for="(item, inx) in invoiceStatusEnum"
               :key="inx"
-            >
+            >  
               {{ item }}
             </a-select-option>
           </a-select>
@@ -98,7 +98,7 @@ export default {
       invoiceStatusEnum,
       listQuery: {
         invoiceNo: "",
-        companyName: "",
+        createUserName: "",
         key: "",
         search: "",
         currentPage: 1,
@@ -122,7 +122,7 @@ export default {
         },
         {
           title: "渠道商名称",
-          dataIndex: "companyName"
+          dataIndex: "createUserName"
         },
         {
           title: "开票金额",
@@ -171,7 +171,7 @@ export default {
     };
   },
   activated() {
-    // this.getList();
+    this.getList();
   },
   methods: {
     startValue(date, dateString) {
