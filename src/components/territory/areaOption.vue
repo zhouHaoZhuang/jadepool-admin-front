@@ -14,28 +14,32 @@
         :label-col="labelCol"
         :wrapper-col="wrapperCol"
       >
-        <a-form-model-item ref="name" label="地域CODE" prop="code">
-          <a-input v-model="form.code" placeholder="请输入地域CODE"></a-input>
-        </a-form-model-item>
-        <a-form-item label="地域名称" prop="accountName">
+        <a-form-model-item ref="name" label="地域CODE" prop="regionCode">
           <a-input
-            v-model="form.accountName"
+            v-model="form.regionCode"
+            placeholder="请输入地域CODE"
+          ></a-input>
+        </a-form-model-item>
+        <a-form-item label="地域名称" prop="regionName">
+          <a-input
+            v-model="form.regionName"
             placeholder="请输入地域名称"
           ></a-input>
         </a-form-item>
         <a-form-model-item label="供应商">
           <a-select
             style="width:150px"
-            v-model="form.account"
+            v-model="form.supplierName"
             allowClear
             placeholder="请选择供应商"
+            @change="getSupplier"
           >
             <a-select-option
-              :value="v.key"
-              v-for="v in useColumns"
-              :key="v.title"
+              v-for="item in supplierList"
+              :key="item.supplierCode"
+              :value="item.supplierCode"
             >
-              {{ v.title }}
+              {{ item.supplierName }}
             </a-select-option>
           </a-select>
         </a-form-model-item>
@@ -57,7 +61,6 @@ export default {
   props: {
     // 是否显示弹框
     visibleDetail: {},
-    //1 采购-财务管理下的提现申请详情  2 销售-财务管理-提现管理-提现操作
     type: {},
     // 申请提现详情
     detailInfo: {
@@ -75,8 +78,7 @@ export default {
     detailInfo: {
       handler(newVal) {
         this.$nextTick(() => {
-          // this.form = newVal;
-          this.form = {};
+          this.form = newVal;
         });
       },
       immediate: true,
@@ -116,6 +118,7 @@ export default {
     return {
       confirmLoading: false,
       newTitle: "",
+      supplierList: [], //供应商列表
       form: {
         account: "1",
         accountName: "2"
@@ -147,7 +150,26 @@ export default {
       }
     };
   },
+  activated() {
+    this.getList();
+  },
   methods: {
+    //获取供应商列表
+    getList() {
+      this.$store.dispatch("provider/getList", this.listQuery).then(res => {
+        this.supplierList = res.data.list;
+      });
+    },
+    getSupplier(val){
+   console.log(val,'aaa');
+   
+   this.supplierList.forEach(ele => {
+     if(val === ele.supplierCode){
+       this.form.supplierName = ele.supplierName
+       this.form.supplierCode = ele.supplierCode
+     }
+   });
+    },
     //新增，编辑地域
     handleOk() {
       this.confirmLoading = true;
@@ -155,16 +177,17 @@ export default {
         if (valid) {
           let title;
           let tig;
-          let obj = {};
-          obj.id = this.form.id;
+          // let obj = {};
+          // obj.id = this.form.id;
+          // obj.
           if (this.title === 1) {
             title = "确认新增地域吗?";
             tig = "地域新增成功";
-            this.addOption(title, tig, obj);
+            this.addOption(title, tig, this.form);
           } else {
             title = "确认更新地域吗?";
             tig = "地域更新成功";
-            this.editOption(title, tig, obj);
+            this.editOption(title, tig, this.form);
           }
         } else {
           console.log("error submit!!");
@@ -179,7 +202,7 @@ export default {
         title: title,
         onOk: () => {
           this.$store
-            .dispatch("withdraw/approval", obj)
+            .dispatch("territory/add", obj)
             .then(res => {
               this.$message.success(tig);
               this.$emit("changeVisible", false);
@@ -197,7 +220,7 @@ export default {
         title: title,
         onOk: () => {
           this.$store
-            .dispatch("withdraw/approval", obj)
+            .dispatch("territory/edit", obj)
             .then(res => {
               this.$message.success(tig);
               this.$emit("changeVisible", false);

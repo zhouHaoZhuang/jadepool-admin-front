@@ -10,8 +10,12 @@
           v-model="listQuery.key"
           placeholder="请选择"
         >
-          <a-select-option :key="i" v-for="(v, i) in columns2" :value="v.key">
-            {{ v.title }}
+          <a-select-option
+            v-for="item in columns.slice(0, columns.length - 1)"
+            :key="item.dataIndex"
+            :value="item.dataIndex"
+          >
+            {{ item.title }}
           </a-select-option>
         </a-select>
         <div>
@@ -30,8 +34,9 @@
       <div>
         <a-table
           :columns="columns"
-          :data-source="exhibitList"
+          :data-source="data"
           rowKey="id"
+          :loading="tableLoading"
           :pagination="paginationProps"
           :scroll="{ x: 1300 }"
         >
@@ -48,7 +53,12 @@
         </a-table>
       </div>
     </div>
-    <AreaOption v-model="showOption" :title="title" @success="reqList" />
+    <AreaOption
+      v-model="showOption"
+      :title="title"
+      @success="reqList"
+      :detailInfo="areaDetail"
+    />
   </div>
 </template>
 
@@ -63,6 +73,8 @@ export default {
       pageSize: 5,
       PoolList: [],
       exhibitList: [],
+      tableLoading: false,
+      data: [],
       title: "",
       showOption: false, // 是否显示地域弹框
       areaDetail: {}, //地域详情
@@ -76,14 +88,14 @@ export default {
       columns: [
         {
           title: "地域CODE",
-          dataIndex: "id",
-          key: "id",
+          dataIndex: "regionCode",
+          key: "regionCode",
           width: 250
         },
         {
           title: "地域名称",
-          dataIndex: "productName",
-          key: "productName"
+          dataIndex: "regionName",
+          key: "regionName"
         },
         {
           title: "供应商",
@@ -99,7 +111,6 @@ export default {
         }
       ],
       columns2: [],
-      data: [],
       sechKey: "",
       // 表格分页器配置
       paginationProps: {
@@ -110,7 +121,9 @@ export default {
         current: 1, //当前页
         pageSize: 5, //每页显示数量
         showTotal: (total, range) =>
-          `共 ${total} 条记录 第 ${this.current} /  ${this.pageNum} 页`,
+          `共 ${total} 条记录 第 ${this.listQuery.currentPage} / ${Math.ceil(
+            total / this.listQuery.pageSize
+          )} 页`,
         onChange: this.changepage,
         onShowSizeChange: this.onShowSizeChange
       }
@@ -137,34 +150,19 @@ export default {
   },
 
   activated() {
-    this.columns2 = this.columns.slice(0, this.columns.length - 1);
-    // 获取列表数据  以及初始化操作
-    this.$store.dispatch("pool/getList").then(val => {
-      this.reqList(val);
-    });
+    this.reqList();
   },
   methods: {
-    reqList(res) {
-      this.PoolList = res.data.list;
-      this.data = this.PoolList;
-      this.paginationProps.total = res.data.totalCount * 1;
-      this.paginationProps.current = this.current;
-      if (this.current == 1) {
-        this.exhibitList = this.PoolList.slice(0, this.pageSize);
-      } else {
-        this.exhibitList = this.PoolList.slice(
-          this.pageSize * (this.current - 1),
-          this.pageSize * this.current
-        );
-        if (this.exhibitList.length == 0) {
-          this.current--;
-          this.paginationProps.current = this.current;
-          this.exhibitList = this.PoolList.slice(
-            this.pageSize * (this.current - 1),
-            this.pageSize * this.current
-          );
-        }
-      }
+    reqList() {
+      this.tableLoading = true;
+      this.$getListQp("territory/getList", this.listQuery)
+        .then(res => {
+          this.data = [...res.data.list];
+          this.paginationProps.total = res.data.totalCount * 1;
+        })
+        .finally(() => {
+          this.tableLoading = false;
+        });
     },
 
     delectArea(id) {
@@ -172,42 +170,27 @@ export default {
       this.$confirm({
         title: "是否确认删除该地域？",
         onOk: () => {
-          this.$store.dispatch("pool/delList", id).then(val => {
+          this.$store.dispatch("territory/del", id).then(val => {
             this.$message.success("删除成功");
-            this.$store.dispatch("pool/getList").then(val => {
-              this.reqList(val);
-            });
+            this.reqList();
           });
         }
       });
     },
     handleMenuClick() {
-      this.$getListQp("pool/getList", this.listQuery).then(val => {
-        this.reqList(val); //获取列表数据并初始化数据
-      });
+      this.listQuery.currentPage = 1;
+      this.reqList();
     },
-    // 切换页码之后被调用
+    // 表格分页切换每页条数
     onShowSizeChange(current, pageSize) {
-      this.pageSize = pageSize;
-      this.current = current;
-      this.paginationProps.current = current;
-      this.paginationProps.pageSize = pageSize;
-      this.$store.dispatch("pool/getList").then(val => {
-        this.reqList(val);
-      });
+      this.listQuery.currentPage = current;
+      this.listQuery.pageSize = pageSize;
+      this.reqList();
     },
     // 切换pagSize之后被调用
-    changepage(page, pageSize) {
-      if (page == 1) {
-        this.exhibitList = this.PoolList.slice(0, this.pageSize);
-      } else {
-        this.exhibitList = this.PoolList.slice(
-          this.pageSize * (page - 1),
-          this.pageSize * page
-        );
-      }
-      this.current = page;
-      this.paginationProps.current = page;
+    changepage(currentPage) {
+      this.listQuery.currentPage = currentPage;
+      this.reqList();
     },
     // 新增地域
     addArea() {
@@ -217,10 +200,11 @@ export default {
     },
     // 跳转至修改页面
     editArea(v) {
-      // console.log(v);
+      this.$store.dispatch("territory/getId", v.id).then(res => {
+        this.areaDetail = res.data;
+      });
       this.showOption = true;
       this.title = 2;
-      this.areaDetail = v;
     }
   }
 };

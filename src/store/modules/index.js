@@ -16,6 +16,7 @@ import bills from './bills'
 import cdnDomain from "./cdnDomain";
 import withdraw from './withdraw'
 import unsubscribe from "./unsubscribe";
+import territory from './territory'
 export default {
   user,
   account,
@@ -34,5 +35,6 @@ export default {
   bills,
   cdnDomain,
   withdraw,
-  unsubscribe
+  unsubscribe,
+  territory
 };
