@@ -10,80 +10,119 @@
       >
         <a-form-model-item
           v-if="type === 'add'"
-          ref="productName"
           label="产品名称"
           prop="productName"
         >
           <a-select
-            label-in-value
+            style="width:100%"
+            allowClear
             v-model="form.productName"
-            @change="onChange"
+            @change="handleProductChange"
           >
             <a-select-option
-              v-for="v in supplierNameList"
-              :value="v.supplierCode"
-              :key="v.id"
+              v-for="item in priceData"
+              :key="item.productName"
+              :value="item.productName"
             >
-              {{ v.supplierName }}
-            </a-select-option>
-          </a-select>
-        </a-form-model-item>
-        <a-form-model-item v-else label="产品ID">
-          {{ form.id }}
-        </a-form-model-item>
-        <a-form-model-item label="产品分类" prop="supplierCode">
-          <a-select
-            label-in-value
-            v-model="form.supplierCode"
-            @change="onChange"
-          >
-            <a-select-option
-              v-for="v in supplierNameList"
-              :value="v.supplierCode"
-              :key="v.id"
-            >
-              {{ v.supplierName }}
+              {{ item.productName }}
             </a-select-option>
           </a-select>
         </a-form-model-item>
         <a-form-model-item
-          ref="supplierProductCode"
-          label="地域选择"
-          prop="supplierProductCode"
+          v-if="type === 'add'"
+          label="产品分类"
+          prop="productTypeName"
         >
-          <a-select
-            v-model="form.supplierProductCode"
-            @change="handleProductChange"
-          >
+          <a-select v-model="form.productTypeName" @change="handleTypeChange">
             <a-select-option
               v-for="item in productList"
-              :value="item.supplierProductCode"
-              :key="item.supplierProductCode"
+              :value="item.productTypeCode"
+              :key="item.productTypeCode"
             >
-              {{ item.supplierProductCode }}
+              {{ item.productTypeName }}
             </a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item prop="supplierProductType" label="计费单位">
-          <span>{{ form.supplierProductType }}</span>
+        <a-form-model-item
+          v-if="type === 'add'"
+          ref="regionName"
+          label="地域选择"
+          prop="regionName"
+        >
+          <a-select v-model="form.regionName" @change="handleRegionChange">
+            <a-select-option
+              v-for="item in areaList"
+              :value="item.regionName"
+              :key="item.regionName"
+            >
+              {{ item.regionName }}
+            </a-select-option>
+          </a-select>
         </a-form-model-item>
-        <a-form-model-item ref="price" label="标准单价" prop="price">
-          <a-input v-model="form.productName" />
-          <span class="ant-form-text">
-            元
-          </span>
+        <a-form-model-item
+          v-if="type === 'edit' || type === 'detail'"
+          label="产品名称"
+        >
+          {{ form.productName }}
+        </a-form-model-item>
+        <a-form-model-item
+          v-if="type === 'edit' || type === 'detail'"
+          label="产品分类"
+        >
+          {{ form.productTypeName }}
+        </a-form-model-item>
+        <a-form-model-item
+          v-if="type === 'edit' || type === 'detail'"
+          label="地域选择"
+        >
+          {{ form.regionName }}
+        </a-form-model-item>
+
+        <a-form-model-item prop="chargeUnit" label="计费单位">
+          <span>{{ form.chargeUnit }}</span>
         </a-form-model-item>
         <a-form-model-item label="是否阶梯计价">
-          <a-radio-group v-decorator="['radio-group']">
-            <a-radio value="a">
+          <!--  -->
+          <a-radio-group
+            v-decorator="['radio-group']"
+            v-model="form.enableLadderPrice"
+          >
+            <a-radio :value="true">
               是
             </a-radio>
-            <a-radio value="b">
+            <a-radio :value="false">
               否
             </a-radio>
           </a-radio-group>
         </a-form-model-item>
-        <div>
+        <a-form-model-item
+          ref="price"
+          label="标准单价"
+          prop="standardPrice"
+          v-if="!form.enableLadderPrice && type !== 'detail'"
+        >
+          <a-input
+            v-model="form.standardPrice"
+            v-number-evolution="{ value: 2, min: 0.01, max: 9999999 }"
+            style="width:260px;"
+          />
+          <span class="ant-form-text">
+            元
+          </span>
+        </a-form-model-item>
+        <a-form-model-item
+          ref="price"
+          label="标准单价"
+          prop="standardPrice"
+          v-if="!form.enableLadderPrice && type === 'detail'"
+        >
+          {{ form.standardPrice }}
+          <span class="ant-form-text">
+            元
+          </span>
+        </a-form-model-item>
+
+        <div v-if="form.enableLadderPrice">
           <hr />
           <!-- 阶梯计价信息 -->
           <div>
@@ -91,36 +130,63 @@
             <div>
               <a-table
                 :pagination="false"
-                :data-source="dataSource"
+                :data-source="form.ladderPriceInfo.ladderPriceList"
                 :columns="columns"
               >
                 <div slot="name" slot-scope="text, record">
-                  <a-input-group compact>
-                    <a-input style=" width: 80px; text-align: center" />
+                  <a-input-group compact v-if="type !== 'detail'">
+                    <a-input
+                      style=" width: 80px; text-align: center"
+                      v-model="record.startData"
+                      v-number-evolution="{ value: 2, min: 0, max: 9999999 }"
+                      disabled
+                    />
                     <a-input
                       style=" width: 30px; border-left: 0; pointer-events: none; backgroundColor: #fff"
                       placeholder="~"
                       disabled
                     />
                     <a-input
-                      style="width: 80px; text-align: center; border-left: 0"
+                      style="width: 90px; text-align: center; border-left: 0"
+                      v-model="record.endData"
+                      v-number-evolution="{ value: 2, min: 0, max: 9999999 }"
+                      @keyup="changeEnd(record)"
                     />
                   </a-input-group>
+                  <div v-else>
+                    {{ record.startData }} ~ {{ record.endData }}
+                  </div>
                 </div>
-                <div slot="age" slot-scope="text, record">
-                  <a-input style="width:80px"></a-input>
+                <div slot="price" slot-scope="text, record">
+                  <div v-if="type === 'detail'">
+                    {{ record.price }}
+                  </div>
+                  <div v-else>
+                    <a-input
+                      style="width:80px"
+                      v-model="record.price"
+                      v-number-evolution="{ value: 2, min: 0.01, max: 9999999 }"
+                    ></a-input>
+                  </div>
                 </div>
                 <template slot="operation" slot-scope="text, record">
-                  <a-popconfirm
-                    v-if="dataSource.length"
-                    title="确认删除吗?"
-                    @confirm="() => onDelete(record.key)"
-                  >
-                    <a href="javascript:;">删除</a>
-                  </a-popconfirm>
+                  <!-- <span
+                  
+                    @click="onDelete(record.key)"
+                    >删除</span
+                  > -->
+                  <!-- :disabled="form.ladderPriceInfo.ladderPriceList.length>2 &&" -->
+                  <div v-if="type !== 'detail'">
+                    <a-button
+                      style="border:none;background:none;"
+                      :disabled="canDel(record)"
+                      @click="onDelete()"
+                      >删除</a-button
+                    >
+                  </div>
                 </template>
               </a-table>
-              <div class="editable-add-btn" @click="handleAdd">
+              <div class="editable-add-btn" @click="handleAdd()">
                 +添加行
               </div>
             </div>
@@ -131,6 +197,7 @@
           @click="onSubmit"
           :loading="loading"
           style="margin-top:30px;"
+          v-if="type !== 'detail'"
         >
           提交
         </a-button>
@@ -148,24 +215,30 @@ export default {
       wrapperCol: { span: 18 },
       other: "",
       form: {
-        productName: "", //产品名称
-        supplierCode: "", //供应商CODE
-        supplierName: "", //供应商
-        supplierProductCode: "", //供应商产品CODE
-        remark: "", //备注
-        supplierProductType: "", //供应商产品类型
-        productType: {
-          productTypes: []
+        chargeUnit: "",
+        enableLadderPrice: false,
+        ladderPriceInfo: {
+          ladderPriceList: [
+            {
+              endData: undefined,
+              price: undefined,
+              startData: undefined
+            },
+            {
+              endData: undefined,
+              price: undefined,
+              startData: 0
+            }
+          ]
         },
-        defaultPurchaseAccount: ""
+        productCode: "",
+        productName: "",
+        productTypeCode: "",
+        productTypeName: "",
+        regionCode: "",
+        regionName: "",
+        standardPrice: undefined
       },
-      dataSource: [
-        {
-          key: "0",
-          name: "Edward King 0",
-          age: "32"
-        }
-      ],
       count: 2,
       columns: [
         {
@@ -175,8 +248,8 @@ export default {
         },
         {
           title: "固定价格(元)",
-          dataIndex: "age",
-          scopedSlots: { customRender: "age" }
+          dataIndex: "price",
+          scopedSlots: { customRender: "price" }
         },
         {
           title: "操作",
@@ -188,52 +261,59 @@ export default {
         productName: [
           {
             required: true,
-            message: "输入值不能为空",
+            message: "产品名称不能为空",
             trigger: ["blur", "change"]
           }
         ],
-        supplierCode: [
+        productTypeName: [
           {
             required: true,
-            message: "输入值不能为空",
+            message: "产品分类不能为空",
             trigger: ["blur", "change"]
           }
         ],
-        supplierProductCode: [
+        regionName: [
           {
             required: true,
-            message: "输入值不能为空",
+            message: "地域选择不能为空",
             trigger: ["blur", "change"]
           }
         ],
-        defaultPurchaseAccount: [
+        standardPrice: [
           {
             required: true,
-            message: "请选择默认采购账号",
-            trigger: "change"
+            message: "标准单价不能为空",
+            trigger: ["blur", "change"]
           }
         ]
       },
       loading: false,
       supplierNameList: [],
       purchase: [],
-      productList: []
+      productList: [],
+      inputUnit: "",
+      priceData: [], //产品名称数据
+      areaList: [], //地域列表
+      canAdd: true // 是否可以点击添加行
     };
   },
   watch: {
     $route: {
       handler(newVal) {
-        if (newVal.path === "/production/product/updateProduct") {
+        if (newVal.path === "/production/price/addPrice") {
+          this.type = "add";
           this.resetForm();
-          this.getProviderList();
           this.getProductList();
-          this.getPurchaseList();
-          if (newVal.query.id) {
-            this.type = "edit";
-            this.getDetail();
-          } else {
-            this.type = "add";
-          }
+          //获取地域列表
+          this.getAreaList();
+          //获取产品名称数据
+          this.getPriceList();
+        } else if (newVal.path === "/production/price/priceDetail") {
+          this.type = "detail";
+          this.getDetail();
+        } else if (newVal.path === "/production/price/updatePrice") {
+          this.type = "edit";
+          this.getDetail();
         }
       },
       immediate: true,
@@ -241,56 +321,120 @@ export default {
     }
   },
   methods: {
-    onDelete(key) {
-      const dataSource = [...this.dataSource];
-      this.dataSource = dataSource.filter(item => item.key !== key);
+    // 删除行
+    onDelete() {
+      if (this.form.ladderPriceInfo.ladderPriceList.length > 2) {
+        this.form.ladderPriceInfo.ladderPriceList.shift();
+        this.form.ladderPriceInfo.ladderPriceList[0].endData = undefined;
+      }
     },
+    // 产品分类切换
+    handleTypeChange(val) {
+      const newObj = this.productList.find(ele => ele.productTypeCode === val);
+      this.form.chargeUnit = newObj.chargeUnit;
+      this.form.productTypeName = newObj.productTypeName;
+    },
+    //添加行
     handleAdd() {
-      const { count, dataSource } = this;
-      const newData = {
-        key: count,
-        name: `Edward King ${count}`,
-        age: 32,
-        address: `London, Park Lane no. ${count}`
-      };
-      this.dataSource = [...dataSource, newData];
-      this.count = count + 1;
+      console.log(this.canAdd,'canAdd');
+      if(this.canAdd){
+         let newList = this.form.ladderPriceInfo.ladderPriceList;
+        let startData = newList[0].endData;
+        if (startData) {
+          const newData = {
+            endData: undefined,
+            price: undefined,
+            startData: startData
+          };
+          this.form.ladderPriceInfo.ladderPriceList.unshift(newData);
+        } else {
+          this.$message.warn("请输入上方阶梯值的结尾值");
+          return false;
+        } 
+      }
+         if(!this.canAdd){
+           this.$message.warn("请校验上方阶梯值的结尾值");
+           return false;
+         }
+    },
+    // 修改第二个值
+    changeEnd(val) {
+      if (val.endData <= val.startData) {
+        this.$message.error("当前值必须大于起始值");
+        // val.endData = ''
+        this.canAdd = false;
+        return false;
+      }else{
+        this.canAdd = true;
+      }
+    },
+    // 是否可以删除
+    canDel(record) {
+      if (this.form.ladderPriceInfo.ladderPriceList.length <= 2) {
+        return true;
+      } else if (record !== this.form.ladderPriceInfo.ladderPriceList[0]) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+
+    //获取地域列表
+    getAreaList() {
+      this.$store.dispatch("territory/getList").then(res => {
+        this.areaList = [...res.data.list];
+      });
+    },
+    // 选择地域
+    handleRegionChange(val) {
+      this.areaList.forEach(element => {
+        if (val === element.regionName) {
+          this.form.regionCode = element.regionCode;
+        }
+      });
+    },
+    // 资源池产品切换
+    handleProductChange(val) {
+      const productObj = this.priceData.find(ele => ele.productName === val);
+      const flag =
+        Object.keys(productObj).includes("productType") &&
+        productObj.productType.productTypes.length > 0;
+      this.productList = flag ? [...productObj.productType.productTypes] : [];
+      if (!flag) {
+        this.form.productTypeCode = undefined;
+      } else {
+        this.form.productTypeCode = this.productList[0].productTypeCode;
+        this.form.chargeUnit = this.productList[0].chargeUnit;
+        this.form.productCode = productObj.productCode;
+      }
     },
     // 获取详情
     getDetail() {
-      this.$store.dispatch("pool/getOne", this.$route.query.id).then(res => {
+      this.$store.dispatch("price/getOne", this.$route.query.id).then(res => {
         this.form = { ...res.data };
-        this.form.supplierCode = {
-          key: res.data.supplierCode,
-          label: res.data.supplierName
-        };
       });
     },
-    // 获取供应商产品列表
+    // 获取产品列表
     getProductList() {
       this.$store.dispatch("pool/getProductList").then(res => {
         this.productList = [...res.data.supplierProducts];
       });
     },
-    // 获取供应商列表
-    getProviderList() {
-      this.$store.dispatch("provider/getList").then(res => {
-        this.supplierNameList = res.data.list;
-      });
-    },
-    // 获取采购账号列表
-    getPurchaseList() {
-      this.$store.dispatch("purchase/getList").then(res => {
-        this.purchase = res.data.list;
-      });
+    // 查询产品名称数据
+    getPriceList() {
+      this.$store
+        .dispatch("pool/getList", { currentPage: 1, pageSize: 999 })
+        .then(res => {
+          this.priceData = [...res.data.list];
+        });
     },
     // 提交
     onSubmit() {
-      this.form.supplierCode = this.form.supplierCode.key;
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
           this.loading = true;
-          const req = this.type === "add" ? "pool/addList" : "pool/changeList";
+          const req =
+            this.type === "add" ? "price/addList" : "price/changeList";
           this.$store
             .dispatch(req, this.form)
             .then(val => {
@@ -304,29 +448,33 @@ export default {
         }
       });
     },
-    onChange(val) {
-      this.form.supplierName = val.label;
-    },
-    // 产品code切换
-    handleProductChange(val) {
-      const productObj = this.productList.find(
-        ele => ele.supplierProductCode === val
-      );
-      this.form.supplierProductType = productObj.supplierProductType;
-      this.form.productType.productTypes = [...productObj.productTypes];
-    },
+
     // 重置表单数据
     resetForm() {
       this.form = {
-        productName: "", //产品名称
-        supplierCode: "", //供应商CODE
-        supplierName: "", //供应商
-        supplierProductCode: "", //供应商产品CODE
-        remark: "", //备注
-        productType: {
-          productTypes: []
+        chargeUnit: "",
+        enableLadderPrice: false,
+        ladderPriceInfo: {
+          ladderPriceList: [
+            {
+              endData: undefined,
+              price: undefined,
+              startData: undefined
+            },
+            {
+              endData: undefined,
+              price: undefined,
+              startData: 0
+            }
+          ]
         },
-        defaultPurchaseAccount: ""
+        productCode: "",
+        productName: "",
+        productTypeCode: "",
+        productTypeName: "",
+        regionCode: "",
+        regionName: "",
+        standardPrice: undefined
       };
       this.$nextTick(() => {
         this.$refs.ruleForm.clearValidate();
@@ -348,10 +496,10 @@ export default {
     margin: 0 auto;
     // text-align: center;
     background-color: #fff;
-    button {
-      position: relative;
-      left: 150px;
-    }
+    // button {
+    //   position: relative;
+    //   left: 150px;
+    // }
   }
   .info-txt {
     color: #aaa;
