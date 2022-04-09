@@ -15,13 +15,21 @@ const customer = {
     // 分配客服
     distribute({ commit, state }, data) {
       return request({
-        url: "/corporationCustomerAdvocate/assign",
+        url: "/channelCustomerAdvocate/assign",
         method: "post",
         data
       });
     },
     // 获取客服列表
     getList({ commit, state }, data) {
+      return request({
+        url: "/customerAdvocate/getCustomerAdvocateList",
+        method: "post",
+        data
+      });
+    },
+    //指定客户获取客服接口
+    getInterfaceLists({ commit, state }, data) {
       return request({
         url: "/customerAdvocate/getCustomerAdvocateList",
         method: "post",
@@ -39,7 +47,7 @@ const customer = {
     //获取客户列表
     getCustomerList({ commit, state }, data) {
       return request({
-        url: "/corporationCustomerAdvocate/getUnrelatedList",
+        url: "/channelCustomerAdvocate/getChannelCustomerList",
         method: "post",
         data
       });

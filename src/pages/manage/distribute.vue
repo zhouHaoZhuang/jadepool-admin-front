@@ -59,11 +59,11 @@
               :open="false"
             >
               <a-select-option
-                :value="item.corporationCode"
+                :value="item.cutomerCode"
                 v-for="(item, index) in userCodeList"
                 :key="index"
               >
-                {{ item.realName }}
+                {{ item.cutomerName }}
               </a-select-option>
             </a-select>
             <a-button type="primary" @click="selectClient(1)"
@@ -513,7 +513,7 @@ export default {
     // 查询客服列表
     getCustomerList() {
       this.$store
-        .dispatch("customer/getNewList", { currentPage: 1, pageSize: 999 })
+        .dispatch("customer/getInterfaceLists", { currentPage: 1, pageSize: 999 })
         .then((res) => {
           this.SelectCustomerList = res.data.list;
           this.paginationProps.total = res.data.totalCount * 1;
@@ -530,7 +530,7 @@ export default {
           //指定客户 指定替换 随机替换 平均分配
           if (this.form.distributeWay === 1) {
             newData.advocateList = this.form.advocateList.split(" ");
-            newData.userCodeList = this.form.userCodeList;
+            newData.channelCodeList = this.form.userCodeList;
             this.distinguish(newData);
           } else if (this.form.distributeWay === 2) {
             newData.formerAdvocateList = this.form.advocateList;
@@ -544,7 +544,7 @@ export default {
             if (this.form.advocateList.length < 2) {
               this.$message.warning("至少选择两个客服");
             } else {
-              newData.formerAdvocateList = this.form.advocateList;
+              newData.advocateList = this.form.advocateList;
               this.distinguish(newData);
             }
           }

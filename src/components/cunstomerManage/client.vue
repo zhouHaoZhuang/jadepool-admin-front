@@ -39,7 +39,7 @@
     <a-table
       :columns="columns"
       :data-source="data"
-      rowKey="corporationCode"
+      rowKey="cutomerCode"
       :pagination="paginationProps"
       :row-selection="{
         selectedRowKeys: selectedRowKeys,
@@ -97,6 +97,7 @@ export default {
         phone: undefined,
         companyName: undefined,
         id: undefined,
+        isRelated: true,
       },
       columns: [
         {
@@ -167,7 +168,6 @@ export default {
     },
     // 弹窗提交
     handleOk() {
-      console.log("我是客户提交的值", this.selectData, this.selectedRowKeys);
       this.$emit("selectData", this.selectData, this.selectedRowKeys);
     },
   },

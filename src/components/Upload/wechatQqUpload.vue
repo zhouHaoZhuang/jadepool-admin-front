@@ -95,7 +95,7 @@ export default {
     // 图片上传地址
     uploadUrl() {
       if (this.replaceUrl === "default") {
-        return env.BASE_URL + "/ccOss/uploadFile";
+        return env.BASE_URL + "/oss/uploadFile";
       }
       if (this.replaceUrl === "formService") {
         return env.FORM_BASE_URL + "/oss/uploadFile";
