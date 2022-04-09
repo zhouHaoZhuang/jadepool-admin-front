@@ -347,12 +347,6 @@ export const asyncRoute = [
                 meta: {},
                 component: () => import("@/pages/channel/channelAdmin/price")
               },
-              // {
-              //   path: "invoice",
-              //   name: "发票管理",
-              //   meta: {},
-              //   component: () => import("@/pages/channel/channelAdmin/price")
-              // },
               {
                 path: "contract",
                 name: "合同管理",
