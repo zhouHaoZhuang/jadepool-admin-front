@@ -16,6 +16,8 @@ import bills from './bills'
 import cdnDomain from "./cdnDomain";
 import withdraw from './withdraw'
 import unsubscribe from "./unsubscribe";
+import customer from "./customer";
+
 export default {
   user,
   account,
@@ -34,5 +36,6 @@ export default {
   bills,
   cdnDomain,
   withdraw,
-  unsubscribe
+  unsubscribe,
+  customer
 };

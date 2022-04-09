@@ -63,15 +63,13 @@ export const asyncRoute = [
               {
                 path: "home",
                 name: "后台首页",
-                meta: {
-                },
+                meta: {},
                 component: () => import("@/pages/home/index/index")
               },
               {
                 path: "message",
                 name: "消息提醒",
-                meta: {
-                },
+                meta: {},
                 component: () => import("@/pages/home/index/message")
               },
               {
@@ -104,8 +102,7 @@ export const asyncRoute = [
               {
                 path: "list",
                 name: "渠道列表",
-                meta: {
-                },
+                meta: {},
                 component: () => import("@/pages/channel/channelAdmin/list")
               },
               {
@@ -130,8 +127,7 @@ export const asyncRoute = [
               {
                 path: "price",
                 name: "渠道价格",
-                meta: {
-                },
+                meta: {},
                 component: () => import("@/pages/channel/channelAdmin/price")
               },
               {
@@ -142,6 +138,39 @@ export const asyncRoute = [
                   back: true
                 },
                 component: () => import("@/pages/channel/channelAdmin/update")
+              },
+              {
+                path: "customermanage",
+                name: "客服管理",
+                meta: {},
+                component: () => import("@/pages/manage/index.vue")
+              },
+              {
+                path: "distribute",
+                name: "分配客服",
+                meta: {
+                  invisible: true,
+                  back: true
+                },
+                component: () => import("@/pages/manage/distribute.vue")
+              },
+              {
+                path: "addcustomer",
+                name: "添加客服",
+                meta: {
+                  invisible: true,
+                  back: true
+                },
+                component: () => import("@/pages/manage/addcustomer.vue")
+              },
+              {
+                path: "editorcustomer",
+                name: "编辑客服",
+                meta: {
+                  invisible: true,
+                  back: true
+                },
+                component: () => import("@/pages/manage/editorcustomer.vue")
               }
             ]
           },
@@ -156,8 +185,7 @@ export const asyncRoute = [
               {
                 path: "list",
                 name: "企业列表",
-                meta: {
-                },
+                meta: {},
                 component: () => import("@/pages/channel/enterpriseAdmin/list")
               },
               {
@@ -191,15 +219,13 @@ export const asyncRoute = [
               {
                 path: "detailed",
                 name: "财务明细",
-                meta: {
-                },
+                meta: {},
                 component: () => import("@/pages/channel/channelAdmin/price")
               },
               {
                 path: "recharge",
                 name: "充值记录",
-                meta: {
-                },
+                meta: {},
                 component: () => import("@/pages/channel/channelAdmin/price")
               }
             ]
@@ -215,8 +241,7 @@ export const asyncRoute = [
               {
                 path: "list",
                 name: "订单列表",
-                meta: {
-                },
+                meta: {},
                 component: () => import("@/pages/finance/income/order")
               },
               {
@@ -232,8 +257,7 @@ export const asyncRoute = [
               {
                 path: "unsubscribe/list",
                 name: "订单退单管理",
-                meta: {
-                },
+                meta: {},
                 component: () =>
                   import("@/pages/finance/income/unsubscribe/index")
               },
@@ -250,8 +274,7 @@ export const asyncRoute = [
               {
                 path: "bill",
                 name: "采购账单",
-                meta: {
-                },
+                meta: {},
                 component: () => import("@/pages/finance/income/bill/index.vue")
               }
             ]
@@ -267,43 +290,37 @@ export const asyncRoute = [
               {
                 path: "payment",
                 name: "人工入款",
-                meta: {
-                },
+                meta: {},
                 component: () => import("@/pages/channel/channelAdmin/list")
               },
               {
                 path: "remittance",
                 name: "线下汇款",
-                meta: {
-                },
+                meta: {},
                 component: () => import("@/pages/channel/channelAdmin/price")
               },
               {
                 path: "invoice",
                 name: "发票管理",
-                meta: {
-                },
+                meta: {},
                 component: () => import("@/pages/channel/channelAdmin/price")
               },
               {
                 path: "contract",
                 name: "合同管理",
-                meta: {
-                },
+                meta: {},
                 component: () => import("@/pages/channel/channelAdmin/list")
               },
               {
                 path: "withdrawal",
                 name: "提现管理",
-                meta: {
-                },
+                meta: {},
                 component: () => import("@/pages/examine/withdrawal/index")
               },
               {
                 path: "refund",
                 name: "退款管理",
-                meta: {
-                },
+                meta: {},
                 component: () => import("@/pages/channel/channelAdmin/price")
               }
             ]
@@ -319,15 +336,13 @@ export const asyncRoute = [
               {
                 path: "reconciliation",
                 name: "渠道对账表",
-                meta: {
-                },
+                meta: {},
                 component: () => import("@/pages/channel/enterpriseAdmin/list")
               },
               {
                 path: "income",
                 name: "收入分摊表",
-                meta: {
-                },
+                meta: {},
                 component: () => import("@/pages/channel/enterpriseAdmin/list")
               }
             ]
@@ -351,8 +366,7 @@ export const asyncRoute = [
               {
                 path: "example",
                 name: "实例列表",
-                meta: {
-                },
+                meta: {},
                 component: () =>
                   import("@/pages/product/cloudservers/example/living.vue")
               },
@@ -369,8 +383,7 @@ export const asyncRoute = [
               {
                 path: "renew",
                 name: "续费降配列表",
-                meta: {
-                },
+                meta: {},
                 component: () =>
                   import("@/pages/product/cloudservers/renewList.vue")
               }
@@ -387,18 +400,15 @@ export const asyncRoute = [
               {
                 path: "domain",
                 name: "域名管理",
-                meta: {
-                },
+                meta: {},
                 component: () => import("@/pages/product/domain/index.vue")
               },
               {
                 path: "bill",
                 name: "账单管理",
-                meta: {
-                },
-                component: () =>
-                  import("@/pages/product/bill/index.vue")
-              },
+                meta: {},
+                component: () => import("@/pages/product/bill/index.vue")
+              }
             ]
           }
         ]
@@ -458,8 +468,7 @@ export const asyncRoute = [
               {
                 path: "supplierList",
                 name: "供应商列表",
-                meta: {
-                },
+                meta: {},
                 component: () =>
                   import("@/pages/production/supplier/list/list.vue")
               },
@@ -486,8 +495,7 @@ export const asyncRoute = [
               {
                 path: "purchase",
                 name: "采购账号列表",
-                meta: {
-                },
+                meta: {},
                 component: () =>
                   import("@/pages/production/supplier/purchase/list.vue")
               },
@@ -524,8 +532,7 @@ export const asyncRoute = [
               {
                 path: "information",
                 name: "产品信息管理",
-                meta: {
-                },
+                meta: {},
                 component: () =>
                   import("@/pages/production/product/information/list.vue")
               },
@@ -554,8 +561,7 @@ export const asyncRoute = [
               {
                 path: "orderRouting",
                 name: "订单路由配置",
-                meta: {
-                },
+                meta: {},
                 component: () =>
                   import("@/pages/production/cloudServer/orderRouting/list.vue")
               },
@@ -586,8 +592,7 @@ export const asyncRoute = [
               {
                 path: "specification",
                 name: "产品规格族配置",
-                meta: {
-                },
+                meta: {},
                 component: () =>
                   import(
                     "@/pages/production/cloudServer/specification/list.vue"
