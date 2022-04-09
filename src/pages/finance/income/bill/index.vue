@@ -48,7 +48,7 @@
       <a-tab-pane key="month" tab="月账单" force-render>
         <div class="public-header-wrap">
           <a-form-model layout="inline" :model="listQuery">
-            <a-form-model-item>
+            <!-- <a-form-model-item>
               <a-select
                 class="sechkey"
                 style="width:150px"
@@ -71,7 +71,7 @@
                 placeholder="请输入"
                 v-model="listQuery.search"
               />
-            </a-form-model-item>
+            </a-form-model-item> -->
             <a-form-model-item>
               <!--  :defaultValue="moment(getCurrentData(), 'YYYY-MM')" -->
               <a-month-picker placeholder="请选择账期" @change="onChange" />
@@ -101,6 +101,9 @@
           </span>
           <div v-if="text" slot="originAmount" slot-scope="text">
             {{ text }}
+          </div>
+          <div slot="useData" slot-scope="text, record">
+            {{ text }}{{ record.useDataPerUnit }}
           </div>
           <div slot="channelName" slot-scope="text, record">
             {{ record.channelName }}
@@ -252,7 +255,8 @@ export default {
         },
         {
           title: "实际用量",
-          dataIndex: "useData"
+          dataIndex: "useData",
+          scopedSlots: { customRender: "useData" }
         }
       ],
       columnsMonth: [
@@ -261,11 +265,17 @@ export default {
           // colSpan:0,     //隐藏表头
           dataIndex: "billPeriod"
         },
+        // {
+        //   title: "所属渠道商",
+        //   dataIndex: "channelName",
+        //   width: 190,
+        //   scopedSlots: { customRender: "channelName" }
+        // },
         {
-          title: "所属渠道商",
-          dataIndex: "channelName",
+          title: "云厂商",
+          dataIndex: "shopName",
           width: 190,
-          scopedSlots: { customRender: "channelName" }
+          scopedSlots: { customRender: "shopName" }
         },
         {
           title: "计费项",
@@ -283,7 +293,8 @@ export default {
         },
         {
           title: "实际用量",
-          dataIndex: "useData"
+          dataIndex: "useData",
+          scopedSlots: { customRender: "useData" }
         },
         {
           //账单金额
@@ -351,7 +362,9 @@ export default {
           this.data = [...res.data.list];
           this.paginationProps.total = res.data.totalCount * 1;
           this.data.forEach(element => {
-            element.consumeTime = moment(element.consumeTime).format("YYYY-MM")
+            element.consumeTime = moment(element.consumeTime).format(
+              "YYYY-MM-DD"
+            );
           });
         })
         .finally(() => {
@@ -359,7 +372,10 @@ export default {
         });
     },
     onChange(value) {
-      this.listQuery["qp-billPeriod-eq"] = moment(value).format("YYYY-MM-DD");
+      this.listQuery["qp-billPeriod-eq"] = moment(value).format("YYYY-MM");
+      if (!value || value === "null" || value === undefined) {
+        delete this.listQuery["qp-billPeriod-eq"];
+      }
     },
     //切换tab
     callback(key) {
@@ -380,10 +396,10 @@ export default {
       if (nowMonth >= 1 && nowMonth <= 9) {
         nowMonth = "0" + nowMonth;
       }
-      if (this.listQuery["qp-billType-eq"] == "month") {
-        this.listQuery["qp-billPeriod-eq"] =
-          new Date().getFullYear() + "-" + nowMonth;
-      }
+      // if (this.listQuery["qp-billType-eq"] == "month") {
+      //   this.listQuery["qp-billPeriod-eq"] =
+      //     new Date().getFullYear() + "-" + nowMonth;
+      // }
       return new Date().getFullYear() + "-" + nowMonth;
     },
     // 日期选择

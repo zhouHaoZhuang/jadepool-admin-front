@@ -10,20 +10,16 @@
         </li>
         <li>
           <span>订单类型:</span>
-          <span>{{ orderInfo.tradeType === 1 ? "新购" : "销售" }} </span>
+          <span>{{ feeReduction[orderInfo.tradeType] }} </span>
         </li>
         <li>
           <span>状态:</span>
-          <span>{{ orderStatus[orderInfo.tradeStatus] }}</span>
+          <span>{{ orderStatusEnum[orderInfo.tradeStatus] }}</span>
         </li>
         <li>
           <span>创建时间:</span>
           <span>{{ orderInfo.createTime | formatDate }}</span>
         </li>
-        <!-- <li>
-          <span>支付时间:</span>
-          <span>{{ orderInfo.payTime | formatDate }}</span>
-        </li> -->
       </ul>
     </div>
     <!-- 支付信息 -->
@@ -35,9 +31,13 @@
           <span>{{ orderInfo.actualAmount }}</span>
         </li>
         <li>
+          <span>支付时间:</span>
+          <span>{{ orderInfo.payTime | formatDate }}</span>
+        </li>
+        <!-- <li>
           <span>支付状态:</span>
           <span>{{ orderInfo.payStatus == 1 ? "待支付" : "已支付" }}</span>
-        </li>
+        </li> -->
       </ul>
     </div>
     <!-- 产品信息 -->
@@ -51,17 +51,30 @@
           :pagination="false"
         >
           <div slot="chargingType" slot-scope="text">
-             {{ text == 'AfterPay' ?'后支付':'预支付' }}
+            {{ charingStatus[text] }}
           </div>
-          <!-- <div slot="ecsPrice" slot-scope="text">
-            <div>CPU：{{ text.cpu }}</div>
-            <div>内存：{{ text.memory }}</div>
-            <div>磁盘：{{ text.dataDiskSize }}</div>
-            <div>带宽：{{ text.internetMaxBandwidthOut }}</div>
-            <div>防御：{{ "20G" }}</div>
-            <div>镜像：{{ text.imageId }}</div>
-            <div>所在区：{{ regionDataEnum[text.regionId] }}</div>
-          </div> -->
+          <div slot="ecsPrice" slot-scope="text, record">
+            <div v-if="record.chargingType == 'AfterPay'">
+              {{ record.productName }}功能开通：按流量计费
+            </div>
+            <div v-else>
+              <div>CPU：{{ text.cpu }}</div>
+              <div>内存：{{ text.memory }}</div>
+              <div>磁盘：{{ text.dataDiskSize }}</div>
+              <div>带宽：{{ text.internetMaxBandwidthOut }}</div>
+              <div>防御：{{ "20G" }}</div>
+              <div>镜像：{{ text.imageId }}</div>
+              <div>所在区：{{ regionDataEnum[text.regionId] }}</div>
+            </div>
+          </div>
+          <div slot="amount" slot-scope="text,record">
+            <span v-if="record.chargingType == 'AfterPay'">--</span>
+            <span v-else>{{ text }}</span>
+          </div>
+          <div slot="discountRate" slot-scope="text,record">
+             <span v-if="record.chargingType == 'AfterPay'">--</span>
+            <span v-else>{{ text }}</span>
+          </div>
         </a-table>
       </div>
     </div>
@@ -95,7 +108,14 @@
 </template>
 
 <script>
-import { orderStatus, feeReduction, regionDataEnum } from "@/utils/enum.js";
+import {
+  orderStatus,
+  feeReduction,
+  regionDataEnum,
+  charingStatus,
+  orderTypeMap,
+  orderStatusEnum
+} from "@/utils/enum.js";
 export default {
   data() {
     return {
@@ -103,6 +123,9 @@ export default {
       feeReduction,
       regionDataEnum,
       orderInfo: null,
+      charingStatus,
+      orderStatusEnum,
+      orderTypeMap,
       data: [],
       columns: [
         {
@@ -127,7 +150,8 @@ export default {
           title: "数量",
           dataIndex: "ecsPrice.amount",
           key: "ecsPrice.amount",
-          width: 100
+          width: 100,
+          scopedSlots: { customRender: "amount" }
         },
         {
           title: "原价",
@@ -143,7 +167,8 @@ export default {
         {
           title: "折扣",
           dataIndex: "discountRate",
-          key: "discountRate"
+          key: "discountRate",
+          scopedSlots: { customRender: "discountRate" }
         },
         {
           title: "成交价",
@@ -169,6 +194,7 @@ export default {
       // console.log(dataDisk);
       this.orderInfo = res.data;
       this.data = [res.data];
+
     });
   }
 };
@@ -201,7 +227,7 @@ export default {
         width: 32%;
         > span:nth-child(1) {
           display: inline-block;
-          width: 80px;
+          width: 82px;
           text-align: right;
           padding-right: 8px;
           font-size: 14px;

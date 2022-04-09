@@ -54,7 +54,7 @@
           label="产品分类"
           prop="supplierProductCode"
         >
-          <a-select v-model="form.productTypeCode">
+          <a-select v-model="form.productTypeCode" @change="handleTypeChange">
             <a-select-option
               v-for="item in productList"
               :value="item.productTypeCode"
@@ -233,6 +233,13 @@ export default {
         this.form.productTypeCode = this.productList[0].productTypeCode;
         this.inputUnit = this.productList[0].chargeUnit;
       }
+    },
+    // 产品分类切换
+    handleTypeChange(val) {
+      const newObj = this.productList.find(
+        ele => ele.productTypeCode === val
+      );
+      this.inputUnit = newObj.chargeUnit;
     },
     handleRadioChange() {
       this.form.discountPrice = "";

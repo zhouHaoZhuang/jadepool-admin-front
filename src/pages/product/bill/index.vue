@@ -58,7 +58,7 @@
               >
                 <a-select-option
                   :value="v.key"
-                  v-for="v in useColumns"
+                  v-for="v in monthColumns"
                   :key="v.title"
                 >
                   {{ v.title }}
@@ -101,6 +101,9 @@
           </span>
           <div v-if="text" slot="originAmount" slot-scope="text">
             {{ text }}
+          </div>
+          <div slot="useData" slot-scope="text, record">
+            {{ text }}{{ record.useDataPerUnit }}
           </div>
           <div slot="channelName" slot-scope="text, record">
             {{ record.channelName }}
@@ -249,7 +252,8 @@ export default {
         },
         {
           title: "实际用量",
-          dataIndex: "useData"
+          dataIndex: "useData",
+          scopedSlots: { customRender: "useData" }
         }
       ],
       columnsMonth: [
@@ -280,7 +284,8 @@ export default {
         },
         {
           title: "实际用量",
-          dataIndex: "useData"
+          dataIndex: "useData",
+          scopedSlots: { customRender: "useData" }
         },
         {
           //账单金额
@@ -347,6 +352,22 @@ export default {
           width: 150
         }
       ];
+    },
+    monthColumns() {
+      return [
+        {
+          title: "渠道商名称",
+          dataIndex: "channelName",
+          key: "channelName",
+          width: 170
+        },
+        {
+          title: "渠道商ID",
+          dataIndex: "channelCode",
+          key: "channelCode",
+          width: 150
+        }
+      ];
     }
   },
   methods: {
@@ -371,6 +392,9 @@ export default {
     },
     onChange(value) {
       this.listQuery["qp-billPeriod-eq"] = moment(value).format("YYYY-MM");
+      if (!value || value === "null" || value === undefined) {
+        delete this.listQuery["qp-billPeriod-eq"];
+      }
     },
     //切换tab
     callback(key) {
@@ -390,10 +414,10 @@ export default {
       if (nowMonth >= 1 && nowMonth <= 9) {
         nowMonth = "0" + nowMonth;
       }
-      if (this.listQuery["qp-billType-eq"] == "month") {
-        this.listQuery["qp-billPeriod-eq"] =
-          new Date().getFullYear() + "-" + nowMonth;
-      }
+      // if (this.listQuery["qp-billType-eq"] == "month") {
+      //   this.listQuery["qp-billPeriod-eq"] =
+      //     new Date().getFullYear() + "-" + nowMonth;
+      // }
 
       return new Date().getFullYear() + "-" + nowMonth;
     },

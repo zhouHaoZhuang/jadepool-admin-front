@@ -5,9 +5,9 @@
         <a-form-model-item>
           <a-select
             style="width:150px"
-            :placeholder="title"
-            v-model="title"
-            @change="changeKey"
+            v-model="listQuery.key"
+            allowClear
+            placeholder="请选择"
           >
             <a-select-option
               :value="v.key"
@@ -33,14 +33,12 @@
             show-time
             format="YYYY-MM-DD 00:00:00"
             placeholder="开始时间"
-            :disabled="isTime"
             @change="changeStart"
             @openChange="handleStartOpenChange"
           />
           <span class="zhi">至</span>
           <a-date-picker
             v-model="endValue"
-            :disabled="isTime"
             :disabled-date="disabledEndDate"
             show-time
             format="YYYY-MM-DD 00:00:00"
@@ -51,12 +49,28 @@
         </a-form-model-item>
         <a-form-model-item>
           <a-select
+            style="width:150px"
+            placeholder="计费方式"
+            allowClear
+            v-model="listQuery.chargingType"
+          >
+            <a-select-option
+              v-for="(value, key) in charingStatus"
+              :key="key"
+              :value="key"
+            >
+              {{ value }}
+            </a-select-option>
+          </a-select>
+        </a-form-model-item>
+        <a-form-model-item>
+          <a-select
             style="width: 120px"
             defaultValue="0"
+            placeholder="订单类型"
+            allowClear
             v-model="listQuery['qp-tradeType-eq']"
-            ><a-select-option value="">
-              订单类型
-            </a-select-option>
+          >
             <a-select-option
               :value="index"
               v-for="(item, index) in feeReduction"
@@ -70,13 +84,13 @@
           <a-select
             style="width: 130px"
             defaultValue="0"
+            placeholder="状态"
+            allowClear
             v-model="listQuery['qp-tradeStatus-eq']"
-            ><a-select-option value="">
-              状态
-            </a-select-option>
+          >
             <a-select-option
               :value="index"
-              v-for="(item, index) in orderStatus"
+              v-for="(item, index) in orderStatusEnum"
               :key="index"
             >
               {{ item }}
@@ -105,7 +119,7 @@
         </div>
         <div slot="customerName" slot-scope="text, record">
           {{ record.customerName }}
-          <br>
+          <br />
           <span> {{ record.customerCode }}</span>
         </div>
         <div slot="corporationCode" slot-scope="text, record">
@@ -113,9 +127,9 @@
           <span> {{ record.corporationName }}</span>
         </div>
         <div slot="chargingType" slot-scope="text">
-          {{ text == 'AfterPay' ?'后支付':'预支付' }}
+          {{ charingStatus[text] }}
         </div>
-          <div slot="actualAmount" slot-scope="text">
+        <div slot="actualAmount" slot-scope="text">
           {{ text.toFixed(2) }}
         </div>
         <div slot="tradeType" slot-scope="text">
@@ -153,20 +167,26 @@
 </template>
 
 <script>
-import { feeReduction, orderStatus } from "@/utils/enum.js";
+import {
+  feeReduction,
+  orderStatus,
+  orderStatusEnum,
+  charingStatus
+} from "@/utils/enum.js";
 export default {
   data() {
     return {
-      title: "orderNo",
       feeReduction,
       orderStatus,
+      orderStatusEnum,
+      charingStatus,
       // search: "",
       listQuery: {
         key: undefined,
         search: "",
         currentPage: 1,
         pageSize: 10,
-        total: 0,
+        total: 0
       },
       columns: [
         {
@@ -181,7 +201,8 @@ export default {
           key: "tradeType",
           scopedSlots: { customRender: "tradeType" },
           width: 150
-        },    {
+        },
+        {
           title: "所属渠道商",
           dataIndex: "customerName",
           key: "customerName",
@@ -195,7 +216,7 @@ export default {
           width: 180,
           scopedSlots: { customRender: "corporationCode" }
         },
-    
+
         {
           title: "原价",
           dataIndex: "originAmount",
@@ -210,7 +231,7 @@ export default {
           scopedSlots: { customRender: "actualAmount" },
           width: 100
         },
-            {
+        {
           title: "折扣率",
           dataIndex: "discountRate",
           key: "discountRate",
@@ -225,9 +246,9 @@ export default {
           scopedSlots: { customRender: "tradeStatus" }
         },
         {
-          title: '计费方式',
-          dataIndex: 'chargingType',
-          key: 'chargingType',
+          title: "计费方式",
+          dataIndex: "chargingType",
+          key: "chargingType",
           width: 100,
           scopedSlots: { customRender: "chargingType" }
         },
@@ -300,32 +321,30 @@ export default {
           key: "cutomerCode",
           width: 150
         },
-        {
-          title: "创建时间",
-          dataIndex: "createTime",
-          key: "createTime",
-          width: 190,
-          scopedSlots: { customRender: "createTime" }
-        }
+        // {
+        //   title: "创建时间",
+        //   dataIndex: "createTime",
+        //   key: "createTime",
+        //   width: 190,
+        //   scopedSlots: { customRender: "createTime" }
+        // }
       ];
     }
   },
   methods: {
     getList() {
       this.loading = true;
-      this.$store
-        .dispatch("financialOrder/getList", this.listQuery)
-        .then(res => {
-          this.paginationProps.total = res.data.totalCount * 1;
-          this.data = res.data.list;
-          this.loading = false;
-        });
+      this.$getListQp("financialOrder/getList", this.listQuery).then(res => {
+        this.paginationProps.total = res.data.totalCount * 1;
+        this.data = res.data.list;
+        this.loading = false;
+      });
     },
     changeStart(date, dateString) {
-      this.listQuery["qp-consumeTime-ge"] = dateString;
+      this.listQuery["qp-createTime-ge"] = dateString;
     },
     changeEnd(date, dateString) {
-      this.listQuery["qp-consumeTime-le"] = dateString;
+      this.listQuery["qp-createTime-le"] = dateString;
     },
     disabledStartDate(startValue) {
       const endValue = this.endValue;
@@ -354,10 +373,10 @@ export default {
       this.listQuery.pageSize = pageSize;
       this.getList();
     },
+    // 表格分页切换每页条数
     onShowSizeChange(current, pageSize) {
-      // console.log("改变了分页的大小", current, pageSize);
-      this.paginationProps.currentPage = current;
-      this.paginationProps.pageSize = pageSize;
+      this.listQuery.currentPage = current;
+      this.listQuery.pageSize = pageSize;
       this.getList();
     },
     selectPool(v, i) {
@@ -369,35 +388,8 @@ export default {
       });
     },
     secectClick() {
-      this.listQuery.key = this.title;
-      if (this.title == "createTime") {
-        this.getList();
-      } else {
-        // this.$getListQp(this.title, this.search, this.startValue, this.endValue);
-        // let tempSearch = this.listQuery.search;
-        if (this.title == "payStatus") {
-          if (this.listQuery.search == "支付") {
-            this.listQuery.search = 1;
-          }
-          if (this.listQuery.search == "未支付") {
-            this.listQuery.search = 0;
-          }
-        }
-        this.$getListQp("financialOrder/getList", this.listQuery).then(val => {
-          // console.log(val, "时间请求结果");
-          this.paginationProps.total = val.data.totalCount * 1;
-          this.data = val.data.list;
-        });
-      }
-    },
-    changeKey(val) {
-      // console.log(val);
-      this.title = val;
-      if (this.title !== "createTime") {
-        this.isTime = true;
-      } else {
-        this.isTime = false;
-      }
+      this.listQuery.currentPage = 1;
+      this.getList();
     }
   }
 };

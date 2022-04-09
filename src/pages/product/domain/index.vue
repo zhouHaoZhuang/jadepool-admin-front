@@ -75,22 +75,26 @@
             }}</a-tag>
           </div>
           <div slot="action" slot-scope="text, record">
+            <a-space>
             <a-button
-              v-if="record.cdnStatus == 6"
+             
               v-permission="'view'"
               type="link"
               @click="operationline('online', record)"
             >
+            <!-- :disabled="record.systemLockStatus == 1" -->
               上线
             </a-button>
             <a-button
-              v-if="record.cdnStatus == 1"
+            
               v-permission="'view'"
               type="link"
               @click="operationline('offline', record)"
             >
+            <!-- :disabled="record.systemLockStatus == 0" -->
               下线
             </a-button>
+            </a-space>
           </div>
           <div slot-scope="text" slot="cashPay" v-if="text != undefined">
             {{ text.toFixed(2) }}

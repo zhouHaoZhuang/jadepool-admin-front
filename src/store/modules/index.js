@@ -20,6 +20,8 @@ import refundmangage from "./refundmangage";
 import recon from "./recon";
 import billmangage from "./billmangage";
 import reconciliation from "./reconciliation";
+import territory from './territory';
+import price from './price'
 export default {
   user,
   account,
@@ -42,5 +44,7 @@ export default {
   refundmangage,
   recon,
   billmangage,
-  reconciliation
+  reconciliation,
+  territory,
+  price
 };

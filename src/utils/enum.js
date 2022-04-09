@@ -69,7 +69,8 @@ export const feeReduction = {
   35: "资源池降配",
   36: "阿里云降配",
   55: "服务器退订",
-  65: "CDN产品"
+  65:'CDN流量',
+  66:"阿里云采购CDN流量"
 };
 // 权限管理-权限单选map
 export const systemAdminMapEnum = {
@@ -119,12 +120,14 @@ export const regionDataEnum = {
   "cn-chengdu": "西南1（成都）",
   "cn-hongkong": "中国（香港）",
   "ap-northeast-1": "日本（东京）",
+  "ap-northeast-2": "韩国（首尔）",
   "ap-southeast-1": "新加坡",
   "ap-southeast-2": "澳大利亚（悉尼）",
   "ap-southeast-3": "马来西亚（吉隆坡）",
   "ap-southeast-6": "菲律宾（马尼拉）",
   "ap-southeast-5": "印度尼西亚（雅加达）",
   "ap-south-1": "印度（孟买）",
+  "ap-southeast-7": "泰国（曼谷）",
   "us-east-1": "美国（弗吉尼亚）",
   "us-west-1": "美国（硅谷）",
   "eu-west-1": "英国（伦敦）",
@@ -163,11 +166,12 @@ export const applyMenStatus = {
 };
 // 订单状态
 export const orderStatusEnum = {
-  "-3": "操作服务器异常",
+  "-3": "交易异常",
   "-1": "交易关闭",
   1: "待支付",
-  3: "支付中",
-  5: "交易完成"
+  3: "订单支付中",
+  5: "交易完成",
+  "-5": "退款失败"
 };
 export const orderTypeMap = {
   1: "云服务新购",
@@ -176,3 +180,8 @@ export const orderTypeMap = {
   35: "云服务降配",
   55: "服务器退订"
 };
+// 计费方式、
+export const charingStatus ={
+  "AfterPay":'按量付费',
+  "BeforePay":'包年包月'
+}
