@@ -418,7 +418,9 @@ export const asyncRoute = [
                 path: "addreconManage",
                 name: "新增对账单",
                 meta: {
-                  icon: "home"
+                  icon: "home",
+                  invisible: true,
+                  back: true
                 },
                 component: () => import("@/pages/channel/recon/reconManage/add")
               },
@@ -426,7 +428,9 @@ export const asyncRoute = [
                 path: "reconManageInfo",
                 name: "对账单详情",
                 meta: {
-                  icon: "home"
+                  icon: "home",
+                  invisible: true,
+                  back: true
                 },
                 component: () => import("@/pages/channel/recon/reconManage/info")
               },

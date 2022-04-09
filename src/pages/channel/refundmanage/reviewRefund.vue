@@ -61,6 +61,18 @@
         <div v-if="text" slot="createTime" slot-scope="text">
           {{ text | formatDate }}
         </div>
+        <div slot="action" slot-scope="text, record">
+          <a-button
+            type="link"
+            @click="
+              $router.push(
+                '/finance/recon/reconManageInfo?data=' + JSON.stringify(record)
+              )
+            "
+          >
+            详情
+          </a-button>
+        </div>
       </a-table>
     </div>
     <div>
@@ -107,20 +119,27 @@ export default {
       },
       columns: [
         {
-          title: "订单ID",
-          dataIndex: "orderNo"
+          title: "对账单号",
+          dataIndex: "billNo"
         },
         {
-          title: "产品名称",
-          dataIndex: "productName"
+          title: "账期",
+          dataIndex: "billDate"
         },
         {
-          title: "开票金额",
-          dataIndex: "originalAmountShow"
+          title: "账单总金额（元）",
+          dataIndex: "initTotalAmount"
         },
         {
-          title: "订单创建时间",
-          dataIndex: "createTimeShow"
+          title: "可开票总金额（元）",
+          dataIndex: "initInvoiceAmount"
+        },
+        {
+          title: "操作",
+          dataIndex: "action",
+          scopedSlots: {
+            customRender: "action"
+          }
         }
       ],
       labelCol: { span: 4 },
@@ -206,9 +225,9 @@ export default {
         .dispatch("refundmangage/getDetail", { id: this.$route.query.id })
         .then(res => {
           this.data = res.data;
-          this.dataList = res.data.invoiceEvaluatePage.list;
+          this.dataList = res.data.invoiceEvaluatePage?.list ?? [];
           this.paginationProps.total =
-            res.data.invoiceEvaluatePage.totalCount * 1;
+            res.data.invoiceEvaluatePage?.totalCount * 1 ?? 0;
         });
     },
     //表格分页跳转

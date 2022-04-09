@@ -1,160 +1,210 @@
 <template>
-  <div class="add-reconManage">
-    <!-- <a-table :columns="columns" ></a-table> -->
-    <h1>基础信息</h1>
-    <a-form-model
-      ref="ruleForm"
-      :model="form"
-      :rules="rules"
-      :label-col="labelCol"
-      :wrapper-col="wrapperCol"
-    >
-      <a-form-model-item label="渠道商" prop="name">
-        <a-input
-          v-model="form.name"
-          placeholder="请输入渠道商ID/渠道商名称模糊查询"
-        />
-      </a-form-model-item>
-      <a-form-model-item label="账期">
-        <a-month-picker
-          placeholder="账期"
-          format="YYYY-MM"
-          @change="startValue"
+  <div class="recon-info">
+    <a-descriptions title="基本信息" v-if="data">
+      <a-descriptions-item label="渠道商">
+        {{ data.channelName }}
+      </a-descriptions-item>
+      <a-descriptions-item label="账期">
+        {{ data.billDate }}
+      </a-descriptions-item>
+      <a-descriptions-item label="备注">
+        {{ data.memo }}
+      </a-descriptions-item>
+    </a-descriptions>
+    <div>
+      <div class="table-title">
+        对账单明细
+      </div>
+      <div>
+        <a-form-model layout="inline">
+          <a-form-model-item>
+            <a-input
+              v-model="listQuery.id"
+              placeholder="请输入账单编号"
+              allowClear
+            />
+          </a-form-model-item>
+          <a-form-model-item>
+            <a-button type="primary" @click="getsteerList">
+              查询
+            </a-button>
+          </a-form-model-item>
+        </a-form-model>
+      </div>
+      <div>
+        <a-table
+          :columns="columnsDetails"
+          :data-source="dataDetails"
+          :pagination="paginationProps"
+          rowKey="id"
         >
-        </a-month-picker>
-      </a-form-model-item>
-      <a-form-model-item label="备注">
-        <a-textarea
-          v-model="form.name"
-          placeholder="请输入备注，不超过100字"
-          :auto-size="{ minRows: 3, maxRows: 5 }"
-        />
-      </a-form-model-item>
-      <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
-        <a-button type="primary" @click="onSubmit">
-          拉取对账单明细
-        </a-button>
-      </a-form-model-item>
-    </a-form-model>
-    <h1>对账单明细</h1>
-    <div>
-      <a-form-model layout="inline">
-        <a-form-model-item>
-          <a-input v-model="form.name" placeholder="请输入订单号" />
-        </a-form-model-item>
-        <a-form-model-item>
-          <a-button type="primary" @click="getList">
-            查询
-          </a-button>
-        </a-form-model-item>
-      </a-form-model>
-    </div>
-    <div>
-      <a-table
-        :pagination="paginationProps"
-        rowKey="id"
-        :columns="columns"
-        :data-source="data"
+          <div slot="finishTime" slot-scope="text">
+            {{ text | formatDate }}
+          </div>
+          <div slot="action" slot-scope="text, record">
+            <a-button @click="showModal(record)" type="link">
+              调整
+            </a-button>
+          </div>
+        </a-table>
+        <p>
+          账单拉取总金额：
+          <span style="color:#02A7F0;">¥ {{ details.totalAmount }}</span>
+          可开票拉取总金额：
+          <span style="color:#02A7F0;">¥ {{ details.invoiceAmount }}</span>
+        </p>
+      </div>
+      <div class="table-title">
+        调整单明细
+      </div>
+      <b style="display:inline-block">建议调整项</b>
+      <!-- <a-button style="margin-left: 20px;" type="primary" @click="showModal">
+        新增建议调整项
+      </a-button> -->
+      <!-- 新增建议调整项 窗口 -->
+      <a-modal
+        title="调整账单明细"
+        :visible="visible"
+        :confirm-loading="confirmLoading"
+        @ok="handleOk"
+        forceRender
+        @cancel="handleCancel"
+        width="40%"
       >
-        <div slot="companyName" slot-scope="text">{{ text }}</div>
-        <div slot="action">
-          <a-button type="link" @click="showModal">调整</a-button>
-        </div>
-      </a-table>
+        <a-form-model
+          ref="ruleForm"
+          :model="form"
+          :rules="rules"
+          :label-col="labelCol"
+          :wrapper-col="wrapperCol"
+        >
+          <a-form-model-item label="账单编号">
+            <span>{{ form.billNo }}</span>
+          </a-form-model-item>
+          <a-form-model-item label="产品">
+            <span>{{ form.productName }}</span>
+          </a-form-model-item>
+          <a-form-model-item label="账单金额（元）">
+            <span>{{ form.totalAmount }}</span>
+          </a-form-model-item>
+          <a-form-model-item label="可开票金额（元）">
+            <span>{{ form.actualAmount }}</span>
+          </a-form-model-item>
+          <a-form-model-item label="账单调整金额（元）" prop="amount">
+            <a-input-number
+              style="width:300px"
+              placeholder="请输入金额（正或负数）"
+              v-model="form.amount"
+            />
+          </a-form-model-item>
+          <a-form-model-item label="可开票调整金额（元）" prop="invoiceAmount">
+            <a-input-number
+              style="width:300px"
+              placeholder="请输入金额（正或负数）"
+              v-model="form.invoiceAmount"
+            />
+          </a-form-model-item>
+        </a-form-model>
+      </a-modal>
+      <div>
+        <a-form-model layout="inline">
+          <a-form-model-item>
+            <a-input
+              v-model="steerListQuery.id"
+              placeholder="请输入账单编号"
+              allowClear
+            />
+          </a-form-model-item>
+          <a-form-model-item>
+            <a-button type="primary" @click="getsteerListSteer">
+              查询
+            </a-button>
+          </a-form-model-item>
+        </a-form-model>
+      </div>
+      <div>
+        <a-table
+          :columns="steercolumns"
+          :data-source="steerdata"
+          :pagination="steerPaginationProps"
+          rowKey="id"
+        >
+          <div slot="finishTime" slot-scope="text">
+            {{ text | formatDate }}
+          </div>
+          <div slot="action" slot-scope="text, record">
+            <a-button @click="showModal(record)" type="link">
+              调整
+            </a-button>
+            <a-button
+              style="margin-left:10px"
+              @click="del(record.id)"
+              type="link"
+            >
+              删除
+            </a-button>
+          </div>
+        </a-table>
+        <p>
+          建议账单调整总金额：
+          <span style="color:#02A7F0;">¥ {{ steer.totalAmount }}</span>
+          建议可开票调整总金额：
+          <span style="color:#02A7F0;">¥ {{ steer.invoiceAmount }}</span>
+        </p>
+      </div>
+      <b>实际调整项</b>
+      <div>
+        <a-form-model layout="inline">
+          <a-form-model-item>
+            <a-input
+              v-model="actualListQuery.id"
+              placeholder="请输入账单编号"
+              allowClear
+            />
+          </a-form-model-item>
+          <a-form-model-item>
+            <a-button type="primary" @click="getsteerListActual">
+              查询
+            </a-button>
+          </a-form-model-item>
+        </a-form-model>
+      </div>
+      <div>
+        <a-table
+          :columns="actualColumns"
+          :data-source="actualData"
+          :pagination="actualPaginationProps"
+          rowKey="id"
+        >
+          <div slot="finishTime" slot-scope="text">
+            {{ text | formatDate }}
+          </div>
+        </a-table>
+        <p>
+          实际账单调整总金额：
+          <span style="color:#02A7F0;">¥{{ actual.totalAmount }}</span>
+          实际可开票调整总金额：
+          <span style="color:#02A7F0;">¥ {{ actual.invoiceAmount }}</span>
+        </p>
+      </div>
       <p>
-        账单拉取总金额：
-        <span>¥ 2233.00</span>
-        可开票拉取总金额：
-        <span>
-          ¥ 2233
-        </span>
-      </p>
-    </div>
-    <!-- 新增建议调整项 窗口 -->
-    <a-modal
-      title="添加建议调整项"
-      :visible="visible"
-      :confirm-loading="confirmLoading"
-      @ok="handleOk"
-      @cancel="handleCancel"
-      width="50%"
-    >
-      <a-form-model
-        ref="ruleForm"
-        :model="formRevision"
-        :rules="rulesRevision"
-        :label-col="labelCol"
-        :wrapper-col="wrapperCol"
-      >
-        <a-form-model-item label="订单号" prop="name">
-          <a-input placeholder="请输入订单号" v-model="form.name" />
-        </a-form-model-item>
-        <a-form-model-item label="产品">
-          <span>根据订单号带出</span>
-        </a-form-model-item>
-        <a-form-model-item label="订单金额（元）">
-          <span>根据订单号带出</span>
-        </a-form-model-item>
-        <a-form-model-item label="可开票金额（元）">
-          <span>根据订单号带出</span>
-        </a-form-model-item>
-        <a-form-model-item label="订单调整金额（元）" prop="name">
-          <a-input placeholder="请输入金额（正或负数）" v-model="form.name" />
-        </a-form-model-item>
-        <a-form-model-item label="可开票调整金额（元）" prop="name">
-          <a-input placeholder="请输入金额（正或负数）" v-model="form.name" />
-        </a-form-model-item>
-      </a-form-model>
-    </a-modal>
-    <h1>调整单明细</h1>
-    <div>
-      <a-form-model layout="inline">
-        <a-form-model-item>
-          <a-input v-model="form.name" placeholder="请输入订单号" />
-        </a-form-model-item>
-        <a-form-model-item>
-          <a-button type="primary">
-            查询
-          </a-button>
-        </a-form-model-item>
-      </a-form-model>
-    </div>
-    <div>
-      <a-table
-        :pagination="actualPaginationProps"
-        rowKey="id"
-        :columns="actualColumns"
-        :data-source="actualCata"
-      >
-        <div slot="companyName" slot-scope="text">{{ text }}</div>
-        <div slot="action">
-          <a-button type="link">删除</a-button>
-        </div>
-      </a-table>
-      <p>
-        实际账单调整总金额：
-        <span>¥ 2233.00</span>
-        实际可开票调整总金额：
-        <span>
-          ¥ 2233
-        </span>
-      </p>
-    </div>
-    <div>
-      <p>
-        对账单总金额：
-        <span>¥ 2213.00</span>
+        对账单总金额:
+        <span style="color:#02A7F0;">¥ {{ amount.totalAmount }}</span>
         可开票总金额：
-        <span>¥ 2213.00</span>
+        <span style="color:#02A7F0;">¥ {{ amount.invoiceAmount }}</span>
       </p>
       <div class="bottom-button">
-        <a-button type="primary" @click="save">
+        <!-- <a-button type="primary" @click="confirm">
           保存
-        </a-button>
-        <a-button type="primary" style="margin-left: 10px;" @click="publish">
+        </a-button> -->
+        <a-button
+          type="primary"
+          style="margin-left: 10px;"
+          @click="batchPublish"
+        >
           发布
         </a-button>
-        <a-button @click="cancel" style="margin-left: 10px;">
+        <a-button style="margin-left: 10px;" @click="goBack">
           取消
         </a-button>
       </div>
@@ -163,239 +213,281 @@
 </template>
 
 <script>
+import { invoiceStatusEnum, statementStatusEnum } from "@/utils/enum";
+
 export default {
   data() {
     return {
-      visible: false,
-      confirmLoading: false,
-      labelCol: { span: 4 },
-      wrapperCol: { span: 14 },
-      formRevision: {
-        name: ""
+      data: null,
+      steerdata: [],
+      invoiceStatusEnum,
+      statementStatusEnum,
+      actualData: null,
+      listQuery: {
+        //(对账单明细)
+        key: "",
+        search: "",
+        id: "",
+        pageNo: 1,
+        pageSize: 10,
+        total: 0
       },
-      rulesRevision: {
-        name: [
-          {
-            required: true,
-            message: "当前选项不能为空",
-            trigger: "blur"
-          }
-        ]
-      },
-      form: {
-        name: "",
-        region: undefined,
-        date1: undefined,
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: ""
-      },
-      rules: {
-        name: [
-          {
-            required: true,
-            message: "Please input Activity name",
-            trigger: "blur"
-          }
-        ]
-      },
-      data: [],
-      columns: [
+      steercolumns: [
         {
-          title: "订单号",
-          dataIndex: "companyName",
-          key: "companyName"
+          title: "账单编号",
+          dataIndex: "id"
         },
         {
           title: "类型",
-          dataIndex: "createTime",
-          key: "createTime"
+          dataIndex: "type"
         },
         {
           title: "产品",
-          dataIndex: "invoiceNo",
-          key: "invoiceNo"
+          dataIndex: "productName"
         },
         {
-          title: "订单创建时间",
-          dataIndex: "status",
-          key: "status"
+          title: "消费时间",
+          dataIndex: "finishTime",
+          scopedSlots: { customRender: "finishTime" }
         },
         {
-          title: "订单金额（元）",
-          dataIndex: "damount",
-          key: "amount"
+          title: "原账单金额（元）",
+          dataIndex: "totalAmount"
         },
         {
-          title: "可开票金额（元）",
-          dataIndex: "kamount"
+          title: "原可开票金额（元）",
+          dataIndex: "actualAmount"
+        },
+        {
+          title: "账单调整金额（元）",
+          dataIndex: "recheckTotalAmount"
+        },
+        {
+          title: "可开票调整金额（元）",
+          dataIndex: "recheckInvoiceAmount"
+        },
+        {
+          title: "调整后账单金额（元）",
+          dataIndex: "afterTotalAmount"
+        },
+        {
+          title: "调整后可开票金额（元）",
+          dataIndex: "afterInvoiceAmount"
         },
         {
           title: "操作",
           dataIndex: "action",
-          key: "action"
+          scopedSlots: { customRender: "action" }
         }
       ],
-      listQuery: {
-        key: "",
-        search: "",
-        currentPage: 1,
-        pageSize: 10,
-        total: 0,
-        status: ""
-      },
+      columnsDetails: [
+        {
+          title: "账单编号",
+          dataIndex: "id"
+        },
+        {
+          title: "类型",
+          dataIndex: "type"
+        },
+        {
+          title: "产品",
+          dataIndex: "productName"
+        },
+        {
+          title: "消费时间",
+          dataIndex: "finishTime",
+          scopedSlots: { customRender: "finishTime" }
+        },
+        {
+          title: "账单金额（元）",
+          dataIndex: "totalAmount"
+        },
+        {
+          title: "可开票金额",
+          dataIndex: "actualAmount",
+          key: "kactualAmount"
+        },
+        {
+          title: "操作",
+          dataIndex: "action",
+          scopedSlots: { customRender: "action" }
+        }
+      ],
+      actualColumns: [
+        {
+          title: "账单编号",
+          dataIndex: "id"
+        },
+        {
+          title: "类型",
+          dataIndex: "type"
+        },
+        {
+          title: "产品",
+          dataIndex: "productName"
+        },
+        {
+          title: "消费时间",
+          dataIndex: "finishTime",
+          scopedSlots: { customRender: "finishTime" }
+        },
+        {
+          title: "原账单金额（元）",
+          dataIndex: "totalAmount"
+        },
+        {
+          title: "原可开票金额（元）",
+          dataIndex: "actualAmount"
+        },
+        {
+          title: "账单调整金额（元）",
+          dataIndex: "recheckTotalAmount"
+        },
+        {
+          title: "可开票调整金额（元）",
+          dataIndex: "recheckInvoiceAmount"
+        },
+        {
+          title: "调整后账单金额（元）",
+          dataIndex: "afterTotalAmount"
+        },
+        {
+          title: "调整后可开票金额（元）",
+          dataIndex: "afterInvoiceAmount"
+        }
+      ],
+      dataDetails: null,
       paginationProps: {
+        //(对账单明细)
         showQuickJumper: true,
         showSizeChanger: true,
         total: 0,
         showTotal: (total, range) =>
-          `共 ${total} 条记录 第 ${this.listQuery.currentPage} / ${Math.ceil(
+          `共 ${total} 条记录 第 ${this.listQuery.pageNo} / ${Math.ceil(
             total / this.listQuery.pageSize
           )} 页`,
         onChange: this.quickJump,
         onShowSizeChange: this.onShowSizeChange
       },
-      actualListQuery: {
+      steerListQuery: {
+        //(建议调整项)
+        id: "",
         key: "",
         search: "",
-        currentPage: 1,
+        pageNo: 1,
         pageSize: 10,
-        total: 0,
-        status: ""
+        total: 0
       },
-      actualPaginationProps: {
+      steer: {},
+      steerPaginationProps: {
+        //(建议调整项)
         showQuickJumper: true,
         showSizeChanger: true,
         total: 0,
         showTotal: (total, range) =>
-          `共 ${total} 条记录 第 ${
-            this.actualListQuery.currentPage
-          } / ${Math.ceil(total / this.actualListQuery.pageSize)} 页`,
+          `共 ${total} 条记录 第 ${this.steerListQuery.pageNo} / ${Math.ceil(
+            total / this.steerListQuery.pageSize
+          )} 页`,
+        onChange: this.quickJumpSteer,
+        onShowSizeChange: this.onShowSizeChangeSteer
+      },
+      actualListQuery: {
+        //(实际调整项)
+        id: "",
+        key: "",
+        search: "",
+        pageNo: 1,
+        pageSize: 10,
+        total: 0
+      },
+      details: {},
+      actual: {},
+      actualPaginationProps: {
+        //(实际调整项)
+        showQuickJumper: true,
+        showSizeChanger: true,
+        total: 0,
+        showTotal: (total, range) =>
+          `共 ${total} 条记录 第 ${this.actualListQuery.pageNo} / ${Math.ceil(
+            total / this.actualListQuery.pageSize
+          )} 页`,
         onChange: this.quickJumpActual,
         onShowSizeChange: this.onShowSizeChangeActual
       },
-      actualCata: [],
-      actualColumns: [
-        {
-          title: "订单号",
-          dataIndex: "companyName",
-          key: "companyName"
-        },
-        {
-          title: "类型",
-          dataIndex: "createTime",
-          key: "createTime"
-        },
-        {
-          title: "产品",
-          dataIndex: "invoiceNo",
-          key: "invoiceNo"
-        },
-        {
-          title: "订单创建时间",
-          dataIndex: "status",
-          key: "status"
-        },
-        {
-          title: "原订单金额（元）",
-          dataIndex: "damount",
-          key: "amount"
-        },
-        {
-          title: "原可开票金额（元）",
-          dataIndex: "ykamount"
-        },
-        {
-          title: "订单调整金额（元）",
-          dataIndex: "orderamount"
-        },
-        {
-          title: "可开票调整金额（元）",
-          dataIndex: "kkamount"
-        },
-        {
-          title: "调整后订单金额（元）",
-          dataIndex: "tzkamount"
-        },
-        {
-          title: "调整后可开票金额（元）",
-          dataIndex: "kamount"
-        },
-        {
-          title: "操作",
-          dataIndex: "action",
-          key: "action"
-        }
-      ]
+      visible: false,
+      confirmLoading: false,
+      labelCol: { span: 9 },
+      wrapperCol: { span: 8 },
+      form: {
+        billNo: "",
+        productName: "",
+        totalAmount: "",
+        actualAmount: "",
+        amount: "",
+        invoiceAmount: ""
+      },
+      rules: {
+        amount: [
+          {
+            required: true,
+            message: "当前选项不能为空",
+            trigger: ["change", "blur"]
+          }
+        ],
+        invoiceAmount: [
+          {
+            required: true,
+            message: "当前选项不能为空",
+            trigger: ["change", "blur"]
+          }
+        ]
+      },
+      amount: {}
     };
   },
+  activated() {
+    this.data = JSON.parse(this.$route.query.data);
+    console.log(`this.data: `, this.data);
+    this.getsteerList({ billNo: this.data.billNo });
+    this.getsteerListSteer();
+    this.getsteerListActual();
+    this.getAmount();
+  },
   methods: {
-    // 保存
-    save() {
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          this.$store.dispatch("recon/save").then(res => {
-            this.$message.success("保存成功");
-          });
-        }
-      });
-    },
-    // 发布
-    publish() {
-      this.$store.dispatch("recon/publish").then(res => {
-        this.$message.success("发布成功");
-      });
-    },
-    // 取消
-    cancel() {
-      this.$confirm({
-        title: "确定要取消吗?",
-        onOk: () => {
-          this.$store.dispatch("recon/cancel").then(res => {
-            this.$message.success("取消成功");
-          });
-        }
-      });
-    },
-    showModal() {
+    showModal(obj) {
       this.visible = true;
+      this.resetForm();
+      this.form.id = obj.id;
+      this.form.billNo = obj.billNo;
+      this.form.productName = obj.productName;
+      this.form.totalAmount = obj.totalAmount;
+      this.form.actualAmount = obj.actualAmount;
     },
     // 确认添加
     handleOk(e) {
-      this.confirmLoading = true;
-      this.onSubmitAdd();
+      this.onSubmit();
     },
     // 取消（关闭弹窗）
     handleCancel(e) {
       console.log("Clicked cancel button");
       this.visible = false;
     },
-    // 添加建议调整项Add
-    onSubmitAdd() {
-      this.$refs.ruleForm.validate(valid => {
-        if (valid) {
-          // this.$store
-          //   .dispatch("reconciliation/addSteerItem", this.form)
-          //   .then(() => {
-          //     this.confirmLoading = false;
-          //     this.visible = false;
-          //     this.$message.success("添加成功");
-          //   });
-        }
-      });
-    },
-
-    startValue(date, dateString) {
-      this.listQuery.startTime = dateString;
-    },
+    // 调整账单明细
     onSubmit() {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
+          this.confirmLoading = true;
           this.$store
-            .dispatch("recon/getReconDetailList", this.form)
-            .then(res => {
-              this.$message.success("拉取成功");
+            .dispatch("reconciliation/addSteerItem", this.form)
+            .then(() => {
+              this.$message.success("操作成功");
+            })
+            .finally(() => {
+              this.confirmLoading = false;
+              this.visible = false;
+              this.getsteerListSteer();
+              this.getsteerListActual();
+              this.getAmount();
             });
         }
       });
@@ -403,53 +495,159 @@ export default {
     resetForm() {
       this.$refs.ruleForm.resetFields();
     },
-    //查询数据表格 对账单明细
-    getList() {
-      this.$getList("recon/getReconDetail", this.listQuery).then(res => {
-        console.log(res);
-        this.data = [...res.data.list];
-        this.paginationProps.total = res.data.totalCount * 1;
+    del(id) {
+      this.$confirm({
+        title: "确认要删除吗？",
+        onOk: () => {
+          this.$store.dispatch("reconciliation/del", { id }).then(() => {
+            this.$message.success("删除成功");
+            // this.getData();
+          }).finally(() => {
+            this.getsteerListSteer()
+          });
+        }
       });
     },
-    //表格分页跳转
+    // 确认
+    confirm() {
+      this.$store
+        .dispatch("reconciliation/confirm", { id: this.data.billNo })
+        .then(() => {
+          this.$message.success("操作成功");
+          // this.getData();
+        });
+    },
+    // 批量发布
+    batchPublish() {
+      this.$confirm({
+        title: "确定要发布吗?",
+        onOk: () => {
+          this.$store
+            .dispatch("reconciliation/batchPublish", {
+              bills: [this.data.id]
+            })
+            .then(() => {
+              this.$message.success("发布成功");
+              this.$router.back();
+            });
+        }
+      });
+    },
+    // 退回
+    goBack(id) {
+      this.$router.back();
+    },
+    // 开票明细
+    getsteerList(obj) {
+      let data = obj ? { ...this.listQuery, ...obj } : this.listQuery;
+      this.$store.dispatch("reconciliation/getsteerList", data).then(res => {
+        console.log(`获取开票明细`, res);
+        this.dataDetails = res.data.page?.list ?? [];
+        this.paginationProps.total = res.data.page?.totalCount * 1 ?? 0;
+        this.details = res.data;
+      });
+    },
+    // 建议调整项
+    getsteerListSteer() {
+      this.$store
+        .dispatch("reconciliation/getsteerListSteer", {
+          ...this.steerListQuery,
+          billNo: this.data.billNo
+        })
+        .then(res => {
+          this.steerdata = res.data.page?.list ?? [];
+          this.steerPaginationProps.total = res.data.page?.totalCount * 1 ?? 0;
+          this.steer = res.data;
+        });
+    },
+    // 实际调整项
+    getsteerListActual() {
+      this.$store
+        .dispatch("reconciliation/getsteerListActual", {
+          ...this.actualListQuery,
+          billNo: this.data.billNo
+        })
+        .then(res => {
+          this.actualData = res.data.page?.list ?? [];
+          this.actualPaginationProps.total = res.data.page?.totalCount * 1 ?? 0;
+          this.actual = res.data;
+        });
+    },
+    // 获取金额
+    getAmount(item) {
+      let data = JSON.parse(this.$route.query.data);
+      this.$store
+        .dispatch("reconciliation/getAmount", {
+          billNo: data.billNo
+        })
+        .then(res => {
+          console.log(res);
+          this.amount = res.data;
+        });
+    },
+    // 获取页面数据
+    getData() {
+      this.$store.dispatch("reconciliation/getData").then(res => {
+        this.data = res.data;
+        this.actualData = res.actualData;
+        // this.dataDetails = res.dataDetails;
+      });
+    },
+    //表格分页跳转(对账单明细)
     quickJump(currentPage) {
-      this.listQuery.currentPage = currentPage;
-      this.getList();
+      this.listQuery.pageNo = currentPage;
+      this.getsteerList();
     },
-    //表格分页切换每页条数
+    //表格分页切换每页条数(对账单明细)
     onShowSizeChange(current, pageSize) {
-      this.listQuery.currentPage = current;
+      this.listQuery.pageNo = current;
       this.listQuery.pageSize = pageSize;
-      this.getList();
+      this.getsteerList();
     },
-    //查询数据表格（调整单明细）
-    getActualList() {
-      this.$getList("word/getList", this.actualListQuery).then(res => {
-        console.log(res);
-        this.actualCata = [...res.data.list];
-        this.actualPaginationProps.total = res.data.totalCount * 1;
-      });
+    //表格分页跳转(建议调整项)
+    quickJumpSteer(currentPage) {
+      this.steerListQuery.pageNo = currentPage;
+      this.getsteerListSteer();
     },
-    //表格分页跳转
+    //表格分页切换每页条数(建议调整项)
+    onShowSizeChangeSteer(current, pageSize) {
+      this.steerListQuery.pageNo = current;
+      this.steerListQuery.pageSize = pageSize;
+      this.getsteerListSteer();
+    },
+
+    //表格分页跳转(实际调整项)
     quickJumpActual(currentPage) {
-      this.actualListQuery.currentPage = currentPage;
-      this.getActualList();
+      this.actualListQuery.pageNo = currentPage;
+      this.getsteerListActual();
     },
-    //表格分页切换每页条数
+    //表格分页切换每页条数(实际调整项)
     onShowSizeChangeActual(current, pageSize) {
-      this.actualListQuery.currentPage = current;
+      this.actualListQuery.pageNo = current;
       this.actualListQuery.pageSize = pageSize;
-      this.getActualList();
+      this.getsteerListActual();
     }
   }
 };
 </script>
 
 <style lang="less" scoped>
-.add-reconManage {
-  padding: 20px;
+.recon-info {
   margin: 0 20px;
+  padding: 20px;
   background-color: #fff;
+}
+.table-title {
+  margin-bottom: 20px;
+  color: #000000d9;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 1.5;
+}
+b {
+  display: block;
+  margin-bottom: 10px;
+  color: #000;
 }
 .bottom-button {
   text-align: center;

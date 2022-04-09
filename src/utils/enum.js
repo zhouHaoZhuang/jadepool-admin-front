@@ -20,6 +20,14 @@ export const invoiceStatusEnum = {
   8: "退票申请已拒绝",
   9: "已退票（退票申请确认）"
 };
+// 对账单状态
+export const statementStatusEnum = {
+  1: "初始化",
+  2: "供应商审核中",
+  3: "渠道商复审中",
+  4: "已退回",
+  9: "已完成"
+};
 // 企业列表企业状态
 export const corporationStatusEnum = {
   0: "正常",
