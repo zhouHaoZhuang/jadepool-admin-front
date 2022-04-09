@@ -19,7 +19,6 @@ const filterList = [
   "payStatus",
   "createTime",
   "discountPrice",
-  'regionName'
 ];
 export const getListQp = (request, listQuery) => {
   return new Promise((resolve, reject) => {

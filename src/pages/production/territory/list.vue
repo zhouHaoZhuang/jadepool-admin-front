@@ -116,17 +116,14 @@ export default {
       paginationProps: {
         showQuickJumper: true,
         showSizeChanger: true,
-        pageSizeOptions: ["5", "10", "20", "30"],
         total: 0,
-        current: 1, //当前页
-        pageSize: 5, //每页显示数量
         showTotal: (total, range) =>
           `共 ${total} 条记录 第 ${this.listQuery.currentPage} / ${Math.ceil(
             total / this.listQuery.pageSize
-          )} 页`,
+          )}  页`,
         onChange: this.changepage,
         onShowSizeChange: this.onShowSizeChange
-      }
+      },
     };
   },
 
@@ -181,15 +178,15 @@ export default {
       this.listQuery.currentPage = 1;
       this.reqList();
     },
-    // 表格分页切换每页条数
+     // 表格分页切换每页条数
     onShowSizeChange(current, pageSize) {
       this.listQuery.currentPage = current;
       this.listQuery.pageSize = pageSize;
       this.reqList();
     },
-    // 切换pagSize之后被调用
-    changepage(currentPage) {
-      this.listQuery.currentPage = currentPage;
+      changepage(current, pageSize) {
+      this.listQuery.currentPage = current;
+      this.listQuery.pageSize = pageSize;
       this.reqList();
     },
     // 新增地域
