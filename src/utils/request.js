@@ -29,6 +29,12 @@ request.interceptors.request.use(async config => {
     config.headers["authing-id"] = authingId;
     config.headers.domain = getDomainUrl();
   }
+  // bill，对账单接口请求地址
+  if (config.billService) {
+    config.baseURL = env.BILL_BASE_URL;
+    config.headers.system = "settle";
+    config.headers.domain = getDomainUrl();
+  }
   config.cancelToken = axiosSource.token;
   const token = store.state.user.token;
   if (token) {

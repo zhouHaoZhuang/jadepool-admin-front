@@ -255,6 +255,87 @@ export const asyncRoute = [
             component: BlankView,
             children: [
               {
+                path: "billmanage",
+                name: "发票管理",
+                meta: {
+                  icon: "home",
+                  perm: "finance-book-order",
+                },
+                component: () =>
+                  import("@/pages/channel/billmanage/index.vue"),
+              },
+              {
+                path: "billInfo",
+                name: "发票申请详情",
+                meta: {
+                  icon: "home",
+                  back: true,
+                  invisible: true,
+                  perm: "finance-book-order",
+                },
+                component: () =>
+                  import("@/pages/channel/billmanage/billInfo.vue"),
+              },
+              {
+                path: "auditbill",
+                name: "审核发票申请",
+                meta: {
+                  icon: "home",
+                  back: true,
+                  invisible: true,
+                  perm: "finance-book-order",
+                },
+                component: () =>
+                  import("@/pages/channel/billmanage/auditbill.vue"),
+              },
+              {
+                path: "editbill",
+                name: "编辑发票申请",
+                meta: {
+                  icon: "home",
+                  back: true,
+                  invisible: true,
+                  perm: "finance-book-order",
+                },
+                component: () =>
+                  import("@/pages/channel/billmanage/editbill.vue"),
+              },
+              {
+                path: "refundmanage",
+                name: "退票管理",
+                meta: {
+                  icon: "home",
+                  back: true,
+                  perm: "finance-book-order",
+                },
+                component: () =>
+                  import("@/pages/channel/refundmanage/list.vue")
+              },
+              {
+                path: "refundApply",
+                name: "退票申请详情",
+                meta: {
+                  icon: "home",
+                  back: true,
+                  invisible: true,
+                  perm: "finance-book-order",
+                },
+                component: () =>
+                  import("@/pages/channel/refundmanage/refundApply.vue")
+              },
+              {
+                path: "reviewRefund",
+                name: "审核退票申请",
+                meta: {
+                  icon: "home",
+                  back: true,
+                  invisible: true,
+                  perm: "finance-book-order",
+                },
+                component: () =>
+                  import("@/pages/channel/refundmanage/reviewRefund.vue")
+              },
+              {
                 path: "payment",
                 name: "人工入款",
                 meta: {},
@@ -263,12 +344,6 @@ export const asyncRoute = [
               {
                 path: "remittance",
                 name: "线下汇款",
-                meta: {},
-                component: () => import("@/pages/channel/channelAdmin/price")
-              },
-              {
-                path: "invoice",
-                name: "发票管理",
                 meta: {},
                 component: () => import("@/pages/channel/channelAdmin/price")
               },
@@ -290,6 +365,44 @@ export const asyncRoute = [
                 meta: {},
                 component: () => import("@/pages/channel/channelAdmin/price")
               }
+            ]
+          },
+          {
+            path: "recon",
+            name: "对账管理",
+            meta: {
+              icon: "home"
+            },
+            component: BlankView,
+            children: [
+              {
+                path: "reconManage",
+                name: "对账单管理",
+                meta: {
+                  icon: "home"
+                },
+                component: () => import("@/pages/channel/recon/reconManage/list")
+              },
+              {
+                path: "addreconManage",
+                name: "新增对账单",
+                meta: {
+                  icon: "home",
+                  invisible: true,
+                  back: true
+                },
+                component: () => import("@/pages/channel/recon/reconManage/add")
+              },
+              {
+                path: "reconManageInfo",
+                name: "对账单详情",
+                meta: {
+                  icon: "home",
+                  invisible: true,
+                  back: true
+                },
+                component: () => import("@/pages/channel/recon/reconManage/info")
+              },
             ]
           },
           {
