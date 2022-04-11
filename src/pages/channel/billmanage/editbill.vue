@@ -231,9 +231,9 @@ export default {
           this.data = res.data;
           this.form.businessExpressDelivery = res.data.businessExpressDelivery;
           this.form.feedbackRemark = res.data.feedbackRemark;
-          this.dataList = res.data.invoiceEvaluatePage?.list ?? [];
+          this.dataList = res.data.billResPager?.list ?? [];
           this.paginationProps.total =
-            res.data.invoiceEvaluatePage?.totalCount * 1 ?? 0;
+            res.data.billResPager?.totalCount * 1 ?? 0;
         });
     },
     //表格分页跳转

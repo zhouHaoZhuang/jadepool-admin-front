@@ -172,11 +172,10 @@ export default {
           id: this.$route.query.id
         })
         .then(res => {
-          console.log(res, "-------");
           this.data = res.data;
-          this.dataList = res.data.invoiceEvaluatePage?.list ?? [];
+          this.dataList = res.data.billResPager?.list ?? [];
           this.paginationProps.total =
-            res.data.invoiceEvaluatePage?.totalCount * 1 ?? 0;
+            res.data.billResPager?.totalCount * 1 ?? 0;
         });
     },
     //表格分页跳转
