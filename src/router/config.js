@@ -471,6 +471,22 @@ export const asyncRoute = [
                 component: () => import("@/pages/channel/enterpriseAdmin/list")
               }
             ]
+          },
+          {
+            path: "bill",
+            name: "账单管理",
+            meta: {
+              icon: "icon-caiwubaobiao"
+            },
+            component: BlankView,
+            children: [
+              {
+                path: "bill",
+                name: "账单管理",
+                meta: {},
+                component: () => import("@/pages/product/bill/index.vue")
+              }
+            ]
           }
         ]
       },
@@ -527,12 +543,6 @@ export const asyncRoute = [
                 name: "域名管理",
                 meta: {},
                 component: () => import("@/pages/product/domain/index.vue")
-              },
-              {
-                path: "bill",
-                name: "账单管理",
-                meta: {},
-                component: () => import("@/pages/product/bill/index.vue")
               }
             ]
           }
