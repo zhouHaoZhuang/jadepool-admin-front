@@ -256,6 +256,9 @@ export default {
             item.ecsPrice.dataDisk.forEach(value => {
               dataDiskSizeNum += value.size;
             });
+            item.ecsPrice.systemDisk.forEach(value => {
+              dataDiskSizeNum += value.size;
+            });
             item.ecsPrice.dataDiskSizeNum = dataDiskSizeNum;
           });
           console.log(this.orderInfo,'------------');
