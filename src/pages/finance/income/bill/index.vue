@@ -349,7 +349,7 @@ export default {
           width: 170
         }
       ];
-    },
+    }
   },
   methods: {
     moment,
@@ -362,7 +362,9 @@ export default {
           this.data = [...res.data.list];
           this.paginationProps.total = res.data.totalCount * 1;
           this.data.forEach(element => {
-            element.consumeTime = moment(element.consumeTime).format("YYYY-MM-DD");
+            element.consumeTime = moment(element.consumeTime).format(
+              "YYYY-MM-DD"
+            );
           });
         })
         .finally(() => {
@@ -370,7 +372,10 @@ export default {
         });
     },
     onChange(value) {
-      this.listQuery["qp-billPeriod-eq"] = moment(value).format("YYYY-MM-DD");
+      this.listQuery["qp-billPeriod-eq"] = moment(value).format("YYYY-MM");
+      if (!value || value === "null" || value === undefined) {
+        delete this.listQuery["qp-billPeriod-eq"];
+      }
     },
     //切换tab
     callback(key) {
