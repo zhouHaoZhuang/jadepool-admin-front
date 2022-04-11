@@ -138,6 +138,39 @@ export const asyncRoute = [
                   back: true
                 },
                 component: () => import("@/pages/channel/channelAdmin/update")
+              },
+              {
+                path: "customermanage",
+                name: "客服管理",
+                meta: {},
+                component: () => import("@/pages/manage/index.vue")
+              },
+              {
+                path: "distribute",
+                name: "分配客服",
+                meta: {
+                  invisible: true,
+                  back: true
+                },
+                component: () => import("@/pages/manage/distribute.vue")
+              },
+              {
+                path: "addcustomer",
+                name: "添加客服",
+                meta: {
+                  invisible: true,
+                  back: true
+                },
+                component: () => import("@/pages/manage/addcustomer.vue")
+              },
+              {
+                path: "editorcustomer",
+                name: "编辑客服",
+                meta: {
+                  invisible: true,
+                  back: true
+                },
+                component: () => import("@/pages/manage/editorcustomer.vue")
               }
             ]
           },
@@ -254,6 +287,18 @@ export const asyncRoute = [
             },
             component: BlankView,
             children: [
+              {
+                path: "payment",
+                name: "人工入款",
+                meta: {},
+                component: () => import("@/pages/channel/channelAdmin/list")
+              },
+              {
+                path: "remittance",
+                name: "线下汇款",
+                meta: {},
+                component: () => import("@/pages/channel/channelAdmin/price")
+              },
               {
                 path: "billmanage",
                 name: "发票管理",
