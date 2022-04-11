@@ -56,7 +56,7 @@
             style="width:150px"
             placeholder="订单状态"
             allowClear
-            v-model="listQuery.tradeStatus"
+            v-model="listQuery['qp-tradeStatus-eq']"
           >
             <a-select-option
               v-for="(value, key) in orderStatusEnum"
@@ -72,7 +72,7 @@
             style="width:150px"
             placeholder="计费方式"
             allowClear
-            v-model="listQuery.chargingType"
+            v-model="listQuery['qp-chargingType-eq']"
           >
             <a-select-option
               v-for="(value, key) in charingStatus"
