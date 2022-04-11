@@ -60,7 +60,7 @@
             <div v-else>
               <div>CPU：{{ text.cpu }}</div>
               <div>内存：{{ text.memory }}</div>
-              <div>磁盘：{{ text.dataDiskSize }}</div>
+              <div>磁盘：{{ diskLength }}</div>
               <div>带宽：{{ text.internetMaxBandwidthOut }}</div>
               <div>防御：{{ "20G" }}</div>
               <div>镜像：{{ text.imageId }}</div>
@@ -100,6 +100,7 @@ export default {
     return {
       orderInfo: null,
       data: [],
+      diskLength:0,
       orderStatusEnum,
       orderTypeMap,
       regionDataEnum,
@@ -139,13 +140,18 @@ export default {
   activated() {
     let id = this.$route.query.id;
     this.$store.dispatch("financialOrder/getOne", id).then(res => {
-      let dataDisk = res.data.ecsPrice.dataDisk;
-      let dataDiskSize = 0;
-      if (dataDisk) {
-        for (let index = 0; index < dataDisk.length; index++) {
-          dataDiskSize += dataDisk[index].size;
-        }
-        res.data.ecsPrice.dataDiskSize = dataDiskSize;
+      // let dataDisk = res.data.ecsPrice.dataDisk;
+      // let dataDiskSize = 0;
+      // if (dataDisk) {
+      //   for (let index = 0; index < dataDisk.length; index++) {
+      //     dataDiskSize += dataDisk[index].size;
+      //   }
+      //   res.data.ecsPrice.dataDiskSize = dataDiskSize;
+      // }
+         if(res.data.ecsPrice){
+      let dataDisk = res.data.ecsPrice.dataDisk? res.data.ecsPrice.dataDisk.length:0;
+      console.log(dataDisk,'dataDisk');
+      this.diskLength = dataDisk + 1
       }
       this.orderInfo = res.data;
       this.data = [res.data];

@@ -16,6 +16,15 @@ const channel = {
         params
       });
     },
+
+    // 获取列表
+    getNewList({ commit, state }, data) {
+      return request({
+        url: "/channelCustomerAdvocate/getChannelCustomerList",
+        method: "post",
+        data
+      });
+    },
     // 新增渠道
     add({ commit, state }, data) {
       return request({
