@@ -16,8 +16,7 @@ const formBaseUrl = {
 };
 // 对账单接口请求地址
 const billUrl = {
-  // local: "http://site.sailayun.com/settle",
-  local: "http://216d7872i4.qicp.vip/settle",
+  local: "http://site.sailayun.com/settle",
   dev: "/settle",
   test: "/settle",
   prod: "/settle"

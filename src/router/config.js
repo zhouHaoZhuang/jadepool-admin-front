@@ -258,7 +258,6 @@ export const asyncRoute = [
                 path: "billmanage",
                 name: "发票管理",
                 meta: {
-                  icon: "home",
                   perm: "finance-book-order",
                 },
                 component: () =>
@@ -304,7 +303,6 @@ export const asyncRoute = [
                 path: "refundmanage",
                 name: "退票管理",
                 meta: {
-                  icon: "home",
                   back: true,
                   perm: "finance-book-order",
                 },
@@ -371,7 +369,7 @@ export const asyncRoute = [
             path: "recon",
             name: "对账管理",
             meta: {
-              icon: "home"
+              icon: "icon-caiwubaobiao"
             },
             component: BlankView,
             children: [
