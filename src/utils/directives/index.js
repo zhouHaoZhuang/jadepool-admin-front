@@ -60,7 +60,7 @@ function isPlainObject(obj) {
  * -> 可传 number字符串 v-numbe-evolutionr="1"
  * -> 可传对象 { value: Number, max: Number, min: Number }
  *            value 小数 max 最大值 min 最小值
- *  v-number-evolution="{ value: 0, min: 0, max: 10 }"
+ *  ="{ value: 0, min: 0, max: 10 }"
  *  输入框的默认值最好是undefined
  */
 export const numberEvolution = Vue.directive("number-evolution", {
