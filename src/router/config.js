@@ -55,7 +55,7 @@ export const asyncRoute = [
             path: "index",
             name: "后台首页",
             meta: {
-              icon: "home"
+              icon: "icon-applicationgroup"
             },
             component: BlankView,
             children: [
@@ -95,7 +95,7 @@ export const asyncRoute = [
             path: "index",
             name: "渠道管理",
             meta: {
-              icon: "home"
+              icon: "icon-qudaoliebiao"
             },
             component: BlankView,
             children: [
@@ -178,7 +178,7 @@ export const asyncRoute = [
             path: "enterprise",
             name: "企业管理",
             meta: {
-              icon: "home"
+              icon: "icon-qiyeguanli"
             },
             component: BlankView,
             children: [
@@ -212,7 +212,7 @@ export const asyncRoute = [
             path: "index",
             name: "收支账簿",
             meta: {
-              icon: "home"
+              icon: "icon-shouzhizhangbao"
             },
             component: BlankView,
             children: [
@@ -234,7 +234,7 @@ export const asyncRoute = [
             path: "order",
             name: "订单管理",
             meta: {
-              icon: "home"
+              icon: "icon-dingdanguanli"
             },
             component: BlankView,
             children: [
@@ -283,7 +283,7 @@ export const asyncRoute = [
             path: "examine",
             name: "财务审核",
             meta: {
-              icon: "home"
+              icon: "icon-caiwushenhe"
             },
             component: BlankView,
             children: [
@@ -300,8 +300,95 @@ export const asyncRoute = [
                 component: () => import("@/pages/channel/channelAdmin/price")
               },
               {
-                path: "invoice",
+                path: "billmanage",
                 name: "发票管理",
+                meta: {
+                  icon: "home",
+                  perm: "finance-book-order",
+                },
+                component: () =>
+                  import("@/pages/channel/billmanage/index.vue"),
+              },
+              {
+                path: "billInfo",
+                name: "发票申请详情",
+                meta: {
+                  icon: "home",
+                  back: true,
+                  invisible: true,
+                  perm: "finance-book-order",
+                },
+                component: () =>
+                  import("@/pages/channel/billmanage/billInfo.vue"),
+              },
+              {
+                path: "auditbill",
+                name: "审核发票申请",
+                meta: {
+                  icon: "home",
+                  back: true,
+                  invisible: true,
+                  perm: "finance-book-order",
+                },
+                component: () =>
+                  import("@/pages/channel/billmanage/auditbill.vue"),
+              },
+              {
+                path: "editbill",
+                name: "编辑发票申请",
+                meta: {
+                  icon: "home",
+                  back: true,
+                  invisible: true,
+                  perm: "finance-book-order",
+                },
+                component: () =>
+                  import("@/pages/channel/billmanage/editbill.vue"),
+              },
+              {
+                path: "refundmanage",
+                name: "退票管理",
+                meta: {
+                  icon: "home",
+                  back: true,
+                  perm: "finance-book-order",
+                },
+                component: () =>
+                  import("@/pages/channel/refundmanage/list.vue")
+              },
+              {
+                path: "refundApply",
+                name: "退票申请详情",
+                meta: {
+                  icon: "home",
+                  back: true,
+                  invisible: true,
+                  perm: "finance-book-order",
+                },
+                component: () =>
+                  import("@/pages/channel/refundmanage/refundApply.vue")
+              },
+              {
+                path: "reviewRefund",
+                name: "审核退票申请",
+                meta: {
+                  icon: "home",
+                  back: true,
+                  invisible: true,
+                  perm: "finance-book-order",
+                },
+                component: () =>
+                  import("@/pages/channel/refundmanage/reviewRefund.vue")
+              },
+              {
+                path: "payment",
+                name: "人工入款",
+                meta: {},
+                component: () => import("@/pages/channel/channelAdmin/list")
+              },
+              {
+                path: "remittance",
+                name: "线下汇款",
                 meta: {},
                 component: () => import("@/pages/channel/channelAdmin/price")
               },
@@ -326,10 +413,48 @@ export const asyncRoute = [
             ]
           },
           {
+            path: "recon",
+            name: "对账管理",
+            meta: {
+              icon: "home"
+            },
+            component: BlankView,
+            children: [
+              {
+                path: "reconManage",
+                name: "对账单管理",
+                meta: {
+                  icon: "home"
+                },
+                component: () => import("@/pages/channel/recon/reconManage/list")
+              },
+              {
+                path: "addreconManage",
+                name: "新增对账单",
+                meta: {
+                  icon: "home",
+                  invisible: true,
+                  back: true
+                },
+                component: () => import("@/pages/channel/recon/reconManage/add")
+              },
+              {
+                path: "reconManageInfo",
+                name: "对账单详情",
+                meta: {
+                  icon: "home",
+                  invisible: true,
+                  back: true
+                },
+                component: () => import("@/pages/channel/recon/reconManage/info")
+              },
+            ]
+          },
+          {
             path: "report",
             name: "财务报表",
             meta: {
-              icon: "home"
+              icon: "icon-caiwubaobiao"
             },
             component: BlankView,
             children: [
@@ -359,7 +484,7 @@ export const asyncRoute = [
             path: "cloudservers",
             name: "云服务器",
             meta: {
-              icon: "home"
+              icon: "icon-yunfuwuqi"
             },
             component: BlankView,
             children: [
@@ -393,7 +518,7 @@ export const asyncRoute = [
             path: "cdn",
             name: "CDN云加速",
             meta: {
-              icon: "home"
+              icon: "icon-CDNyunjiasu"
             },
             component: BlankView,
             children: [
@@ -451,7 +576,7 @@ export const asyncRoute = [
           }
         ]
       },
-      // 生产
+      // 采购
       {
         path: "/production",
         name: "采购",
@@ -461,7 +586,7 @@ export const asyncRoute = [
             path: "supplier",
             name: "供应商管理",
             meta: {
-              icon: "home"
+              icon: "icon-gongyingshangguanli"
             },
             component: BlankView,
             children: [
@@ -525,7 +650,7 @@ export const asyncRoute = [
             path: "product",
             name: "产品管理",
             meta: {
-              icon: "home"
+              icon: "icon-chanpinguanli"
             },
             component: BlankView,
             children: [
@@ -551,10 +676,73 @@ export const asyncRoute = [
             ]
           },
           {
+            path: "price",
+            name: "产品标准价格管理",
+            meta: {
+              icon: "icon-chanpinguanli"
+            },
+            component: BlankView,
+            children: [
+              {
+                path: "list",
+                name: "产品标准价格管理",
+                meta: {},
+                component: () => import("@/pages/production/price/list.vue")
+              },
+              {
+                path: "addPrice",
+                name: "新建产品标准价格",
+                meta: {
+                  invisible: true,
+                  back: true
+                },
+                component: () =>
+                  import("@/pages/production/price/priceDetail.vue")
+              },
+              {
+                path: "updatePrice",
+                name: "编辑产品标准价格",
+                meta: {
+                  invisible: true,
+                  back: true
+                },
+                component: () =>
+                  import("@/pages/production/price/priceDetail.vue")
+              },
+              {
+                path: "priceDetail",
+                name: "产品标准价格详情",
+                meta: {
+                  invisible: true,
+                  back: true
+                },
+                component: () =>
+                  import("@/pages/production/price/priceDetail.vue")
+              }
+            ]
+          },
+          {
+            path: "territory",
+            name: "地域管理",
+            meta: {
+              icon: "icon-chanpinguanli"
+            },
+            component: BlankView,
+            children: [
+              {
+                path: "territory/list",
+                name: "地域管理",
+                meta: {},
+                component: () => import("@/pages/production/territory/list.vue")
+              }
+            ]
+          },
+
+          {
             path: "cloudServer",
             name: "云服务器",
             meta: {
-              icon: "home"
+              icon: "icon-yunfuwuqi"
             },
             component: BlankView,
             children: [
@@ -627,7 +815,7 @@ export const asyncRoute = [
             path: "workorderManage",
             name: "工单管理",
             meta: {
-              icon: "home",
+              icon: "icon-gongdanguanli",
               perm: "userinfo"
             },
             component: BlankView,
@@ -666,7 +854,7 @@ export const asyncRoute = [
             path: "setting",
             name: "工单设置",
             meta: {
-              icon: "home",
+              icon: "icon-gongdanshezhi",
               perm: "userinfo"
             },
             component: BlankView,
@@ -759,7 +947,7 @@ export const asyncRoute = [
             path: "index",
             name: "租户管理",
             meta: {
-              icon: "home",
+              icon: "icon-zuhuguanli",
               perm: "userinfo"
             },
             component: BlankView,

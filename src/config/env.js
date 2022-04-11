@@ -14,6 +14,14 @@ const formBaseUrl = {
   test: "/fs",
   prod: "/fs"
 };
+// 对账单接口请求地址
+const billUrl = {
+  // local: "http://site.sailayun.com/settle",
+  local: "http://216d7872i4.qicp.vip/settle",
+  dev: "/settle",
+  test: "/settle",
+  prod: "/settle"
+};
 const domains = {
   local: "t946471742443573248.site.sailayun.com"
 };
@@ -21,5 +29,6 @@ const domains = {
 export default {
   BASE_URL: baseUrl[process.env.VUE_APP_ENV],
   DOMAIN_URL: domains[process.env.VUE_APP_ENV],
-  FORM_BASE_URL: formBaseUrl[process.env.VUE_APP_ENV]
+  FORM_BASE_URL: formBaseUrl[process.env.VUE_APP_ENV],
+  BILL_BASE_URL: billUrl[process.env.VUE_APP_ENV]
 };

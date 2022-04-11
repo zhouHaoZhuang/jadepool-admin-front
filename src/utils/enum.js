@@ -8,6 +8,26 @@ export const certificationStatusEnum = {
   0: "已认证",
   1: "未认证"
 };
+// 发票开票记录状态
+export const invoiceStatusEnum = {
+  1: "开票中（已提交）",
+  2: "已取消",
+  3: "审核中",
+  4: "已驳回",
+  5: "已开票（已通过）",
+  6: "退票中（退票申请中）",
+  7: "退票申请取消",
+  8: "退票申请已拒绝",
+  9: "已退票（退票申请确认）"
+};
+// 对账单状态
+export const statementStatusEnum = {
+  1: "初始化",
+  2: "供应商审核中",
+  3: "渠道商复审中",
+  4: "已退回",
+  9: "已完成"
+};
 // 企业列表企业状态
 export const corporationStatusEnum = {
   0: "正常",
@@ -162,6 +182,6 @@ export const orderTypeMap = {
 };
 // 计费方式、
 export const charingStatus ={
-  "AfterPay":'包年包月',
-  "BeforePay":'按量付费'
+  "AfterPay":'按量付费',
+  "BeforePay":'包年包月'
 }

@@ -392,6 +392,9 @@ export default {
     },
     onChange(value) {
       this.listQuery["qp-billPeriod-eq"] = moment(value).format("YYYY-MM");
+      if (!value || value === "null" || value === undefined) {
+        delete this.listQuery["qp-billPeriod-eq"];
+      }
     },
     //切换tab
     callback(key) {
