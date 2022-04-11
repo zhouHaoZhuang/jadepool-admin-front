@@ -139,6 +139,8 @@ export default {
     // 弹窗提交
     handleOk() {
       this.$emit("filtercustomer", this.selectData, this.selectedRowKeys);
+      this.selectedRowKeys = []
+      this.selectData = []
     },
   },
 };

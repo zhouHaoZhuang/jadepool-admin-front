@@ -324,12 +324,12 @@ export default {
       },
       columns: [
         {
-          title: "用户ID",
-          dataIndex: "userCode",
+          title: "渠道商编码",
+          dataIndex: "channelCode",
         },
         {
           title: "姓名",
-          dataIndex: "realName",
+          dataIndex: "channelName",
         },
         {
           title: "企业",
@@ -337,7 +337,7 @@ export default {
         },
         {
           title: "手机",
-          dataIndex: "phoneNumber",
+          dataIndex: "number",
         },
         {
           title: "客服姓名",
@@ -513,7 +513,10 @@ export default {
     // 查询客服列表
     getCustomerList() {
       this.$store
-        .dispatch("customer/getInterfaceLists", { currentPage: 1, pageSize: 999 })
+        .dispatch("customer/getInterfaceLists", {
+          currentPage: 1,
+          pageSize: 999,
+        })
         .then((res) => {
           this.SelectCustomerList = res.data.list;
           this.paginationProps.total = res.data.totalCount * 1;
@@ -551,15 +554,15 @@ export default {
         }
       });
     },
-    back(){
-      this.$router.back()
+    back() {
+      this.$router.back();
     },
     //区分请求列表
     distinguish(data) {
       this.$store
         .dispatch("customer/distribute", data)
         .then((res) => {
-          this.data = res.data.list;
+          this.data = res.data;
           this.$message.success(res.msg);
         })
         .finally(() => {});
@@ -578,6 +581,12 @@ export default {
     // 重置表单数据
     resetForm() {
       this.$refs.ruleForm.clearValidate();
+      //选择的客服id
+      this.advocateList= [],
+      //筛选出的新客服
+      this.newAdvocateList= [],
+      //选择的客户id
+      this.userCodeList= [],
       this.form = {
         advocateList: undefined,
         userCodeList: undefined,

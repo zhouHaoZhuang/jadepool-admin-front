@@ -10,7 +10,7 @@
           </a-form-model-item> -->
           <a-form-model-item>
             <a-select
-              style="width:120px"
+              style="width: 120px"
               allowClear
               v-model="listQuery.key"
               placeholder="请选择"
@@ -28,9 +28,7 @@
             <a-input v-model="listQuery.search" placeholder="搜索关键词" />
           </a-form-model-item>
           <a-form-model-item>
-            <a-button type="primary" @click="search">
-              查询
-            </a-button>
+            <a-button type="primary" @click="search"> 查询 </a-button>
           </a-form-model-item>
         </a-form-model>
       </div>
@@ -43,7 +41,7 @@
           :pagination="paginationProps"
           :scroll="{ x: 1300 }"
         >
-          <span slot="addressProject" slot-scope="text" style="color:#1890ff">
+          <span slot="addressProject" slot-scope="text" style="color: #1890ff">
             {{ text }}
           </span>
           <div class="status" slot="customerStatus" slot-scope="text">
@@ -55,9 +53,7 @@
             {{ text | formatDate }}
           </span>
           <span slot="action" slot-scope="text, record">
-            <a-button type="link" @click="goDetail(record)">
-              查看
-            </a-button>
+            <a-button type="link" @click="goDetail(record)"> 查看 </a-button>
             <a-divider type="vertical" />
             <a-button type="link" @click="handleFrozen(record)">
               {{ record.customerStatus !== 0 ? "解冻" : "冻结" }}
@@ -78,50 +74,51 @@ export default {
         search: "",
         currentPage: 1,
         pageSize: 10,
-        total: 0
+        total: 0,
+        id: "",
       },
       columns: [
         {
           title: "渠道商ID",
           dataIndex: "cutomerCode",
           key: "cutomerCode",
-          width: 260
+          width: 260,
         },
         {
           title: "全称",
           dataIndex: "cutomerName",
-          key: "cutomerName"
+          key: "cutomerName",
         },
         {
           title: "简称",
           dataIndex: "shortName",
-          key: "shortName"
+          key: "shortName",
         },
         {
           title: "项目网址",
           dataIndex: "addressProject",
           key: "addressProject",
-          scopedSlots: { customRender: "addressProject" }
+          scopedSlots: { customRender: "addressProject" },
         },
         {
           title: "状态",
           dataIndex: "customerStatus",
           key: "customerStatus",
-          scopedSlots: { customRender: "customerStatus" }
+          scopedSlots: { customRender: "customerStatus" },
         },
         {
           title: "创建时间",
           dataIndex: "createTime",
           key: "createTime",
           scopedSlots: { customRender: "createTime" },
-          width: 250
+          width: 250,
         },
         {
           title: "操作",
           key: "action",
           fixed: "right",
-          scopedSlots: { customRender: "action" }
-        }
+          scopedSlots: { customRender: "action" },
+        },
       ],
       data: [],
       paginationProps: {
@@ -133,13 +130,28 @@ export default {
             total / this.listQuery.pageSize
           )} 页`,
         onChange: this.quickJump,
-        onShowSizeChange: this.onShowSizeChange
+        onShowSizeChange: this.onShowSizeChange,
       },
-      tableLoading: false
+      tableLoading: false,
     };
   },
   activated() {
-    this.getList();
+    // this.getList();
+  },
+  watch: {
+    $route: {
+      handler(newVal) {
+        if (newVal.query.id) {
+          this.listQuery.id = newVal.query.id;
+          this.listQuery.isRelated = true;
+          this.getDetailList();
+        } else {
+          this.getList();
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
   },
   methods: {
     // 查询
@@ -147,11 +159,23 @@ export default {
       this.listQuery.currentPage = 1;
       this.getList();
     },
+    getDetailList() {
+      this.tableLoading = true;
+      this.$getListQp("channel/getNewList", this.listQuery)
+        .then((res) => {
+          this.data = [...res.data.list];
+          this.paginationProps.total = res.data.totalCount * 1;
+          this.listQuery.id = "";
+        })
+        .finally(() => {
+          this.tableLoading = false;
+        });
+    },
     // 查询表格数据
     getList() {
       this.tableLoading = true;
       this.$getListQp("channel/getList", this.listQuery)
-        .then(res => {
+        .then((res) => {
           this.data = [...res.data.list];
           this.paginationProps.total = res.data.totalCount * 1;
         })
@@ -162,19 +186,31 @@ export default {
     // 表格分页快速跳转n页
     quickJump(currentPage) {
       this.listQuery.currentPage = currentPage;
-      this.getList();
+      if (this.$route.query.id) {
+        this.listQuery.id = this.$route.query.id;
+        this.listQuery.isRelated = true;
+        this.getDetailList();
+      } else {
+        this.getList();
+      }
     },
     // 表格分页切换每页条数
     onShowSizeChange(current, pageSize) {
       this.listQuery.currentPage = current;
       this.listQuery.pageSize = pageSize;
-      this.getList();
+      if (this.$route.query.id) {
+        this.listQuery.id = this.$route.query.id;
+        this.listQuery.isRelated = true;
+        this.getDetailList();
+      } else {
+        this.getList();
+      }
     },
     // 查看
     goDetail(record) {
       this.$router.push({
         path: "/channel/index/detail",
-        query: { id: record.id }
+        query: { id: record.id },
       });
     },
     // 冻结
@@ -183,19 +219,19 @@ export default {
       this.$store
         .dispatch("channel/updateStatus", {
           id: record.id,
-          customerStatus
+          customerStatus,
         })
-        .then(res => {
+        .then((res) => {
           this.$message.success("操作成功");
-          const index = this.data.findIndex(ele => ele.id === record.id);
+          const index = this.data.findIndex((ele) => ele.id === record.id);
           this.data.splice(index, 1, { ...record, customerStatus });
         });
     },
     // 新增渠道
     addChannel() {
       this.$router.push("/channel/index/add");
-    }
-  }
+    },
+  },
 };
 </script>
 

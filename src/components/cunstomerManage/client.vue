@@ -101,20 +101,20 @@ export default {
       },
       columns: [
         {
-          title: "用户ID",
-          dataIndex: "corporationCode",
+          title: "渠道商编码",
+          dataIndex: "cutomerCode",
         },
         {
           title: "姓名",
-          dataIndex: "realName",
+          dataIndex: "cutomerName",
         },
         {
           title: "企业",
-          dataIndex: "companyName",
+          dataIndex: "shortName",
         },
         {
           title: "手机号",
-          dataIndex: "phoneNumber",
+          dataIndex: "number",
         },
       ],
       paginationProps: {
@@ -169,6 +169,8 @@ export default {
     // 弹窗提交
     handleOk() {
       this.$emit("selectData", this.selectData, this.selectedRowKeys);
+      this.selectedRowKeys = []
+      this.selectData = []
     },
   },
 };

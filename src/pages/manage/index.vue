@@ -171,16 +171,16 @@ export default {
     //查看
     selectInfo(key, text) {
       console.log(text, "<<<");
-      // if (text === 0) {
-      //   this.$message.warning("该客服暂无客户");
-      // } else {
-      //   this.$router.push({
-      //     path: "/channel/index/list",
-      //     query: {
-      //       id: key,
-      //     },
-      //   });
-      // }
+      if (text === 0) {
+        this.$message.warning("该客服暂无客户");
+      } else {
+        this.$router.push({
+          path: "/channel/index/list",
+          query: {
+            id: key,
+          },
+        });
+      }
     },
     //编辑客服
     editortInfo(record) {
