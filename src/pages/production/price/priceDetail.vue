@@ -103,7 +103,7 @@
         >
           <a-input
             v-model="form.standardPrice"
-            v-number-evolution="{ value: 2, min: 0.01, max: 9999999 }"
+            v-number-evolution="{ value: 6, min: 0.01, max: 9999999 }"
             style="width:260px;"
           />
           <span class="ant-form-text">
@@ -165,7 +165,7 @@
                     <a-input
                       style="width:80px"
                       v-model="record.price"
-                      v-number-evolution="{ value: 2, min: 0.01, max: 9999999 }"
+                      v-number-evolution="{ value: 6, min: 0.01, max: 9999999 }"
                     ></a-input>
                   </div>
                 </div>
