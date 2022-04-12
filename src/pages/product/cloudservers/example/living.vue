@@ -107,7 +107,7 @@ export default {
         { title: "CPU(核)", dataIndex: "cpu", key: "cpu" },
         { title: "内存(G)", dataIndex: "memory", key: "memory" },
         {
-          title: "磁盘(G)",
+          title: "数据磁盘(G)",
           dataIndex: "dataDiskSize"
         },
         {
