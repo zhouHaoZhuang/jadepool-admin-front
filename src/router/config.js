@@ -379,18 +379,6 @@ export const asyncRoute = [
                   import("@/pages/channel/refundmanage/reviewRefund.vue")
               },
               {
-                path: "payment",
-                name: "人工入款",
-                meta: {},
-                component: () => import("@/pages/channel/channelAdmin/list")
-              },
-              {
-                path: "remittance",
-                name: "线下汇款",
-                meta: {},
-                component: () => import("@/pages/channel/channelAdmin/price")
-              },
-              {
                 path: "contract",
                 name: "合同管理",
                 meta: {},
