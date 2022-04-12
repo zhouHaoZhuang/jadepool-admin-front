@@ -69,8 +69,8 @@ export const feeReduction = {
   35: "资源池降配",
   36: "阿里云降配",
   55: "服务器退订",
-  65:'CDN流量',
-  66:"阿里云采购CDN流量"
+  65:'后付费产品',
+  66:"阿里云后付费产品"
 };
 // 权限管理-权限单选map
 export const systemAdminMapEnum = {
