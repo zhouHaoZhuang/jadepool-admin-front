@@ -103,7 +103,7 @@
         >
           <a-input
             v-model="form.standardPrice"
-            v-number-evolution="{ value: 6, min: 0.01, max: 9999999 }"
+            v-number-evolution="{ value: 6, min: 0.000001, max: 9999999 }"
             style="width:260px;"
           />
           <span class="ant-form-text">
@@ -165,7 +165,7 @@
                     <a-input
                       style="width:80px"
                       v-model="record.price"
-                      v-number-evolution="{ value: 6, min: 0.01, max: 9999999 }"
+                      v-number-evolution="{ value: 6, min:0.000001, max: 9999999 }"
                     ></a-input>
                   </div>
                 </div>
@@ -219,11 +219,11 @@ export default {
         enableLadderPrice: false,
         ladderPriceInfo: {
           ladderPriceList: [
-            {
-              endData: undefined,
-              price: undefined,
-              startData: undefined
-            },
+            // {
+            //   endData: undefined,
+            //   price: undefined,
+            //   startData: undefined
+            // },
             {
               endData: undefined,
               price: undefined,
@@ -342,7 +342,7 @@ export default {
         let startData = newList[0].endData;
         if (startData) {
           const newData = {
-            endData: undefined,
+            endData: '',
             price: undefined,
             startData: startData
           };
@@ -359,6 +359,15 @@ export default {
     },
     // 修改第二个值
     changeEnd(val) {
+      // let newArr = this.form.ladderPriceInfo.ladderPriceList.reverse()
+
+      // console.log(val.endData,'eeeeeeeee');
+      // console.log(newArr[0].endData,'newArr[0]');
+      // if(val.endData === newArr[0].endData){
+      //    newArr[1].startData = newArr[0].endData
+
+      // }
+      // if(newArr[0])
       if (val.endData <= val.startData) {
         this.$message.error("当前值必须大于起始值");
         // val.endData = ''
@@ -381,7 +390,7 @@ export default {
 
     //获取地域列表
     getAreaList() {
-      this.$store.dispatch("territory/getList").then(res => {
+      this.$store.dispatch("territory/getList",{'pageSize':1000,'currentPage': 1}).then(res => {
         this.areaList = [...res.data.list];
       });
     },
@@ -430,6 +439,10 @@ export default {
     },
     // 提交
     onSubmit() {
+      if(this.form.ladderPriceInfo.ladderPriceList.length <2){
+         this.$message.error("计量阶梯表格至少要有两行数据",4);
+        return
+      }
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
           this.loading = true;
@@ -456,11 +469,11 @@ export default {
         enableLadderPrice: false,
         ladderPriceInfo: {
           ladderPriceList: [
-            {
-              endData: undefined,
-              price: undefined,
-              startData: undefined
-            },
+            // {
+            //   endData: undefined,
+            //   price: undefined,
+            //   startData: undefined
+            // },
             {
               endData: undefined,
               price: undefined,

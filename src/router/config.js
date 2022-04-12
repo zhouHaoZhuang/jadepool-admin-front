@@ -303,7 +303,6 @@ export const asyncRoute = [
                 path: "billmanage",
                 name: "发票管理",
                 meta: {
-                  icon: "home",
                   perm: "finance-book-order",
                 },
                 component: () =>
@@ -349,7 +348,6 @@ export const asyncRoute = [
                 path: "refundmanage",
                 name: "退票管理",
                 meta: {
-                  icon: "home",
                   back: true,
                   perm: "finance-book-order",
                 },
@@ -381,18 +379,6 @@ export const asyncRoute = [
                   import("@/pages/channel/refundmanage/reviewRefund.vue")
               },
               {
-                path: "payment",
-                name: "人工入款",
-                meta: {},
-                component: () => import("@/pages/channel/channelAdmin/list")
-              },
-              {
-                path: "remittance",
-                name: "线下汇款",
-                meta: {},
-                component: () => import("@/pages/channel/channelAdmin/price")
-              },
-              {
                 path: "contract",
                 name: "合同管理",
                 meta: {},
@@ -416,7 +402,7 @@ export const asyncRoute = [
             path: "recon",
             name: "对账管理",
             meta: {
-              icon: "home"
+              icon: "icon-caiwubaobiao"
             },
             component: BlankView,
             children: [

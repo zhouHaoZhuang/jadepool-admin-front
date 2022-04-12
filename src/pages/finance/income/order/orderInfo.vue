@@ -60,19 +60,21 @@
             <div v-else>
               <div>CPU：{{ text.cpu }}</div>
               <div>内存：{{ text.memory }}</div>
-              <div>磁盘：{{ text.dataDiskSize }}</div>
+              <!-- <div>磁盘：{{ diskLength }}</div> -->
+              <div>系统盘:{{ systemDiskSize }}G</div>
+              <div>数据盘:{{ dataDiskSize }}G</div>
               <div>带宽：{{ text.internetMaxBandwidthOut }}</div>
               <div>防御：{{ "20G" }}</div>
               <div>镜像：{{ text.imageId }}</div>
               <div>所在区：{{ regionDataEnum[text.regionId] }}</div>
             </div>
           </div>
-          <div slot="amount" slot-scope="text,record">
+          <div slot="amount" slot-scope="text, record">
             <span v-if="record.chargingType == 'AfterPay'">--</span>
             <span v-else>{{ text }}</span>
           </div>
-          <div slot="discountRate" slot-scope="text,record">
-             <span v-if="record.chargingType == 'AfterPay'">--</span>
+          <div slot="discountRate" slot-scope="text, record">
+            <span v-if="record.chargingType == 'AfterPay'">--</span>
             <span v-else>{{ text }}</span>
           </div>
         </a-table>
@@ -127,6 +129,9 @@ export default {
       orderStatusEnum,
       orderTypeMap,
       data: [],
+      systemDiskSize: 0,
+      dataDiskSize: 0,
+      diskLength: 0, //磁盘长度
       columns: [
         {
           title: "产品名称",
@@ -180,21 +185,22 @@ export default {
   },
   activated() {
     let id = this.$route.query.id;
-    // console.log(id);
     this.$store.dispatch("financialOrder/getOne", id).then(res => {
-      // console.log(res);
-      // let dataDisk = res.data.ecsPrice.dataDisk;
       // let dataDiskSize = 0;
-      // if (dataDisk) {
-      //   for (let index = 0; index < dataDisk.length; index++) {
-      //     dataDiskSize += dataDisk[index].size;
-      //   }
-      //   res.data.ecsPrice.dataDiskSize = dataDiskSize;
+      if (res.data.ecsPrice) {
+        let dataDisk = res.data.ecsPrice.dataDisk;
+        this.systemDiskSize = res.data.ecsPrice.systemDisk.size;
+        for (let index = 0; index < dataDisk.length; index++) {
+          this.dataDiskSize += dataDisk[index].size;
+        }
+      }
+      // if(res.data.ecsPrice){
+      // let dataDisk = res.data.ecsPrice.dataDisk? res.data.ecsPrice.dataDisk.length:0;
+      // console.log(dataDisk,'dataDisk');
+      // this.diskLength = dataDisk + 1
       // }
-      // console.log(dataDisk);
       this.orderInfo = res.data;
       this.data = [res.data];
-
     });
   }
 };
