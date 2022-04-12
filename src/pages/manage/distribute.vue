@@ -319,7 +319,7 @@ export default {
       form: {
         advocateList: undefined,
         userCodeList: undefined,
-        distributeWay: 1,
+        distributeWay: undefined,
         newAdvocateList: undefined,
       },
       columns: [
@@ -590,7 +590,7 @@ export default {
       this.form = {
         advocateList: undefined,
         userCodeList: undefined,
-        distributeWay: 1,
+        distributeWay: undefined,
         newAdvocateList: undefined,
       };
     },

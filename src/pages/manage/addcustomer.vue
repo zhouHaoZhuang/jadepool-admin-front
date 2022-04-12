@@ -41,7 +41,7 @@
         <a-form-model-item label="二维码" prop="wechatUrl">
           <a-space :size="30">
             <Upload :defaultFile="form.wechatUrl" @change="pcImgChange" />
-            <span class="preview-code" @click="preview">预览二维码</span>
+            <!-- <span class="preview-code" @click="preview">预览二维码</span> -->
           </a-space>
         </a-form-model-item>
         <a-form-model-item :wrapper-col="{ span: 18, offset: 11 }">
@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import Upload from "@/components/Upload/wechatQqUpload";
+import Upload from "@/components/Upload/customerUpload";
 
 export default {
   components: {
@@ -89,17 +89,21 @@ export default {
         ],
         employeeId: [
           {
-            required: true,
             message: "请输入工号",
             trigger: "blur",
           },
         ],
         phone: [
-          {
+         {
             required: true,
-            message: "请输入手机号",
+            message: "请输入联系方式",
             trigger: "blur",
           },
+          {
+            pattern: /^((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)/,
+            message: "联系方式格式不正确",
+            trigger: ["blur", "change"]
+          }
         ],
         qqType: [
           {
@@ -114,6 +118,11 @@ export default {
             message: "请输入qq号",
             trigger: "blur",
           },
+          {
+            pattern: /^[0-9]*$/,
+            message: "qq号格式不正确",
+            trigger: ["blur", "change"]
+          }
         ],
         wechatType: [
           {
