@@ -28,3 +28,7 @@ yarn build:test
 #### 生产
 
 yarn build
+
+项目仓库地址
+origin  https://git.ydidc.com/ydidc/jadepool-admin-front.git (fetch)
+origin  https://git.ydidc.com/ydidc/jadepool-admin-front.git (push)
